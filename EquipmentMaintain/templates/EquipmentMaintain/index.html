@@ -1,0 +1,26 @@
+﻿{% extends "main.html" %}
+{% load staticfiles %}
+{% block title %}{{title}}{% endblock title %}
+{% block CSS %}
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}dist/css/HLD-main.css" />
+	<link rel="stylesheet" type="text/css" href="{% static 'EquipmentMaintain/css/HLD-EquipmentMaintain.css' %}"/>
+{% endblock CSS %}
+{% block content %}
+	<!-- 主体 -->
+	<div class="container-fluid" >
+		<div class="row">
+			<h1>{{title}}</h1>
+		</div>	
+		<div class="paper">
+			<div class="row">
+			{% for name,address in buttons %}
+			<div class="col-md-3 sidebar">
+				<p>
+					<a class="btn btn-primary btn-large btn-block" href="{{address}}" role="button">{{name}}</a>
+				</p>
+			</div>
+			{% endfor %}
+			</div>
+		</div>		
+	</div>		
+{% endblock content%}
