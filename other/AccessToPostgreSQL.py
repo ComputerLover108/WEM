@@ -1,20 +1,11 @@
-﻿#-------------------------------------------------------------------------------
-# Name:        模块1
-# Purpose:
-#
-# Author:      public
-#
-# Created:     20/07/2014
-# Copyright:   (c) public 2014
-# Licence:     <your licence>
-#-------------------------------------------------------------------------------
+﻿import argparse
 import pypyodbc
 import os
 import csv
 import codecs
-import timeit
+##import timeit
 import psycopg2
-import io
+##import io
 ##import shutil
 ##import re
 ##import chardet
@@ -166,8 +157,8 @@ def CreateTable(tableName):
     cur.close()
     connection.close()
 
-def CSVtoPostgreSQL(src,tableName):
-    dsn="dbname=HLD user=operator password=5302469 host=10.30.29.51 port=2012"
+def CSVtoPostgreSQL(src,tableName,dsn):
+##    dsn="dbname=HLD user=operator password=5302469 host=10.30.29.51 port=2012"
     conn = psycopg2.connect(dsn)
     cur=conn.cursor()
     SQL_set="SET client_encoding = 'UTF8';"
@@ -265,9 +256,9 @@ def AccessToCSV(infile,pathName,table):
     con.close()
 
 
-def psqlTest():
-    strCn = "DSN=PostgreSQL35W;Uid=operator;Pwd=5302469;DBname=HLD"
-    cnn=pypyodbc.connect(strCn)
+def psqlTest(DSN):
+    DSN = "DSN=PostgreSQL35W;Uid=operator;Pwd=5302469;DBname=HLD"
+    cnn=pypyodbc.connect(DSN)
     cur=cnn.cursor()
     SQL=''' select * from 生产信息 where 日期='2014-4-1'; '''
     cur.execute(SQL)
@@ -277,8 +268,8 @@ def psqlTest():
         print(row)
     cnn.close()
 
-def AccessTest():
-    src=r'E:\public\test\葫芦岛天然气处理厂管理系统 test\葫芦岛天然气处理厂.mdb'
+def AccessTest(src,dsn):
+##    src=r'E:\public\test\葫芦岛天然气处理厂管理系统 test\葫芦岛天然气处理厂.mdb'
     if not os.path.exists(src):
 ##         pypyodbc.win_create_mdb(src)
          print('Access 数据库 ('+src+')没找到!')
@@ -289,11 +280,27 @@ def AccessTest():
     for table in tables:
         CreateTable(table)
         AccessToCSV(src,pathName,table)
-        CSVtoPostgreSQL(os.path.join('CSV',table+'.csv'),table)
+        CSVtoPostgreSQL(os.path.join('CSV',table+'.csv'),table,dsn)
 
 
 def main():
-    AccessTest()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-F", "--file",type=str,help="Access file")
+    parser.add_argument("-H","--host",type=str,default='127.0.0.1',help="default host is 127.0.0.1")
+    parser.add_argument("-P","--port",type=str,default='2012',help="default port is 2012")
+    parser.add_argument("-U","--user",type=str,default='operator',help="default user is postgres")
+    parser.add_argument("-W","--password",type=str,default='5302469',help="default password is empty!")
+    parser.add_argument("-D","--database",type=str,default='HLD',help="default database is postgres")
+    args = parser.parse_args()
+    if args.file :
+        src=args.file
+        host=args.host
+        port=args.port
+        user=args.user
+        password=args.password
+        dbname=args.database
+        dsn='dbname=%s user=%s password=%s host=%s port=%s' %(dbname,user,password,host,port)
+        AccessTest(src,dsn)
 ##    psqlTest()
 
 if __name__ == '__main__':

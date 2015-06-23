@@ -14,7 +14,14 @@ import os
 import csv
 import platform
 import psycopg2
+##import tempfile
 from datetime import datetime, date, time
+
+##创建一个为PostgreSQL数据库导入的csv方言
+class pgSQL(csv.excel):
+    lineterminator='\n'
+    delimiter='\t'
+    quoting=csv.QUOTE_MINIMAL
 
 class AccessToPostreSQL:
     def __init__(self, mdbFile, pg_con_string):
@@ -25,107 +32,94 @@ class AccessToPostreSQL:
         self.pg_cur = self.pg_con.cursor()
         self.SQL=""
 
+    def getTables(self):
+        tables=list()
+        tables=[x[2] for x in self.ac_cur.tables().fetchall() if x[3] == 'TABLE']
+        return tables
+
+    def getFields(self,table):
+        fields=list()
+        for column in self.ac_cur.columns(table=table):
+            fields += [column[3],]
+##        print(table,fields)
+        print(self.ac_cur.description)
+        return fields
+
     def createTable(self):
         table_list=list()
         table_list=[x[2] for x in self.ac_cur.tables().fetchall() if x[3] == 'TABLE']
         for table in table_list:
-            self.SQL += "\nCREATE TABLE " + table +" IF NOT EXISTS"+ "\n("
+            self.SQL += "\nCREATE TABLE IF NOT EXISTS " + table + "(\n"
             self.SQL += self.createFields(table)
-            self.SQL +="\n);"
-
-        print(self.SQL)
+            self.SQL +="\n);\n"
+##            print(self.ac_cur.primaryKeys().fetchall())
+##        print(self.SQL)
+        self.pg_cur.execute(self.SQL)
+        self.pg_con.commit()
 
     def createFields(self,table):
-        postgresql_fields = {
-            'COUNTER': 'serial',  # autoincrement
-            'VARCHAR': 'text',  # text
-            'LONGCHAR': 'text',  # memo
-            'BYTE': 'integer',  # byte
-            'SMALLINT': 'integer',  # integer
-            'INTEGER': 'bigint',  # long integer
-            'REAL': 'real',  # single
-            'DOUBLE': 'double precision',  # double
-            'DATETIME': 'timestamp',  # date/time
-            'CURRENCY': 'money',  # currency
-            'BIT':  'boolean',  # yes/no
-        }
-
+        CharacterTypes=['VARCHAR','MEMO','TEXT','LONGCHAR']
+        ArbitraryPrecisionNumberTypes=['NUMERIC']
         SQL = ""
         field_list = list()
-##        for column in self.access_cur.columns(table=table):
-##            if column.type_name in postgresql_fields:
-##                field_list += ['"' + column.column_name + '"' +
-##                               " " + postgresql_fields[column.type_name], ]
-##            elif column.type_name == "DECIMAL":
-##                field_list += ['"' + column.column_name + '"' +
-##                               " numeric(" + str(column.column_size) + "," +
-##                               str(column.decimal_digits) + ")", ]
-##            else:
-##                print( "column " + table + "." + column.column_name +
-##                " has uncatered for type: " + column.type_name)
-
+        for column in self.ac_cur.columns(table=table):
+            if column[5] in CharacterTypes :
+                field_list += ['"' + column[3] +'"' + '\tTEXT' ,]
+                continue
+            if column[5] in ArbitraryPrecisionNumberTypes :
+                field_list += ['"' + column[3] +'"'
+                    + '\t' + column[5]
+                    + '('
+                    + str(column[6]) + ',' + str(column[7])
+                    + ')',
+                ]
+                continue
+            if column[5] == 'COUNTER' :
+                field_list += ['"' + column[3] +'"' + '\tSERIAL' ,]
+                continue
+            if column[5] == 'DOUBLE' :
+                field_list += ['"' + column[3] +'"' + '\tREAL' ,]
+                continue
+            if column[5] == 'DATETIME' :
+                field_list += ['"' + column[3] +'"' + '\tTIMESTAMP' ,]
+                continue
+            field_list += ['"' + column[3] +'"' + '\t' + column[5],]
         return ",\n ".join(field_list)
 
-    def mdbExport(self):
-        pass
-
-    def pgImport(self):
-        pass
+    def run(self):
+        csv.register_dialect("pgSQL")
+##        print(table,csv.list_dialects())
+        table_list=list()
+        table_list=[x[2] for x in self.ac_cur.tables().fetchall() if x[3] == 'TABLE']
+        pathName='temp'
+        if not os.path.exists(pathName):
+            os.mkdir(pathName)
+        for table in table_list:
+            SQL = """SELECT * FROM {table_name}""".format(table_name=table)
+##            print(SQL)
+            self.ac_cur.execute(SQL)
+            rows = self.ac_cur.fetchall()
+            outfile=os.path.join(pathName,table) + '.csv'
+            with open(outfile,'w+',encoding='utf-8',) as fp:
+                csvfile = csv.writer(fp,'unix',lineterminator='\n')
+                for row in rows:
+                    line=[]
+                    for s in row:
+                        if s == None:
+                            s='\\N'
+                        line.append(s)
+##                    print(line)
+                    csvfile.writerow(line)
+##                csvfile.writerows(rows)
+                self.createTable()
+##                print(self.SQL)
+                table='"'+table+'"'
+                self.pg_cur.copy_from(fp, table, sep=',', null='\\N', )
+        self.pg_con.commit()
 
 def isWindows():
     sysstr = platform.system()
     return (sysstr =="Windows")
-
-def createSQL(fileName):
-    if isWindows() :
-        connection=pypyodbc.win_connect_mdb(fileName)
-        cur = connection.cursor()
-        Tables = [x[2] for x in cur.tables().fetchall() if x[3] == 'TABLE']
-        for Table in Tables:
-            s=createTable(Table,fileName)
-##        cur.commit()
-        connection.close()
-    else :
-        pass;
-    print(SQL)
-    return(SQL+s+"\n")
-
-def createTable(Table,fileName):
-    field=createField(Table,fileName)
-    s="""
-    CREATE IF NOT EXISTS %s
-    (
-        %s,
-    );
-    """ %(Table,field)
-    print(s)
-    return(SQL+s+"\n")
-
-
-def createField(Table,fileName):
-    connection=pypyodbc.win_connect_mdb(fileName)
-    cur = connection.cursor()
-    for Column in cur.columns(table=Table):
-        if Column[5]=='VARCHAR' :
-            s="""
-                "%s" %s(%s),
-            """ %(Column[3],Column[5],Column[6])
-        else:
-            s="""
-                "%s" %s,
-                """ %(Column[3],Column[5])
-##        print(s)
-    connection.close()
-    print(s)
-    return(SQL+s+",\n")
-
-
-def accessToCSV():
-    pass;
-
-def csvToPostgreSQL():
-    pass;
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -149,10 +143,12 @@ def main():
             dbname=args.database
             pg_con_string='dbname=%s user=%s password=%s host=%s port=%s' %(dbname,user,password,host,port)
 ##            access_con_string='DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=%s;' %(src)
-            print(src,pg_con_string)
+##            print(src,pg_con_string)
             x=AccessToPostreSQL(src,pg_con_string)
-            x.createTable()
-
+            t=x.getTables()
+            for table in t:
+               x.getFields(table)
+            x.run()
 
 if __name__ == '__main__':
     main()
