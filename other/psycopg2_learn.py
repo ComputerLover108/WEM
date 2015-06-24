@@ -6,6 +6,7 @@ import tempfile
 def test(fname,dsn):
     psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
     conn=psycopg2.connect(dsn=dsn)
+    conn.set_client_encoding('UTF8')
     cur=conn.cursor()
     table='"%s"' %('生产动态')
 ##    print(table)

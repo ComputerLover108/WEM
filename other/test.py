@@ -15,13 +15,12 @@ import csv
 import platform
 import psycopg2
 ##import tempfile
-from datetime import datetime, date, time
 
 ##创建一个为PostgreSQL数据库导入的csv方言
-class pgSQL(csv.excel):
-    lineterminator='\n'
-    delimiter='\t'
-    quoting=csv.QUOTE_MINIMAL
+#class pgSQL(csv.excel):
+#    lineterminator='\n'
+#    delimiter='\t'
+#    quoting=csv.QUOTE_MINIMAL
 
 class AccessToPostreSQL:
     def __init__(self, mdbFile, pg_con_string):
@@ -30,7 +29,7 @@ class AccessToPostreSQL:
             self.ac_cur = self.ac_con.cursor()
         self.pg_con = psycopg2.connect(pg_con_string)
         self.pg_cur = self.pg_con.cursor()
-        self.SQL=""
+        self.SQL="SET client_encoding = 'UTF8';\n"
 
     def getTables(self):
         tables=list()
@@ -42,19 +41,21 @@ class AccessToPostreSQL:
         for column in self.ac_cur.columns(table=table):
             fields += [column[3],]
 ##        print(table,fields)
-        print(self.ac_cur.description)
+#        print(self.ac_cur.description)
         return fields
 
     def createTable(self):
         table_list=list()
         table_list=[x[2] for x in self.ac_cur.tables().fetchall() if x[3] == 'TABLE']
+        SQL=''
         for table in table_list:
-            self.SQL += "\nCREATE TABLE IF NOT EXISTS " + table + "(\n"
-            self.SQL += self.createFields(table)
-            self.SQL +="\n);\n"
+            SQL += "\nCREATE TABLE IF NOT EXISTS " + table + "(\n"
+            SQL += self.createFields(table)
+            SQL +="\n);\n"
 ##            print(self.ac_cur.primaryKeys().fetchall())
-##        print(self.SQL)
-        self.pg_cur.execute(self.SQL)
+#        print('createTable():'+SQL)
+        self.SQL += SQL
+        self.pg_cur.execute(SQL)
         self.pg_con.commit()
 
     def createFields(self,table):
@@ -87,7 +88,8 @@ class AccessToPostreSQL:
         return ",\n ".join(field_list)
 
     def run(self):
-        csv.register_dialect("pgSQL")
+        self.createTable()
+        csv.register_dialect("pgSQL",lineterminator='\n',delimiter='\t',quoting=csv.QUOTE_MINIMAL)
 ##        print(table,csv.list_dialects())
         table_list=list()
         table_list=[x[2] for x in self.ac_cur.tables().fetchall() if x[3] == 'TABLE']
@@ -101,7 +103,7 @@ class AccessToPostreSQL:
             rows = self.ac_cur.fetchall()
             outfile=os.path.join(pathName,table) + '.csv'
             with open(outfile,'w+',encoding='utf-8',) as fp:
-                csvfile = csv.writer(fp,'unix',lineterminator='\n')
+                csvfile = csv.writer(fp,'pgSQL')
                 for row in rows:
                     line=[]
                     for s in row:
@@ -111,10 +113,9 @@ class AccessToPostreSQL:
 ##                    print(line)
                     csvfile.writerow(line)
 ##                csvfile.writerows(rows)
-                self.createTable()
 ##                print(self.SQL)
                 table='"'+table+'"'
-                self.pg_cur.copy_from(fp, table, sep=',', null='\\N', )
+                self.pg_cur.copy_from(fp, table, sep='\t', null='\\N', )
         self.pg_con.commit()
 
 def isWindows():

@@ -8,22 +8,22 @@ import sys
 # Refer to https://code.google.com/p/pyodbc/wiki/Cursor for information on
 # cursor.tables and cursor.columns field names
 import argparse
-import pypyodbc
+#import pypyodbc
 import pyodbc
 import psycopg2
 
 class Converter:
 
     def __init__(self, access_con_string, pg_con_string, print_SQL):
-
-        self.access_cur = pyodbc.connect(access_con_string).cursor()
-        self.access_cur = pypyodbc.win_connect_mdb(access_con_string).cursor()
-##        self.pg_con = psycopg2.connect(pg_con_string)
+        self.access_con=pyodbc.connect(access_con_string)
+        self.access_cur = self.access_con.cursor()
+#        self.access_cur = pypyodbc.win_connect_mdb(access_con_string).cursor()
+        self.pg_con = psycopg2.connect(pg_con_string)
         self.pg_cur = self.pg_con.cursor()
-
+        psycopg2.extensions.register_type(psycopg2.extensions.UNICODE, self.pg_cur)
         self.print_SQL = print_SQL
-
         self.schema_name = self.get_access_db_name()
+#        print(self.pg_con.encoding)
 
     def get_access_db_name(self):
 
@@ -96,8 +96,8 @@ class Converter:
                                " numeric(" + str(column.column_size) + "," +
                                str(column.decimal_digits) + ")", ]
             else:
-                print( "column " + table + "." + column.column_name +
-                " has uncatered for type: " + column.type_name)
+                print(( "column " + table + "." + column.column_name +
+                " has uncatered for type: " + column.type_name))
 
         return ",\n ".join(field_list)
 
@@ -135,18 +135,12 @@ class Converter:
                 self.pg_con.commit()
 
     def get_access_data(self, table):
-
-        SQL = """SELECT *
-        FROM {table_name}""".format(table_name=table)
-
+        SQL = """SELECT * FROM {table_name}""".format(table_name=table)
         self.access_cur.execute(SQL)
-
         rows = self.access_cur.fetchall()
-
         data = list()
         for row in rows:
             data += [row, ]
-
         return data
 
 def main():
@@ -159,9 +153,9 @@ def main():
     parser.add_argument("-D","--database",type=str,default='HLD',help="default database is postgres")
     args = parser.parse_args()
     if args.file :
-        src=args.file
-        if not os.path.exists(src):
-         print('Access 数据库 ('+src+')没找到!')
+        fileName=args.file
+        if not os.path.exists(fileName):
+         print(('Access 数据库 ('+fileName+')没找到!'))
          exit(0)
         else:
             host=args.host
@@ -170,12 +164,15 @@ def main():
             password=args.password
             dbname=args.database
             pg_con_string='dbname=%s user=%s password=%s host=%s port=%s' %(dbname,user,password,host,port)
-            print_SQL=""
-##            path=os.path.normcase(src)
-##            print(path)
-            access_con_string='DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=%s;' %(src)
-            print(access_con_string,pg_con_string)
-            Converter(access_con_string,pg_con_string,print_SQL)
+            print_SQL=''
+            if fileName.endswith('.accdb'):
+                driver = 'Microsoft Access Driver (*.mdb, *.accdb)'
+            else:
+                driver = 'Microsoft Access Driver (*.mdb)'
+            access_con_string = 'DRIVER={%s};DBQ=%s;ExtendedAnsiSQL=1' % (driver, os.path.abspath(fileName))
+            print(('%s\n%s')%(access_con_string,pg_con_string))
+            x=Converter(access_con_string,pg_con_string,print_SQL)
+            x.create_tables()
 
 if __name__ == '__main__':
     main()

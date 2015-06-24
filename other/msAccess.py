@@ -11,38 +11,51 @@
 import os
 import platform
 import argparse
+import pyodbc
 import pypyodbc
-
-
 def isWindows():
     sysstr = platform.system()
     return (sysstr =="Windows")
 
 class MSAccess:
     def __init__(self, fileName):
-##        conn = pypyodbc.connect('Driver={Microsoft Access Driver (*.mdb)};DBQ=D:\\salesdb.mdb')
+##        if fileName.endswith('.accdb'):
+##            driver = 'Microsoft Access Driver (*.mdb, *.accdb)'
+##        else:
+##            driver = 'Microsoft Access Driver (*.mdb)'
+##        DSN = 'DRIVER={%s};DBQ=%s;ExtendedAnsiSQL=1' % (driver, os.path.abspath(fileName))
+##        self.conn=pyodbc.connect(DSN)
         if isWindows():
             self.conn=pypyodbc.win_connect_mdb(fileName)
-        else:
-            self.conn=pypyodbc.connect('Driver={Microsoft Access Driver (*.mdb)};DBQ={fname}'.format(fname=fileName))
         self.cur=self.conn.cursor()
 
     def getTables(self):
+##        不收集系统表
         tables=list()
         tables=[x[2] for x in self.cur.tables().fetchall() if x[3] == 'TABLE']
         return tables
 
     def getFields(self,table):
-        fields=list()
-##        for column in self.cur.columns(table=table):
-##            fields += [column[3],]
-##        print(table,fields)
-##        print(self.cur.description)
-        SQL='select * from {table};'.format(table=table)
-        self.cur.execute(SQL)
-        for column in self.cur.description:
-            print(column)
+        fields=[column[3] for column in self.cur.columns(table)]
+##        for column in self.cur.columns(table):
+##            print(column)
         return fields
+
+    def exportTableDefine(self,table):
+##        fields=self.getFields(table)
+        CharacterTypes=['VARCHAR','MEMO','TEXT','LONGCHAR']
+        ArbitraryPrecisionNumberTypes=['NUMERIC']
+        SQL = "\nCREATE TABLE IF NOT EXISTS {table}(\n".format(table=table)
+        for column in self.cur.columns(table):
+            if column[5] in CharacterTypes:
+                SQL += '\t%s\t%s(%d%)'%(column[3],column[5],column[6])
+                continue
+            if column[5] in ArbitraryPrecisionNumberTypes:
+                SQL += '\t%s\t%s(%d,%d)'%(column[3],column[5],column[6],column[7])
+                continue
+            s='\t%s\t%s'%(column[3],column[5])
+        SQL += "\n);\n"
+        print(SQL)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -55,9 +68,9 @@ def main():
          exit(0)
         else:
             x=MSAccess(src)
-            t=x.getTables()
-            for table in t:
-               x.getFields(table)
+            for table in x.getTables():
+#               x.getFields(table)
+               x.exportTableDefine(table)
 
 if __name__ == '__main__':
     main()
