@@ -1,4 +1,4 @@
-﻿#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Name:        模块1
 # Purpose:
 #
@@ -14,13 +14,14 @@ import os
 import csv
 import platform
 import psycopg2
-##import tempfile
-
+#import tempfile
+            
+pathName='temp'
 ##创建一个为PostgreSQL数据库导入的csv方言
-#class pgSQL(csv.excel):
-#    lineterminator='\n'
-#    delimiter='\t'
-#    quoting=csv.QUOTE_MINIMAL
+class pgSQL(csv.excel):
+   lineterminator='\n'
+   delimiter='\t'
+   quoting=csv.QUOTE_MINIMAL
 
 class AccessToPostreSQL:
     def __init__(self, mdbFile, pg_con_string):
@@ -49,19 +50,19 @@ class AccessToPostreSQL:
         table_list=[x[2] for x in self.ac_cur.tables().fetchall() if x[3] == 'TABLE']
         SQL=''
         for table in table_list:
-            SQL += "\nCREATE TABLE IF NOT EXISTS " + table + "(\n"
+            SQL += '\nCREATE TABLE IF NOT EXISTS  "{table}" (\n'.format(table=table)
             SQL += self.createFields(table)
             SQL +="\n);\n"
 ##            print(self.ac_cur.primaryKeys().fetchall())
 #        print('createTable():'+SQL)
         self.SQL += SQL
-        self.pg_cur.execute(SQL)
-        self.pg_con.commit()
+        # self.pg_cur.execute(SQL)
+        # self.pg_con.commit()
 
     def createFields(self,table):
         CharacterTypes=['VARCHAR','MEMO','TEXT','LONGCHAR']
         ArbitraryPrecisionNumberTypes=['NUMERIC']
-        SQL = ""
+#        SQL = ""
         field_list = list()
         for column in self.ac_cur.columns(table=table):
             if column[5] in CharacterTypes :
@@ -93,30 +94,40 @@ class AccessToPostreSQL:
 ##        print(table,csv.list_dialects())
         table_list=list()
         table_list=[x[2] for x in self.ac_cur.tables().fetchall() if x[3] == 'TABLE']
-        pathName='temp'
-        if not os.path.exists(pathName):
-            os.mkdir(pathName)
         for table in table_list:
             SQL = """SELECT * FROM {table_name}""".format(table_name=table)
 ##            print(SQL)
+            SQL_head='\nCOPY  "{table_name}"  FROM stdin ;\n' .format(table_name=table)
+            SQL_tail='\\.\n'
             self.ac_cur.execute(SQL)
             rows = self.ac_cur.fetchall()
-            outfile=os.path.join(pathName,table) + '.csv'
-            with open(outfile,'w+',encoding='utf-8',) as fp:
+            # outfile=os.path.join(pathName,table) + '.csv'
+            outfile=table+'.csv'
+            with open(outfile,'w+',encoding='utf-8') as fp:
                 csvfile = csv.writer(fp,'pgSQL')
                 for row in rows:
                     line=[]
-                    for s in row:
-                        if s == None:
-                            s='\\N'
-                        line.append(s)
-##                    print(line)
+                    for col in row:
+                        if col == None:
+                            col='\\N'
+                            line.append(col)
+                            continue
+                        # if isinstance(col,str) :
+                        #     col=col.replace('\\','\\\\')
+                        #     line.append(col)
+                        #     continue
+                        line.append(col)
                     csvfile.writerow(line)
-##                csvfile.writerows(rows)
-##                print(self.SQL)
-                table='"'+table+'"'
-                self.pg_cur.copy_from(fp, table, sep='\t', null='\\N', )
-        self.pg_con.commit()
+            with open(outfile,'rU',encoding='utf-8') as f:
+                SQL_content=f.read()
+                # SQL_content.strip('\r\n')
+
+            self.SQL+=SQL_head+SQL_content+SQL_tail
+            os.remove(outfile)
+
+        #         table='"'+table+'"'
+        #         self.pg_cur.copy_from(fp, table, sep='\t', null='\\N', )
+        # self.pg_con.commit()
 
 def isWindows():
     sysstr = platform.system()
@@ -145,11 +156,19 @@ def main():
             pg_con_string='dbname=%s user=%s password=%s host=%s port=%s' %(dbname,user,password,host,port)
 ##            access_con_string='DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=%s;' %(src)
 ##            print(src,pg_con_string)
+
+            # if not os.path.exists(pathName):
+            #     os.mkdir(pathName)
+
             x=AccessToPostreSQL(src,pg_con_string)
-            t=x.getTables()
-            for table in t:
-               x.getFields(table)
             x.run()
+
+            # if not os.listdir(pathName):
+            #     os.rmdir(pathName)
+
+            fname='AccessToPostgreSQL.sql'
+            with open(fname,'w',encoding='utf-8',newline='\n') as f:
+                f.write(x.SQL)
 
 if __name__ == '__main__':
     main()
