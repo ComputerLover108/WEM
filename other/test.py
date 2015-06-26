@@ -62,30 +62,31 @@ class AccessToPostreSQL:
     def createFields(self,table):
         CharacterTypes=['VARCHAR','MEMO','TEXT','LONGCHAR']
         ArbitraryPrecisionNumberTypes=['NUMERIC']
-#        SQL = ""
+        columnDef = dict()
         field_list = list()
         for column in self.ac_cur.columns(table=table):
-            if column[5] in CharacterTypes :
-                field_list += ['"' + column[3] +'"' + '\tTEXT' ,]
-                continue
-            if column[5] in ArbitraryPrecisionNumberTypes :
-                field_list += ['"' + column[3] +'"'
-                    + '\t' + column[5]
-                    + '('
-                    + str(column[6]) + ',' + str(column[7])
-                    + ')',
-                ]
-                continue
+            columnDef['column_name']=column[3]
+            columnDef['type_name']=column[5]
+            columnDef['column_size']=column[6]
+            columnDef['decimal_digits']=column[8]
+            columnDef['num_prec_radix']=column[9]
+
             if column[5] == 'COUNTER' :
-                field_list += ['"' + column[3] +'"' + '\tSERIAL' ,]
-                continue
+                columnDef['type_name'] = 'SERIAL'
             if column[5] == 'DOUBLE' :
-                field_list += ['"' + column[3] +'"' + '\tREAL' ,]
-                continue
+                columnDef['type_name'] = 'REAL'               
+            if columnDef['type_name'] in CharacterTypes:
+                columnDef['type_name'] = 'TEXT'
             if column[5] == 'DATETIME' :
-                field_list += ['"' + column[3] +'"' + '\tTIMESTAMP' ,]
-                continue
-            field_list += ['"' + column[3] +'"' + '\t' + column[5],]
+                columnDef['type_name'] = 'TIMESTAMP'
+            if column[5] in ArbitraryPrecisionNumberTypes :
+                columnDef['type_name'] = '%s(%d,%d)'%(column[5],column[8],column[9])
+            if  column[17] == 'NO' :
+                # columnDef['is_nullable']='NOT NULL'           
+                field_list += ['"%s"\t%s\tNOT NULL'%(columnDef['column_name'],columnDef['type_name']),]
+            else:
+                field_list += ['"%s"\t%s'%(columnDef['column_name'],columnDef['type_name']),]        
+
         return ",\n ".join(field_list)
 
     def run(self):
@@ -101,7 +102,6 @@ class AccessToPostreSQL:
             SQL_tail='\\.\n'
             self.ac_cur.execute(SQL)
             rows = self.ac_cur.fetchall()
-            # outfile=os.path.join(pathName,table) + '.csv'
             outfile=table+'.csv'
             with open(outfile,'w+',encoding='utf-8') as fp:
                 csvfile = csv.writer(fp,'pgSQL')
@@ -112,22 +112,29 @@ class AccessToPostreSQL:
                             col='\\N'
                             line.append(col)
                             continue
-                        # if isinstance(col,str) :
-                        #     col=col.replace('\\','\\\\')
-                        #     line.append(col)
-                        #     continue
+                        if isinstance(col,str) :
+                            col=col.replace('\\','\\\\')
+                            col=col.replace('\r','\\n')
+                            col=col.replace('\n','\\n')
+                            col=col.replace('\t','\\t')
+                            line.append(col)
+                            continue
                         line.append(col)
                     csvfile.writerow(line)
             with open(outfile,'rU',encoding='utf-8') as f:
                 SQL_content=f.read()
-                # SQL_content.strip('\r\n')
+                # self.pg_cur.copy_from(fp, table, sep='\t', null='\\N', )
 
             self.SQL+=SQL_head+SQL_content+SQL_tail
             os.remove(outfile)
+        # self.pg_con.commit()            
+        fname='AccessToPostgreSQL.sql'
+        with open(fname,'w',encoding='utf-8',newline='\n') as f:
+            f.write(self.SQL)
+        command='psql -h 127.0.0.1 -p 2012 -U operator -f %s HLD'%(fname)
+        with os.popen(command) as proc:
+            print(proc.read())
 
-        #         table='"'+table+'"'
-        #         self.pg_cur.copy_from(fp, table, sep='\t', null='\\N', )
-        # self.pg_con.commit()
 
 def isWindows():
     sysstr = platform.system()
@@ -166,9 +173,7 @@ def main():
             # if not os.listdir(pathName):
             #     os.rmdir(pathName)
 
-            fname='AccessToPostgreSQL.sql'
-            with open(fname,'w',encoding='utf-8',newline='\n') as f:
-                f.write(x.SQL)
+
 
 if __name__ == '__main__':
     main()
