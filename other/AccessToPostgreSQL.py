@@ -14,7 +14,7 @@ import os
 import csv
 import platform
 import psycopg2
-#import tempfile
+import tempfile
             
 pathName='temp'
 ##创建一个为PostgreSQL数据库导入的csv方言
@@ -23,15 +23,28 @@ class pgSQL(csv.excel):
    delimiter='\t'
    quoting=csv.QUOTE_MINIMAL
 
-class AccessToPostreSQL:
-    def __init__(self, mdbFile, pg_con_string):
+class AccessToPostgreSQL:
+    # def __init__(self, mdbFile, pg_con_string):
+    #     if isWindows():
+    #         self.ac_con=pypyodbc.win_connect_mdb(mdbFile)
+    #         self.ac_cur = self.ac_con.cursor()
+    #     self.pg_con = psycopg2.connect(pg_con_string)
+    #     self.pg_cur = self.pg_con.cursor()
+    #     self.SQL="SET client_encoding = 'UTF8';\n"
+    def __init__(self,mdbFile,host,port,user,password,database):
         if isWindows():
             self.ac_con=pypyodbc.win_connect_mdb(mdbFile)
             self.ac_cur = self.ac_con.cursor()
-        self.pg_con = psycopg2.connect(pg_con_string)
+        self.pg_database=database
+        self.pg_user=user
+        self.pg_password=password
+        self.pg_host=host
+        self.pg_port=port            
+        self.pg_con = psycopg2.connect(database=database,user=user,password=password,host=host,port=port)
         self.pg_cur = self.pg_con.cursor()
         self.SQL="SET client_encoding = 'UTF8';\n"
 
+        
     def getTables(self):
         tables=list()
         tables=[x[2] for x in self.ac_cur.tables().fetchall() if x[3] == 'TABLE']
@@ -131,9 +144,12 @@ class AccessToPostreSQL:
         fname='AccessToPostgreSQL.sql'
         with open(fname,'w',encoding='utf-8',newline='\n') as f:
             f.write(self.SQL)
-        command='psql -h 127.0.0.1 -p 2012 -U operator -f %s HLD'%(fname)
+        # command='psql -h 127.0.0.1 -p 2012 -U operator -f %s HLD' %(fname)
+        command="psql -h {host} -p {port} -U {user}  -f {file} {database}".format(host=self.pg_host,port=self.pg_port,user=self.pg_user,file=fname,database=self.pg_database) 
+        # print(command)        
         with os.popen(command) as proc:
             print(proc.read())
+        os.remove(fname)
 
 
 def isWindows():
@@ -159,15 +175,14 @@ def main():
             port=args.port
             user=args.user
             password=args.password
-            dbname=args.database
-            pg_con_string='dbname=%s user=%s password=%s host=%s port=%s' %(dbname,user,password,host,port)
+            database=args.database
+            # pg_con_string='dbname=%s user=%s password=%s host=%s port=%s' %(database,user,password,host,port)
+            # x=AccessToPostgreSQL(mdbFile=src,pg_con_string=pg_con_string)
 ##            access_con_string='DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=%s;' %(src)
 ##            print(src,pg_con_string)
 
-            # if not os.path.exists(pathName):
-            #     os.mkdir(pathName)
 
-            x=AccessToPostreSQL(src,pg_con_string)
+            x=AccessToPostgreSQL(mdbFile=src,host=host,port=port,user=user,password=password,database=database)
             x.run()
 
             # if not os.listdir(pathName):
