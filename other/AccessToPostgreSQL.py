@@ -14,23 +14,15 @@ import os
 import csv
 import platform
 import psycopg2
-import tempfile
-            
-pathName='temp'
+# import tempfile
+
 ##创建一个为PostgreSQL数据库导入的csv方言
 class pgSQL(csv.excel):
-   lineterminator='\n'
-   delimiter='\t'
-   quoting=csv.QUOTE_MINIMAL
+	lineterminator='\n'
+	delimiter='\t'
+	quoting=csv.QUOTE_MINIMAL
 
 class AccessToPostgreSQL:
-    # def __init__(self, mdbFile, pg_con_string):
-    #     if isWindows():
-    #         self.ac_con=pypyodbc.win_connect_mdb(mdbFile)
-    #         self.ac_cur = self.ac_con.cursor()
-    #     self.pg_con = psycopg2.connect(pg_con_string)
-    #     self.pg_cur = self.pg_con.cursor()
-    #     self.SQL="SET client_encoding = 'UTF8';\n"
     def __init__(self,mdbFile,host,port,user,password,database):
         if isWindows():
             self.ac_con=pypyodbc.win_connect_mdb(mdbFile)
@@ -39,12 +31,12 @@ class AccessToPostgreSQL:
         self.pg_user=user
         self.pg_password=password
         self.pg_host=host
-        self.pg_port=port            
+        self.pg_port=port
         self.pg_con = psycopg2.connect(database=database,user=user,password=password,host=host,port=port)
         self.pg_cur = self.pg_con.cursor()
         self.SQL="SET client_encoding = 'UTF8';\n"
 
-        
+
     def getTables(self):
         tables=list()
         tables=[x[2] for x in self.ac_cur.tables().fetchall() if x[3] == 'TABLE']
@@ -87,7 +79,7 @@ class AccessToPostgreSQL:
             if column[5] == 'COUNTER' :
                 columnDef['type_name'] = 'SERIAL'
             if column[5] == 'DOUBLE' :
-                columnDef['type_name'] = 'REAL'               
+                columnDef['type_name'] = 'REAL'
             if columnDef['type_name'] in CharacterTypes:
                 columnDef['type_name'] = 'TEXT'
             if column[5] == 'DATETIME' :
@@ -95,10 +87,10 @@ class AccessToPostgreSQL:
             if column[5] in ArbitraryPrecisionNumberTypes :
                 columnDef['type_name'] = '%s(%d,%d)'%(column[5],column[8],column[9])
             if  column[17] == 'NO' :
-                # columnDef['is_nullable']='NOT NULL'           
+                # columnDef['is_nullable']='NOT NULL'
                 field_list += ['"%s"\t%s\tNOT NULL'%(columnDef['column_name'],columnDef['type_name']),]
             else:
-                field_list += ['"%s"\t%s'%(columnDef['column_name'],columnDef['type_name']),]        
+                field_list += ['"%s"\t%s'%(columnDef['column_name'],columnDef['type_name']),]
 
         return ",\n ".join(field_list)
 
@@ -137,16 +129,15 @@ class AccessToPostgreSQL:
             with open(outfile,'rU',encoding='utf-8') as f:
                 SQL_content=f.read()
                 # self.pg_cur.copy_from(fp, table, sep='\t', null='\\N', )
-
             self.SQL+=SQL_head+SQL_content+SQL_tail
             os.remove(outfile)
-        # self.pg_con.commit()            
+        # self.pg_con.commit()
         fname='AccessToPostgreSQL.sql'
         with open(fname,'w',encoding='utf-8',newline='\n') as f:
             f.write(self.SQL)
         # command='psql -h 127.0.0.1 -p 2012 -U operator -f %s HLD' %(fname)
-        command="psql -h {host} -p {port} -U {user}  -f {file} {database}".format(host=self.pg_host,port=self.pg_port,user=self.pg_user,file=fname,database=self.pg_database) 
-        # print(command)        
+        command="psql -h {host} -p {port} -U {user}  -f {file} {database}".format(host=self.pg_host,port=self.pg_port,user=self.pg_user,file=fname,database=self.pg_database)
+        # print(command)
         with os.popen(command) as proc:
             print(proc.read())
         os.remove(fname)
@@ -168,8 +159,8 @@ def main():
     if args.file :
         src=args.file
         if not os.path.exists(src):
-         print('Access 数据库 ('+src+')没找到!')
-         exit(0)
+            print('Access 数据库 ('+src+')没找到!')
+            exit(0)
         else:
             host=args.host
             port=args.port
