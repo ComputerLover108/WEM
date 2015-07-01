@@ -28,6 +28,10 @@ class MSAccess:
         if isWindows():
             self.conn=pypyodbc.win_connect_mdb(fileName)
             self.cur=self.conn.cursor()
+        else :
+            DSN = 'Driver=MDBTools;DBQ={fname}'.format(fname=fileName)
+            self.conn = pypyodbc.connect(DSN)
+            self.cur = self.conn.cursor()
 
     def getTables(self):
 ##        不收集系统表

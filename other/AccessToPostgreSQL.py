@@ -27,6 +27,9 @@ class AccessToPostgreSQL:
         if isWindows():
             self.ac_con=pypyodbc.win_connect_mdb(mdbFile)
             self.ac_cur = self.ac_con.cursor()
+        else :
+            self.ac.con=pypyodbc.connect('Driver=MDBTools;DBQ={fname}'.format(fname=mdbFile))
+            self.ac_cur=self.ac_con.cursor() 
         self.pg_database=database
         self.pg_user=user
         self.pg_password=password
