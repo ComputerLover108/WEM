@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'Accounts',
     'ProcessProduce',
     'EquipmentMaintain',
-    'HealthSafetyEnviroment',
+#    'HealthSafetyEnviroment',
     'Information',
 )
 
@@ -71,9 +71,9 @@ DATABASES = {
         'NAME': 'HLD',
         'USER': 'operator',
         'PASSWORD': '5302469',
-        'HOST': '127.0.0.1',                      
-        #'HOST': '10.30.29.51',                      
-        'PORT': '2012',                      
+        'HOST': '127.0.0.1',
+        #'HOST': '10.30.29.51',
+        'PORT': '2012',
     }
 }
 
@@ -95,10 +95,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,'templates').replace('\\','/'),
-)
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static").replace('\\','/'),
 )
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': [
+            os.path.join(BASE_DIR,'templates').replace('\\', '/'),
+        ],
+    },
+]
