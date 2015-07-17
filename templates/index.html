@@ -1,7 +1,7 @@
 ﻿{% extends "main.html" %}
 {% block title %}{{title}}{% endblock title %}
 {% block CSS %}
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}dist/css/HLD-index.css" />
+	<link rel="stylesheet" type="text/css" href="/static/bootstrap/css/HLD-index.css" />
 {% endblock CSS %}
 {% block content %}
 	<!-- 主体 -->
@@ -27,7 +27,7 @@
 					</ol>
 					<div class="carousel-inner" role="listbox">
 					  <div class="item active">
-						<img  alt="全景" src="{{ STATIC_URL }}images/全景.jpg" >
+						<img  alt="全景" src="/static/images/全景.jpg" >
 						<div class="container">
 							<div class="carousel-caption">
 	<!-- 						  <h1>One more for good measure.</h1>
@@ -37,10 +37,10 @@
 						</div>
 					  </div>
 					  <div class="item">
-						<img  alt="日景" src="{{ STATIC_URL }}images/日景.jpg" >
+						<img  alt="日景" src="/static/images/日景.jpg" >
 					  </div>
 					  <div class="item ">
-						<img  alt="夜景"  src="{{ STATIC_URL }}images/夜景.jpg" >
+						<img  alt="夜景"  src="/static/images/夜景.jpg" >
 					  </div>
 					</div>
 					<a class="left carousel-control" href="#全景" role="button" data-slide="prev">
