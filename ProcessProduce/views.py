@@ -1,22 +1,31 @@
 ﻿from django.shortcuts import render
-import operator
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+
+from .forms import ProrationForm
 # Create your views here.
 def index(request):
     title='工艺生产'
     用户='游客'
 ##    背景图片='/static/images/工艺生产.jpg'
     buttons=(
+        ('配产','Proration'),
         ('快速录入','QuickInput'),
-        ('海管状态','SeaPipeStatus'),
-        ('装车信息','OutputReport'),
-        ('化验报表','TestData'),
-        ('生产日报','Daily'),
-        ('生产月报','MonthlyReport'),
-        ('生产年报','AnnualReport'),
+        ('化验数据','TestData'),
+        ('海管数据','SeaPipeData'),
+        ('装车数据','OutputData'),
+        ('海管报表','SeaPipeReport'),
+        ('装车报表','OutputReport'),
+        ('化验报表','TestReport'),
         ('生产动态','ProductionStatus'),
+        ('生产日报','DailyProduction'),
+        ('生产月报','MonthlyProduction'),
+        ('生产年报','AnnualProduction'),
+ 
     )
     return render(request, 'ProcessProduce/index.html', locals())
 
+#数据录入
 def TestData(request):
     title='化验录入'
     return render(request, 'ProcessProduce/TestData.html', locals())
@@ -59,3 +68,44 @@ def QuickInput(request):
             ('电','自发电kwh')
         )
     return render(request, 'ProcessProduce/QuickInput.html', locals())
+ 
+def Proration(request):
+    title="配产任务"
+    产品 = ["天然气","轻油","丙丁烷"]
+    if request.method == 'POST':
+        form = ProrationForm(request.POST)
+        if form.is_valid():
+            date = form.cleaned_data['日期']
+            gasM = form.cleaned_data['天然气月配产']
+            gasY = form.cleaned_data['天然气月配产']
+            oilM = form.cleaned_data['轻油月配产']
+            oilY = form.cleaned_data['轻油年配产']
+            bdM = form.cleaned_data['丙丁烷月配产']
+            bdY = form.cleaned_data['丙丁烷年配产']
+            return HttpResponseRedirect('/thanks/')
+    else:
+        form = ProrationForm()
+    return render(request,'ProcessProduce/Proration.html',locals())
+    
+def RealData(request):
+    pass
+
+#报表
+def DailyProduction():
+    pass
+
+def MonthlyProduction():
+    pass
+
+def AnnualProduction():
+    pass
+
+def TestReport():
+    pass
+
+def SeaPipeStatus():
+    pass
+
+def OutputReport():
+    pass
+
