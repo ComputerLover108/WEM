@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Created on Tue Jul 21 21:25:32 2015
 
@@ -6,6 +6,7 @@ Created on Tue Jul 21 21:25:32 2015
 """
 
 from django import forms
+from datetime import date
 
 class QuickInputFrom(forms.Form):
     pass
@@ -14,7 +15,7 @@ class TestDataForm(forms.Form):
     pass
 
 class ProrationForm(forms.Form):
-    日期 = forms.DateField()
+    日期 = forms.DateField( initial=date.today().isoformat() )
     天然气月配产10KNm3 = forms.DecimalField()
     天然气年配产10KNm3 = forms.DecimalField()
     轻油月配产m3 = forms.IntegerField()

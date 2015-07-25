@@ -6,30 +6,16 @@
         <form class="form-horizontal" action="{% url '配产' %}" method="post">
         {% csrf_token %}
             <div class="row">
-                <div clas="form-group">
-                `   <label for="日期" class="col-md-3 control-label">日期</label>
-                    <div class="col-md-2">
-                        <input type="date" class="form-control">
+                <div class="form-group">
+                    <div class="col-md-5">
+                        <h1 class="bg-danger">请按制表键[tab](键盘Q字母左边)，输入下一个数据</h1>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2 ">
                         <button type="submit" class="btn btn-primary btn-block" >保存</button>
                     </div>
                 </div>
             </div>
-            <table class="table table-bordered">
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>月配产</th>
-                        <th>年配产</th>
-                    </tr>
-                    {% for x in 产品 %}
-                    <tr>
-                        <td>{{x}}</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    {% endfor %}
-            </table>    
+            {% include "form_snippet.html" %}
         </form>
 	</div>		
 {% endblock content%}

@@ -2,6 +2,7 @@
 
 # Create your models here.
 class 生产信息(models.Model):
+      id = models.AutoField(primary_key=True)
       日期 = models.DateField()
       名称 = models.CharField(max_length=32)
       单位 = models.CharField(max_length=32,blank=True)
@@ -14,7 +15,7 @@ class 生产信息(models.Model):
       数据源 = models.TextField(blank=True)
       class Meta:
             db_table='生产信息'
-##            unique_together = ("日期", "名称","单位","备注")
+#            unique_together = ("日期", "名称","单位","备注")
       def __str__(self):
           return self.日期+':'+self.名称+'['+self.单位+']'
 
