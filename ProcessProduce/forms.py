@@ -9,7 +9,9 @@ from django import forms
 from datetime import date
 
 class QuickInputFrom(forms.Form):
-    pass
+    类别 = forms.CharField(max_length=32)
+    名称 = forms.CharField(max_length=32)
+    数据 = forms.DecimalField()
     
 class TestDataForm(forms.Form):
     pass

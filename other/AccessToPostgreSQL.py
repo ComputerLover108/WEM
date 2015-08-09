@@ -1,13 +1,3 @@
-#-------------------------------------------------------------------------------
-# Name:        模块1
-# Purpose:
-#
-# Author:      wkx
-#
-# Created:     01/06/2015
-# Copyright:   (c) wkx 2015
-# Licence:     <your licence>
-#-------------------------------------------------------------------------------
 import argparse
 import pypyodbc
 import os
