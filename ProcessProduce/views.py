@@ -40,65 +40,33 @@ def TestData(request):
 
 def QuickInput(request):
     title='快速录入'   
-#    with connection.cursor() as c:
-#        SQL="select distinct 类别 from 生产信息 order by 类别;"
-#        c.execute(SQL)
-#        categorys=[x[0] for x in c.fetchall() if x[0] != '' ]
-#        categorys.sort()
-#        print(categorys)
+
     categorys=['天然气','轻油','轻烃','化学药剂','水','电','数据库','上游']
-    天然气=['入厂计量Nm3','稳定区产气Nm3','外供锦天化Nm3','外供精细化工Nm3','外供污水处理厂Nm3','外供新奥燃气Nm3','自用气Nm3']
-    轻油=['V-631A(液位m)','V-631B(液位m)','V-631C(液位m)']
-    轻烃=['V-641A(液位m)','V-641B(液位m)','V-642(液位m)','V-643A(液位m)','V-643B(液位m)']
-    化学药剂=['乙二醇消耗m3','乙二醇消耗m3']  
-    水=['污水排放m3','水池水位m','自采水m3','外供水m3']  
-    电=['外供电kwh','自发电kwh']  
-    上游=['JZ20-2体系供气Nm3','JZ25-1S原油密度','JZ20-2凝析油m3','JZ20-2轻油m3','JZ9-3供气10KNm3','JZ21-1供气10KNm3','JZ25-1供气10KNm3','JZ25-1S供气10KNm3']  
+    天然气=['入厂计量 Nm3','稳定区产气 Nm3','外供锦天化 Nm3','外供精细化工 Nm3','外供污水处理厂 Nm3','外供新奥燃气 Nm3','自用气 Nm3','JZ202体系 Nm3']
+    轻油=['V-631A m','V-631B m','V-631C m']
+    轻烃=['V-641A m','V-641B m','V-642 m','V-643A m','V-643B m']
+    化学药剂=['甲醇日耗量 m3','乙二醇日耗量 m3','乙二醇日回收量 m3','乙二醇浓度 %']  
+    水=['水池水位 m','污水排放 m3','自采水 m3','外供水 m3']  
+    电=['外供电 kwh','自发电 kwh']  
+    上游=['JZ20-2体系供气 Nm3','JZ25-1S原油密度','JZ20-2凝析油m3','JZ20-2轻油m3','JZ9-3供气10KNm3','JZ21-1供气10KNm3','JZ25-1供气10KNm3','JZ25-1S供气10KNm3']  
     数据库=['数据库轻油回收量m3','数据库丙丁烷回收量m3']
-    Date=date.today().isoformat()
-    表格=(
-            ('上游','JZ9-3供气10KNm3'),
-            ('上游','JZ21-1供气10KNm3'),
-            ('上游','JZ25-1供气10KNm3'),
-            ('上游','JZ25-1S供气10KNm3'),
-            ('上游','JZ25-1S原油密度'),
-            ('上游','JZ20-2凝析油m3'),
-            ('上游','JZ20-2轻油m3'),
-            ('数据库','数据库轻油回收量m3'),
-            ('数据库','数据库丙丁烷回收量m3'),
-            ('天然气','JZ20-2体系供气Nm3'),
-            ('天然气','入厂计量Nm3'),
-            ('天然气','稳定区产气Nm3'),
-            ('天然气','外供锦天化Nm3'),
-            ('天然气','外供精细化工Nm3'),
-            ('天然气','外供污水处理厂Nm3'),
-            ('天然气','外供新奥燃气Nm3'),
-            ('天然气','自用气Nm3'),
-            ('轻油','V-631A(液位m)'),
-            ('轻油','V-631B(液位m)'),
-            ('轻油','V-631C(液位m)'),
-            ('轻烃','V-641A(液位m)'),
-            ('轻烃','V-641B(液位m)'),
-            ('轻烃','V-642(液位m)'),
-            ('轻烃','V-643A(液位m)'),
-            ('轻烃','V-643B(液位m)'),
-            ('化学药剂','乙二醇消耗m3'),
-            ('化学药剂','甲醇消耗m3'),
-            ('水','外供水m3'),
-            ('水','自采水m3'),
-            ('水','污水排放m3'),
-            ('水','水池水位m'),
-            ('电','外供电kwh'),
-            ('电','自发电kwh')
-        )
-    td=dict()
-    for x in 表格:
-        td[x[1]]=x[0]
-#    print(td)
-    rows= range(len(表格))
-    columns= range(3)
+
     if request.method == 'POST':
-        print(request.POST)
+        form = QuickInputFrom(request.POST)
+        if form.is_valid():
+            日期 = form.cleaned_data['日期']
+            稳定区 = form.cleaned_data['稳定区']
+            入厂计量 = form.cleaned_data['入厂计量']
+            锦天化 = form.cleaned_data['锦天化']
+            精细化工 = form.cleaned_data['精细化工']
+            污水处理厂 = form.cleaned_data['污水处理厂']
+            新奥燃气 = form.cleaned_data['新奥燃气']
+            自用气 = form.cleaned_data['自用气']
+            JZ202体系 = form.cleaned_data['JZ202体系']
+            address='/ProcessProduce/DailyProduction/{}/'.format(日期)
+            return HttpResponseRedirect(address)pass
+    else:
+        form = QuickInputFrom()
     return render(request, 'ProcessProduce/QuickInput.html', locals())
 
  
