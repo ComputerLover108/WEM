@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db import connection
 from django.forms.formsets import formset_factory
+from django.forms import ModelForm
 from datetime import date,datetime
 import sys
 import json
@@ -11,6 +12,15 @@ import json
 from . forms import ProrationForm,QuickInputFrom
 from . models import 生产信息,生产动态,提单
 
+
+class LadingForm(ModelForm):
+    class Meta:
+        model = 提单
+
+
+def BillOfLading():
+    pass
+    
 # Create your views here.
 def index(request):
     title='工艺生产'
@@ -42,8 +52,8 @@ def QuickInput(request):
     title='快速录入'   
 
     categorys=['天然气','轻油','轻烃','化学药剂','水','电','数据库','上游']
-    天然气=['入厂计量 Nm3','稳定区产气 Nm3','外供锦天化 Nm3','外供精细化工 Nm3','外供污水处理厂 Nm3','外供新奥燃气 Nm3','自用气 Nm3','JZ202体系 Nm3']
-    轻油=['V-631A m','V-631B m','V-631C m']
+    气=['入厂计量 Nm3','稳定区产气 Nm3','外供锦天化 Nm3','外供精细化工 Nm3','外供污水处理厂 Nm3','外供新奥燃气 Nm3','自用气 Nm3','JZ202体系 Nm3']
+    油=['V-631A m','V-631B m','V-631C m']
     轻烃=['V-641A m','V-641B m','V-642 m','V-643A m','V-643B m']
     化学药剂=['甲醇日耗量 m3','乙二醇日耗量 m3','乙二醇日回收量 m3','乙二醇浓度 %']  
     水=['水池水位 m','污水排放 m3','自采水 m3','外供水 m3']  

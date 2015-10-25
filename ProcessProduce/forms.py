@@ -11,7 +11,6 @@ from datetime import date
 class QuickInputFrom(forms.Form):
     日期 = forms.DateField(initial=date.today().isoformat())
 # 气
-<<<<<<< HEAD
     稳定区 = forms.IntegerField(label='稳定区产气 Nm3',max_value=30000)
     入厂计量 = forms.IntegerField(label='入厂计量 Nm3',max_value=1800000)
     锦天化 = forms.IntegerField(label='外供锦天化 Nm3',max_value=1800000)
@@ -28,24 +27,6 @@ class QuickInputFrom(forms.Form):
     海管进出口压力 = forms.CharField(label='海管进/出口压力 MPa')
     海管进出口温度= forms.CharField(label='海管进/出口温度 ℃')
     海管通球备注 = forms.CharField(required=False)
-=======
-    稳定区 = forms.IntegerField(label='稳定区 Nm3',max_value=30000)
-    入厂计量 = forms.IntegerField(label='入厂计量 Nm3',max_value=1800000)
-    外供锦天化 = forms.IntegerField(label='外供锦天化 Nm3',max_value=1800000)
-    外供精细化工 = forms.IntegerField(label='外供精细化工 Nm3')
-    外供污水处理厂 = forms.IntegerField(label='外供污水处理厂 Nm3')
-    外供新奥燃气Nm3 = forms.IntegerField(label='外供新奥燃气 Nm3')
-    自用气量 = forms.IntegerField(label='自用气量 Nm3',max_value=20000)
-    JZ202体系 = forms.IntegerField(label='JZ202体系 Nm3',max_value=1800000)
-# 海管    
-    海管来液含水 = forms.CharField(label='海管来液含水[V-601] %')
-    海管MEG浓度 = forms.CharField(label='海管MEG浓度[V-611] %',max_value=100)
-    海管出口凝点 = forms.CharField(label='海管出口凝点[V-601] ℃')
-    海管出口PH值 = forms.CharField(label='海管出口PH值')
-    海管进出口压力 = forms.CharField(label='海管进/出口压力 MPa')
-    海管进出口温度= forms.CharField(label='海管进/出口温度 ℃')
-    海管通球备注 = forms.CharField()
->>>>>>> 06b28ace292a23a3125bf6ff77fb3fcf708ea330
 # 上游    
     JZ202凝析油 = forms.DecimalField(label='JZ-202凝析油 m3')
     JZ202轻油 = forms.DecimalField(label='JZ-202轻油 m3')
@@ -56,17 +37,10 @@ class QuickInputFrom(forms.Form):
     轻油装车t = forms.DecimalField(label='轻油装车 t')
     轻油装车m3 = forms.DecimalField(label='轻油装车 m3')
     轻油装车bbl = forms.DecimalField(label='轻油装车 bbl')
-<<<<<<< HEAD
     外输凝点 = forms.DecimalField(label='外输凝点 ℃',required=False)
     外输PH值 = forms.DecimalField(required=False)
     饱和蒸汽压 = forms.DecimalField(label='饱和蒸汽压 Kpa',required=False)
     轻油入罐前上午下午含水 = forms.CharField(label='轻油入罐前上/下午含水 %',required=False)
-=======
-    外输凝点 = forms.DecimalField(label='外输凝点 ℃')
-    外输PH值 = forms.DecimalField()
-    饱和蒸汽压 = forms.DecimalField(label='饱和蒸汽压 Kpa')
-    轻油入罐前上午下午含水 = forms.CharField(label='轻油入罐前上/下午含水 %')
->>>>>>> 06b28ace292a23a3125bf6ff77fb3fcf708ea330
     轻油密度 = forms.DecimalField(label='轻油密度 t/m3')
 # 轻烃    
     V641A = forms.DecimalField(label='V641A m')
@@ -83,13 +57,8 @@ class QuickInputFrom(forms.Form):
 # 化学药剂
     甲醇消耗 = forms.DecimalField(label='甲醇日耗量 m3')
     乙二醇消耗 = forms.DecimalField(label='乙二醇日耗量 m3')    
-<<<<<<< HEAD
     乙二醇回收 = forms.DecimalField(label='乙二醇日回收量 m3')
     乙二醇浓度 = forms.DecimalField(label='乙二醇浓度 %',required=False)
-=======
-    乙二醇日回收 = forms.DecimalField(label='乙二醇日回收量 m3')
-    乙二醇浓度 = forms.DecimalField(label='乙二醇浓度 %')
->>>>>>> 06b28ace292a23a3125bf6ff77fb3fcf708ea330
 # 水
     水池水位 = forms.DecimalField(label='水池水位 m')    
     外供水 = forms.DecimalField(label='外供水 m3')
@@ -99,11 +68,7 @@ class QuickInputFrom(forms.Form):
     外供电 = forms.DecimalField(label='日外供电量 kwh')
     自发电 = forms.DecimalField(label='日自发电量 kwh ')
 # 备注    
-<<<<<<< HEAD
     生产备注 = forms.CharField(required=False)   
-=======
-    生产备注 = forms.CharField()   
->>>>>>> 06b28ace292a23a3125bf6ff77fb3fcf708ea330
 # 非日报数据
     FIQ6102 = forms.DecimalField(label='FIQ-6102 m3')
     FIQ5014 = forms.DecimalField(label='FIQ-5014 km3')
