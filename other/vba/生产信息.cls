@@ -192,21 +192,21 @@ Public Sub PushTableToDatabase(table)
             End If
             Call ac.cnn.Execute(SQL)
             rst.AddNew
-            rst.Fields("日期").value = temp.日期
-            rst.Fields("名称").value = temp.名称
-            rst.Fields("单位").value = temp.单位
-            rst.Fields("类别").value = temp.类别
-            rst.Fields("状态").value = temp.状态
-            rst.Fields("备注").value = temp.备注
-            rst.Fields("数据源").value = temp.数据源
+            rst.Fields("日期").Value = temp.日期
+            rst.Fields("名称").Value = temp.名称
+            rst.Fields("单位").Value = temp.单位
+            rst.Fields("类别").Value = temp.类别
+            rst.Fields("状态").Value = temp.状态
+            rst.Fields("备注").Value = temp.备注
+            rst.Fields("数据源").Value = temp.数据源
             If Not IsEmpty(temp.数据) Then
-                rst.Fields("数据").value = temp.数据
+                rst.Fields("数据").Value = temp.数据
             End If
             If Not IsEmpty(temp.月累) Then
-                rst.Fields("月累").value = temp.月累
+                rst.Fields("月累").Value = temp.月累
             End If
             If Not IsEmpty(temp.年累) Then
-                rst.Fields("年累").value = temp.年累
+                rst.Fields("年累").Value = temp.年累
             End If
             rst.UpdateBatch
         End If
@@ -223,26 +223,26 @@ Public Sub PushTableToDatabase(table)
         condition = temp.isFormat(temp)
         If condition Then
             rst.AddNew
-            rst.Fields("日期").value = temp.日期
-            rst.Fields("名称").value = temp.名称
-            rst.Fields("单位").value = temp.单位
-            rst.Fields("类别").value = temp.类别
-            rst.Fields("状态").value = temp.状态
-            rst.Fields("备注").value = temp.备注
-            rst.Fields("数据源").value = temp.数据源
+            rst.Fields("日期").Value = temp.日期
+            rst.Fields("名称").Value = temp.名称
+            rst.Fields("单位").Value = temp.单位
+            rst.Fields("类别").Value = temp.类别
+            rst.Fields("状态").Value = temp.状态
+            rst.Fields("备注").Value = temp.备注
+            rst.Fields("数据源").Value = temp.数据源
             If Not IsEmpty(temp.数据) Then
-                rst.Fields("数据").value = temp.数据
+                rst.Fields("数据").Value = temp.数据
             End If
             If Not IsEmpty(temp.月累) Then
-                rst.Fields("月累").value = temp.月累
+                rst.Fields("月累").Value = temp.月累
             End If
             If Not IsEmpty(temp.年累) Then
-                rst.Fields("年累").value = temp.年累
+                rst.Fields("年累").Value = temp.年累
             End If
             rst.UpdateBatch
         End If
     Next x
-    Debug.Print "导入" & rst.RecordCount & "条记录,PostgreSQL表花费" & DateDiff("s", t, Now()) & "s."
+    Debug.Print "导入" & table.count & "条记录到表" & tableName & " ,PostgreSQL表花费" & DateDiff("s", t, Now()) & "s."
     rst.Close
     Set rst = Nothing
     Call removeDuplicate
@@ -284,16 +284,16 @@ Public Sub AccessToPostgreSQL()
     rst1.MoveFirst
     While Not rst1.EOF Or rst1.BOF
         rst2.AddNew
-        rst2.Fields("日期").value = rst1!日期
-        rst2.Fields("名称").value = rst1!名称
-        rst2.Fields("单位").value = rst1!单位
-        rst2.Fields("类别").value = rst1!类别
-        rst2.Fields("状态").value = rst1!状态
-        rst2.Fields("备注").value = rst1!备注
-        rst2.Fields("数据源").value = rst1!数据源
-        rst2.Fields("数据").value = rst1!数据
-        rst2.Fields("月累").value = rst1!月累
-        rst2.Fields("年累").value = rst1!年累
+        rst2.Fields("日期").Value = rst1!日期
+        rst2.Fields("名称").Value = rst1!名称
+        rst2.Fields("单位").Value = rst1!单位
+        rst2.Fields("类别").Value = rst1!类别
+        rst2.Fields("状态").Value = rst1!状态
+        rst2.Fields("备注").Value = rst1!备注
+        rst2.Fields("数据源").Value = rst1!数据源
+        rst2.Fields("数据").Value = rst1!数据
+        rst2.Fields("月累").Value = rst1!月累
+        rst2.Fields("年累").Value = rst1!年累
         rst2.UpdateBatch
         rst1.MoveNext
         rst2.MoveNext
@@ -333,16 +333,16 @@ On Error GoTo ErrorHandler
     rst2.Open tableName, ac.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
     While Not rst1.EOF Or rst1.BOF
         rst2.AddNew
-        rst2.Fields("日期").value = rst1!日期
-        rst2.Fields("名称").value = rst1!名称
-        rst2.Fields("单位").value = rst1!单位
-        rst2.Fields("类别").value = rst1!类别
-        rst2.Fields("状态").value = rst1!状态
-        rst2.Fields("备注").value = rst1!备注
-        rst2.Fields("数据源").value = rst1!数据源
-        rst2.Fields("数据").value = rst1!数据
-        rst2.Fields("月累").value = rst1!月累
-        rst2.Fields("年累").value = rst1!年累
+        rst2.Fields("日期").Value = rst1!日期
+        rst2.Fields("名称").Value = rst1!名称
+        rst2.Fields("单位").Value = rst1!单位
+        rst2.Fields("类别").Value = rst1!类别
+        rst2.Fields("状态").Value = rst1!状态
+        rst2.Fields("备注").Value = rst1!备注
+        rst2.Fields("数据源").Value = rst1!数据源
+        rst2.Fields("数据").Value = rst1!数据
+        rst2.Fields("月累").Value = rst1!月累
+        rst2.Fields("年累").Value = rst1!年累
         rst2.UpdateBatch
         rst1.MoveNext
         rst2.MoveNext

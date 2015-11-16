@@ -4,6 +4,7 @@ Created on Wed Oct 28 17:00:20 2015
 
 @author: public
 """
+import re
 import os
 import xlrd
 #import psycopg2
@@ -29,7 +30,92 @@ def canOpenExcel(fileName):
     finally:
         wb = None
         return result        
-
+class TestData:
+    def __init__(self,src):
+        self.source = src
+        self.data = []
+    def run(self):
+        if os.path.isfile(self.source) :
+            self.data.append(self.getData(self.source))
+        if os.path.isdir(self.source):
+            self.data = self.dataMining(self.source)
+            
+    def dataMining(self):
+        data = []
+        condition = False
+        for parent,dirs,files in os.walk(pathName):
+            for file in files:
+                fname = os.path.join(parent,file)
+                condition = canOpenExcel(fname)
+                if condition :
+                    temp = self.getData(fname)
+                    data.append(temp)
+        return data
+    
+    def getData(self):
+        Flag = '化验报表'
+        Title = '葫芦岛天然气终端厂化验日报'
+        wb = xlrd.open_workbook(fileName)        
+        for sh in wb.sheets():
+            if sh.name == Flag :
+                数据源 = fileName
+                for row in range(sh.nrows):    
+                    for col in range(sh.ncols):
+                        temp = sh.cell(row,col).value
+#                        乙二醇
+                        pattern = r'乙二醇*'
+                        if re.match(pattern,temp):
+                            pass
+#                        轻油
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass
+#                        轻油入罐前数据
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass                        
+#                        轻油外输数据
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass                             
+#                        液化石油气
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass
+#                        E-613
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass
+#                        运行单机滑油
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass
+#                        天然气分析
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass
+#                        V-641A
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass
+#                        锅炉水
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass
+#                        循环水
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass
+#                        凝点
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass
+#                        备注
+                         pattern= r''
+                         if re.match(pattern,temp):
+                             pass                        
+        return data
+        
 class WaterTestData:
     def __init__(self,source):
         self.source = source
