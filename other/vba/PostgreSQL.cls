@@ -71,3 +71,24 @@ Public Sub removeDuplicate()
     Call cnn.Execute(SQL)
     Debug.Print "PostgreSQL 去除重复数据用时" & DateDiff("s", t, Now()) & "s."
 End Sub
+
+Public Sub 数据库整理()
+    Err.Clear
+On Error GoTo ErrorHandler
+    Dim SQL As String
+    SQL = "ALTER TABLE 生产动态 ALTER 时间 TYPE timestamp;"
+    Call cnn.Execute(SQL)
+    SQL = "ALTER TABLE  IF EXISTS  生产信息  RENAME COLUMN ID TO id;"
+    Call cnn.Execute(SQL)
+    SQL = "update 生产信息 set 名称='海管出口PH值' where 名称 like '海管出口PH值%';"
+    Call cnn.Execute(SQL)
+    SQL = "delete from 生产信息 where 名称='轻油密度'  and 数据=0;"
+    Call cnn.Execute(SQL)
+ErrorHandler:
+    If 0 = Err.Number Or 20 = Err.Number Then
+    
+    Else
+        Debug.Print Err.Number & vbTab & Err.Description
+    End If
+    Resume Next
+End Sub
