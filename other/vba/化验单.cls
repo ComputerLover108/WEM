@@ -33,7 +33,7 @@ On Error GoTo ErrorHandler
 '    轻油
     Dim 轻油外输凝点℃, 轻油外输PH值, 轻油饱和蒸汽压, 上午轻油入罐前含水, 下午轻油入罐前含水, 轻油密度 As Variant
 '    化学药剂
-    Dim 乙二醇日回收量m3, 乙二醇浓度 As Variant
+    Dim 乙二醇日回收量m3, 乙二醇浓度, 乙二醇库存, 乙二醇死库存 As Variant
     Dim 海管来液密度, 轻油稳定塔顶压力, 轻油稳定塔底操作温度℃ As Variant
 '    循环水
     Dim PH值, 浊度, 电导率, 总碱度, 总硬度, LSI, 氯离子, 总铁 As Double
@@ -945,6 +945,46 @@ On Error GoTo ErrorHandler
                     Next i
                 End If
             End If
+            If temp Like "*备*注*" Then
+                co = 1
+                Dim s, re  As String
+                s = Cells(row, column + co).value
+                re = "\d+(\.\d+)"
+                Dim regEx, Match, Matches
+                Set regEx = CreateObject("vbScript.regexp")
+                regEx.Pattern = re
+                regEx.IgnoreCase = True
+                regEx.Global = True
+                Set Matches = regEx.Execute(s)
+                If Matches.count = 2 And s Like "乙二醇*死库存*" Then
+                    乙二醇库存 = Matches(0)
+                    乙二醇死库存 = Matches(1)
+                    
+                    scxx.日期 = 日期
+                    scxx.名称 = "乙二醇库存"
+                    scxx.数据源 = ThisWorkbook.FullName
+                    scxx.类别 = "化学药剂"
+                    scxx.单位 = "方"
+                    scxx.状态 = "库存"
+                    scxx.数据 = 乙二醇库存
+                    If Not IsEmpty(scxx.数据) Then
+                        scRecord.Add scxx, ""
+                    End If
+                    Set scxx = Nothing
+                    
+                    scxx.日期 = 日期
+                    scxx.名称 = "乙二醇死库存"
+                    scxx.数据源 = ThisWorkbook.FullName
+                    scxx.类别 = "化学药剂"
+                    scxx.单位 = "方"
+                    scxx.状态 = "库存"
+                    scxx.数据 = 乙二醇死库存
+                    If Not IsEmpty(scxx.数据) Then
+                        scRecord.Add scxx, ""
+                    End If
+                    Set scxx = Nothing
+                End If
+            End If
         Next column
     Next row
 
@@ -957,10 +997,10 @@ On Error GoTo ErrorHandler
 '    For Each x In oilRecord.Keys
 '        Debug.Print x.日期, x.名称, x.运动粘度, x.机械杂质, x.含水, x.数据源
 '    Next
-'    For Each x In scRecord.Keys
-'        Debug.Print x.日期, x.名称, x.单位, x.类别, x.数据, x.备注, x.数据源
-'    Next
-'    Debug.Print "生产信息：" & scRecord.count & ",轻烃组分：" & gasRecord.count & ",滑油检测：" & oilRecord.count & ",水质检测：" & waterRecord.count
+    For Each x In scRecord.Keys
+        Debug.Print x.日期, x.名称, x.单位, x.类别, x.数据, x.备注, x.数据源
+    Next
+    Debug.Print "生产信息：" & scRecord.count & ",轻烃组分：" & gasRecord.count & ",滑油检测：" & oilRecord.count & ",水质检测：" & waterRecord.count
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     
