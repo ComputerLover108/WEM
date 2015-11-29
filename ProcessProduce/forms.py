@@ -21,7 +21,7 @@ class QuickInputFrom(forms.Form):
     JZ202体系 = forms.IntegerField(label='JZ-202体系 Nm3')
 # 海管    
     海管来液含水 = forms.CharField(label='海管来液含水[V-601] %',required=False)
-    海管MEG浓度 = forms.CharField(label='海管MEG浓度[V-611] %',required=False,max_value=100)
+    海管MEG浓度 = forms.CharField(label='海管MEG浓度[V-611] %',required=False)
     海管出口凝点 = forms.CharField(label='海管出口凝点[V-601] ℃',required=False)
     海管出口PH值 = forms.CharField(label='海管出口PH值',required=False)
     海管进出口压力 = forms.CharField(label='海管进/出口压力 MPa')

@@ -39,9 +39,14 @@ def index(request):
     return render(request, 'ProcessProduce/index.html', locals())
 
 #数据录入
-def TestData(request):
-    title='化验录入'
-    return render(request, 'ProcessProduce/TestData.html', locals())
+#def TestData(request):
+#    title='化验录入'
+#    return render(request, 'ProcessProduce/TestData.html', locals())
+
+def TestDaily(request,year,month,day):
+    Title='化验日报'
+    日期=date(int(year),int(month),int(day))
+    return render(request, 'ProcessProduce/TestDaily.html', locals())
 
 #def QuickInput(request):
 #    title='快速录入'   
