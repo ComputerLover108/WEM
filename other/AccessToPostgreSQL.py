@@ -172,8 +172,6 @@ def main():
             # if not os.listdir(pathName):
             #     os.rmdir(pathName)
 
-def main():
-    test()
 
 if __name__ == '__main__':
     main()

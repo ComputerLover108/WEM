@@ -7,17 +7,16 @@ Created on Wed Oct 28 17:00:20 2015
 import re
 import os
 import xlrd
-#import psycopg2
+import argparse
+import psycopg2
 
-def test():
-    fileName = r'E:\public\test\2015年化验报表\10月\151001葫芦岛天然气终端厂化验日报.xls'
-    pathName = r'E:\public\test\2015年化验报表'
-#    fileName = r'D:\public\HLD\工艺\2015年化验报表\10月\151001葫芦岛天然气终端厂化验日报.xls'
-#    pathName= r'D:\public\HLD\工艺\2015年化验报表'
-    x = WaterTestData(pathName)
+def test(src):
+    x = WaterTestData(src)
     x.run()
-#    print(x.data)
-    print(len(x.data))
+    for record in x.data:
+        print(record)
+    s="提取{0}条数据！".format(len(x.data))
+    print(s)
 
 def canOpenExcel(fileName):
     result = False
@@ -29,7 +28,8 @@ def canOpenExcel(fileName):
         print("%s Can't open!"%fileName) 
     finally:
         wb = None
-        return result        
+        return result 
+
 class TestData:
     def __init__(self,src):
         self.source = src
@@ -67,53 +67,53 @@ class TestData:
                         if re.match(pattern,temp):
                             pass
 #                        轻油
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass
-#                        轻油入罐前数据
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass                        
-#                        轻油外输数据
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass                             
-#                        液化石油气
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass
-#                        E-613
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass
-#                        运行单机滑油
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass
-#                        天然气分析
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass
-#                        V-641A
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass
-#                        锅炉水
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass
-#                        循环水
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass
-#                        凝点
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass
-#                        备注
-                         pattern= r''
-                         if re.match(pattern,temp):
-                             pass                        
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass
+# #                        轻油入罐前数据
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass                        
+# #                        轻油外输数据
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass                             
+# #                        液化石油气
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass
+# #                        E-613
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass
+# #                        运行单机滑油
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass
+# #                        天然气分析
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass
+# #                        V-641A
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass
+# #                        锅炉水
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass
+# #                        循环水
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass
+# #                        凝点
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass
+# #                        备注
+#                          pattern= r''
+#                          if re.match(pattern,temp):
+#                              pass                        
         return data
         
 class WaterTestData:
@@ -183,7 +183,17 @@ class WaterTestData:
         return data
 
 def main():
-    test()
+    parser = argparse.ArgumentParser(description='从葫芦岛终端化验日报中提取数据[excel 文件或所在目录]')
+    parser.add_argument(dest="src", type=str)
+    parser.add_argument("-H","--host",type=str,default='127.0.0.1',help="default host is 127.0.0.1")
+    parser.add_argument("-P","--port",type=str,default='2012',help="default port is 2012")
+    parser.add_argument("-U","--user",type=str,default='operator',help="default user is postgres")
+    parser.add_argument("-W","--password",type=str,default='5302469',help="default password is empty!")
+    parser.add_argument("-D","--database",type=str,default='HLD',help="default database is postgres")    
+    args = parser.parse_args()
+    if args.src :
+        print(args.src)
+        test(args.src)
 
 if __name__ == '__main__':
     main()
