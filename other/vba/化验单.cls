@@ -139,7 +139,7 @@ On Error GoTo ErrorHandler
                 Dim st, sp As String
                 sp = "(\-|\+)?\d+(\.\d+)?$"
 '                st = 上午海管出口凝点
-                Debug.Print 上午海管出口凝点, RegExpTest(sp, st)
+'                Debug.Print 上午海管出口凝点, RegExpTest(sp, st)
                 上午海管出口凝点 = CDbl(RegExpTest(sp, 上午海管出口凝点))
                 下午海管出口凝点 = CDbl(RegExpTest(sp, 下午海管出口凝点))
                 
@@ -997,9 +997,9 @@ On Error GoTo ErrorHandler
 '    For Each x In oilRecord.Keys
 '        Debug.Print x.日期, x.名称, x.运动粘度, x.机械杂质, x.含水, x.数据源
 '    Next
-    For Each x In scRecord.Keys
-        Debug.Print x.日期, x.名称, x.单位, x.类别, x.数据, x.备注, x.数据源
-    Next
+'    For Each x In scRecord.Keys
+'        Debug.Print x.日期, x.名称, x.单位, x.类别, x.数据, x.备注, x.数据源
+'    Next
     Debug.Print "生产信息：" & scRecord.count & ",轻烃组分：" & gasRecord.count & ",滑油检测：" & oilRecord.count & ",水质检测：" & waterRecord.count
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then

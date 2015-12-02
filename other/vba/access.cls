@@ -8,7 +8,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-Const DBname = "葫芦岛天然气处理厂.mdb"
 Public cnn As New ADODB.Connection
 '测试access类模块
 Public Sub test()
@@ -20,15 +19,19 @@ End Sub
 Private Sub Class_Initialize()
     Dim fs As Object
     Set fs = CreateObject("Scripting.FileSystemObject")
-    Dim fname As String
-    fname = ThisWorkbook.Path & Application.PathSeparator & "葫芦岛天然气处理厂.mdb"
+'    Access 数据库位置
+    Dim src, fileName, fname As String
+'    src = "\\10.30.29.51\public\HLD\工艺\工艺报表\2014葫芦岛天然气处理厂管理系统"
+    fileName = "葫芦岛天然气处理厂.mdb"
+'    fname = src & Application.PathSeparator & fname
+    fname = ThisWorkbook.Path & Application.PathSeparator & fileName
     If Not fs.FileExists(fname) Then
         Call createDB(fname)
     End If
     Dim VersionNumber As String
     VersionNumber = Application.Version
     Dim cnstr As String
-    If CInt(VersionNumber) <= 11 Then
+    If CInt(VersionNumber) <= 11 Or Application.Caption Like "*WPS 表格" Then
 '        office 2003以前
         cnstr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & fname & ";"
     Else
@@ -66,12 +69,12 @@ Function hasTable(ByVal tableName As String) As Boolean
 '    End If
 End Function
 '获得字段名
-Public Sub getFields(ByVal tableName As String, ByRef result As Dictionary)
+Public Sub getFields(ByVal tableName As String, ByRef result As Object)
     Dim i As Integer
     Dim rst As New ADODB.Recordset
     rst.Open tableName, cnn, adOpenDynamic, adLockOptimistic
     For i = 0 To rst.Fields.count - 1
-        result.Add i, rst.Fields(i).name
+        result.Add i, rst.Fields(i).Name
     Next i
 End Sub
 
@@ -87,4 +90,17 @@ Public Sub removeDuplicate()
     t = Now
     Call cnn.Execute(SQL)
     Debug.Print "Access 去除重复数据用时" & DateDiff("s", t, Now()) & "s."
+End Sub
+
+Public Sub DropTable(tableName As String)
+On Error GoTo Handler
+    Dim SQL As String
+    SQL = "drop table " & tableName
+    Call cnn.Execute(SQL)
+Handler:
+    If 0 = Err.Number Or 20 = Err.Number Then
+    
+    Else
+        Debug.Print Err.Number & vbTab & Err.Description
+    End If
 End Sub

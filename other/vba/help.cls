@@ -61,7 +61,7 @@ Public Function hasSheet(ByVal name As String, ByRef wb As Workbook) As Boolean
     Next sh
 '    Debug.Print hasSheet
 End Function
-
+'正则匹配
 Public Function isMatch(ByVal pattern As String, ByVal s As String) As Boolean
     Dim regex As Object
     Set regex = CreateObject("VBScript.RegexP")    '全部子目录
@@ -72,6 +72,7 @@ Public Function isMatch(ByVal pattern As String, ByVal s As String) As Boolean
 '    Debug.Print regex.test(s)
     isMatch = regex.test(s)
 End Function
+'正则替换
 Public Function replace(ByVal s As String, ByVal pattern As String, ByVal value As String) As String
      Dim regex As Object
     Set regex = CreateObject("VBScript.RegexP")    '全部子目录
@@ -82,8 +83,14 @@ Public Function replace(ByVal s As String, ByVal pattern As String, ByVal value 
         replace = .replace(s, value)
     End With
 End Function
-
+'是否已授权
 Public Function checkRight(ByVal s As String) As Boolean
     Const password = "工艺操作"
     checkRight = (password = s)
 End Function
+'建立多级目录
+Public sub sMkDir(ByVal s as string)
+    dim pt as variant
+    pt() = Split(s, "\")
+    debug.print pt
+end sub

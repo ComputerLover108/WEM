@@ -21,7 +21,7 @@ def test(src):
 def canOpenExcel(fileName):
     result = False
     try:
-        wb = xlrd.open_workbook(fileName)
+        wb = xlrd.open_workbook(fileName,formatting_info=True)
         result = True
         return result
     except xlrd.XLRDError:
@@ -65,7 +65,11 @@ class TestData:
 #                        乙二醇
                         pattern = r'乙二醇*'
                         if re.match(pattern,temp):
-                            pass
+                            ro=1
+                            co=3
+                            乙二醇浓度=sh.cell(row+ro,col+3).value
+                            ro=
+
 #                        轻油
 #                          pattern= r''
 #                          if re.match(pattern,temp):
