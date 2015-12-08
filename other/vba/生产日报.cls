@@ -1784,6 +1784,115 @@ ErrorHandler:
     Debug.Print Err.Number & vbTab & Err.Description
     Resume Next
 End Sub
+'填写表格
+Public Sub putData(byval 日期 as date)
+On Error GoTo ErrorHandler
+    Dim SQL,filter,filter2,filter3 As String
+    Dim 月初,年初 As Date
+    月初 = DateSerial(Year(日期), Month(d日期), 1)
+    年初 = DateSerial(Year(日期), 1, 1)
+    filter = "日期 = " & "'" & 日期 & "'"
+    filter2 = "日期 between #" & 月初 & "# and #" & 日期 & "#"
+    filter3 = "日期 between #" & 年初 & "# and #" & 日期 & "#"
+'    入厂计量
+    SQL = "SELECT 数据 FROM 生产信息  WHERE " & filter & " and 名称='入厂计量' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='入厂计量' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='入厂计量' "
+'    锦天化
+    SQL = "SELECT 数据 FROM 生产信息  WHERE " & filter & " and 名称='锦天化' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='锦天化' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='锦天化' "
+'    精细化工
+    SQL = "SELECT 数据 FROM 生产信息  WHERE " & filter & " and 名称='精细化工' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='精细化工' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='精细化工' "
+'    污水处理厂
+    SQL = "SELECT 数据 FROM 生产信息  WHERE " & filter & " and 名称='污水处理厂' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='污水处理厂' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='污水处理厂' "
+'    新奥燃气
+    SQL = "SELECT 数据 FROM 生产信息  WHERE " & filter & " and 名称='新奥燃气' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='新奥燃气' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='新奥燃气' "
+'    自用气
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='自用气' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='自用气' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='自用气' "
+'    轻油
+'    轻油库存合计
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='轻油库存合计' and 单位='吨' "
+'    轻油比重
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='轻油比重' "
+'    丙烷罐库存t
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='丙烷罐库存' and 单位='吨' "
+'    V-642t
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='V-642' and 单位='吨' "
+'    液化气罐库存t
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='液化气罐库存' and 单位='吨' "
+'    轻烃库存t
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='轻烃库存' and 单位='吨' "
+'    甲醇消耗
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='甲醇消耗' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='甲醇消耗' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='甲醇消耗' "
+'    乙二醇生产
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='乙二醇回收' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='乙二醇回收' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='乙二醇回收' "
+'    库存水t
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='库存水' and 单位='方' "
+'    外供水
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='外供水' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='外供水' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='外供水' "
+'    水消耗
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='水消耗' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='水消耗' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='水消耗' "
+'    自采水
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='自采水' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='自采水' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='自采水' "
+'    外供电
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='外供电' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='外供电' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='外供电' "
+'    电消耗
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='电消耗' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='电消耗' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='电消耗' "
+'    自发电
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='自发电' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='自发电' "
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='自发电' "
+'   轻油生产
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='轻油回收量' and 单位='方'"
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='轻油回收量' and 单位='方'"
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='轻油回收量' and 单位='方'"
+'    丙丁烷生产
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='丙丁烷回收量' and 单位='方' "
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='丙丁烷回收量' and 单位='方'"
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='丙丁烷回收量' and 单位='方'"
+'    JZ20-2体系接收
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='JZ20-2体系' and 状态='接收'"
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='JZ20-2体系' and 状态='接收'"
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='JZ20-2体系' and 状态='接收'"
+'    JZ20-2体系外输
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='JZ20-2体系' and 状态='外输'"
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='JZ20-2体系' and 状态='外输'"
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='JZ20-2体系' and 状态='外输'"
+'    JZ25-1S体系接收
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='JZ25-1S体系' and 状态='接收'"
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='JZ25-1S体系' and 状态='接收'"
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='JZ25-1S体系' and 状态='接收'"
+'    JZ25-1S体系外输
+    SQL = "SELECT 数据 FROM 生产信息 WHERE " & filter & " and 名称='JZ25-1S体系' and 状态='外输'"
+    SQL = "SELECT sum(数据) as 计算月累 FROM 生产信息 WHERE " & filter2 & " and 名称='JZ25-1S体系' and 状态='外输'"
+    SQL = "SELECT sum(数据) as 计算年累 FROM 生产信息 WHERE " & filter3 & " and 名称='JZ25-1S体系' and 状态='外输'"
+ErrorHandler:
+    Debug.Print Err.Number & vbTab & Err.Description
+    Resume Next
+End Sub
 '自动计算
 Public Function 自动计算() As Boolean
 On Error GoTo ErrorHandler
@@ -1893,22 +2002,6 @@ On Error GoTo ErrorHandler
             Else
                 [轻油回收量数据] = [轻油回收量t] / [轻油比重]
             End If
-'            Dim 昨轻油比重 As Double
-'            If temp Like "*轻油比重*" Then
-'                offset = 2
-'                昨轻油比重 = Worksheets("相关数据").Cells(row, column + offset).value
-'                If IsEmpty([轻油比重]) Or IsNull([轻油比重]) And 0 <> 昨轻油比重 Then
-'                    [轻油比重] = 昨轻油比重
-'                End If
-'                If 0 = [轻油比重] Then
-'                    Dim d
-'                    d = Worksheets("生产日报").Cells(2, 1).value
-'                    MsgBox "数据库里没有找到 " & d & " 里的轻油比重,请在 快速录入 表里输入轻油比重！"
-'                    自动计算 = False
-'                Else
-'                    [轻油回收量数据] = [轻油回收量t] / [轻油比重]
-'                End If
-'            End If
 '    丙丁烷
             If h.isMatch(".*丙烷罐库存.*", temp) Then
                 Dim 昨丙烷库存 As Double
@@ -1938,6 +2031,8 @@ On Error GoTo ErrorHandler
                 [甲醇消耗年累] = Worksheets("相关数据").Cells(row, column + offset).value + [甲醇消耗数据]
             End If
             If h.isMatch(".*乙二醇回收.*", temp) Then
+                SQL = "select sum(数据) as 月累 from 生产信息 where 日期 between date_trunc('month','" & 日期 & "') and '" & 日期 & "' and 名称='乙二醇回收' and 单位='方' "
+                
                 offset = 3
                 [乙二醇回收月累] = Worksheets("相关数据").Cells(row, column + offset).value + [乙二醇回收数据]
                 offset = 4
