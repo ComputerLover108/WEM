@@ -20,21 +20,19 @@ def BillOfLading():
 def index(request):
     title='工艺生产'
     用户='游客'
-##    背景图片='/static/images/工艺生产.jpg'
     buttons=(
-        ('配产','Proration'),
-        ('快速录入','QuickInput'),
-        ('化验数据','TestData'),
-        ('海管数据','SeaPipeData'),
-        ('装车数据','OutputData'),
-        ('海管报表','SeaPipeReport'),
-        ('装车报表','OutputReport'),
-        ('化验报表','TestReport'),
-        ('生产动态','ProductionStatus'),
-        ('生产日报','DailyProduction'),
-        ('生产月报','MonthlyProduction'),
-        ('生产年报','AnnualProduction'),
- 
+    ('配产','Proration'),
+    ('快速录入','QuickInput'),
+    ('化验数据','TestData'),
+    ('海管数据','SeaPipeData'),
+    ('装车数据','OutputData'),
+    ('海管报表','SeaPipeReport'),
+    ('装车报表','OutputReport'),
+    ('化验报表','TestReport'),
+    ('生产动态','ProductionStatus'),
+    ('生产日报','DailyProduction'),
+    ('生产月报','MonthlyProduction'),
+    ('生产年报','AnnualProduction'),
     )
     return render(request, 'ProcessProduce/index.html', locals())
 
@@ -44,7 +42,7 @@ def index(request):
 #    return render(request, 'ProcessProduce/TestData.html', locals())
 
 def TestDaily(request,year,month,day):
-    Title='化验日报'
+    title='化验日报'
     日期=date(int(year),int(month),int(day))
     return render(request, 'ProcessProduce/TestDaily.html', locals())
 
@@ -79,7 +77,7 @@ def TestDaily(request,year,month,day):
 #        form = QuickInputFrom()
 #    return render(request, 'ProcessProduce/QuickInput.html', locals())
 
- 
+
 #def Proration(request):
 #    title="配产任务"
 ##    产品 = ["天然气","轻油","丙丁烷"]
@@ -121,9 +119,11 @@ def TestDaily(request,year,month,day):
 #    pass
 #
 ##报表
-#def DailyProduction(request,date=date.today()):
-#    pass
-#
+def DailyProduction(request,year,month,day):
+    title="生产日报"
+    日期=date(int(year),int(month),int(day))
+    return render(request,'ProcessProduce/DailyPaper.htm',locals())
+
 #def MonthlyProduction():
 #    pass
 #
