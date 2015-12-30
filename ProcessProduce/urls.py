@@ -1,8 +1,11 @@
 ﻿from django.conf.urls import url
 
+from ProcessProduce.views import LadingList
+
 from . import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^Ladings/$', LadingList.as_view()),
 #    url(r'^TestData/$',views.TestData,name='化验录入'),
     url(r'^TestDaily/(\d+)/(\d+)/(\d+)/$', views.TestDaily, name='TestDaily'),
     # url(r'^QuickInput/$',views.QuickInput,name='快速录入'),

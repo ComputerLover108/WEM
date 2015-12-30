@@ -3,18 +3,20 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db import connection
-from django.forms.formsets import formset_factory
+
 from django.forms import ModelForm
 from datetime import date,datetime
 import sys
 import json
+from django.views.generic import ListView
 
 from . forms import ProrationForm,QuickInputFrom
 from . models import 生产信息,生产动态,提单
 
 
-def BillOfLading():
-    pass
+class LadingList(ListView):
+    model = 提单
+
     
 # Create your views here.
 def index(request):
@@ -122,7 +124,7 @@ def TestDaily(request,year,month,day):
 def DailyProduction(request,year,month,day):
     title="生产日报"
     日期=date(int(year),int(month),int(day))
-    return render(request,'ProcessProduce/DailyPaper.htm',locals())
+    return render(request,'ProcessProduce/DailyPaper.html',locals())
 
 #def MonthlyProduction():
 #    pass

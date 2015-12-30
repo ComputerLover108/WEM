@@ -46,6 +46,8 @@ class 提单(models.Model):
     备注 = models.TextField(blank=True)
     class Meta:
         db_table='提单'
+    def __str__(self):
+        return self.提单号
     def excessiveLoading(self):
         return self.实际装车t > self.计划装车t
 

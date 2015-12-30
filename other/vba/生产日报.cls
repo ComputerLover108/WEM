@@ -1785,10 +1785,10 @@ ErrorHandler:
     Resume Next
 End Sub
 '填写表格
-Public Sub putData(byval 日期 as date)
+Public Sub putData(ByVal 日期 As Date)
 On Error GoTo ErrorHandler
-    Dim SQL,filter,filter2,filter3 As String
-    Dim 月初,年初 As Date
+    Dim SQL, filter, filter2, filter3 As String
+    Dim 月初, 年初 As Date
     月初 = DateSerial(Year(日期), Month(d日期), 1)
     年初 = DateSerial(Year(日期), 1, 1)
     filter = "日期 = " & "'" & 日期 & "'"
@@ -1908,7 +1908,6 @@ On Error GoTo ErrorHandler
     Dim lastRow As Long
     Dim lastColumn As Long
     Dim offset As Integer
-'    LastRow = Worksheets("相关数据").Range("a4:a65535").End(xlDown).row
 '    需要昨天30条记录
     lastRow = 30
     lastColumn = 11
@@ -1994,14 +1993,7 @@ On Error GoTo ErrorHandler
                 offset = 2
                 [轻油回收量t] = [轻油库存合计t] + [轻油装车t] - Worksheets("相关数据").Cells(row, column + offset).value
             End If
-            If 0 = [轻油比重] Then
-                Dim d
-                d = Worksheets("生产日报").Cells(2, 1).value
-                MsgBox "数据库里没有找到 " & d & " 里的轻油比重,请在 快速录入 表里输入轻油比重！"
-                自动计算 = False
-            Else
-                [轻油回收量数据] = [轻油回收量t] / [轻油比重]
-            End If
+            [轻油回收量数据] = [轻油回收量t] / [轻油比重]
 '    丙丁烷
             If h.isMatch(".*丙烷罐库存.*", temp) Then
                 Dim 昨丙烷库存 As Double
@@ -2090,8 +2082,6 @@ On Error GoTo ErrorHandler
                 [轻油回收量年累] = Worksheets("相关数据").Cells(row, column + offset).value + [轻油回收量数据]
             End If
             If h.isMatch(".*丙丁烷回收量.*", temp) Then
-'                Dim 左月累 As Double
-'                Dim 左年累 As Double
 '                Dim 数据 As Double
 '                数据 = [丙丁烷回收量数据]
                  offset = 3
