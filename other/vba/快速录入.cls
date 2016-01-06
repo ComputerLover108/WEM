@@ -492,7 +492,10 @@ Sub getBaseData(ByRef table As Object)
         End If
     Next row
 ErrorHandler:
-    Debug.Print Err.Number & vbTab & Err.Description
+    If 0 = Err.Number Or 20 = Err.Number Then
+    Else
+        Debug.Print Err.Number & vbTab & Err.Description
+    End If
     Resume Next
 End Sub
 '获得配产数据
@@ -564,8 +567,7 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
-
-
+'获得昨日相关数据
 Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
     On Error GoTo ErrorHandler
     Dim 今天, 昨天 As Date
@@ -578,7 +580,7 @@ Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
     Dim 月初, 年初 As Date
     月初 = DateSerial(Year(今天), month(今天), 1)
     年初 = DateSerial(Year(今天), 1, 1)
-    Dim tableName, SQL, filterM, filterY As String
+    Dim tableName, SQL, filter, filterM, filterY As String
     tableName = "生产信息"
     Dim psql As New PostgreSQL
     filterM = "日期 between '" & 月初 & "' and '" & 昨天 & "' "
@@ -593,16 +595,39 @@ Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
 '            Debug.Print (SQL)
             name = key & "昨月累"
             dataM = psql.cnn.Execute(SQL)(0)
+            If IsNull(dataM) Then
+                dataM = 0
+            End If
             table.add name, dataM
             SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & " and 名称='" & key & "' ;"
 '            Debug.Print (SQL)
             name = key & "昨年累"
             dataY = psql.cnn.Execute(SQL)(0)
+            If IsNull(dataY) Then
+                dataY = 0
+            End If
             table.add name, dataY
-            Debug.Print 昨天, key, dataM, dataY
+'            Debug.Print 昨天, key, dataM, dataY
         End If
     Next key
-       
+
+    Dim ar, x, d
+    ar = Array("轻油库存合计", "轻烃库存", "库存水")
+    showFields = "数据"
+    For Each x In ar
+        d = "吨"
+        name = "昨" & x & "t"
+        If x = "库存水" Then
+            d = "方"
+            name = "昨" & x & "m3"
+        End If
+        filter = "日期 = '" & 昨天 & "' and 单位='" & d & "' and 名称='" & x & "' ;"
+        SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filter
+        data = psql.cnn.Execute(SQL)(0)
+'        Debug.Print name, data, SQL
+        table.add name, data
+    Next x
+    
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     Else
@@ -610,7 +635,72 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
-
+'获得推导数据
+Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
+    On Error GoTo ErrorHandler
+    Dim today As Date
+    today = table("日期")
+    If isempty(today) Then
+        MsgBox ("没有填写日期！")
+        Exit Sub
+    End If
+    Dim monthHead, yearHead As Date
+    monthHead = DateSerial(Year(today), month(today), 1)
+    yearHead = DateSerial(Year(today), 1, 1)
+    
+    Dim key, data, dataM, dataY, name, temp, dataT
+    name = "总外输气量"
+    data = table("锦天化") + table("精细化工") + table("污水处理厂") + table("CNG") + table("新奥燃气")
+    table.add name, data
+    
+    name = "年时间进度比"
+    Dim lastYearEnd, yearEnd As Date
+    lastYearEnd = DateAdd("d", -1, yearHead)
+    yearEnd = DateAdd("yyyy", 1, lastYearEnd)
+    data = DateDiff("d", today, lastYearEnd) / DateDiff("d", yearEnd, lastYearEnd) * 100
+    table.add name, data
+        
+'    [轻油回收量t] = [轻油库存合计t] + [轻油装车t] - 昨轻油库存合计t
+'
+'    [丙丁烷回收量t] = [轻烃库存t] + [丙烷装车t] + [丁烷装车t] + [液化气装车t] - 昨轻烃库存
+'
+'    [水消耗数据] = 昨库存水 + [外供水数据] + [自采水数据] - [库存水]
+    For Each key In table.keys
+        If ts.exists(key) Then
+            '月累
+            name = key & "月累"
+            data = table(key)
+            temp = key & "昨月累"
+            dataT = table(temp)
+            If today = monthHead Then
+                dataM = data
+            Else
+                dataM = data + dataT
+            End If
+            table.add name, dataM
+            '年累
+            name = key & "年累"
+            data = table(key)
+            temp = key & "昨年累"
+            dataT = table(temp)
+            If today = yearHead Then
+                dataY = data
+            Else
+                dataY = data + dataT
+            End If
+            table.add name, dataY
+'            Debug.Print today, key, data, dataM, dataY
+        End If
+    Next key
+'    temp = ([天然气年度配产] - [总外输气量年累]) / 剩余天数
+ErrorHandler:
+    If 0 = Err.Number Or 20 = Err.Number Then
+    Else
+        Debug.Print Err.Number & vbTab & Err.Description
+    End If
+    Resume Next
+End Sub
+'有月累年累记录
 Public Sub maySum(ByRef ts As Object)
     On Error GoTo ErrorHandler
     ' 上游
@@ -652,4 +742,5 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
+
 
