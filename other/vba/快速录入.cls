@@ -612,12 +612,12 @@ Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
     Next key
 
     Dim ar, x, d
-    ar = Array("轻油库存合计", "轻烃库存", "库存水")
+    ar = Array("轻油库存", "轻烃库存", "水库存")
     showFields = "数据"
     For Each x In ar
         d = "吨"
         name = "昨" & x & "t"
-        If x = "库存水" Then
+        If x = "水库存" Then
             d = "方"
             name = "昨" & x & "m3"
         End If
@@ -659,12 +659,109 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     yearEnd = DateAdd("yyyy", 1, lastYearEnd)
     data = DateDiff("d", today, lastYearEnd) / DateDiff("d", yearEnd, lastYearEnd) * 100
     table.add name, data
-        
-'    [轻油回收量t] = [轻油库存合计t] + [轻油装车t] - 昨轻油库存合计t
-'
-'    [丙丁烷回收量t] = [轻烃库存t] + [丙烷装车t] + [丁烷装车t] + [液化气装车t] - 昨轻烃库存
+    
+    Call getRelatedData(table, ts)
+    'V-631A/B/C 直径14.5米
+    'V-641A/B,V-642,V-643A/B 直径12.3米
+    'V-712A/B 直径29.75米
+    '轻油密度按0.739算
+    Dim ar, x, dataV, dataW, diameter, height, density
+    ar = Array("V-631A", "V-631B", "V-631C", "V-641A", "V-641B", "V-642", "V-643A", "V-643B", "V-712A", "V-712B")
+    Dim PI
+    PI = Application.PI()
+    For Each x In ar
+        If table.exists(x) Then
+            height = table(x)
+            If x Like "V-631*" Then
+                diameter = 14.5
+                density = 0.739
+                name = x & "库存m3"
+                dataV = PI * diameter * diameter * height / 4
+                table.add name, dataV
+            End If
+            If x Like "V-64*" Then
+                diameter = 12.3
+                name = x & "库存m3"
+                dataV = PI * height * height * (3 * diameter / 2 - height)
+                table.add name, dataV
+                temp = x & "密度"
+                density = table(temp)
+            End If
+            If x Like "V-712*" Then
+                diameter = 29.75
+                name = x & "库存m3"
+                dataV = PI * diameter * diameter * height / 4
+                table.add name, dataV
+                density = 1
+            End If
+            name = x & "库存t"
+            dataW = dataV * density
+            table.add name, dataW
+        End If
+    Next x
+    name = "轻油库存m3"
+    data = table("V-631A库存m3") + table("V-631B库存m3") + table("V-631C库存m3")
+    table.add name, data
+    name = "轻油库存t"
+    data = table("V-631A库存t") + table("V-631B库存t") + table("V-631C库存t")
+    table.add name, data
+    name = "轻油回收量t"
+    data = table("轻油库存t") + table("轻油装车t") - table("昨轻油库存t")
+    table.add name, data
+    name = "轻油回收量m3"
+    data = table("轻油回收量t") / table("轻油密度")
+    table.add name, data
+    '估计轻油处理量m3比轻油回收量m3多25m3
+    Const OIL_balance = 25
+    name = "轻油处理量m3"
+    data = table("轻油回收量m3") + OIL_balance
+    
+    name = "丙烷库存m3"
+    data = table("V-641A库存m3") + table("V-641B库存m3")
+    table.add name, data
+    name = "丙烷库存t"
+    data = table("V-641A库存t") + table("V-641B库存t")
+    table.add name, data
+    name = "丁烷库存m3"
+    data = table("V-642库存m3") + table("V-643A库存m3")
+    table.add name, data
+    name = "丁烷库存t"
+    data = table("V-642库存t") + table("V-643A库存t")
+    table.add name, data
+    name = "液化气库存m3"
+    data = table("V-643B库存m3")
+    table.add name, data
+    name = "液化气库存t"
+    data = table("V-643B库存t")
+    table.add name, data
+    name = "轻烃库存m3"
+    data = table("丙烷库存m3") + table("丁烷库存m3") + table("液化气库存m3")
+    table.add name, data
+    name = "轻烃库存t"
+    data = table("丙烷库存t") + table("丁烷库存t") + table("液化气库存t")
+    table.add name, data
+    name = "丙烷回收量t"
+    data = table("丙烷库存t") + table("丙烷装车t") - table("昨丙烷库存t")
+    table.add name, data
+    name = "丁烷回收量t"
+    data = table("丁烷库存t") + table("丁烷装车t") - table("昨丁烷库存t")
+    table.add name, data
+    name = "液化气回收量t"
+    data = table("液化气库存t") + table("液化气装车t") - table("昨液化气库存t")
+    table.add name, data
+    name = "轻烃回收量t"
+    data = table("轻烃库存t") + table("丙烷装车t") + table("丁烷装车t") + table("液化气装车t") - table("昨轻烃库存t")
+    table.add name, data
 '
 '    [水消耗数据] = 昨库存水 + [外供水数据] + [自采水数据] - [库存水]
+    name = "水库存m3"
+'    data = table("V-712A") + table("V-712B")
+    Const WATER_balance = 1390
+    data = table("水池水位") * WATER_balance
+    table.add name, data
+    name = "水消耗m3"
+    data = table("昨水库存m3") + table("外供水") + table("自采水") - table("水库存m3")
+    table.add name, data
     For Each key In table.keys
         If ts.exists(key) Then
             '月累
@@ -742,5 +839,6 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
+
 
 
