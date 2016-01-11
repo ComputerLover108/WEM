@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "快速录入"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 '获得基本数据
 Sub getBaseData(ByRef table As Object)
     On Error GoTo ErrorHandler
@@ -28,12 +19,12 @@ Sub getBaseData(ByRef table As Object)
 '        日期
         If temp Like "*日期*" Then
             offset = 1
-            If isempty(Cells(row, column + offset).value) Or IsNull(Cells(row, column + offset).value) Then
+            If IsEmpty(Cells(row, column + offset).value) Or IsNull(Cells(row, column + offset).value) Then
                 MsgBox prompt:="没有填写日期！请重新填写！", Buttons:=vbOKOnly
                 Exit Sub
             End If
             data = datevalue(Cells(row, column + offset).value)
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "日期", data
             End If
         End If
@@ -42,7 +33,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*稳定区*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "稳定区", data
             End If
         End If
@@ -50,7 +41,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*入厂计量*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "入厂计量", data
             End If
         End If
@@ -58,7 +49,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*JZ20-2体系*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "JZ20-2体系", data
             End If
         End If
@@ -66,7 +57,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*锦天化*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "锦天化", data
             End If
         End If
@@ -74,7 +65,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*精细化工*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "精细化工", data
             End If
         End If
@@ -82,7 +73,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*污水处理厂*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "污水处理厂", data
             End If
         End If
@@ -90,7 +81,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*CNG*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "CNG", data
             End If
         End If
@@ -98,7 +89,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*新奥燃气*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "新奥燃气", data
             End If
         End If
@@ -106,7 +97,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*自用气*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "自用气", data
             End If
         End If
@@ -115,12 +106,12 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*海管来液含水*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管来液含水上午", data
             End If
             offset = 2
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管来液含水下午", data
             End If
         End If
@@ -128,12 +119,12 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*海管MEG浓度*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管MEG浓度上午", data
             End If
             offset = 2
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管MEG浓度下午", data
             End If
         End If
@@ -141,12 +132,12 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*海管出口凝点*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管出口凝点上午", data
             End If
             offset = 2
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管出口凝点下午", data
             End If
         End If
@@ -154,12 +145,12 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*海管出口PH值*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管出口PH值上午", data
             End If
             offset = 2
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管出口PH值下午", data
             End If
         End If
@@ -167,7 +158,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*海管进*出口压力*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管进出口压力", data
             End If
         End If
@@ -175,7 +166,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*海管进*出口温度*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管进出口温度", data
             End If
         End If
@@ -183,7 +174,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*海管通球备注*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "海管通球备注", data
             End If
         End If
@@ -194,7 +185,7 @@ Sub getBaseData(ByRef table As Object)
 '            JZ251S原油 = Cells(row, column + offset).value
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "JZ25-1S原油密度", data
             End If
         End If
@@ -202,12 +193,12 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*JZ20-2凝析油*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "JZ20-2凝析油", data
             End If
             offset = 2
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "JZ20-2凝析油密度", data
             End If
         End If
@@ -215,12 +206,12 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*JZ20-2轻油*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "JZ20-2轻油", data
             End If
             offset = 2
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "JZ20-2轻油密度", data
             End If
         End If
@@ -229,7 +220,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*V-631A*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "V-631A", data
             End If
         End If
@@ -237,7 +228,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*V-631B*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "V-631B", data
             End If
         End If
@@ -245,7 +236,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*V-631C*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "V-631C", data
             End If
         End If
@@ -253,7 +244,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*轻油装车t*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "轻油装车t", data
             End If
         End If
@@ -261,7 +252,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*轻油装车m3*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "轻油装车m3", data
             End If
         End If
@@ -269,7 +260,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*轻油装车bbl*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "轻油装车bbl", data
             End If
         End If
@@ -277,7 +268,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*外输凝点*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "外输凝点", data
             End If
         End If
@@ -285,7 +276,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*外输PH值*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "外输PH值", data
             End If
         End If
@@ -293,7 +284,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*轻油入罐前*含水*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "轻油入罐前含水", data
             End If
         End If
@@ -301,7 +292,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*饱和蒸汽压*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "饱和蒸汽压", data
             End If
         End If
@@ -313,7 +304,7 @@ Sub getBaseData(ByRef table As Object)
 '                Exit Sub
 '            End If
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "轻油密度", data
             End If
         End If
@@ -322,7 +313,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*V-641A*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "V-641A", data
             End If
         End If
@@ -330,7 +321,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*V-641B*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "V-641B", data
             End If
         End If
@@ -338,7 +329,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*V-642*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "V-642", data
             End If
         End If
@@ -346,7 +337,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*V-643A*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "V-643A", data
             End If
         End If
@@ -354,7 +345,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*V-643B*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "V-643B", data
             End If
         End If
@@ -362,7 +353,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*丙烷装车t*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "丙烷装车t", data
             End If
         End If
@@ -370,7 +361,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*丁烷装车t*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "丁烷装车t", data
             End If
         End If
@@ -378,7 +369,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*液化气装车t*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "液化气装车t", data
             End If
         End If
@@ -387,7 +378,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*数据库轻油回收*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "数据库轻油回收", data
             End If
         End If
@@ -395,7 +386,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*数据库丙丁烷回收*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "数据库丙丁烷回收", data
             End If
         End If
@@ -404,7 +395,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*乙二醇日回收量*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "乙二醇回收", data
             End If
         End If
@@ -412,7 +403,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*乙二醇浓度*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "乙二醇浓度", data
             End If
         End If
@@ -420,7 +411,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*乙二醇日耗量*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "乙二醇消耗", data
             End If
         End If
@@ -428,7 +419,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*甲醇日耗量*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "甲醇消耗", data
             End If
         End If
@@ -437,7 +428,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*外供水*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "外供水", data
             End If
         End If
@@ -445,7 +436,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*自采水*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "自采水", data
             End If
         End If
@@ -453,7 +444,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*污水m3" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "污水", data
             End If
         End If
@@ -461,7 +452,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*水池水位*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "水池水位", data
             End If
         End If
@@ -470,7 +461,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*外供电*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "外供电", data
             End If
         End If
@@ -478,7 +469,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*自发电*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "自发电", data
             End If
         End If
@@ -486,7 +477,7 @@ Sub getBaseData(ByRef table As Object)
         If temp Like "*生产备注*" Then
             offset = 1
             data = Cells(row, column + offset).value
-            If Not isempty(data) Then
+            If Not IsEmpty(data) Then
                 table.add "生产备注", data
             End If
         End If
@@ -525,37 +516,76 @@ Sub getProrationData(ByRef table As Object)
             If temp Like "*天然气104m3*" Then
                 offset = 1
                 md = Cells(row, column + offset).value
-                If Not isempty(md) Then
+                If Not IsEmpty(md) Then
                     table.add "天然气月配产", md
                 End If
                 offset = 2
                 yd = Cells(row, column + offset).value
-                If Not isempty(md) Then
+                If Not IsEmpty(md) Then
                     table.add "天然气年配产", yd
                 End If
             End If
             If temp Like "*轻油m3*" Then
                 offset = 1
                 md = Cells(row, column + offset).value
-                If Not isempty(md) Then
+                If Not IsEmpty(md) Then
                     table.add "轻油月配产", md
                 End If
                 offset = 2
                 yd = Cells(row, column + offset).value
-                If Not isempty(md) Then
+                If Not IsEmpty(md) Then
                     table.add "轻油年配产", yd
                 End If
             End If
             If temp Like "*丙丁烷m3*" Then
                 offset = 1
                 md = Cells(row, column + offset).value
-                If Not isempty(md) Then
+                If Not IsEmpty(md) Then
                     table.add "丙丁烷月配产", md
                 End If
                 offset = 2
                 yd = Cells(row, column + offset).value
-                If Not isempty(md) Then
+                If Not IsEmpty(md) Then
                     table.add "丙丁烷年配产", yd
+                End If
+            End If
+        Next column
+    Next row
+ErrorHandler:
+    If 0 = Err.Number Or 20 = Err.Number Then
+    Else
+        Debug.Print Err.Number & vbTab & Err.Description
+    End If
+    Resume Next
+End Sub
+'获得轻烃密度
+Sub getLightHydrocarbonDensity(ByRef table As Object)
+    On Error GoTo ErrorHandler
+    Dim temp, name, data
+    Dim row, column, beginRow, beginColumn, lastRow, lastColumn, offset
+    Worksheets("快速录入").Select
+    lastRow = Worksheets("快速录入").UsedRange.Rows.count
+    lastColumn = Worksheets("快速录入").UsedRange.Columns.count
+    For row = 1 To lastRow
+        For column = 1 To lastColumn
+            temp = Cells(row, column).value
+            If temp Like "轻烃密度*" Then
+                beginRow = row
+                beginColumn = column
+                Exit For
+            End If
+        Next column
+    Next row
+    For row = beginRow To lastRow
+        For column = beginColumn To lastColumn
+            temp = Cells(row, column).value
+'            Debug.Print temp
+            If temp Like "V-64*" Then
+                offset = 1
+                name = temp & "密度"
+                data = Cells(row + offset, column).value
+                If Not IsEmpty(data) Then
+                    table.add name, data
                 End If
             End If
         Next column
@@ -573,7 +603,7 @@ Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
     Dim 今天, 昨天 As Date
     今天 = table("日期")
     昨天 = DateAdd("d", -1, 今天)
-    If isempty(今天) Then
+    If IsEmpty(今天) Then
         MsgBox ("没有填写日期！")
         Exit Sub
     End If
@@ -640,7 +670,7 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     On Error GoTo ErrorHandler
     Dim today As Date
     today = table("日期")
-    If isempty(today) Then
+    If IsEmpty(today) Then
         MsgBox ("没有填写日期！")
         Exit Sub
     End If
@@ -661,6 +691,7 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     table.add name, data
     
     Call getRelatedData(table, ts)
+    call getLightHydrocarbonDensity(table)
     'V-631A/B/C 直径14.5米
     'V-641A/B,V-642,V-643A/B 直径12.3米
     'V-712A/B 直径29.75米
@@ -789,7 +820,7 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
 '            Debug.Print today, key, data, dataM, dataY
         End If
     Next key
-'    temp = ([天然气年度配产] - [总外输气量年累]) / 剩余天数
+'    temp = ([天然气年配产] - [总外输气量年累]) / 剩余天数
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     Else
@@ -839,6 +870,301 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
-
-
-
+'填写生产日报
+Public Sub FillDailyProduction(ByRef table As Object)
+    On Error GoTo ErrorHandler
+    const Title="葫芦岛天然气终端厂生产日报"
+    Dim temp, name, data
+    Dim row, column, beginRow, beginColumn, lastRow, lastColumn, offset，anchor1，anchor2
+    Worksheets("生产日报").Select
+    lastRow = Worksheets("生产日报").UsedRange.Rows.count
+    lastColumn = Worksheets("生产日报").UsedRange.Columns.count
+    for row=beginRow to lastRow
+        for column=beginColumn to lastColumn
+            temp = cells(row,column).value
+            if temp = Title then
+                offset=1
+                cells(row+offset,column) = table("日期")
+                exit for
+            end if
+            If temp Like "*配产*完成情况*" Then
+                anchor1 = row
+                anchor2 = row + 4
+            End If
+            If row < anchor2 And row > anchor1 Then
+                 If temp Like "*年度配产*" Then
+'                     天然气万方变方
+                    offset = 1
+                    .Cells(row + offset, column).value = table(天然气年配产) * 10000
+                    offset = 2
+                    .Cells(row + offset, column).value = table(轻油年配产)
+                    offset = 3
+                    .Cells(row + offset, column).value = table(丙丁烷年配产)
+                End If
+                If temp Like "*月度配产*" Then
+'                    天然气万方变方
+                    offset = 1
+                    .Cells(row + offset, column).value = table(天然气月配产) * 10000
+                    offset = 2
+                    .Cells(row + offset, column).value = table(轻油月配产)
+                    offset = 3
+                    .Cells(row + offset, column).value = table(丙丁烷月配产)
+                End If
+            End If
+'                配产/完成情况
+            If temp Like "*天然气产量*外输*海管信息*" Then
+                anchor1 = row
+                anchor2 = row + 15
+            End If
+            If row < anchor2 And row > anchor1 Then
+                If temp Like "*稳定区*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 稳定区
+                End If
+                If temp Like "*入厂计量*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 入厂计量
+                End If
+                If temp Like "*JZ20-2体系*" And row < anchor1 + 6 Then
+                    offset = 1
+                    .Cells(row, column + offset).value = JZ202体系
+                End If
+'                    If temp Like "*JZ25-1S体系*" Then
+'                        offset = 1
+'                        .Cells(row, column + offset).value = JZ251S体系
+'                    End If
+                If temp Like "*锦天化*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 锦天化
+                End If
+                If temp Like "*精细化工*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 精细化工
+                End If
+                If temp Like "*污水处理厂*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 污水处理厂
+                End If
+                If temp Like "*CNG*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = CNG
+                End If
+                If temp Like "*新奥燃气*" Then
+                    offset = 2
+                    .Cells(row, column + offset).value = 新奥燃气
+                End If
+                If temp Like "*自用气*" Then
+                    offset = 2
+                    .Cells(row, column + offset).value = 自用气
+                End If
+                If temp Like "*海管来*液含水*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 海管来液含水上午
+                    offset = 2
+                    .Cells(row, column + offset).value = 海管来液含水下午
+                End If
+                If temp Like "*海管MEG浓度*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 海管MEG浓度上午
+                    offset = 2
+                    .Cells(row, column + offset).value = 海管MEG浓度下午
+                End If
+                If temp Like "*海管出口凝点*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 海管出口凝点上午
+                    offset = 2
+                    .Cells(row, column + offset).value = 海管出口凝点下午
+                End If
+                If temp Like "*海管出口PH值*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 海管出口PH值上午
+                    offset = 2
+                    .Cells(row, column + offset).value = 海管出口PH值下午
+                End If
+                If temp Like "*海管进*出口压力*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 海管进出口压力
+                End If
+                If temp Like "*海管进*出口温度*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 海管进出口温度
+                    海管通球备注 = helper.replace(海管通球备注, "[;；]", s)
+                    offset = 4
+                    .Cells(row + offset, column).value = 海管通球备注
+                End If
+'                    If h.isMatch("海管信息", temp) Then
+'                        offset = 8
+'                        海管通球备注 = helper.replace(海管通球备注, "[;；]", s)
+'                        .Cells(row + 8, column + 6).value = 海管通球备注
+'                    End If
+            End If
+'                上游
+            If temp Like "*JZ25-1S原油*" Then
+'                    offset = 1
+'                    .Cells(row, column + offset).value = JZ251S原油
+                offset = 2
+                .Cells(row, column + offset).value = JZ251S原油密度
+            End If
+            If temp Like "*JZ20-2凝析油*" Then
+                offset = 1
+                .Cells(row, column + offset).value = JZ202凝析油
+                offset = 2
+                .Cells(row, column + offset).value = JZ202凝析油密度
+            End If
+            If temp Like "*JZ20-2轻油*" Then
+                offset = 1
+                .Cells(row, column + offset).value = JZ202轻油
+                offset = 2
+                .Cells(row, column + offset).value = JZ202轻油密度
+            End If
+'                天然气产量/外输/海管信息
+            If temp Like "*轻油产量*外输*库存*" Then
+                anchor1 = row
+                anchor2 = row + 6
+            End If
+'                轻油
+            If row < anchor2 And row > anchor1 Then
+                If temp Like "*V-631A*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = V631A
+                End If
+                If temp Like "*V-631B*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = V631B
+                End If
+                If temp Like "*V-631C*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = V631C
+                End If
+                If temp Like "*轻油装车t*" Then
+                    offset = 2
+                    .Cells(row, column + offset).value = 轻油装车t
+                End If
+                If temp Like "*轻油装车m3*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 轻油装车m3
+                End If
+                If temp Like "*轻油装车bbl*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 轻油装车bbl
+                End If
+                If temp Like "*外输凝点*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = 外输凝点
+                End If
+                If temp Like "*外输PH值*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = 外输PH值
+                End If
+                If temp Like "*饱和蒸汽压*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = 饱和蒸汽压
+                End If
+                If temp Like "*轻油入罐前含水*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 轻油入罐前含水
+                End If
+            End If
+'                丙丁烷产量/外输/库存
+            If temp Like "*丙丁烷产量*外输*库存*" Then
+                anchor1 = row
+                anchor2 = row + 8
+            End If
+            If row < anchor2 And row > anchor1 Then
+                If temp Like "*V-641A*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = V641A
+                End If
+                If temp Like "*V-641B*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = V641B
+                End If
+                If temp Like "*V-642*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = V642
+                End If
+                If temp Like "*V-643A*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = V643A
+                End If
+                If temp Like "*V-643B*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = V643B
+                End If
+                If temp Like "*丙烷装车t*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 丙烷装车t
+                End If
+                If temp Like "*丁烷装车t*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 丁烷装车t
+                End If
+                If temp Like "*液化气装车t*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 液化气装车t
+                End If
+                If temp Like "*数据库轻油回收*" Then
+                    offset = 2
+                    .Cells(row, column + offset).value = 数据库轻油回收
+                End If
+                If temp Like "*数据库丙丁烷回收*" Then
+                    offset = 2
+                    .Cells(row, column + offset).value = 数据库丙丁烷回收
+                End If
+            End If '丙丁烷产量/外输/库存
+'                物料消耗
+            If temp Like "*物料接收*消耗*" Then
+                anchor1 = row
+                anchor2 = row + 9
+                offset = 7
+                生产备注 = helper.replace(生产备注, "[;；]", s)
+                .Cells(row + offset, column).value = 生产备注
+            End If
+            If row < anchor2 And row > anchor1 Then
+                If temp Like "*乙二醇回收*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = 乙二醇生产
+                End If
+                If temp Like "*乙二醇浓度*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 乙二醇浓度
+                End If
+                If temp Like "*乙二醇消耗*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 乙二醇消耗
+                End If
+                If temp Like "*甲醇消耗*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = 甲醇消耗
+                End If
+                If temp Like "*外供水*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = 外供水
+                End If
+                If temp Like "*自采水*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = 自采水
+                End If
+                If temp Like "*水池水位*" Then
+                    offset = 1
+                    .Cells(row, column + offset).value = 水池水位
+                End If
+                If temp Like "*外供电*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = 外供电
+                End If
+                If temp Like "*自发电*" Then
+                    offset = 1
+                    .Cells(row + offset, column).value = 自发电
+                End If
+            End If '物            
+        next column
+    next row
+   
+ErrorHandler:
+    If 0 = Err.Number Or 20 = Err.Number Then
+    Else
+        Debug.Print Err.Number & vbTab & Err.Description
+    End If
+    Resume Next
+End Sub
