@@ -625,7 +625,7 @@ Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
             unit = "度"
         End If
         filterU = " AND 单位 = '" & unit & "'"
-        data = table(key)
+'        data = table(key)
         SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterU & " and 名称='" & key & "' ;"
 '       Debug.Print (SQL)
         name = key & "昨月累"
@@ -748,7 +748,7 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     Const OIL_balance = 25
     name = "轻油处理量m3"
     data = table("轻油回收量m3") + OIL_balance
-    
+    table.add name, data
     name = "丙烷库存m3"
     data = table("V-641A库存m3") + table("V-641B库存m3")
     table.add name, data
@@ -782,23 +782,40 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     name = "液化气回收量t"
     data = table("液化气库存t") + table("液化气装车t") - table("昨液化气库存t")
     table.add name, data
-    name = "轻烃回收量t"
+    name = "丙丁烷回收量t"
     data = table("轻烃库存t") + table("丙烷装车t") + table("丁烷装车t") + table("液化气装车t") - table("昨轻烃库存t")
     table.add name, data
-    name = "轻烃回收量m3"
+
     '轻烃密度按0.54 10*3*kg/m3算
     density = 0.54
-    data = table("轻烃回收量t") / density
+    name = "丙丁烷回收量m3"
+    data = table("丙丁烷回收量t") / density
     table.add name, data
-'
+    '丙烷密度按V-641A，丁烷密度按V-642，液化气密度按V-643B*算
+    丙烷密度 = table("V-641A密度")
+    丁烷密度 = table("V-642密度")
+    液化气密度 = table("V-643B密度")
+    name = "丙烷装车m3"
+    data = table("丙烷装车t") / 丙烷密度
+    table.add name, data
+    name = "丁烷装车m3"
+    data = table("丁烷装车t") / 丁烷密度
+    table.add name, data
+    name = "液化气装车m3"
+    data = table("液化气装车t") / 液化气密度
+    table.add name, data
+    
 '    [水消耗数据] = 昨库存水 + [外供水数据] + [自采水数据] - [库存水]
     name = "水库存m3"
 '    data = table("V-712A") + table("V-712B")
     Const WATER_balance = 1390
     data = table("水池水位") * WATER_balance
     table.add name, data
-    name = "水消耗m3"
+    name = "水消耗"
     data = table("昨水库存m3") + table("外供水") + table("自采水") - table("水库存m3")
+    table.add name, data
+    name = "电消耗"
+    data = table("外供电") + table("自发电")
     table.add name, data
     For Each key In ts.keys
         '月累
@@ -829,7 +846,7 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     Else
-        Debug.Print Err.Number & vbTab & Err.Description
+        Debug.Print Err.Number, Err.Description, name, data
     End If
     Resume Next
 End Sub
@@ -1084,11 +1101,6 @@ Public Sub FillDailyProduction(ByRef table As Object)
                     offset = 4
                     Cells(row + offset, column).value = table("海管通球备注")
                 End If
-'                    If h.isMatch("海管信息",temp) Then
-'                        offset = 8
-'                        海管通球备注 = helper.replace(海管通球备注,"[;；]",s)
-'                        cells(row + 8,column + 6).value = 海管通球备注
-'                    End If
             End If
 '                上游
             If temp Like "*JZ25-1S原油*" Then
@@ -1119,14 +1131,44 @@ Public Sub FillDailyProduction(ByRef table As Object)
                 If temp Like "*V-631A*" Then
                     offset = 1
                     Cells(row + offset, column).value = table("V-631A")
+                    offset = 2
+                    Cells(row + offset, column).value = table("V-631A库存m3")
+                    offset = 3
+                    Cells(row + offset, column).value = table("V-631A库存t")
                 End If
                 If temp Like "*V-631B*" Then
                     offset = 1
                     Cells(row + offset, column).value = table("V-631B")
+                    offset = 2
+                    Cells(row + offset, column).value = table("V-631B库存m3")
+                    offset = 3
+                    Cells(row + offset, column).value = table("V-631B库存t")
                 End If
                 If temp Like "*V-631C*" Then
                     offset = 1
                     Cells(row + offset, column).value = table("V-631C")
+                    offset = 2
+                    Cells(row + offset, column).value = table("V-631C库存m3")
+                    offset = 3
+                    Cells(row + offset, column).value = table("V-631C库存t")
+                End If
+                If temp Like "*轻油库存*" Then
+                    offset = 2
+                    Cells(row + offset, column).value = table("轻油库存m3")
+                    offset = 3
+                    Cells(row + offset, column).value = table("轻油库存t")
+                End If
+                If temp Like "*轻油处理量m3*" Then
+                    offset = 1
+                    Cells(row + offset, column).value = table("轻油处理量m3")
+                End If
+                If temp Like "*轻油回收量m3*" Then
+                    offset = 1
+                    Cells(row + offset, column).value = table("轻油回收量m3")
+                End If
+                If temp Like "*轻油回收量t*" Then
+                    offset = 1
+                    Cells(row + offset, column).value = table("轻油回收量t")
                 End If
                 If temp Like "*轻油装车t*" Then
                     offset = 2
@@ -1245,13 +1287,13 @@ Public Sub FillDailyProduction(ByRef table As Object)
                     offset = 1
                     Cells(row, column + offset).value = table("液化气装车m3")
                 End If
-                If temp Like "*丙丁烷回收t*" Then
+                If temp Like "*丙丁烷回收量t*" Then
                     offset = 1
-                    Cells(row, column + offset).value = table("丙丁烷回收t")
+                    Cells(row, column + offset).value = table("丙丁烷回收量t")
                 End If
-                If temp Like "*丙丁烷回收*" Then
+                If temp Like "*丙丁烷回收量m3*" Then
                     offset = 1
-                    Cells(row, column + offset).value = table("丙丁烷回收")
+                    Cells(row, column + offset).value = table("丙丁烷回收量m3")
                 End If
                 If temp Like "*数据库轻油回收*" Then
                     offset = 2
@@ -1351,7 +1393,7 @@ Public Sub FillDailyProduction(ByRef table As Object)
                     offset = 3
                     Cells(row + offset, column).value = table("电消耗年累")
                 End If
-            End If 
+            End If
         Next column
     Next row
    
@@ -1362,7 +1404,3 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
-
-
-
-
