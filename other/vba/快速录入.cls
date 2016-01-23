@@ -50,7 +50,7 @@ Sub getBaseData(ByRef table As Object)
             offset = 1
             data = Cells(row, column + offset).value
             If Not IsEmpty(data) Then
-                table.add "JZ20-2体系", data
+                table.add "JZ20-2体系接收", data
             End If
         End If
 '        锦天化
@@ -610,7 +610,7 @@ Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
     Dim 月初, 年初 As Date
     月初 = DateSerial(Year(今天), month(今天), 1)
     年初 = DateSerial(Year(今天), 1, 1)
-    Dim tableName, SQL, filter, filterM, filterY, filterU, unit As String
+    Dim tableName, SQL, filter, filterM, filterY, filterU, filterS, unit, state As String
     tableName = "生产信息"
     Dim psql As New PostgreSQL
     filterM = "日期 between '" & 月初 & "' and '" & 昨天 & "' "
@@ -626,22 +626,65 @@ Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
         End If
         filterU = " AND 单位 = '" & unit & "'"
 '        data = table(key)
-        SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterU & " and 名称='" & key & "' ;"
-'       Debug.Print (SQL)
-        name = key & "昨月累"
-        dataM = psql.cnn.Execute(SQL)(0)
-        If IsNull(dataM) Then
-            dataM = 0
-        End If
-        table.add name, dataM
-        SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterU & " and 名称='" & key & "' ;"
-'        Debug.Print (SQL)
-        name = key & "昨年累"
-        dataY = psql.cnn.Execute(SQL)(0)
-        If IsNull(dataY) Then
-            dataY = 0
-        End If
-        table.add name, dataY
+        name = key
+        If name = "JZ20-2体系接收" Or name = "JZ25-1S体系接收" Then
+            state = "接收"
+            filterS = " AND 状态 = '" & state & "'"
+            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterU & filterS & " and 名称='" & name & "' ;"
+            name = key & state & "昨月累"
+            dataM = psql.cnn.Execute(SQL)(0)
+            If IsNull(dataM) Then
+                dataM = 0
+            End If
+            table.add name, dataM
+            name = key
+            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterU & filterS & " and 名称='" & name & "' ;"
+            name = key & state & "昨年累"
+            dataY = psql.cnn.Execute(SQL)(0)
+            If IsNull(dataY) Then
+                dataY = 0
+            End If
+            table.add name, dataY
+        end if
+        If name = "JZ20-2体系外输" Or name = "JZ25-1S体系外输" Then
+            name = key
+            state = "外输"
+            filterS = " AND 状态 = '" & state & "'"
+            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterU & filterS & " and 名称='" & name & "' ;"
+            name = key & state & "昨月累"
+            dataM = psql.cnn.Execute(SQL)(0)
+            If IsNull(dataM) Then
+                dataM = 0
+            End If
+            table.add name, dataM
+            name = key
+            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterU & filterS & " and 名称='" & name & "' ;"
+            name = key & state & "昨年累"
+            dataY = psql.cnn.Execute(SQL)(0)
+            If IsNull(dataY) Then
+                dataY = 0
+            End If
+            table.add name, dataY
+        end if
+        
+            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterU & " and 名称='" & name & "' ;"
+    '       Debug.Print (SQL)
+            name = key & "昨月累"
+            dataM = psql.cnn.Execute(SQL)(0)
+            If IsNull(dataM) Then
+                dataM = 0
+            End If
+            table.add name, dataM
+            name = key
+            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterU & " and 名称='" & name & "' ;"
+    '        Debug.Print (SQL)
+            name = key & "昨年累"
+            dataY = psql.cnn.Execute(SQL)(0)
+            If IsNull(dataY) Then
+                dataY = 0
+            End If
+            table.add name, dataY
+
     Next key
     Dim ar, x, d
     ar = Array("轻油库存", "轻烃库存", "水库存")
@@ -680,10 +723,23 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     monthHead = DateSerial(Year(today), month(today), 1)
     yearHead = DateSerial(Year(today), 1, 1)
     
-    Dim key, data, dataM, dataY, name, temp, dataT
+    Dim key, data, dataM, dataY, name, temp, dataT,proportion
     name = "总外输气量"
     data = table("锦天化") + table("精细化工") + table("污水处理厂") + table("CNG") + table("新奥燃气")
     table.add name, data
+    name = "总产气量"
+    data = table("总外输气量") + table("自用气")
+    table.add name, data
+    name = "JZ25-1S体系接收"
+    data = table("入厂计量")-table("JZ20-2体系接收")
+    table.add name,data
+    proportion = table("JZ20-2体系接收")/table("入厂计量")
+    name = "JZ20-2体系外输"
+    data = table("锦天化")*proportion
+    table.add name,data
+    name = "JZ25-1S体系外输"
+    data = table("锦天化")-table("JZ202体系外输")
+    
     
     name = "年时间进度比"
     Dim lastYearEnd, YearEnd As Date
@@ -854,8 +910,10 @@ End Sub
 Public Sub maySum(ByRef ts As Object)
     On Error GoTo ErrorHandler
     ' 上游
-    ts.add "JZ20-2体系", ""
-    ts.add "JZ25-1S体系", ""
+    ts.add "JZ20-2体系接收", ""
+    ts.add "JZ25-1S体系接收", ""
+    ts.add "JZ20-2体系外输", ""
+    ts.add "JZ25-1S体系外输", ""    
     ts.add "JZ20-2凝析油", ""
     ts.add "JZ20-2轻油", ""
     ' 气
@@ -1009,14 +1067,63 @@ Public Sub FillDailyProduction(ByRef table As Object)
                     offset = 4
                     Cells(row, column + offset).value = table("入厂计量年累")
                 End If
-                If temp Like "*JZ20-2体系*" And row < anchor1 + 6 Then
-                    offset = 1
-                    Cells(row, column + offset).value = JZ202体系
+                If row < anchor1 + 6 Then
+                    If temp Like "*JZ20-2体系*" Then
+                        offset = 1
+                        Cells(row, column + offset).value = table("JZ202体系接收")
+                        offset = 3
+                        Cells(row, column + offset).value = table("JZ202体系接收月累")
+                        offset = 4
+                        Cells(row, column + offset).value = table("JZ202体系接收年累")
+                    End If
+                    If temp Like "*JZ25-1S体系*" Then
+                        offset = 1
+                        Cells(row, column + offset).value = table("JZ251S体系接收")
+                        offset = 3
+                        Cells(row, column + offset).value = table("JZ251S体系接收月累")
+                        offset = 4
+                        Cells(row, column + offset).value = table("JZ251S体系接收年累")
+                    End If
+                Else
+                    If temp Like "*JZ20-2体系*" Then
+                        offset = 1
+                        Cells(row, column + offset).value = table("JZ202体系外输")
+                        offset = 3
+                        Cells(row, column + offset).value = table("JZ202体系外输月累")
+                        offset = 4
+                        Cells(row, column + offset).value = table("JZ202体系外输年累")
+                    End If
+                    If temp Like "*JZ25-1S体系*" Then
+                        offset = 1
+                        Cells(row, column + offset).value = table("JZ251S体系外输")
+                        offset = 3
+                        Cells(row, column + offset).value = table("JZ251S体系外输月累")
+                        offset = 4
+                        Cells(row, column + offset).value = table("JZ251S体系外输年累")
+                    End If
                 End If
-'                    If temp Like "*JZ25-1S体系*" Then
-'                        offset = 1
-'                        cells(row,column + offset).value = JZ251S体系
-'                    End If
+                If temp Like "*总外输气量*" Then
+                    offset = 2
+                    data = table("总外输气量")
+                    Cells(row, column + offset).value = data
+                    offset = 4
+                    data = table("总外输气量月累")
+                    Cells(row, column + offset).value = data
+                    offset = 5
+                    data = table("总外输气量年累")
+                    Cells(row, column + offset).value = data
+                End If
+                If temp Like "*总产气量*" Then
+                    offset = 2
+                    data = table("总产气量")
+                    Cells(row, column + offset).value = data
+                    offset = 4
+                    data = table("总产气量月累")
+                    Cells(row, column + offset).value = data
+                    offset = 5
+                    data = table("总产气量年累")
+                    Cells(row, column + offset).value = data
+                End If
                 If temp Like "*锦天化*" Then
                     offset = 1
                     Cells(row, column + offset).value = table("锦天化")
@@ -1404,3 +1511,5 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
+
+
