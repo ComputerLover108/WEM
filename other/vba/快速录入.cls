@@ -610,80 +610,50 @@ Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
     Dim 月初, 年初 As Date
     月初 = DateSerial(Year(今天), month(今天), 1)
     年初 = DateSerial(Year(今天), 1, 1)
-    Dim tableName, SQL, filter, filterM, filterY, filterU, filterS, unit, state As String
+    Dim tableName, SQL, filter, filterM, filterY, filterN,filterU, filterS, unit, status,category As String
     tableName = "生产信息"
     Dim psql As New PostgreSQL
     filterM = "日期 between '" & 月初 & "' and '" & 昨天 & "' "
     filterY = "日期 between '" & 年初 & "' and '" & 昨天 & "' "
     filterU = " AND 单位 = '" & unit & "' "
+    filterC = " AND 类别='" & category & "' "
+    filterS = " AND 状态='" & status & "' "
     showFields = "sum(数据) "
     Dim name, dataM, dataY
-    Dim key
+    Dim key,temp
     For Each key In ts.keys
-        unit = "方"
-        If key Like "*电*" Then
-            unit = "度"
-        End If
-        filterU = " AND 单位 = '" & unit & "'"
-'        data = table(key)
         name = key
-        If name = "JZ20-2体系接收" Or name = "JZ25-1S体系接收" Then
-            state = "接收"
-            filterS = " AND 状态 = '" & state & "'"
-            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterU & filterS & " and 名称='" & name & "' ;"
-            name = key & state & "昨月累"
-            dataM = psql.cnn.Execute(SQL)(0)
-            If IsNull(dataM) Then
-                dataM = 0
-            End If
-            table.add name, dataM
-            name = key
-            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterU & filterS & " and 名称='" & name & "' ;"
-            name = key & state & "昨年累"
-            dataY = psql.cnn.Execute(SQL)(0)
-            If IsNull(dataY) Then
-                dataY = 0
-            End If
-            table.add name, dataY
-        end if
-        If name = "JZ20-2体系外输" Or name = "JZ25-1S体系外输" Then
-            name = key
-            state = "外输"
-            filterS = " AND 状态 = '" & state & "'"
-            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterU & filterS & " and 名称='" & name & "' ;"
-            name = key & state & "昨月累"
-            dataM = psql.cnn.Execute(SQL)(0)
-            If IsNull(dataM) Then
-                dataM = 0
-            End If
-            table.add name, dataM
-            name = key
-            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterU & filterS & " and 名称='" & name & "' ;"
-            name = key & state & "昨年累"
-            dataY = psql.cnn.Execute(SQL)(0)
-            If IsNull(dataY) Then
-                dataY = 0
-            End If
-            table.add name, dataY
-        end if
-        
-            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterU & " and 名称='" & name & "' ;"
-    '       Debug.Print (SQL)
-            name = key & "昨月累"
-            dataM = psql.cnn.Execute(SQL)(0)
-            If IsNull(dataM) Then
-                dataM = 0
-            End If
-            table.add name, dataM
-            name = key
-            SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterU & " and 名称='" & name & "' ;"
-    '        Debug.Print (SQL)
-            name = key & "昨年累"
-            dataY = psql.cnn.Execute(SQL)(0)
-            If IsNull(dataY) Then
-                dataY = 0
-            End If
-            table.add name, dataY
+        temp=ts(key)
+        unit=temp(0)
+        category = temp(1)
+        status = temp(2)
+        filterN = " AND 名称='" & name & "' "
+        filterU = " AND 单位 = '" & unit & "' "
+        filterC = " AND 类别='" & category & "' "
+        filterS = " AND 状态='" & status & "' "      
+        SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterN & filterU & filterC & filterS 
+'       Debug.Print (SQL)
+        dataM = psql.cnn.Execute(SQL)(0)
+        If IsNull(dataM) Then
+            dataM = 0
+        End If        
+        name = key & "昨月累"
+        if key="JZ20-2体系" or key="JZ25-1S体系" then
+            name = key & "接收昨月累"    
+        end if        
+        table.add name, dataM
+'        年累
+        SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterN & filterU & filterC & filterS 
+'        Debug.Print (SQL)
+        dataY = psql.cnn.Execute(SQL)(0)
+        If IsNull(dataY) Then
+            dataY = 0
+        End If
+        name = key & "昨年累"
+        if key="JZ20-2体系" or key="JZ25-1S体系" then
+            name = key & "接收昨月累"    
+        end if        
+        table.add name, dataY
 
     Next key
     Dim ar, x, d
@@ -873,6 +843,12 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     name = "电消耗"
     data = table("外供电") + table("自发电")
     table.add name, data
+    ts.remove("JZ20-2体系")
+    ts.remove("JZ25-1S体系")
+    ts.add "JZ20-2体系接收",""
+    ts.add "JZ20-2体系外输",""
+    ts.add "JZ25-1S体系接收",""
+    ts.add "JZ25-1S体系外输",""
     For Each key In ts.keys
         '月累
         name = key & "月累"
@@ -910,39 +886,37 @@ End Sub
 Public Sub maySum(ByRef ts As Object)
     On Error GoTo ErrorHandler
     ' 上游
-    ts.add "JZ20-2体系接收", ""
-    ts.add "JZ25-1S体系接收", ""
-    ts.add "JZ20-2体系外输", ""
-    ts.add "JZ25-1S体系外输", ""    
-    ts.add "JZ20-2凝析油", ""
-    ts.add "JZ20-2轻油", ""
+    ts.add "JZ20-2体系", array("方","天然气","接收")
+    ts.add "JZ25-1S体系", array("方","天然气","接收")   
+    ts.add "JZ20-2凝析油", array("方","天然气","接收")
+    ts.add "JZ20-2轻油", array("方","天然气","接收")
     ' 气
-    ts.add "稳定区", ""
-    ts.add "入厂计量", ""
-    ts.add "总外输气量", ""
-    ts.add "总产气量", ""
-    ts.add "锦天化", ""
-    ts.add "精细化工", ""
-    ts.add "污水处理厂", ""
-    ts.add "CNG", ""
-    ts.add "新奥燃气", ""
-    ts.add "自用气", ""
+    ts.add "稳定区", array("方","天然气","接收")
+    ts.add "入厂计量", array("方","天然气","接收")
+    ts.add "总外输气量", array("方","天然气","外输")
+    ts.add "总产气量", array("方","天然气","生产")
+    ts.add "锦天化", array("方","天然气","外输")
+    ts.add "精细化工", array("方","天然气","外输")
+    ts.add "污水处理厂", array("方","天然气","外输")
+    ts.add "CNG", array("方","天然气","外输")
+    ts.add "新奥燃气", array("方","天然气","外输")
+    ts.add "自用气", array("方","天然气","消耗")
     ' 油
-    ts.add "轻油回收量", ""
+    ts.add "轻油回收量", array("方","轻油","生产")
     ' 轻烃
-    ts.add "丙丁烷回收量", ""
+    ts.add "丙丁烷回收量", array("方","丙丁烷","生产")
     ' 化学药剂
-    ts.add "甲醇消耗", ""
-    ts.add "乙二醇消耗", ""
-    ts.add "乙二醇回收", ""
+    ts.add "甲醇消耗", array("方","化学药剂","接收")
+    ts.add "乙二醇消耗", array("方","化学药剂","接收")
+    ts.add "乙二醇回收", array("方","化学药剂","生产")
     ' 水
-    ts.add "外供水", ""
-    ts.add "自采水", ""
-    ts.add "水消耗", ""
+    ts.add "外供水", array("方","水","接收")
+    ts.add "自采水", array("方","水","生产")
+    ts.add "水消耗", array("方","水","消耗·")
     ' 电
-    ts.add "外供电", ""
-    ts.add "电消耗", ""
-    ts.add "自发电", ""
+    ts.add "外供电", array("度","电","接收")
+    ts.add "电消耗", array("度","电","消耗")
+    ts.add "自发电", array("度","电","生产")
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     Else
