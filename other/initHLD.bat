@@ -1,7 +1,7 @@
 rem chcp 65001 'UTF8'
 rem chcp 936 'chinese'
-set PGHOME=e:\public\portable\x64\database\pgsql
-set PGDATA=f:\public\database\MasterPG\data
+set PGHOME=d:\public\portable\x64\database\pgsql
+set PGDATA=e:\public\database\MasterPG\data
 set PGBACKUP=e:\public\database
 set path=%PGHOME%\bin;%path%;
 pg_ctl -D  %PGDATA% stop
@@ -23,20 +23,6 @@ psql -d HLD -U ComputerLover -c " ALTER DATABASE ""HLD"" OWNER TO ""operator""; 
 
 psql -d HLD -U ComputerLover -c " ALTER ROLE ""ComputerLover"" WITH ENCRYPTED PASSWORD 'wkx9dragon Xue Xi.' ; "
 
-REM psql -d HLD -U ComputerLover -c " ALTER ROLE ""repuser"" WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN REPLICATION ENCRYPTED PASSWORD '119' ;" 
-REM psql -d HLD -U ComputerLover -c " ALTER ROLE ""operator"" WITH NOSUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION ENCRYPTED PASSWORD '5302469' ; "
-REM psql -d HLD -U ComputerLover -c " ALTER ROLE ""leader"" WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB  NOREPLICATION  ;" 
-REM psql -d HLD -U ComputerLover -c " ALTER ROLE ""worker"" WITH NOSUPERUSER INHERIT CREATEROLE CREATEDB  REPLICATION  ; "
-
-REM psql -d HLD -U ComputerLover -c 
-REM "
-REM CREATE ROLE ""operator"" ; 
-REM CREATE ROLE ""repuser"" ;
-REM ALTER DATABASE ""HLD"" OWNER TO ""operator""; 
-REM ALTER ROLE ""repuser"" WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN REPLICATION ENCRYPTED PASSWORD '119' ;
-REM ALTER ROLE ""operator"" WITH NOSUPERUSER INHERIT CREATEROLE CREATEDB LOGIN NOREPLICATION ENCRYPTED PASSWORD '5302469' ;
-REM ALTER ROLE ""ComputerLover"" WITH ENCRYPTED PASSWORD 'wkx9dragon Xue Xi.' ;
-REM "
 pg_ctl -D  %PGDATA% stop
 copy %PGBACKUP%\pg_hba.conf %PGDATA%
 copy %PGBACKUP%\postgresql.conf %PGDATA%

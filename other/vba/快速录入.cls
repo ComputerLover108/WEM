@@ -610,61 +610,90 @@ Public Sub getRelatedData(ByRef table As Object, ByRef ts As Object)
     Dim 月初, 年初 As Date
     月初 = DateSerial(Year(今天), month(今天), 1)
     年初 = DateSerial(Year(今天), 1, 1)
-    Dim tableName, SQL, filter, filterM, filterY, filterN,filterU, filterS, unit, status,category As String
+    Dim tableName, SQL, filter, filterM, filterY, filterN, filterU, filterS, unit, status, category As String
+    Dim name, dataM, dataY
     tableName = "生产信息"
     Dim psql As New PostgreSQL
     filterM = "日期 between '" & 月初 & "' and '" & 昨天 & "' "
     filterY = "日期 between '" & 年初 & "' and '" & 昨天 & "' "
+    unit = "方"
+    category = "天然气"
+    status = "外输"
     filterU = " AND 单位 = '" & unit & "' "
     filterC = " AND 类别='" & category & "' "
     filterS = " AND 状态='" & status & "' "
     showFields = "sum(数据) "
-    Dim name, dataM, dataY
-    Dim key,temp
+    
+    filterN = " AND 名称='JZ20-2体系' "
+    SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterN & filterU & filterC & filterS
+    dataM = psql.cnn.Execute(SQL)(0)
+    name = "JZ20-2体系外输昨月累"
+    table.add name, dataM
+    SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterN & filterU & filterC & filterS
+    dataY = psql.cnn.Execute(SQL)(0)
+    name = "JZ20-2体系外输昨年累"
+    Debug.Print name, dataM, dataY, SQL
+    table.add name, dataY
+
+    filterN = " AND 名称='JZ25-1S体系' "
+    SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterN & filterU & filterC & filterS
+    dataM = psql.cnn.Execute(SQL)(0)
+    name = "JZ25-1S体系外输昨月累"
+    table.add name, dataM
+    SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterN & filterU & filterC & filterS
+    dataY = psql.cnn.Execute(SQL)(0)
+    name = "JZ25-1S体系外输昨年累"
+    Debug.Print name, dataM, dataY, SQL
+    table.add name, dataY
+    
+
+    Dim key, temp
     For Each key In ts.keys
         name = key
-        temp=ts(key)
-        unit=temp(0)
+        temp = ts(key)
+        unit = temp(0)
         category = temp(1)
         status = temp(2)
         filterN = " AND 名称='" & name & "' "
         filterU = " AND 单位 = '" & unit & "' "
         filterC = " AND 类别='" & category & "' "
-        filterS = " AND 状态='" & status & "' "      
-        SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterN & filterU & filterC & filterS 
+        filterS = " AND 状态='" & status & "' "
+        SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterM & filterN & filterU & filterC & filterS
 '       Debug.Print (SQL)
         dataM = psql.cnn.Execute(SQL)(0)
         If IsNull(dataM) Then
             dataM = 0
-        End If        
+        End If
         name = key & "昨月累"
-        if key="JZ20-2体系" or key="JZ25-1S体系" then
-            name = key & "接收昨月累"    
-        end if        
+        If key = "JZ20-2体系" Or key = "JZ25-1S体系" Then
+            name = key & "接收昨月累"
+        End If
+'        Debug.Print name, dataM, SQL
         table.add name, dataM
 '        年累
-        SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterN & filterU & filterC & filterS 
+        SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filterY & filterN & filterU & filterC & filterS
 '        Debug.Print (SQL)
         dataY = psql.cnn.Execute(SQL)(0)
         If IsNull(dataY) Then
             dataY = 0
         End If
         name = key & "昨年累"
-        if key="JZ20-2体系" or key="JZ25-1S体系" then
-            name = key & "接收昨月累"    
-        end if        
+        If key = "JZ20-2体系" Or key = "JZ25-1S体系" Then
+            name = key & "接收昨年累"
+        End If
+'        Debug.Print name, dataY, SQL
         table.add name, dataY
 
     Next key
     Dim ar, x, d
-    ar = Array("轻油库存", "轻烃库存", "水库存")
+    ar = Array("轻油库存合计", "轻烃库存", "库存水")
     showFields = "数据"
     For Each x In ar
         d = "吨"
         name = "昨" & x & "t"
-        If x = "水库存" Then
+        If x = "库存水" Then
             d = "方"
-            name = "昨" & x & "m3"
+            name = "昨水库存m3"
         End If
         filter = "日期 = '" & 昨天 & "' and 单位='" & d & "' and 名称='" & x & "' ;"
         SQL = "SELECT " & showFields & " FROM " & tableName & " WHERE " & filter
@@ -693,7 +722,7 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     monthHead = DateSerial(Year(today), month(today), 1)
     yearHead = DateSerial(Year(today), 1, 1)
     
-    Dim key, data, dataM, dataY, name, temp, dataT,proportion
+    Dim key, data, dataM, dataY, name, temp, dataT, proportion
     name = "总外输气量"
     data = table("锦天化") + table("精细化工") + table("污水处理厂") + table("CNG") + table("新奥燃气")
     table.add name, data
@@ -701,14 +730,14 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     data = table("总外输气量") + table("自用气")
     table.add name, data
     name = "JZ25-1S体系接收"
-    data = table("入厂计量")-table("JZ20-2体系接收")
-    table.add name,data
-    proportion = table("JZ20-2体系接收")/table("入厂计量")
+    data = table("入厂计量") - table("JZ20-2体系接收")
+    table.add name, data
+    proportion = table("JZ20-2体系接收") / table("入厂计量")
     name = "JZ20-2体系外输"
-    data = table("锦天化")*proportion
-    table.add name,data
+    data = table("锦天化") * proportion
+    table.add name, data
     name = "JZ25-1S体系外输"
-    data = table("锦天化")-table("JZ202体系外输")
+    data = table("锦天化") - table("JZ20-2体系外输")
     
     
     name = "年时间进度比"
@@ -741,10 +770,11 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
             If x Like "V-64*" Then
                 diameter = 12.3
                 name = x & "库存m3"
-                dataV = PI * height * height * (3 * diameter / 2 - height)
+                dataV = PI * height * height * (diameter / 2 - height / 3)
                 table.add name, dataV
                 temp = x & "密度"
                 density = table(temp)
+'                Debug.Print name, PI, height, dataV, table(temp)
             End If
             If x Like "V-712*" Then
                 diameter = 29.75
@@ -756,6 +786,7 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
             name = x & "库存t"
             dataW = dataV * density
             table.add name, dataW
+'            Debug.Print name, height, density, dataV, dataW, table(name)
         End If
     Next x
     name = "轻油库存m3"
@@ -843,12 +874,12 @@ Public Sub getDerivedData(ByRef table As Object, ByRef ts As Object)
     name = "电消耗"
     data = table("外供电") + table("自发电")
     table.add name, data
-    ts.remove("JZ20-2体系")
-    ts.remove("JZ25-1S体系")
-    ts.add "JZ20-2体系接收",""
-    ts.add "JZ20-2体系外输",""
-    ts.add "JZ25-1S体系接收",""
-    ts.add "JZ25-1S体系外输",""
+    ts.Remove ("JZ20-2体系")
+    ts.Remove ("JZ25-1S体系")
+    ts.add "JZ20-2体系接收", ""
+    ts.add "JZ20-2体系外输", ""
+    ts.add "JZ25-1S体系接收", ""
+    ts.add "JZ25-1S体系外输", ""
     For Each key In ts.keys
         '月累
         name = key & "月累"
@@ -886,37 +917,35 @@ End Sub
 Public Sub maySum(ByRef ts As Object)
     On Error GoTo ErrorHandler
     ' 上游
-    ts.add "JZ20-2体系", array("方","天然气","接收")
-    ts.add "JZ25-1S体系", array("方","天然气","接收")   
-    ts.add "JZ20-2凝析油", array("方","天然气","接收")
-    ts.add "JZ20-2轻油", array("方","天然气","接收")
+    ts.add "JZ20-2体系", Array("方", "天然气", "接收")
+    ts.add "JZ25-1S体系", Array("方", "天然气", "接收")
     ' 气
-    ts.add "稳定区", array("方","天然气","接收")
-    ts.add "入厂计量", array("方","天然气","接收")
-    ts.add "总外输气量", array("方","天然气","外输")
-    ts.add "总产气量", array("方","天然气","生产")
-    ts.add "锦天化", array("方","天然气","外输")
-    ts.add "精细化工", array("方","天然气","外输")
-    ts.add "污水处理厂", array("方","天然气","外输")
-    ts.add "CNG", array("方","天然气","外输")
-    ts.add "新奥燃气", array("方","天然气","外输")
-    ts.add "自用气", array("方","天然气","消耗")
+    ts.add "稳定区", Array("方", "天然气", "接收")
+    ts.add "入厂计量", Array("方", "天然气", "接收")
+    ts.add "总外输气量", Array("方", "天然气", "外输")
+    ts.add "总产气量", Array("方", "天然气", "生产")
+    ts.add "锦天化", Array("方", "天然气", "外输")
+    ts.add "精细化工", Array("方", "天然气", "外输")
+    ts.add "污水处理厂", Array("方", "天然气", "外输")
+    ts.add "CNG", Array("方", "天然气", "外输")
+    ts.add "新奥燃气", Array("方", "天然气", "外输")
+    ts.add "自用气", Array("方", "天然气", "消耗")
     ' 油
-    ts.add "轻油回收量", array("方","轻油","生产")
+    ts.add "轻油回收量", Array("方", "轻油", "生产")
     ' 轻烃
-    ts.add "丙丁烷回收量", array("方","丙丁烷","生产")
+    ts.add "丙丁烷回收量", Array("方", "丙丁烷", "生产")
     ' 化学药剂
-    ts.add "甲醇消耗", array("方","化学药剂","接收")
-    ts.add "乙二醇消耗", array("方","化学药剂","接收")
-    ts.add "乙二醇回收", array("方","化学药剂","生产")
+    ts.add "甲醇消耗", Array("方", "化学药剂", "消耗")
+    ts.add "乙二醇消耗", Array("方", "化学药剂", "接收")
+    ts.add "乙二醇回收", Array("方", "化学药剂", "生产")
     ' 水
-    ts.add "外供水", array("方","水","接收")
-    ts.add "自采水", array("方","水","生产")
-    ts.add "水消耗", array("方","水","消耗·")
+    ts.add "外供水", Array("方", "水", "接收")
+    ts.add "自采水", Array("方", "水", "生产")
+    ts.add "水消耗", Array("方", "水", "消耗")
     ' 电
-    ts.add "外供电", array("度","电","接收")
-    ts.add "电消耗", array("度","电","消耗")
-    ts.add "自发电", array("度","电","生产")
+    ts.add "外供电", Array("度", "电", "接收")
+    ts.add "电消耗", Array("度", "电", "消耗")
+    ts.add "自发电", Array("度", "电", "生产")
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     Else
@@ -1044,36 +1073,48 @@ Public Sub FillDailyProduction(ByRef table As Object)
                 If row < anchor1 + 6 Then
                     If temp Like "*JZ20-2体系*" Then
                         offset = 1
-                        Cells(row, column + offset).value = table("JZ202体系接收")
+                        data = table("JZ20-2体系接收")
+                        Cells(row, column + offset).value = data
                         offset = 3
-                        Cells(row, column + offset).value = table("JZ202体系接收月累")
+                        data = table("JZ20-2体系接收月累")
+                        Cells(row, column + offset).value = data
                         offset = 4
-                        Cells(row, column + offset).value = table("JZ202体系接收年累")
+                        data = table("JZ20-2体系接收年累")
+                        Cells(row, column + offset).value = data
                     End If
                     If temp Like "*JZ25-1S体系*" Then
                         offset = 1
-                        Cells(row, column + offset).value = table("JZ251S体系接收")
+                        data = table("JZ25-1S体系接收")
+                        Cells(row, column + offset).value = data
                         offset = 3
-                        Cells(row, column + offset).value = table("JZ251S体系接收月累")
+                        data = table("JZ25-1S体系接收月累")
+                        Cells(row, column + offset).value = data
                         offset = 4
-                        Cells(row, column + offset).value = table("JZ251S体系接收年累")
+                        data = table("JZ25-1S体系接收年累")
+                        Cells(row, column + offset).value = data
                     End If
                 Else
                     If temp Like "*JZ20-2体系*" Then
                         offset = 1
-                        Cells(row, column + offset).value = table("JZ202体系外输")
+                        data = table("JZ20-2体系外输")
+                        Cells(row, column + offset).value = data
                         offset = 3
-                        Cells(row, column + offset).value = table("JZ202体系外输月累")
+                        data = table("JZ20-2体系外输月累")
+                        Cells(row, column + offset).value = data
                         offset = 4
-                        Cells(row, column + offset).value = table("JZ202体系外输年累")
+                        data = table("JZ20-2体系外输年累")
+                        Cells(row, column + offset).value = data
                     End If
                     If temp Like "*JZ25-1S体系*" Then
                         offset = 1
-                        Cells(row, column + offset).value = table("JZ251S体系外输")
+                        data = table("JZ25-1S体系外输")
+                        Cells(row, column + offset).value = data
                         offset = 3
-                        Cells(row, column + offset).value = table("JZ251S体系外输月累")
+                        data = table("JZ25-1S体系外输月累")
+                        Cells(row, column + offset).value = data
                         offset = 4
-                        Cells(row, column + offset).value = table("JZ251S体系外输年累")
+                        data = table("JZ25-1S体系外输年累")
+                        Cells(row, column + offset).value = data
                     End If
                 End If
                 If temp Like "*总外输气量*" Then
@@ -1185,22 +1226,22 @@ Public Sub FillDailyProduction(ByRef table As Object)
             End If
 '                上游
             If temp Like "*JZ25-1S原油*" Then
-'                    offset = 1
-'                    cells(row,column + offset).value = JZ251S原油
+                offset = 1
+                Cells(row, column + offset).value = table("JZ25-1S原油")
                 offset = 2
-                Cells(row, column + offset).value = table("JZ251S原油密度")
+                Cells(row, column + offset).value = table("JZ25-1S原油密度")
             End If
             If temp Like "*JZ20-2凝析油*" Then
                 offset = 1
-                Cells(row, column + offset).value = table("JZ202凝析油")
+                Cells(row, column + offset).value = table("JZ20-2凝析油")
                 offset = 2
-                Cells(row, column + offset).value = table("JZ202凝析油密度")
+                Cells(row, column + offset).value = table("JZ20-2凝析油密度")
             End If
             If temp Like "*JZ20-2轻油*" Then
                 offset = 1
-                Cells(row, column + offset).value = table("JZ202轻油")
+                Cells(row, column + offset).value = table("JZ20-2轻油")
                 offset = 2
-                Cells(row, column + offset).value = table("JZ202轻油密度")
+                Cells(row, column + offset).value = table("JZ20-2轻油密度")
             End If
 '                天然气产量/外输/海管信息
             If temp Like "*轻油产量*外输*库存*" Then
@@ -1450,6 +1491,10 @@ Public Sub FillDailyProduction(ByRef table As Object)
                     offset = 1
                     Cells(row, column + offset).value = table("水池水位")
                 End If
+                If temp Like "*水池储水*" Then
+                    offset = 1
+                    Cells(row, column + offset).value = table("水库存m3")
+                End If
                 If temp Like "*外供电*" Then
                     offset = 1
                     Cells(row + offset, column).value = table("外供电")
@@ -1485,5 +1530,8 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
+
+
+
 
 
