@@ -23,7 +23,6 @@ On Error GoTo ErrorHandler
     For row = 1 To Rows.count
         For column = 1 To Columns.count
             temp = Cells(row, column).value
-'            Debug.Print ThisWorkbook.name
             If temp Like Title Then
                 position(0) = row
                 position(1) = column
@@ -42,19 +41,19 @@ On Error GoTo ErrorHandler
     Dim temp
     For row = beginRow To Rows.count
         temp = Cells(row, beginColumn).value
-        If temp Like "（一）配产/完成情况" Then
+        If temp Like "*（一）配产/完成情况*" Then
             table.add "（一）配产/完成情况", row
         End If
-        If temp Like "（二）天然气产量/外输/海管信息" Then
+        If temp Like "*（二）天然气产量/外输/海管信息*" Then
             table.add "（二）天然气产量/外输/海管信息", row
         End If
-        If temp Like "（三）轻油产量/外输/库存" Then
+        If temp Like "*（三）轻油产量/外输/库存*" Then
             table.add "（三）轻油产量/外输/库存", row
         End If
-        If temp Like "（四）丙丁烷产量/外输/库存" Then
+        If temp Like "*（四）丙丁烷产量/外输/库存*" Then
             table.add "（四）丙丁烷产量/外输/库存", row
         End If
-        If temp Like "（五）物料接收/消耗" Then
+        If temp Like "*（五）物料接收/消耗*" Then
             table.add "（五）物料接收/消耗", row
         End If
     Next row
@@ -92,6 +91,7 @@ On Error GoTo ErrorHandler
     Dim row, column, ro, co, beginRow, beginColumn, lastRow, lastColumn As Long
     Dim 日期 As Date
     Dim temp
+    Dim 轻油回收量月累方, 轻油回收量年累方, 丙丁烷回收量月累方, 丙丁烷回收量年累方 As Double
     Dim recordSC As New 生产信息
 '    新的数据提取方法
     Dim anchors As Object
@@ -104,9 +104,16 @@ On Error GoTo ErrorHandler
             beginColumn = position(1)
             lastColumn = beginColumn - 1 + Cells(beginRow, beginColumn).MergeArea.Columns.count
             Call getAnchors(beginRow, beginColumn, anchors)
+            Dim regex, matches, match, name 
+            Set regex = CreateObject("VBSCRIPT.REGEXP")
+            Dim unit, category, status, remark
             If verify(anchors) Then
                 ro = 1
                 日期 = Cells(beginRow + ro, beginColumn).value
+                unit = ""
+                category = ""
+                status = ""
+                remark = ""                
 '                （一）配产/完成情况
                 beginRow = anchors.item("（一）配产/完成情况") + 1
                 lastRow = anchors.item("（二）天然气产量/外输/海管信息") - 1
@@ -230,6 +237,10 @@ On Error GoTo ErrorHandler
                                 .数据 = Cells(row, column + co).value
                                 .类别 = "天然气"
                                 .状态 = "生产"
+                                co = 3
+                                .月累 = Cells(row, column + co).value
+                                co = 4
+                                .年累 = Cells(row, column + co).value
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
@@ -413,6 +424,25 @@ On Error GoTo ErrorHandler
                             With recordSC
                                 .日期 = 日期
                                 .名称 = "污水处理厂"
+                                .单位 = "方"
+                                co = 1
+                                .数据 = Cells(row, column + co).value
+                                .类别 = "天然气"
+                                .状态 = "外输"
+                                co = 4
+                                .月累 = Cells(row, column + co).value
+                                co = 5
+                                .年累 = Cells(row, column + co).value
+                                .数据源 = fname
+                            End With
+                            table.add recordSC, ""
+                            Set recordSC = Nothing
+                        End If
+'                        CNG
+                        If temp Like "*污水处理厂*" Then
+                            With recordSC
+                                .日期 = 日期
+                                .名称 = "CNG"
                                 .单位 = "方"
                                 co = 1
                                 .数据 = Cells(row, column + co).value
@@ -756,776 +786,273 @@ On Error GoTo ErrorHandler
                 For row = beginRow To lastRow
                     For column = beginColumn To lastColumn
                         temp = sh.Cells(row, column).value
-                        If temp Like "*液位m*" Then
-'                            V-631A
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-631A"
-                                .单位 = "米"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-631B
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-631B"
-                                .单位 = "米"
-                                co = 3
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-631C
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-631C"
-                                .单位 = "米"
-                                co = 4
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            轻油库存合计
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "轻油库存合计"
-                                .单位 = "米"
-                                co = 5
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*库存t*" Then
-'                            V-631A
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-631A"
-                                .单位 = "吨"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-631B
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-631B"
-                                .单位 = "吨"
-                                co = 3
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-631C
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-631C"
-                                .单位 = "吨"
-                                co = 4
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            轻油库存合计
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "轻油库存合计"
-                                .单位 = "吨"
-                                co = 5
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*库存m3*" Then
-'                            V-631A
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-631A"
-                                .单位 = "方"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-631B
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-631B"
-                                .单位 = "方"
-                                co = 3
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-631C
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-631C"
-                                .单位 = "方"
-                                co = 4
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            轻油库存合计
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "轻油库存合计"
-                                .单位 = "方"
-                                co = 5
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*轻油装车t*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "轻油装车"
-                                .单位 = "吨"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "外输"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*轻油装车bbl*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "轻油装车"
-                                .单位 = "桶"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "外输"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*外输凝点*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "外输凝点"
-                                .单位 = "摄氏度"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-'                                .状态 = ""
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*外输PH值*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "外输PH值"
-'                                .单位 = ""
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-'                                .状态 = ""
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*轻油处理量m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "轻油处理量"
-                                .单位 = "方"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "接收"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*轻油回收量t*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "轻油回收量"
-                                .单位 = "吨"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "生产"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*轻油回收量m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "轻油回收量"
-                                .单位 = "方"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "生产"
-                                .月累 = 轻油回收量月累方
-                                .年累 = 轻油回收量年累方
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*饱和蒸气压*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "饱和蒸气压"
-                                .单位 = "千帕"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-'                                .状态 = ""
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*轻油入罐前含水*" Then
+                        category = "轻油"
+                        status = ""
+                        remark = ""
+                        regex.pattern = "V-631(A|B|C)"
+                        if regex.test(temp) then
+                        end if
+                        regex.pattern = "轻油装车" 
+                        if regex.test(temp) then
+                        end if
+                        regex.pattern = "轻油回收量" 
+                        if regex.test(temp) then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            status = "生产"
                             ro = 1
-                            data = Cells(row + ro, column).value
-                            ta = Split(data, "/")
-                            count = (UBound(ta) - LBound(ta) + 1)
-                            If count = 2 Then
-'                                上午
-                                With recordSC
-                                    .日期 = 日期
-                                    .名称 = "轻油入罐前含水"
-                                    .数据 = ta(0)
-                                    .类别 = "轻油"
-                                    .备注 = "上午"
-                                    .数据源 = fname
-                                End With
-                                table.add recordSC, ""
-                                Set recordSC = Nothing
-'                                下午
-                                With recordSC
-                                    .日期 = 日期
-                                    .名称 = "轻油入罐前含水"
-                                    .数据 = ta(1)
-                                    .类别 = "轻油"
-                                    .备注 = "下午"
-                                    .数据源 = fname
-                                End With
-                                table.add recordSC, ""
-                                Set recordSC = Nothing
-                            End If
-                        End If
-                        If temp Like "*轻油装车m3*" Then
+                            data = cells(row+ro,column).value
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "轻油装车"
-                                .单位 = "方"
-                                ro = 1
-                                .数据 = Cells(row + ro, column).value
-                                .类别 = "轻油"
-                                .状态 = "外输"
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
+                            Set recordSC = Nothing                             
+                        end if
+                        regex.pattern = "轻油处理量" 
+                        if regex.test(temp) then
+                        end if
+                        regex.pattern = "(饱和蒸汽压)|(外输凝点)|(外输PH值)"
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            select case name
+                                case "饱和蒸汽压"
+                                    unit = "千帕"
+                                case "外输凝点"
+                                    unit = "摄氏度"
+                                case "外输PH值" 
+                                    unit = ""
+                            end select
+                            ro = 1
+                            data= Cells(row + ro, column).value
+                            With recordSC
+                                .日期 = 日期
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
+                                .数据源 = fname
+                            End With
+                            table.add recordSC, ""
+                            Set recordSC = Nothing                            
+                        if regex.test(temp) then
+                        end if
+                        regex.pattern = "轻油入罐前含水" 
+                        if regex.test(temp) then
+                        end if                      
                     Next column
                 Next row
 '                （四）丙丁烷产量/外输/库存
                 beginRow = anchors.item("（四）丙丁烷产量/外输/库存") + 1
-                lastRow = anchors.item("（五）物料接收/消耗") - 1
+                lastRow = anchors.item("（五）物料接收/消耗") - 1               
                 For row = beginRow To lastRow
                     For column = beginColumn To lastColumn
-                        temp = sh.Cells(row, column).value
-'                        液位m
-                        If temp Like "*液位m*" Then
-'                            V-641A
+                        temp = sh.Cells(row, column).value                        
+                        category = "丙丁烷"
+                        regex.pattern = "t"
+                        if regex.test(temp) then
+                            unit = "吨"
+                        end if
+                        regex.pattern = "m3"
+                        if regex.test(temp) then
+                            unit = "方"
+                        end if                        
+                        regex.pattern = "V-64[1-3]([AB])?"
+                        If regex.test(temp) Then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            status = "库存"
+                            Select Case name
+                                Case "V-641A"
+                                    remark = "丙烷"
+                                Case "V-641B"
+                                    remark = "丙烷"
+                                Case "V-642"
+                                    remark = "丁烷"
+                                Case "V-643A"
+                                    remark = "液化气"
+                                Case "V-643B"
+                                    remark = "丁烷"
+                            End Select
+                            unit = "米"
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "V-641A"
-                                .单位 = "米"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丙烷"
+                                .名称 = name
+                                .单位 = unit
+                                ro = 1
+                                data= Cells(row + ro, column).value
+                                .数据=data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
                             Set recordSC = Nothing
-'                            V-641B
+                            unit = "方"
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "V-641B"
-                                .单位 = "米"
-                                co = 3
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丙烷"
+                                .名称 = name
+                                .单位 = unit
+                                ro = 2
+                                data= Cells(row + ro, column).value
+                                .数据=data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-643A
+                            Set recordSC = Nothing                           
+                            unit = "吨"
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "V-643A"
-                                .单位 = "米"
-                                co = 5
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "液化气"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-643B
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-643B"
-                                .单位 = "米"
-                                co = 6
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丁烷"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-642
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-642"
-                                .单位 = "米"
-                                co = 8
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丁烷"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        库存t
-                        If temp Like "*库存t*" And row < lastRow - 3 Then
-'                            V-641A
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-641A"
-                                .单位 = "吨"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丙烷"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-641B
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-641B"
-                                .单位 = "吨"
-                                co = 3
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丙烷"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            丙烷罐库存
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "丙烷罐库存"
-                                .单位 = "吨"
-                                co = 4
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-'                                .备注 = ""
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-643A
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-643A"
-                                .单位 = "吨"
-                                co = 5
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "液化气"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-643B
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-643B"
-                                .单位 = "吨"
-                                co = 6
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丁烷"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            液化气罐库存
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "液化气罐库存"
-                                .单位 = "吨"
-                                co = 7
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-'                                .备注 = ""
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-642
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-642"
-                                .单位 = "吨"
-                                co = 8
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丁烷"
+                                .名称 = name
+                                .单位 = unit
+                                ro = 3
+                                data= Cells(row + ro, column).value
+                                .数据=data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        库存m3
-                        If temp Like "*库存m3*" Then
-'                            V-641A
+                        regex.pattern = "(丙烷|丁烷|液化气)库存"
+                        If regex.test(temp) Then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            unit = "方"
+                            status = "库存"
+                            remark = ""
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "V-641A"
-                                .单位 = "方"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丙烷"
+                                .名称 = name
+                                .单位 = unit
+                                ro = 2
+                                data= Cells(row + ro, column).value
+                                .数据=data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
                             Set recordSC = Nothing
-'                            V-641B
+                            
+                            unit = "吨"
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "V-641B"
-                                .单位 = "方"
-                                co = 3
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丙烷"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            丙烷罐库存
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "丙烷罐库存"
-                                .单位 = "吨"
-                                co = 4
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-'                                .备注 = ""
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-643A
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-643A"
-                                .单位 = "方"
-                                co = 5
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "液化气"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-643B
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-643B"
-                                .单位 = "方"
-                                co = 6
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丁烷"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            液化气罐库存
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "液化气罐库存"
-                                .单位 = "吨"
-                                co = 7
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-'                                .备注 = ""
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-'                            V-642
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "V-642"
-                                .单位 = "方"
-                                co = 8
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .备注 = "丁烷"
+                                .名称 = name
+                                .单位 = unit
+                                ro = 3
+                                data= Cells(row + ro, column).value
+                                .数据=data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        丙烷装车t
-                        If temp Like "*丙烷装车t*" Then
+                        regex.pattern = "((丙烷)|(丁烷)|(液化气))装车"
+                        if regex.test(temp) then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            status = "外输"
+                            remark = ""
+                            co = 1
+                            data= Cells(row , column+co).value                            
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "丙烷装车"
-                                .单位 = "吨"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "外输"
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        丙烷装车m3
-                        If temp Like "*丙烷装车m3*" Then
+                            Set recordSC = Nothing                            
+                        end if
+                        regex.pattern = "丙丁烷回收量"
+                        if regex.test(temp) then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            status = "生产"
+                            remark = ""
+                            co = 1
+                            data= Cells(row , column+co).value                            
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "丙烷装车"
-                                .单位 = "方"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "外输"
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        丁烷装车t
-                        If temp Like "*丁烷装车t*" Then
+                            Set recordSC = Nothing                         
+                        end if
+                        regex.pattern = "轻烃库存"
+                        If regex.test(temp) Then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            status = "库存"
+                            remark = ""
+                            co = 1
+                            data= Cells(row , column+co).value                            
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "丁烷装车"
-                                .单位 = "吨"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "外输"
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing
+                            Set recordSC = Nothing 
                         End If
-'                        丁烷装车m3
-                        If temp Like "*丁烷装车m3*" Then
+                        regex.pattern = "数据库(轻油|丙丁烷)回收量"
+                        if regex.test(temp) then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            status = "生产"
+                            remark = ""
+                            regex.pattern = "轻油|丙丁烷"
+                            Set matches = regex.Execute(name)
+                            category = matches(0).value                            
+                            co = 2
+                            data= Cells(row , column+co).value                            
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "丁烷装车"
-                                .单位 = "方"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "外输"
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        丙丁烷回收量t
-                        If temp Like "*丙丁烷回收量t*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "丙丁烷回收量"
-                                .单位 = "吨"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "生产"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        丙丁烷回收量m3
-                        If temp Like "丙丁烷回收量m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "丙丁烷回收量"
-                                .单位 = "方"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "生产"
-                                .月累 = 丙丁烷回收量月累方
-                                .年累 = 丙丁烷回收量年累方
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        液化气装车t
-                        If temp Like "*液化气装车t*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "液化气装车"
-                                .单位 = "吨"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "外输"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        液化气装车m3
-                        If temp Like "*液化气装车m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "液化气装车"
-                                .单位 = "方"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "外输"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        轻烃库存t
-                        If temp Like "*轻烃库存t*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "轻烃库存"
-                                .单位 = "吨"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        数据库轻油回收量m3
-                        If temp Like "*数据库轻油回收量m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "数据库轻油回收量"
-                                .单位 = "方"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "轻油"
-                                .状态 = "生产"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        数据库丙丁烷回收量m3
-                        If temp Like "*数据库丙丁烷回收量m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "数据库丙丁烷回收量"
-                                .单位 = "方"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "丙丁烷"
-                                .状态 = "生产"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
+                            Set recordSC = Nothing                         
+                        end if
                     Next column
                 Next row
 '                （五）物料接收/消耗
@@ -1545,220 +1072,110 @@ On Error GoTo ErrorHandler
                 For row = beginRow To lastRow
                     For column = beginColumn To lastColumn
                         temp = sh.Cells(row, column).value
-'                        乙二醇回收
-                        If temp Like "*乙二醇日回收量m3*" Then
+                        regex.pattern = "((甲醇|水|电)消耗)|(乙二醇回收)|(外供(电|水))|(自采水)|(自发电)"
+                        If regex.test(temp) Then
+                            remark = ""
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            regex.pattern = "消耗"
+                            if regex.test(name) then
+                                status = "消耗"
+                            end if
+                            regex.pattern = "外供|自采水"
+                            if regex.test(name) then
+                                status = "接收"
+                            end if
+                            regex.pattern = "乙二醇回收|自发电"
+                            if regex.test(name) then
+                                status = "生产"
+                            end if                            
+                            regex.pattern = "醇"
+                            if regex.test(name) then
+                                category = "化学药剂"
+                            end if
+                            regex.pattern = "水|电"
+                            if regex.test(name) then
+                                Set matches = regex.Execute(name)
+                                category = matches(0).value
+                            end if
+                            regex.pattern = "电"
+                            if regex.test(name) then
+                                unit = "度"
+                            end if                            
+                            ro = 1
+                            data= Cells(row+ro , column).value
+                            ro = 2
+                            dataM = cells(row+ro,column).value
+                            ro = 3
+                            dataY = cells(row+ro,column).value
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "乙二醇回收"
-                                .单位 = "方"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                ro = 3
-                                .月累 = Cells(row + ro, column + co).value
-                                ro = 4
-                                .年累 = Cells(row + ro, column + co).value
-                                .类别 = "化学药剂"
-                                .状态 = "生产"
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .月累 = dataM
+                                .年累 = dataY
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing
+                            Set recordSC = Nothing 
                         End If
-'                        乙二醇浓度
-                        If temp Like "*乙二醇浓度*" Then
+                        regex.pattern = "乙二醇(浓度|消耗)"
+                        if regex.test(temp) then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            category = "化学药剂"
+                            if name = "乙二醇消耗" then
+                                unit = "方"
+                                status = "消耗"
+                            end if
+                            if name = "乙二醇浓度" then
+                                unit = ""
+                                status = ""
+                            end if
+                            co = 1
+                            data= Cells(row , column+co).value                            
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "乙二醇浓度"
-'                                .单位 = ""
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "化学药剂"
-'                                .状态 = ""
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        乙二醇消耗
-                        If temp Like "*乙二醇日耗量m3*" Then
+                            Set recordSC = Nothing                         
+                        end if
+                        regex.pattern = "水池(水位|储水)"
+                        if regex.test(temp) then
+                            name = "库存水"
+                            category = "水"
+                            status = "库存"
+                            unit = "方"
+                            remark = ""
+                            if temp like "*水位*" then
+                                unit = "米"
+                            end if
+                            co = 1
+                            data= Cells(row , column+co).value                            
                             With recordSC
                                 .日期 = 日期
-                                .名称 = "乙二醇消耗"
-                                .单位 = "方"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "化学药剂"
-                                .状态 = "消耗"
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        甲醇消耗
-                        If temp Like "*甲醇日耗量m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "甲醇消耗"
-                                .单位 = "方"
-                                co = 2
-                                .数据 = Cells(row, column + co).value
-                                ro = 1
-                                .月累 = Cells(row + ro, column + co).value
-                                co = 4
-                                .年累 = Cells(row + ro, column + co).value
-                                .类别 = "化学药剂"
-                                .状态 = "消耗"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        外供水
-                        If temp Like "*外供水m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "外供水"
-                                .单位 = "方"
-                                co = 1
-                                ro = 0
-                                .数据 = Cells(row + ro, column + co).value
-                                .类别 = "水"
-                                .状态 = "接收"
-                                ro = 1
-                                .月累 = Cells(row + ro, column + co).value
-                                ro = 2
-                                .年累 = Cells(row + ro, column + co).value
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        自采水
-                        If temp Like "*自采水量m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "自采水"
-                                .单位 = "方"
-                                ro = 0
-                                co = 1
-                                .数据 = Cells(row + ro, column + co).value
-                                .类别 = "水"
-                                .状态 = "生产"
-                                ro = 1
-                                .月累 = Cells(row + ro, column + co).value
-                                ro = 2
-                                .年累 = Cells(row + ro, column + co).value
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        库存水
-                        If temp Like "*水池水位*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "库存水"
-                                .单位 = "米"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "水"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-                        If temp Like "*水池储水*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "库存水"
-                                .单位 = "方"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "水"
-                                .状态 = "库存"
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        水消耗
-                        If temp Like "*日耗水量m3*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "水消耗"
-                                .单位 = "方"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "水"
-                                .状态 = "消耗"
-                                ro = 4
-                                co = -1
-                                .月累 = Cells(row + ro, column + co).value
-                                co = 1
-                                .年累 = Cells(row + ro, column + co).value
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        外供电
-                        If temp Like "*日外供电量*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "外供电"
-                                .单位 = "度"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "电"
-                                .状态 = "接收"
-                                co = 3
-                                .月累 = Cells(row, column + co).value
-                                co = 5
-                                .年累 = Cells(row, column + co).value
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        自发电
-                        If temp Like "*日自发电量*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "自发电"
-                                .单位 = "度"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "电"
-                                .状态 = "生产"
-                                co = 3
-                                .月累 = Cells(row, column + co).value
-                                co = 5
-                                .年累 = Cells(row, column + co).value
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
-'                        电消耗
-                        If temp Like "*日耗电量*" Then
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = "电消耗"
-                                .单位 = "度"
-                                co = 1
-                                .数据 = Cells(row, column + co).value
-                                .类别 = "电"
-                                .状态 = "消耗"
-                                co = 3
-                                .月累 = Cells(row, column + co).value
-                                co = 5
-                                .年累 = Cells(row, column + co).value
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing
-                        End If
+                            Set recordSC = Nothing                         
+                        end if                        
                     Next column
                 Next row
             End If
@@ -2242,4 +1659,5 @@ Public Sub batchIntoDB()
     Dim scxx As New 生产信息
     Call scxx.PushTableToDatabase(table)
 End Sub
+
 
