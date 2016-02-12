@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "生产信息"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Public 日期 As Date
 Public 名称 As String
 Public 单位 As String
@@ -139,21 +130,21 @@ Sub CreateTable()
     Err.Clear
     On Error GoTo errorhander
     Dim SQL As String
-    Dim tablename As String
-    tablename = "生产信息"
+    Dim tableName As String
+    tableName = "生产信息"
 '    access 表
     Dim tableDef As String
     tableDef = " (ID counter,日期 date not null,名称 text(16) not null,单位 text(8),数据 double,类别 text(8),状态 text(8),月累 double,年累 double,备注 text,数据源 text  )"
-    SQL = " CREATE TABLE " & tablename & tableDef
+    SQL = " CREATE TABLE " & tableName & tableDef
     Dim ac As New access
     Call ac.cnn.Execute(SQL)
 '    PostgreSQL 表
     tableDef = " (ID serial,日期 date not null,名称 varchar(16) not null,单位 varchar(8),数据 double precision,类别 varchar(8),状态 varchar(8),备注 varchar,月累 double precision,年累 double precision,数据源 varchar  );"
-    SQL = " CREATE TABLE IF NOT EXISTS " & tablename & tableDef
+    SQL = " CREATE TABLE IF NOT EXISTS " & tableName & tableDef
     Dim psql As New PostgreSQL
     Call psql.cnn.Execute(SQL)
 '    重建逻辑索引
-    SQL = "create unique index 生产信息_逻辑ID on " & tablename & " (日期,名称,单位,类别,状态,备注) "
+    SQL = "create unique index 生产信息_逻辑ID on " & tableName & " (日期,名称,单位,类别,状态,备注) "
     Call ac.cnn.Execute(SQL)
     Call psql.cnn.Execute(SQL)
 errorhander:
@@ -170,106 +161,119 @@ Public Sub PushTableToDatabase(table)
     Dim rst As New ADODB.Recordset
     Dim SQL As String
     Dim temp As New 生产信息
-    Dim Condition As Boolean
-    Condition = True
+    Dim condition As Boolean
+    condition = True
     Dim x, y
     Dim filter As String
 '    导入access
     Debug.Print "准备导入" & table.count & "条记录！"
-    Dim tablename As String
-    tablename = "生产信息"
+    Dim tableName As String
+    tableName = "生产信息"
     Dim cnn As Object
     Set cnn = ac.cnn
-    rst.Open tablename, cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTabl
+    SQL = "update " & tableName & " set 单位='' where 单位 is null"
+    Call cnn.Execute(SQL)
+    SQL = "update " & tableName & " set 类别='' where 类别 is null"
+    Call cnn.Execute(SQL)
+    SQL = "update " & tableName & " set 状态='' where 状态 is null"
+    Call cnn.Execute(SQL)
+    SQL = "update " & tableName & " set 备注='' where 备注 is null"
+    Call cnn.Execute(SQL)
+    SQL = "update " & tableName & " set 数据源='' where 数据源 is null"
+    Call cnn.Execute(SQL)    
+    rst.Open tableName, cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTabl
+    for each x in table.keys
+        if isempty(x.日期) or isempty(x.名称) then
+            table.remove(x)
+        end if
+        if isempty(x.单位) then
+            x.单位 = ""
+        end if
+        if isempty(x.类别) then
+            x.类别 = ""
+        end if
+        if isempty(x.状态) then
+            x.状态 = ""
+        end if
+        if isempty(x.备注) then
+            x.备注 = ""
+        end if
+        if isempty(x.数据源) then
+            x.数据源 = ""
+        end if        
+    next x
     For Each x In table.keys
-        Condition = x.isFormat(temp)
-        If Condition Then
-            SQL = "select count(*) from " & tablename & " where 日期=#" & x.日期 & "# and 名称='" & x.名称 & "' and 单位='" & x.单位 & "' and 类别='" & x.类别 & "' and 状态='" & x.状态 & "' and  备注='" & x.备注 & "'"
-            y = cnn.Execute(SQL)(0)
-            Debug.Print y, SQL
-            If y = 0 Then
-                rst.AddNew
-            End If
-            If Not IsEmpty(x.日期) Then
-                rst.Fields("日期").value = x.日期
-            End If
-            If Not IsEmpty(x.名称) Then
-                rst.Fields("名称").value = x.名称
-            End If
-            If Not IsEmpty(x.单位) Then
-                rst.Fields("单位").value = x.单位
-            End If
-            If Not IsEmpty(x.类别) Then
-                rst.Fields("类别").value = x.类别
-            End If
-            If Not IsEmpty(x.状态) Then
-                rst.Fields("状态").value = x.状态
-            End If
-            If Not IsEmpty(x.备注) Then
-                rst.Fields("备注").value = x.备注
-            End If
+        condition = x.isFormat(temp)
+        If condition Then
+            SQL = "delete from " & tableName & " where 日期=#" & x.日期 & "# and 名称='" & x.名称 & "' and 单位='" & x.单位 & "' and 类别='" & x.类别 & "' and 状态='" & x.状态 & "' and  备注='" & x.备注 & "'"
+            Call cnn.Execute(SQL)
+
+            rst.AddNew
+            
+            rst.Fields("日期").value = x.日期
+            rst.Fields("名称").value = x.名称
+            rst.Fields("单位").value = x.单位
+            rst.Fields("类别").value = x.类别
+            rst.Fields("状态").value = x.状态
+            rst.Fields("备注").value = x.备注
             rst.Fields("数据源").value = x.数据源
             If Not IsEmpty(x.数据) Then
-                rst.Fields("数据").value = x.数据
+                rst.Fields("数据").value = round(x.数据, 4)
             End If
             If Not IsEmpty(x.月累) Then
-                rst.Fields("月累").value = x.月累
+                rst.Fields("月累").value = round(x.月累, 4)
             End If
             If Not IsEmpty(x.年累) Then
-                rst.Fields("年累").value = x.年累
+                rst.Fields("年累").value = round(x.年累, 4)
             End If
+
             rst.UpdateBatch
         End If
     Next x
-    Debug.Print "导入" & rst.RecordCount; "条记录,access表花费" & DateDiff("s", t, Now()) & "s."
+'    Debug.Print "导入" & rst.RecordCount; "条记录,access表花费" & DateDiff("s", t, Now()) & "s."
     rst.Close
-'    Set rst = Nothing
+    Set rst = Nothing
 '    导入postgresql
     Dim psql As New PostgreSQL
     Set cnn = psql.cnn
-    rst.Open tablename, cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
+    
+    SQL = "update " & tableName & " set 单位='' where 单位 is null"
+    Call cnn.Execute(SQL)
+    SQL = "update " & tableName & " set 类别='' where 类别 is null"
+    Call cnn.Execute(SQL)
+    SQL = "update " & tableName & " set 状态='' where 状态 is null"
+    Call cnn.Execute(SQL)
+    SQL = "update " & tableName & " set 备注='' where 备注 is null"
+    Call cnn.Execute(SQL)
+    
+    rst.Open tableName, cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
     For Each x In table.keys
         Set temp = x
-        Condition = x.isFormat(temp)
-        If Condition Then
-            SQL = "select count(*) from " & tablename & " where 日期='" & x.日期 & "' and 名称='" & x.名称 & "' and 单位='" & x.单位 & "' and 类别='" & x.类别 & "' and 状态='" & x.状态 & "' and  备注='" & x.备注 & "'"
-            y = cnn.Execute(SQL)(0)
-            Debug.Print y, SQL
-            If y = 0 Then
-                rst.AddNew
-            End If
-            If Not IsEmpty(x.日期) Then
-                rst.Fields("日期").value = x.日期
-            End If
-            If Not IsEmpty(x.名称) Then
-                rst.Fields("名称").value = x.名称
-            End If
-            If Not IsEmpty(x.单位) Then
-                rst.Fields("单位").value = x.单位
-            End If
-            If Not IsEmpty(x.类别) Then
-                rst.Fields("类别").value = x.类别
-            End If
-            If Not IsEmpty(x.状态) Then
-                rst.Fields("状态").value = x.状态
-            End If
-            If Not IsEmpty(x.备注) Then
-                rst.Fields("备注").value = x.备注
-            End If
-            rst.Fields("数据源").value = x.数据源
+        condition = x.isFormat(temp)
+        If condition Then
+'            SQL = "select count(*) from " & tablename & " where 日期='" & x.日期 & "' and 名称='" & x.名称 & "' and 单位='" & x.单位 & "' and 类别='" & x.类别 & "' and 状态='" & x.状态 & "' and  备注='" & x.备注 & "'"
+'            y = cnn.Execute(SQL)(0)
+'            Debug.Print y, SQL
+'            If x.名称 Like "JZ20-2体系" Or x.名称 Like "锦天化*" Then
+'                Debug.Print x.日期, x.名称, x.单位, x.类别, x.状态, x.数据, x.月累, x.年累
+'            End If
+'            If y = 0 Then
+'                rst.AddNew
+'            End If
+            rst.AddNew
             If Not IsEmpty(x.数据) Then
-                rst.Fields("数据").value = x.数据
+                rst.Fields("数据").value = round(x.数据, 4)
             End If
             If Not IsEmpty(x.月累) Then
-                rst.Fields("月累").value = x.月累
+                rst.Fields("月累").value = round(x.月累, 4)
             End If
             If Not IsEmpty(x.年累) Then
-                rst.Fields("年累").value = x.年累
+                rst.Fields("年累").value = round(x.年累, 4)
             End If
             rst.UpdateBatch
         End If
     Next x
-    Debug.Print "导入" & table.count & "条记录到表" & tablename & " ,PostgreSQL表花费" & DateDiff("s", t, Now()) & "s."
+    Debug.Print "导入" & table.count & "条记录到表" & tableName & " ,PostgreSQL表花费" & DateDiff("s", t, Now()) & "s."
     rst.Close
     Set rst = Nothing
     Call removeDuplicate
@@ -277,7 +281,7 @@ ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     
     Else
-        Debug.Print Err.Number & vbTab & Err.Description
+        Debug.Print Err.Number, Err.Description, SQL
     End If
 '    PostgreSQL 未连接代码 -2147467259
     If -2147467259 = Err.Number Then
@@ -299,15 +303,15 @@ Public Sub AccessToPostgreSQL()
     On Error GoTo ErrorHandler
     Dim ac As New access
     Dim psql As New PostgreSQL
-    Dim tablename As String
-    tablename = "生产信息"
+    Dim tableName As String
+    tableName = "生产信息"
 '    Dim SQL As String
 '    SQL = " Select  日期,名称,单位,数据,类别,状态,月累,年累,备注,数据源 from 生产信息 "
 '    rst1.Open SQL, ac.cnn, adOpenDynamic, adLockBatchOptimistic
     Dim rst1 As New ADODB.Recordset
-    rst1.Open tablename, ac.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
+    rst1.Open tableName, ac.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
     Dim rst2 As New ADODB.Recordset
-    rst2.Open tablename, psql.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
+    rst2.Open tableName, psql.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
     rst1.MoveFirst
     While Not rst1.EOF Or rst1.BOF
         rst2.AddNew
@@ -350,14 +354,14 @@ Err.Clear
 On Error GoTo ErrorHandler
     Dim ac As New access
     Dim psql As New PostgreSQL
-    Dim tablename As String
-    tablename = "生产信息"
+    Dim tableName As String
+    tableName = "生产信息"
 '    Access
     Dim rst1 As New ADODB.Recordset
     Dim rst2 As New ADODB.Recordset
-    rst1.Open tablename, psql.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
+    rst1.Open tableName, psql.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
     rst1.MoveFirst
-    rst2.Open tablename, ac.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
+    rst2.Open tableName, ac.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
     While Not rst1.EOF Or rst1.BOF
         rst2.AddNew
         rst2.Fields("日期").value = rst1!日期
