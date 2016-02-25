@@ -1,13 +1,5 @@
-Public 日期 As Date
-Public 名称 As String
-Public 单位 As String
-Public 数据 As Variant
-Public 类别 As String
-Public 状态 As String
-Public 备注 As String
-Public 月累 As Variant
-Public 年累 As Variant
-Public 数据源 As String
+Public 日期,名称,单位,类别,状态,备注,数据源,数据月累年累 Variant
+
 Function content() As String
     content = 日期 & _
                 vbTab & 名称 & _
@@ -180,34 +172,38 @@ Public Sub PushTableToDatabase(table)
     SQL = "update " & tableName & " set 备注='' where 备注 is null"
     Call cnn.Execute(SQL)
     SQL = "update " & tableName & " set 数据源='' where 数据源 is null"
-    Call cnn.Execute(SQL)    
+    Call cnn.Execute(SQL)
     rst.Open tableName, cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTabl
-    for each x in table.keys
-        if isempty(x.日期) or isempty(x.名称) then
-            table.remove(x)
-        end if
-        if isempty(x.单位) then
+    For Each x In table.keys
+        If IsEmpty(x.日期) Or IsEmpty(x.名称) Then
+            table.Remove (x)
+        End If
+        If IsEmpty(x.单位) Then
             x.单位 = ""
-        end if
-        if isempty(x.类别) then
+        End If
+        If IsEmpty(x.类别) Then
             x.类别 = ""
-        end if
-        if isempty(x.状态) then
+        End If
+        If IsEmpty(x.状态) Then
             x.状态 = ""
-        end if
-        if isempty(x.备注) then
+        End If
+        If IsEmpty(x.备注) Then
             x.备注 = ""
-        end if
-        if isempty(x.数据源) then
+        End If
+        If IsEmpty(x.数据源) Then
             x.数据源 = ""
-        end if        
-    next x
+        End If
+        SQL = "delete from " & tableName & " where 日期=#" & x.日期 & "# and 名称='" & x.名称 & "' and 单位='" & x.单位 & "' and 类别='" & x.类别 & "' and 状态='" & x.状态 & "' and  备注='" & x.备注 & "'"
+        Call cnn.Execute(SQL)
+'        Debug.Print SQL
+'        SQL = "select count(*) from " & tableName & " where 日期=#" & x.日期 & "# and 名称='" & x.名称 & "' and 单位='" & x.单位 & "' and 类别='" & x.类别 & "' and 状态='" & x.状态 & "' and  备注='" & x.备注 & "'"
+'        Debug.Print cnn.Execute(SQL)(0), SQL
+    Next x
+    
+'    Debug.Print "table count:", table.count
     For Each x In table.keys
         condition = x.isFormat(temp)
         If condition Then
-            SQL = "delete from " & tableName & " where 日期=#" & x.日期 & "# and 名称='" & x.名称 & "' and 单位='" & x.单位 & "' and 类别='" & x.类别 & "' and 状态='" & x.状态 & "' and  备注='" & x.备注 & "'"
-            Call cnn.Execute(SQL)
-
             rst.AddNew
             
             rst.Fields("日期").value = x.日期
@@ -230,7 +226,8 @@ Public Sub PushTableToDatabase(table)
             rst.UpdateBatch
         End If
     Next x
-'    Debug.Print "导入" & rst.RecordCount; "条记录,access表花费" & DateDiff("s", t, Now()) & "s."
+    Debug.Print "导入" & table.count; "条记录,access表花费" & DateDiff("s", t, Now()) & "s."
+    
     rst.Close
     Set rst = Nothing
 '    导入postgresql
@@ -261,6 +258,13 @@ Public Sub PushTableToDatabase(table)
 '                rst.AddNew
 '            End If
             rst.AddNew
+            rst.Fields("日期").value = x.日期
+            rst.Fields("名称").value = x.名称
+            rst.Fields("单位").value = x.单位
+            rst.Fields("类别").value = x.类别
+            rst.Fields("状态").value = x.状态
+            rst.Fields("备注").value = x.备注
+            rst.Fields("数据源").value = x.数据源
             If Not IsEmpty(x.数据) Then
                 rst.Fields("数据").value = round(x.数据, 4)
             End If
@@ -395,3 +399,5 @@ ErrorHandler:
         Exit Sub
     End If
 End Sub
+
+

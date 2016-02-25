@@ -104,16 +104,16 @@ On Error GoTo ErrorHandler
             beginColumn = position(1)
             lastColumn = beginColumn - 1 + Cells(beginRow, beginColumn).MergeArea.Columns.count
             Call getAnchors(beginRow, beginColumn, anchors)
-            Dim regex, matches, match, name 
+            Dim regex, matches, match, name
             Set regex = CreateObject("VBSCRIPT.REGEXP")
             Dim unit, category, status, remark
+            unit = ""
+            category = ""
+            status = ""
+            remark = ""
             If verify(anchors) Then
                 ro = 1
                 日期 = Cells(beginRow + ro, beginColumn).value
-                unit = ""
-                category = ""
-                status = ""
-                remark = ""                
 '                （一）配产/完成情况
                 beginRow = anchors.item("（一）配产/完成情况") + 1
                 lastRow = anchors.item("（二）天然气产量/外输/海管信息") - 1
@@ -787,50 +787,37 @@ On Error GoTo ErrorHandler
                     For column = beginColumn To lastColumn
                         temp = sh.Cells(row, column).value
                         category = "轻油"
-                        status = ""
                         remark = ""
-                        regex.pattern = "V-631(A|B|C)"
-                        if regex.test(temp) then
-                        end if
-                        regex.pattern = "轻油装车" 
-                        if regex.test(temp) then
-                        end if
-                        regex.pattern = "轻油回收量" 
-                        if regex.test(temp) then
-                            Set matches = regex.Execute(temp)
-                            name = matches(0).value
-                            status = "生产"
-                            ro = 1
-                            data = cells(row+ro,column).value
-                            With recordSC
-                                .日期 = 日期
-                                .名称 = name
-                                .单位 = unit
-                                .数据 = data
-                                .类别 = category
-                                .状态 = status
-                                .备注 = remark
-                                .数据源 = fname
-                            End With
-                            table.add recordSC, ""
-                            Set recordSC = Nothing                             
-                        end if
-                        regex.pattern = "轻油处理量" 
-                        if regex.test(temp) then
-                        end if
-                        regex.pattern = "(饱和蒸汽压)|(外输凝点)|(外输PH值)"
+                        unit = ""
+                        status = ""
+                        regex.pattern = "m[3]?|t|bbl|KPa|℃"
+                        If regex.test(temp) Then
                             Set matches = regex.Execute(temp)
                             name = matches(0).value
                             select case name
-                                case "饱和蒸汽压"
+                                case "m"
+                                    unit = "米"
+                                case "m3"
+                                    unit = "方"
+                                case "t"
+                                    unit = "吨"
+                                case "bbl"
+                                    unit = "桶"
+                                case "KPa"
                                     unit = "千帕"
-                                case "外输凝点"
-                                    unit = "摄氏度"
-                                case "外输PH值" 
-                                    unit = ""
-                            end select
+                                case "℃"
+                                    unit = "摄氏度"                                    
+                            end select 
+                        End If
+                        
+                        regex.pattern = "V-631([ABC])"
+                        If regex.test(temp) Then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            status = "库存"
+                            unit = "米"
                             ro = 1
-                            data= Cells(row + ro, column).value
+                            data = Cells(row + ro, column).value
                             With recordSC
                                 .日期 = 日期
                                 .名称 = name
@@ -842,29 +829,161 @@ On Error GoTo ErrorHandler
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing                            
+                            Set recordSC = Nothing
+                            unit = "方"
+                            ro = 2
+                            data = Cells(row + ro, column).value                            
+                            With recordSC
+                                .日期 = 日期
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
+                                .数据源 = fname
+                            End With
+                            table.add recordSC, ""
+                            Set recordSC = Nothing
+                            unit = "吨"
+                            ro = 3
+                            data = Cells(row + ro, column).value                            
+                            With recordSC
+                                .日期 = 日期
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
+                                .数据源 = fname
+                            End With
+                            table.add recordSC, ""
+                            Set recordSC = Nothing
+                        End If
+                        regex.pattern = "轻油库存"
+                        If regex.test(temp) Then                         
+                            name = "轻油库存合计"
+                            status = "库存"
+                            unit = "方"
+                            ro = 2
+                            data = Cells(row + ro, column).value                            
+                            With recordSC
+                                .日期 = 日期
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
+                                .数据源 = fname
+                            End With
+                            table.add recordSC, ""
+                            Set recordSC = Nothing
+                            unit = "吨"
+                            ro = 3
+                            data = Cells(row + ro, column).value                            
+                            With recordSC
+                                .日期 = 日期
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
+                                .数据源 = fname
+                            End With
+                            table.add recordSC, ""
+                            Set recordSC = Nothing
+                        End If                        
+                        regex.pattern = "轻油装车"
+                        If regex.test(temp) Then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            status = "外输"
+                            remark = ""
+                            co = 1
+                            data = Cells(row, column + co).value
+                            With recordSC
+                                .日期 = 日期
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
+                                .数据源 = fname
+                            End With
+                            table.add recordSC, ""
+                            Set recordSC = Nothing
+                        End If
+                        regex.pattern = "轻油入罐前含水"
                         if regex.test(temp) then
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            status = ""
+                            remark = ""
+                            co = 1
+                            data = Cells(row, column + co).value
+                            With recordSC
+                                .日期 = 日期
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
+                                .数据源 = fname
+                            End With
+                            table.add recordSC, ""
+                            Set recordSC = Nothing                        
                         end if
-                        regex.pattern = "轻油入罐前含水" 
+                        regex.pattern = "(外输(凝点|PH值))|(饱和蒸汽压)|(轻油(处理|回收)量)"
                         if regex.test(temp) then
-                        end if                      
+                            Set matches = regex.Execute(temp)
+                            name = matches(0).value
+                            select case name
+                                case "轻油处理量"
+                                    status = "接收"
+                                case "轻油回收量"
+                                    status = "生产"
+                                case else
+                                    status = ""
+                            end select 
+                            
+                            co = 1
+                            data = Cells(row, column + co).value
+                            With recordSC
+                                .日期 = 日期
+                                .名称 = name
+                                .单位 = unit
+                                .数据 = data
+                                .类别 = category
+                                .状态 = status
+                                .备注 = remark
+                                .数据源 = fname
+                            End With
+                            table.add recordSC, ""
+                            Set recordSC = Nothing                        
+                        end if                        
+
                     Next column
                 Next row
 '                （四）丙丁烷产量/外输/库存
                 beginRow = anchors.item("（四）丙丁烷产量/外输/库存") + 1
-                lastRow = anchors.item("（五）物料接收/消耗") - 1               
+                lastRow = anchors.item("（五）物料接收/消耗") - 1
                 For row = beginRow To lastRow
                     For column = beginColumn To lastColumn
-                        temp = sh.Cells(row, column).value                        
+                        temp = sh.Cells(row, column).value
                         category = "丙丁烷"
                         regex.pattern = "t"
-                        if regex.test(temp) then
+                        If regex.test(temp) Then
                             unit = "吨"
-                        end if
+                        End If
                         regex.pattern = "m3"
-                        if regex.test(temp) then
+                        If regex.test(temp) Then
                             unit = "方"
-                        end if                        
+                        End If
                         regex.pattern = "V-64[1-3]([AB])?"
                         If regex.test(temp) Then
                             Set matches = regex.Execute(temp)
@@ -888,8 +1007,8 @@ On Error GoTo ErrorHandler
                                 .名称 = name
                                 .单位 = unit
                                 ro = 1
-                                data= Cells(row + ro, column).value
-                                .数据=data
+                                data = Cells(row + ro, column).value
+                                .数据 = data
                                 .类别 = category
                                 .状态 = status
                                 .备注 = remark
@@ -903,23 +1022,23 @@ On Error GoTo ErrorHandler
                                 .名称 = name
                                 .单位 = unit
                                 ro = 2
-                                data= Cells(row + ro, column).value
-                                .数据=data
+                                data = Cells(row + ro, column).value
+                                .数据 = data
                                 .类别 = category
                                 .状态 = status
                                 .备注 = remark
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing                           
+                            Set recordSC = Nothing
                             unit = "吨"
                             With recordSC
                                 .日期 = 日期
                                 .名称 = name
                                 .单位 = unit
                                 ro = 3
-                                data= Cells(row + ro, column).value
-                                .数据=data
+                                data = Cells(row + ro, column).value
+                                .数据 = data
                                 .类别 = category
                                 .状态 = status
                                 .备注 = remark
@@ -940,8 +1059,8 @@ On Error GoTo ErrorHandler
                                 .名称 = name
                                 .单位 = unit
                                 ro = 2
-                                data= Cells(row + ro, column).value
-                                .数据=data
+                                data = Cells(row + ro, column).value
+                                .数据 = data
                                 .类别 = category
                                 .状态 = status
                                 .备注 = remark
@@ -956,8 +1075,8 @@ On Error GoTo ErrorHandler
                                 .名称 = name
                                 .单位 = unit
                                 ro = 3
-                                data= Cells(row + ro, column).value
-                                .数据=data
+                                data = Cells(row + ro, column).value
+                                .数据 = data
                                 .类别 = category
                                 .状态 = status
                                 .备注 = remark
@@ -967,13 +1086,13 @@ On Error GoTo ErrorHandler
                             Set recordSC = Nothing
                         End If
                         regex.pattern = "((丙烷)|(丁烷)|(液化气))装车"
-                        if regex.test(temp) then
+                        If regex.test(temp) Then
                             Set matches = regex.Execute(temp)
                             name = matches(0).value
                             status = "外输"
                             remark = ""
                             co = 1
-                            data= Cells(row , column+co).value                            
+                            data = Cells(row, column + co).value
                             With recordSC
                                 .日期 = 日期
                                 .名称 = name
@@ -985,16 +1104,16 @@ On Error GoTo ErrorHandler
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing                            
-                        end if
+                            Set recordSC = Nothing
+                        End If
                         regex.pattern = "丙丁烷回收量"
-                        if regex.test(temp) then
+                        If regex.test(temp) Then
                             Set matches = regex.Execute(temp)
                             name = matches(0).value
                             status = "生产"
                             remark = ""
                             co = 1
-                            data= Cells(row , column+co).value                            
+                            data = Cells(row, column + co).value
                             With recordSC
                                 .日期 = 日期
                                 .名称 = name
@@ -1006,8 +1125,8 @@ On Error GoTo ErrorHandler
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing                         
-                        end if
+                            Set recordSC = Nothing
+                        End If
                         regex.pattern = "轻烃库存"
                         If regex.test(temp) Then
                             Set matches = regex.Execute(temp)
@@ -1015,7 +1134,7 @@ On Error GoTo ErrorHandler
                             status = "库存"
                             remark = ""
                             co = 1
-                            data= Cells(row , column+co).value                            
+                            data = Cells(row, column + co).value
                             With recordSC
                                 .日期 = 日期
                                 .名称 = name
@@ -1027,19 +1146,19 @@ On Error GoTo ErrorHandler
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing 
+                            Set recordSC = Nothing
                         End If
                         regex.pattern = "数据库(轻油|丙丁烷)回收量"
-                        if regex.test(temp) then
+                        If regex.test(temp) Then
                             Set matches = regex.Execute(temp)
                             name = matches(0).value
                             status = "生产"
                             remark = ""
                             regex.pattern = "轻油|丙丁烷"
                             Set matches = regex.Execute(name)
-                            category = matches(0).value                            
+                            category = matches(0).value
                             co = 2
-                            data= Cells(row , column+co).value                            
+                            data = Cells(row, column + co).value
                             With recordSC
                                 .日期 = 日期
                                 .名称 = name
@@ -1051,8 +1170,8 @@ On Error GoTo ErrorHandler
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing                         
-                        end if
+                            Set recordSC = Nothing
+                        End If
                     Next column
                 Next row
 '                （五）物料接收/消耗
@@ -1078,36 +1197,36 @@ On Error GoTo ErrorHandler
                             Set matches = regex.Execute(temp)
                             name = matches(0).value
                             regex.pattern = "消耗"
-                            if regex.test(name) then
+                            If regex.test(name) Then
                                 status = "消耗"
-                            end if
+                            End If
                             regex.pattern = "外供|自采水"
-                            if regex.test(name) then
+                            If regex.test(name) Then
                                 status = "接收"
-                            end if
+                            End If
                             regex.pattern = "乙二醇回收|自发电"
-                            if regex.test(name) then
+                            If regex.test(name) Then
                                 status = "生产"
-                            end if                            
+                            End If
                             regex.pattern = "醇"
-                            if regex.test(name) then
+                            If regex.test(name) Then
                                 category = "化学药剂"
-                            end if
+                            End If
                             regex.pattern = "水|电"
-                            if regex.test(name) then
+                            If regex.test(name) Then
                                 Set matches = regex.Execute(name)
                                 category = matches(0).value
-                            end if
+                            End If
                             regex.pattern = "电"
-                            if regex.test(name) then
+                            If regex.test(name) Then
                                 unit = "度"
-                            end if                            
+                            End If
                             ro = 1
-                            data= Cells(row+ro , column).value
+                            data = Cells(row + ro, column).value
                             ro = 2
-                            dataM = cells(row+ro,column).value
+                            dataM = Cells(row + ro, column).value
                             ro = 3
-                            dataY = cells(row+ro,column).value
+                            dataY = Cells(row + ro, column).value
                             With recordSC
                                 .日期 = 日期
                                 .名称 = name
@@ -1121,23 +1240,23 @@ On Error GoTo ErrorHandler
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing 
+                            Set recordSC = Nothing
                         End If
                         regex.pattern = "乙二醇(浓度|消耗)"
-                        if regex.test(temp) then
+                        If regex.test(temp) Then
                             Set matches = regex.Execute(temp)
                             name = matches(0).value
                             category = "化学药剂"
-                            if name = "乙二醇消耗" then
+                            If name = "乙二醇消耗" Then
                                 unit = "方"
                                 status = "消耗"
-                            end if
-                            if name = "乙二醇浓度" then
+                            End If
+                            If name = "乙二醇浓度" Then
                                 unit = ""
                                 status = ""
-                            end if
+                            End If
                             co = 1
-                            data= Cells(row , column+co).value                            
+                            data = Cells(row, column + co).value
                             With recordSC
                                 .日期 = 日期
                                 .名称 = name
@@ -1149,20 +1268,20 @@ On Error GoTo ErrorHandler
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing                         
-                        end if
+                            Set recordSC = Nothing
+                        End If
                         regex.pattern = "水池(水位|储水)"
-                        if regex.test(temp) then
+                        If regex.test(temp) Then
                             name = "库存水"
                             category = "水"
                             status = "库存"
                             unit = "方"
                             remark = ""
-                            if temp like "*水位*" then
+                            If temp Like "*水位*" Then
                                 unit = "米"
-                            end if
+                            End If
                             co = 1
-                            data= Cells(row , column+co).value                            
+                            data = Cells(row, column + co).value
                             With recordSC
                                 .日期 = 日期
                                 .名称 = name
@@ -1174,8 +1293,8 @@ On Error GoTo ErrorHandler
                                 .数据源 = fname
                             End With
                             table.add recordSC, ""
-                            Set recordSC = Nothing                         
-                        end if                        
+                            Set recordSC = Nothing
+                        End If
                     Next column
                 Next row
             End If
@@ -1659,5 +1778,6 @@ Public Sub batchIntoDB()
     Dim scxx As New 生产信息
     Call scxx.PushTableToDatabase(table)
 End Sub
+
 
 
