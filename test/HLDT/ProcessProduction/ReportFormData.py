@@ -55,21 +55,23 @@ def getSeaPipeData(context,date):
 	# 海管出口PH值
 	# 海管进/出口压力MPa
 	# 海管进/出口温度℃
-	pass
+    category = '海管'
+    records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
+    for record in records :
+       print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))        
 
 def getUpstreamData(context,date):
     category = '上游'
     records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
     for record in records:
-#        print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
-        if record.名称 == 'JZ20-2凝析油' :
+        if re.match('JZ20-2凝析油',record.名称) :
+            # print('{}\t{}\t{}'.format(record.名称,record.单位,record.数据))
             name = record.名称.replace('-','')
             if record.单位 == '方' :
                 name = name+'数据'
                 context[name] = record.数据
-
-            if re.match('吨?立方米',record.单位) :
-                name = name+'密度'
+            if re.match('吨/立方米',record.单位) :
+                name = name
                 print(name,record.数据)
                 context[name] = record.数据
 
@@ -248,6 +250,7 @@ def ProductionDailyData(year,month,day):
     日期=date(int(year),int(month),int(day))
     getDistributionData(context,日期)
     getUpstreamData(context,日期)
+    getSeaPipeData(context,日期)
     getGasData(context,日期)
     getOilData(context,日期)
     getHydrocarbonData(context,日期)
