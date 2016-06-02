@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+
+{% block title %} 工作电话 {% endblock title %}
+{% block content %}
+    {% if WorkPhone %}
+        {% url "WorkPhone-update" pk=WorkPhone.pk as post_url %}
+    {% else %}
+        {% url "WorkPhone-create" as post_url %}
+    {% endif %}
+    <h2 class="text-center" >工作电话</h2>
+    <div class="col-md-4 ">
+        <form action="{{ post_url }}" method="POST" >
+            {% csrf_token %}
+                 <table class="table table-bordered">
+                    <tr>
+                        <th>地点</th>
+                        <th>电话</th>
+                        <th>备注</th>
+                    </tr>
+                    <tr>
+                        <td>{{form.地点}}</td>
+                        <td>{{form.电话}}</td>
+                        <td>{{form.备注}}</td>
+                    </tr>
+                </table>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <div class="form-actions">
+            <a href="{% url "WorkPhone-list" %}" class="btn btn-primary">取消</a>
+            {% if WorkPhone %}
+                <a href="{% url "WorkPhone-delete" pk=WorkPhone.pk %}" class="btn btn-danger">删除</a>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{% url "WorkPhone-add" %}" class="btn btn-success">保存继续</a>
+        </div>
+    </div>    
+{% endblock %}

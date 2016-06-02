@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+
+{% block title %} 工作电话 {% endblock title %}
+
+{% block content %}
+    <h2 class="text-center" >工作电话</h2>
+    
+    <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+    <table class="table table-bordered">
+        <tr>
+            <th>地点</th>
+            <th>电话</th>
+            <th>备注</th>
+        </tr>
+        {% for WorkPhone in object_list %}
+            <tr>
+                <td>
+                    {{ WorkPhone.地点 }}
+                </td>
+                <td>
+                    {{ WorkPhone.电话 }}
+                </td>
+                <td>
+                    {{ WorkPhone.备注 }}
+                </td>
+                <td>
+                    <a href="{% url "WorkPhone-delete" pk=WorkPhone.pk %}" class="btn btn-danger">删除</a>
+                </td>
+            </tr>          
+        {% endfor %}
+    </table>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url "WorkPhone-add" %}" class="btn btn-primary">"添加"</a>
+    </div>
+    </div>
+    {% include "pagination.html" %}       
+{% endblock %}
