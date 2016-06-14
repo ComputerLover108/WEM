@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "main.html" %}
 
 {% block CSS %}
     <!-- <link rel="stylesheet" type="text/css" href="/static/css/print.css" /> -->
@@ -45,40 +45,40 @@
             <td>月度完成率%</td>
         </tr>
         <tr>
-            <td>天然气Nm<sup>3</sup>
+            <td>天然气10<sup>4</sup>Nm<sup>3</sup>
             </td>
-            <td>{{年时间进度比|floatformat:2}}</td>
-            <td>{{天然气年配产|floatformat}}</td>
-            <td>{{总外输气量年累|floatformat}}</td>
-            <td>{{天然气年度完成率|floatformat:2}}</td>
-            <td>{{天然气需日产|floatformat}}</td>
-            <td>{{天然气月配产|floatformat}}</td>
-            <td>{{总外输气量月累|floatformat}}</td>
-            <td>{{天然气月度完成率|floatformat:2}}</td>
+            <td>{{年时间进度比}}</td>
+            <td>{{天然气年配产}}</td>
+            <td>{{总外输气量年累}}</td>
+            <td>{{天然气年度完成率}}</td>
+            <td>{{天然气需日产}}</td>
+            <td>{{天然气月配产}}</td>
+            <td>{{总外输气量月累}}</td>
+            <td>{{天然气月度完成率}}</td>
         </tr>
         <tr>
             <td>轻油m<sup>3</sup>
             </td>
-            <td>{{年时间进度比|floatformat:2}}</td>
-            <td>{{轻油年配产|floatformat}}</td>
-            <td>{{轻油年累|floatformat}}</td>
-            <td>{{轻油年度完成率|floatformat:2}}</td>
-            <td>{{轻油需日产|floatformat}}</td>
-            <td>{{轻油月配产|floatformat}}</td>
-            <td>{{轻油月累|floatformat}}</td>
-            <td>{{轻油月度完成率|floatformat:2}}</td>
+            <td>{{年时间进度比}}</td>
+            <td>{{轻油年配产}}</td>
+            <td>{{轻油年累}}</td>
+            <td>{{轻油年度完成率}}</td>
+            <td>{{轻油需日产}}</td>
+            <td>{{轻油月配产}}</td>
+            <td>{{轻油月累}}</td>
+            <td>{{轻油月度完成率}}</td>
         </tr>
         <tr>
             <td>丙丁烷m<sup>3</sup>
             </td>
-            <td>{{年时间进度比|floatformat:2}}</td>
-            <td>{{丙丁烷年配产|floatformat}}</td>
-            <td>{{丙丁烷年累|floatformat}}</td>
-            <td>{{丙丁烷年度完成率|floatformat:2}}</td>
-            <td>{{丙丁烷需日产|floatformat}}</td>
-            <td>{{丙丁烷月配产|floatformat}}</td>
-            <td>{{丙丁烷月累|floatformat}}</td>
-            <td>{{丙丁烷月度完成率|floatformat:2}}</td>
+            <td>{{年时间进度比}}</td>
+            <td>{{丙丁烷年配产}}</td>
+            <td>{{丙丁烷年累}}</td>
+            <td>{{丙丁烷年度完成率}}</td>
+            <td>{{丙丁烷需日产}}</td>
+            <td>{{丙丁烷月配产}}</td>
+            <td>{{丙丁烷月累}}</td>
+            <td>{{丙丁烷月度完成率}}</td>
         </tr>
         <tr>
             <th colspan="9">（二）天然气产量/外输/海管信息</th>
@@ -363,7 +363,13 @@
             <th colspan="9">（五）物料接收/消耗</th>
         </tr>
         <tr>
-            <td>项目</td>
+            <td rowspan="2">项目</td>
+            <td colspan="2">化学药剂</td>
+            <td colspan="3">水</td>
+            <td colspan="3">电</td>
+        </tr>
+        <tr>
+            <!-- <td rowspan="2">项目</td> -->
             <td>甲醇消耗m<sup>3</sup></td>
             <td>乙二醇回收m<sup>3</sup></td>
             <td>外供水m<sup>3</sup></td>
@@ -413,9 +419,9 @@
             <td>{{乙二醇消耗m3}}</td>
             <td>库存水</td>
             <td>水池水位m</td>
-            <td>{{水池水位}}</td>
+            <td>{{库存水m}}</td>
             <td>水池储水m<sup>3</sup></td>
-            <td>{{水池储水m3}}</td>
+            <td>{{库存水m3}}</td>
         </tr>
         <tr>
             <td colspan="9">

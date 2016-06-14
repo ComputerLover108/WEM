@@ -1,0 +1,55 @@
+﻿<!-- <nav class="navbar navbar-default navbar-fixed-top" role="navigation"> -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation"
+  <div class="container-fluid">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="http://www.cnooc.com.cn"><img alt="Brand"  width="90" height="30" src="/static/images/商标.jpg"></a>
+	</div>
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	  <ul class="nav navbar-nav">
+		<li><a href="/">天津分公司葫芦岛天然气终端厂</a> </li>
+		<li class="dropdown">
+		  <a href="#" class="dropdown-toggle" data-toggle="dropdown">部门<span class="caret"></span></a>
+		  <ul class="dropdown-menu" role="menu">
+			<li><a href="/ProcessProduce">工艺生产</a></li>
+			<li><a href="/EquipmentMaintain">设备维修</a></li>
+			<li><a href="/HealthSafetyEnviroment">安全环保</a></li>
+			<li><a href="/后勤服务">后勤服务</a></li>
+		  </ul>
+		</li>
+		<li class="dropdown">
+		  <a href="#" class="dropdown-toggle" data-toggle="dropdown">档案资料<span class="caret"></span></a>
+		  <ul class="dropdown-menu" role="menu">
+			<li><a href="/图纸">图纸</a></li>
+			<li><a href="/操作手册">操作手册</a></li>
+			<li><a href="/规章制度">规章制度</a></li>
+			<li><a href="/培训学习">培训学习</a></li>
+		  </ul>
+		</li>
+		<li class="dropdown">
+		  <a href="#" class="dropdown-toggle" data-toggle="dropdown">数据管理<span class="caret"></span></a>
+		  <ul class="dropdown-menu" role="menu">
+			<li><a href="/图纸">数据录入</a></li>
+			<li><a href="/操作手册">报表查询</a></li>
+			<li><a href="/规章制度">图表查看</a></li>
+			<li><a href="/培训学习">数据搜索</a></li>
+		  </ul>
+		</li>		
+	  </ul>
+	  <ul class="nav navbar-nav navbar-right">
+		{% if request.user.is_authenticated %}
+			<li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{user.username}}<span class="caret"></span></a>
+			  <ul class="dropdown-menu" role="menu">
+				<li><a href="/Accounts/logout">注销</a></li>
+				<!-- <li><a href="/logout">注销</a></li>			 -->
+			  </ul>
+			</li>
+		{% else %}
+			<li><a href="/Accounts/register">注册</a></li>
+			<li><a href="/Accounts/login">登录</a></li>
+		{% endif %}
+	  </ul>
+	</div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
