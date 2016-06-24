@@ -21,6 +21,7 @@ from Home import views as home_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', home_views.home),    
-    url(r'^QHSE/',include('QHSE.urls')),
     url(r'^ProcessProduction/',include('ProcessProduction.urls')),
+    url(r'^EquipmentMaintenance/',include('EquipmentMaintenance.urls')),
+    url(r'^QHSE/',include('QHSE.urls')),
 ]

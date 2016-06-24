@@ -1,0 +1,418 @@
+﻿{% extends "main.html" %}
+{% block title %}{{title}}{% endblock title %}
+{% block content %}  
+  <table  class="table table-bordered" >
+    <caption>葫芦岛天然气终端厂化验日报</caption>
+   <tr>
+    <td colspan="31" id="日期" >{{日期}}</td>
+   </tr>  
+   <tr  >
+    <td  colspan="13"  >乙二醇浓度（%）</td>
+    <td  colspan="2" rowspan="2"  >轻油</td>
+    <td  colspan="8" >15.6℃</td>
+    <td  colspan="2"  >V-601(%)</td>
+    <td  colspan="6"  >液化石油气</td>   
+   </tr>
+   <tr  >
+    <td  colspan="6"  >V-616</td>
+    <td  colspan="7"  >V-611</td>
+    <td  colspan="2"  >位置</td>
+    <td  colspan="2"  >A</td>
+    <td  colspan="2"  >B</td>
+    <td  colspan="2"  >C</td>
+    <td  >9:00</td>
+    <td  >{{上午海管来液含水}}</td>
+    <td  colspan="2" rowspan="3" >位 号<br/>项 目</td>
+    <td  colspan="2" rowspan="3" >V-643A<br/>(液化气）</td>
+    <td  colspan="2" rowspan="3"  >V-643B<br/>（丁烷）</td>   
+   </tr>
+   <tr  >
+    <td   colspan="3" rowspan="2"  >浓度</td>
+    <td  colspan="3" rowspan="2" >{{乙二醇浓度}}</td>
+    <td  colspan="2" rowspan="2"  >9:00</td>
+    <td  colspan="2" rowspan="2"  >{{上午海管MEG浓度}}</td>
+    <td  colspan="3" rowspan="2"  >≥50</td>
+    <td  colspan="2"  >含水(%)</td>
+    <td  colspan="2"  >≤0.5%</td>
+    <td  colspan="2"  >{{V631A含水}}</td>
+    <td  colspan="2"  >{{V631B含水}}</td>
+    <td  colspan="2"  >{{V631C含水}}</td>
+    <td  >15:00</td>
+    <td  >{{下午海管来液含水}}</td>   
+   </tr>
+   <tr  >
+    <td  colspan="4"  >饱和压蒸汽压 Kpa</td>
+    <td  colspan="2"  >{{V631B饱和蒸汽压}}</td>
+    <td  colspan="2"  >{{V631B饱和蒸汽压}}</td>
+    <td  colspan="2"  >{{V631B饱和蒸汽压}}</td>
+    <td colspan="2"></td>
+    
+   </tr>
+   <tr  >
+    <td   colspan="3"  >处理量（m<font class="font48"><sup>3</sup></font><font class="font24">）</font></td>
+    <td  colspan="3" >{{乙二醇回收}}</span></td>
+    <td  colspan="2"  >14:00</td>
+    <td  colspan="2"  >{{下午海管MEG浓度}}</td>
+    <td  colspan="3"  >≥50</td>
+    <td  colspan="4"  >密度</td>
+    <td  colspan="2"  >{{V631A密度}}</td>
+    <td  colspan="2"  >{{V631A密度}}</td>
+    <td  colspan="2"  >{{V631A密度}}</td>
+    <td  colspan="2" >&nbsp;</span></td>
+    <td  rowspan="5"  >组分MOL(%)</td>
+    <td  >C<font class="font49"><sub>2</sub></font></td>
+    <td  colspan="2">{{V643A_C2}}</td> 
+    <td  colspan="2">{{V643B_C2}}</td>   
+   </tr>
+   <tr  >
+    <td   colspan="13" rowspan="2"  >E-613饱和蒸汽压</td>
+    <td  colspan="5"  >轻油入罐前数据</td>
+    <td  >含水%</td>
+    <td   >9:00</td>
+    <td   >{{上午轻油入罐前含水}}</td>
+    <td   >15:00</td>
+    <td   >{{上午轻油入罐前含水}}</td>
+    <td  >PH值</td>
+    <td  >{{轻油入罐前PH值}}</td>
+    <td  >C<font class="font49"><sub>3</sub></font></td>
+    <td  colspan="2" >{{V643A_C3}}</td>
+    <td  colspan="2" >{{V643A_C3}}</td>   
+   </tr>
+   <tr  >
+    <td  colspan="5"  >轻油外输数据</td>
+    <td  >PH值</td>
+    <td  colspan="3"  >{{轻油外输PH值}}</td>
+    <td  colspan="2"  >凝点</td>
+    <td  >{{轻油外输凝点}}</td>
+    <td  >iC4</td>
+    <td  colspan="2">{{V643A_iC4}}</td> 
+    <td  colspan="2">{{V643B_iC4}}</td> 
+    
+   </tr>
+   <tr  >
+    <td   colspan="8"  >37.8℃ Kpa</td>
+    <td  colspan="2" >{{E-613饱和蒸汽压}}</td>
+    <td  colspan="3"  >＜70</td>
+    <td  colspan="2" rowspan="4"  >运行单机滑油</td>
+    <td  colspan="4" rowspan="2" >位号</td>
+    <td  colspan="3"  >运动粘度40℃</td>
+    <td  colspan="2"  >机械杂质</td>
+    <td  >含水</td>
+    <td  >nC4</td>
+    <td  colspan="2">{{V643A_nC4}}</td> 
+    <td  colspan="2">{{V643B_nC4}}</td>     
+   </tr>
+   <tr  >
+    <td  colspan="3"  >T-611</td>
+    <td  colspan="5"  >塔顶压力</td>
+    <td  colspan="5" rowspan="2" >{{T-611塔顶压力}}</td>
+    <td  colspan="3"  >（mm<font class="font48"><sup>2</sup></font><font class="font24">/s）</font></td>
+    <td  colspan="2"  >（%）</td>
+    <td  >（%）</td>
+    <td  >C<font class="font49"><sub>5</sub></font><font class="font24">+</font></td>
+    <td  colspan="2">{{V643A_C5plus}}</td> 
+    <td  colspan="2">{{V643B_C5plus}}</td>   
+   </tr>
+   <tr  >
+    <td  colspan="3" rowspan="2"  >参数</td>
+    <td  colspan="5"  >Mpa</td>
+    <td  colspan="4"  >{{滑油检测_名称1}}</td>
+    <td  colspan="3"  >{{滑油检测_运动粘度1}}</td>
+    <td  colspan="2"  >{{滑油检测_机械杂质1}}</td>
+    <td  >{{滑油检测_含水1}}</td>
+    <td  colspan="2" rowspan="2"  >饱和蒸汽压（KPa）</td>
+    <td  colspan="2" rowspan="2">{{V643A_饱和蒸气压}}</td> 
+    <td  colspan="2" rowspan="2">{{V643B_饱和蒸气压}}</td>   
+   </tr>
+   <tr  >
+    <td  colspan="5"  >塔底温度℃</td>
+    <td  colspan="5" >{{E-615温度}}</span></td>
+    <td  colspan="4"  >{{滑油检测_名称2}}</td>
+    <td  colspan="3"  >{{滑油检测_运动粘度2}}</td>
+    <td  colspan="2"  >{{滑油检测_机械杂质2}}</td>
+    <td  >{{滑油检测_含水2}}</td>   
+   </tr>
+   <tr  >
+    <td   colspan="26"  >天然气分析</td>
+    <td  colspan="2" rowspan="3" >项 目</td>
+    <td  colspan="2" rowspan="2"  >外输丙烷</td>
+    <td  rowspan="2"  >外输丁烷</td>   
+   </tr>
+   <tr  >
+    <td   colspan="2" rowspan="2" >项目</td>
+    <!-- 甲烷 -->
+    <td  colspan="3"  >{{轻烃组分_名称1}}</td>
+    <!-- 乙烷 -->
+    <td  colspan="4"  >{{轻烃组分_名称2}}</td>
+    <!-- 丙烷 -->
+    <td  colspan="4"  >{{轻烃组分_名称3}}</td>
+    <!-- 丁烷 -->
+    <td  colspan="4"  >{{轻烃组分_名称4}}</td>
+    <!-- 丙烷2检 -->
+    <td  colspan="4"  >{{轻烃组分_名称5}}</td>
+    <!-- 丁烷2检或外输气 -->
+    <td  colspan="3"  >{{轻烃组分_名称6}}</td>
+    <!-- 原料气 -->
+    <td  colspan="2"  >{{轻烃组分_名称7}}</td>   
+   </tr>
+   <tr  >
+    <td  >备注</td>
+    <td  colspan="2"  >化验</td>
+    <td  colspan="2"  >指标</td>
+    <td  colspan="2"  >化验</td>
+    <td  colspan="2"  >指标</td>
+    <td  colspan="2"  >化验</td>
+    <td  colspan="2"  >指标</td>
+    <td  colspan="2"  >化验</td>
+    <td  colspan="2"  >指标</td>
+    <td  colspan="2"  >化验</td>
+    <td  colspan="2"  >指标</td>
+    <td  >化验</td>
+    <td  >指标</td>
+    <td  >化验</td>
+    <td  >V-641A</td>
+    <td  >V-641B</td>
+    <td  >V-642</td>   
+   </tr>
+   <tr  >
+    <td   rowspan="10"  >组分MOL(%)</td>
+    <td  >C1</td>
+    <td></td>
+    <td  colspan="2"  >{{轻烃组分_C1_1}}</td>
+    <td  colspan="2"  >&lt;2.5</td>
+    <td  colspan="2"  >{{轻烃组分_C1_2}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_C1_3}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_C1_4}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_C1_5}}</td>
+    <td  colspan="2" ></td>
+    <td  >{{轻烃组分_C1_6}}</td>
+    <td ></td>
+    <td>{{轻烃组分_C1_7}}</td>
+    <td  rowspan="5"  >组分MOL(%)</td>
+    <td>C2</td>
+    <td>{{V641A_C2}}</td>
+    <td>{{V641B_C2}}</td>
+    <td>{{V642_C2}}</td>
+   </tr>
+   <tr  >
+    <td  >C2</td>
+    <td></td>
+    <td  colspan="2" >{{轻烃组分_C2_1}}</span></td>
+    <td  colspan="2"  >&gt;<font class="font30">90.0</font></td>
+    <td  colspan="2"  >{{轻烃组分_C2_2}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2"  >{{轻烃组分_C2_3}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_C2_4}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_C2_5}}</td>
+    <td  colspan="2" ></td>
+    <td>{{轻烃组分_C2_6}}</td>
+    <td></td>
+    <td  >{{轻烃组分_C2_7}}</td>
+    <td  >C3</td>
+    <td>{{V641A_C3}}</td>
+    <td>{{V641B_C3}}</td>
+    <td>{{V642_C3}}</td>  
+   </tr>
+   <tr  >
+    <td  >C3</td>
+    <td  rowspan="5" ></td>
+    <td  colspan="2"  >{{轻烃组分_C3_1}}</td>
+    <td  colspan="2" rowspan="5"  >&lt;<font class="font30">6.0</font></td>
+    <td  colspan="2"  >{{轻烃组分_C3_2}}</td>
+    <td  colspan="2"  >≥95.0</td>
+    <td  colspan="2"  >{{轻烃组分_C3_3}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2"  >{{轻烃组分_C3_4}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_C3_5}}</td>
+    <td  colspan="2" ></td>
+    <td  >{{轻烃组分_C3_6}}</td>
+    <td></td>
+    <td  >{{轻烃组分_C3_7}}</td>
+    <td  >iC4</td>
+    <td>{{V641A_iC4}}</td>
+    <td>{{V641B_iC4}}</td>
+    <td>{{V642_iC4}}</td>   
+   </tr>
+   <tr  >
+    <td  >iC4</td>
+    <td  colspan="2"  >{{轻烃组分_iC4_1}}</td>
+    <td  colspan="2"  >{{轻烃组分_iC4_2}}</td>
+    <td  colspan="2" rowspan="4" ></td>
+    <td  colspan="2"  >{{轻烃组分_iC4_3}}</td>
+    <td  colspan="2" rowspan="2"  >≥95.0</td>
+    <td  colspan="2" >{{轻烃组分_iC4_4}}</td>
+    <td  colspan="2" rowspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_iC4_5}}</td>
+    <td  colspan="2" rowspan="4" ></td>
+    <td  >{{轻烃组分_iC4_5}}</td>
+    <td></td>
+    <td  >{{轻烃组分_iC4_6}}</td>
+    <td  >nC4</td>
+    <td>{{V641A_nC4}}</td>
+    <td>{{V641B_nC4}}</td>
+    <td>{{V642_nC4}}</td>  
+   </tr>
+   <tr  >
+    <td  >nC4</td>
+    <td  colspan="2"  >{{轻烃组分_nC4_1}}</td>
+    <td  colspan="2"  >{{轻烃组分_nC4_2}}</td>
+    <td  colspan="2"  >{{轻烃组分_nC4_3}}</td>
+    <td  colspan="2"  >{{轻烃组分_nC4_4}}</td>
+    <td  colspan="2" >{{轻烃组分_nC4_5}}</td>
+    <td  >{{轻烃组分_nC4_6}}</td>
+    <td></td>
+    <td  >{{轻烃组分_nC4_7}}</td>
+    <td  >C5+</td>
+    <td>{{V641A_C5plus}}</td>
+    <td>{{V641B_C5plus}}</td>
+    <td>{{V642_C5plus}}</td> 
+   </tr>
+   <tr  >
+    <td  >iC5</td>
+    <td  colspan="2"  >{{轻烃组分_iC5_1}}</td>
+    <td  colspan="2"  >{{轻烃组分_iC5_2}}</td>
+    <td  colspan="2" >{{轻烃组分_iC5_3}}</td>
+    <td  colspan="2" rowspan="2"  >≤2.0</td>
+    <td  colspan="2"  >{{轻烃组分_iC5_4}}</td>
+    <td  colspan="2" rowspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_iC5_5}}</td>
+    <td  >{{轻烃组分_iC5_6}}</td>
+    <td></td>
+    <td  >{{轻烃组分_iC5_7}}</td>
+    <td  colspan="5"  >锅炉水</td>
+   </tr>
+   <tr  >
+    <td  >nC5</td>
+    <td  colspan="2"  >{{轻烃组分_nC5_1}}</td>
+    <td  colspan="2"  >{{轻烃组分_nC5_2}}</td>
+    <td  colspan="2" >{{轻烃组分_nC5_3}}</td>
+    <td  colspan="2"  >{{轻烃组分_nC5_4}}</td>
+    <td  colspan="2" >{{轻烃组分_nC5_5}}</td>
+    <td  >{{轻烃组分_nC5_6}}</td>
+    <td></td>
+    <td>{{轻烃组分_nC5_7}}</td>
+    <td>项目</td>
+    <td  colspan="2"  >软化水</td>
+    <td  colspan="2"  >循环水</td>
+   </tr>
+   <tr  >
+    <td  >温度℃</td>
+    <td  >C<font class="font50">6</font></td>
+    <td  colspan="2" >{{轻烃组分_塔底温度_1}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_塔底温度_2}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_塔底温度_3}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_塔底温度_4}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_塔底温度_5}}</td>
+    <td  colspan="2" ></td>
+    <td  >{{轻烃组分_塔底温度_6}}</td>
+    <td></td>
+    <td  >{{轻烃组分_塔底温度_7}}</td>
+    <td  >PH值</td>
+    <td  colspan="2" >{{锅炉软化水PH值}}</span></td>
+    <td  colspan="2" >{{锅炉循环水PH值}}</td>
+   </tr>
+   <tr  >
+    <td  >CO2</td>
+    <td></td>
+    <td  colspan="2" >{{轻烃组分_CO2_1}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_CO2_2}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_CO2_3}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_CO2_4}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_CO2_5}}</td>
+    <td  colspan="2" ></td>
+    <td  >{{轻烃组分_CO2_6}}</td>
+    <td></td>
+    <td  >{{轻烃组分_CO2_7}}</td>
+    <td  >总硬度</td>
+    <td  colspan="2" >{{锅炉软化水总硬度}}</td>
+    <td  colspan="2" >{{锅炉循环水总硬度}}</td>
+   </tr>
+   <tr  >
+    <td  >N2</td>
+    <td></td>
+    <td  colspan="2"  >{{轻烃组分_N2_1}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_N2_2}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_N2_3}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_N2_4}}</td>
+    <td  colspan="2" ></td>
+    <td  colspan="2" >{{轻烃组分_N2_5}}</td>
+    <td  colspan="2" ></td>
+    <td  >{{轻烃组分_N2_6}}</td>
+    <td></td>
+    <td  >{{轻烃组分_N2_7}}</td>
+    <td  >总碱度</td>
+    <td  colspan="2" >{{锅炉软化水总碱度}}</td>
+    <td  colspan="2" >{{锅炉循环水总碱度}}</td>
+   </tr>
+   <tr  >
+    <td   rowspan="3"  >循环水</td>
+    <td>项目</td>
+    <td  colspan="3"  >PH值</td>
+    <td  colspan="4"  >浊度</td>
+    <td  colspan="4"  >电导率</td>
+    <td  colspan="4"  >总碱度</td>
+    <td  colspan="2"  >总硬度</td>
+    <td  colspan="2"  >LSI</td>
+    <td  colspan="3"  >氯离子</td>
+    <td  colspan="2"  >总铁</td>
+    <td  rowspan="4"  ><br/>备<br/>注<br/></td>
+    <td  colspan="4" rowspan="4"  >乙二醇储罐{{乙二醇库存}}m<sup>3</sup>，其中{{乙二醇死库存}}m<sup>3</sup>为死库存</td>   
+   </tr>
+   <tr  >
+    <td  >数据</td>
+    <td  colspan="3" >{{循环水PH值}}</td>
+    <td  colspan="4" >{{循环水浊度}}</td>
+    <td  colspan="4" >{{循环水电导率}}</td>
+    <td  colspan="4" >{{循环水总碱度}}</td>
+    <td  colspan="2" >{{循环水总硬度}}</td>
+    <td  colspan="2" >{{循环水LSI}}</td>
+    <td  colspan="3" >{{循环水氯离子}}</td>
+    <td  colspan="2" >{{循环水总铁}}</td>   
+   </tr>
+   <tr  >
+    <td  >标准</td>
+    <td  colspan="3"  >6.8-9.0</td>
+    <td  colspan="4"  >＜10NTU</td>
+    <td  colspan="4"  >＜1400us/cm</td>
+    <td  colspan="4"  >＜450ppm</td>
+    <td  colspan="2"  >＜650ppm</td>
+    <td  colspan="2"  >2.5ppm</td>
+    <td  colspan="3"  >＜700ppm</td>
+    <td  colspan="2"  >＜1ppm</td>   
+   </tr>
+   <tr  >
+    <td>V-601</td>
+    <td  colspan="2"  >凝点（℃）</td>
+    <td  colspan="5" >9:00</td>
+    <td  colspan="3"  >{{上午海管出口凝点}}</td>
+    <td  colspan="3"  >15:00</td>
+    <td  colspan="3"  >{{下午海管出口凝点}}</td>
+    <td  colspan="2"  >PH值</td>
+    <td  colspan="2"  >9:00</td>
+    <td  colspan="2" >{{上午海管出口PH值}}</td>
+    <td   >15:00</td>
+    <td  colspan="2" >{{下午海管出口PH值}}</td>   
+   </tr>
+   <tr>
+    <td colspan="30" id="签名提示">填表人：</td>
+    <td id="签名" >{{签名}}</td>
+   </tr>
+  </table>  
+{% endblock content%}  
