@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class 设备位号(models.Model):
+class Equipment(models.Model):
     id = models.AutoField(primary_key=True)
     位号 = models.CharField(max_length=32)
     名称 = models.CharField(max_length=32)

@@ -5,5 +5,5 @@ from .views import EquipmentList
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-	url(r'Equipment/$',Equipment.as_view(),name='Equipment-list'),        
+	url(r'EquipmentList/$',EquipmentList.as_view(),name='Equipment-list'),        
 ]
