@@ -21,4 +21,8 @@ class EquipmentList(ListView):
     	if keyword :
     		queryset = Equipment.objects.filter(Q(位号__icontains=keyword)|Q(名称__icontains=keyword)|Q(备注__icontains=keyword)).order_by('位号','名称')
     	return queryset
+    def get_context_data(self, **kwargs):
+        context = super(EquipmentList, self).get_context_data(**kwargs)
+        context['Title'] = "设备位号"
+        return context 
 

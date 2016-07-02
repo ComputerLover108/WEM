@@ -1,39 +1,83 @@
-{% extends "base.html" %}
+{% extends "page.html" %}
+{% block hJS %} 
+    <script src="/static/js/editTable.js"></script> 
+    <script> 
+        $(function() { 
+        //$('.edit').handleTable({"cancel" : "<span class='glyphicon glyphicon-remove'></span>"}); 
+        $('.editable').handleTable({ 
+            "handleFirst" : true, 
+            "cancel" : " <span class='glyphicon glyphicon-remove'></span> ", 
+            "edit" : " <span class='glyphicon glyphicon-edit'></span> ", 
+            "add" : " <span class='glyphicon glyphicon-plus'></span> ", 
+            "save" : " <span class='glyphicon glyphicon-saved'></span> ", 
+            "confirm" : " <span class='glyphicon glyphicon-ok'></span> ", 
+            "operatePos" : -1, 
+            "editableCols" : [1,2,3], 
+            "order": ["add","edit"], 
+        "saveCallback" : function(data, isSuccess) { //这里可以写ajax内容，用于保存编辑后的内容 
+        //data: 返回的数据 
+        //isSucess: 方法，用于保存数据成功后，将可编辑状态变为不可编辑状态 
+        var flag = true; //ajax请求成功（保存数据成功），才回调isSuccess函数（修改保存状态为编辑状态） 
+        if(flag) { 
+            isSuccess(); 
+            alert(data + " 保存成功"); 
+        } else { 
+            alert(data + " 保存失败"); 
+        } 
+        return true; 
+    }, 
+    "addCallback" : function(data,isSuccess) { 
+        var flag = true; 
+        if(flag) { 
+            isSuccess(); 
+            alert(data + " 增加成功"); 
+        } else { 
+            alert(data + " 增加失败"); 
+        } 
+    }, 
+    "delCallback" : function(isSuccess) { 
+        var flag = true; 
+        if(flag) { 
+            isSuccess(); 
+            alert("删除成功"); 
+        } else { 
+            alert("删除失败"); 
+        } 
+    } 
+    }); 
+    }); 
+    </script>      
+{% endblock hJS %}
 
-
-{% block title %} 工作电话 {% endblock title %}
-{% block content %}
+{% block main-content %}
     {% if WorkPhone %}
         {% url "WorkPhone-update" pk=WorkPhone.pk as post_url %}
     {% else %}
         {% url "WorkPhone-create" as post_url %}
     {% endif %}
-    <h2 class="text-center" >工作电话</h2>
-    <div class="col-md-4 ">
+    <div class="bs-example" data-example-id="hoverable-table"> 
+    <div class="col-md-6 col-md-offset-1 ">
         <form action="{{ post_url }}" method="POST" >
             {% csrf_token %}
-                 <table class="table table-bordered">
-                    <tr>
-                        <th>地点</th>
-                        <th>电话</th>
-                        <th>备注</th>
-                    </tr>
-                    <tr>
-                        <td>{{form.地点}}</td>
-                        <td>{{form.电话}}</td>
-                        <td>{{form.备注}}</td>
-                    </tr>
+                <table class="table table-bordered editable">
+                    <thead> 
+                        <tr> 
+                            <th>地点</th>
+                            <th>电话</th>
+                            <th>备注</th>
+                            <th>编辑</th> 
+                        </tr> 
+                    </thead> 
+                    <tbody> 
+                        <tr>
+                            <td>{{form.地点}}</td>
+                            <td>{{form.电话}}</td>
+                            <td>{{form.备注}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>     
                 </table>
         </form>
     </div>
-    <div class="col-md-4">
-        <div class="form-actions">
-            <a href="{% url "WorkPhone-list" %}" class="btn btn-primary">取消</a>
-            {% if WorkPhone %}
-                <a href="{% url "WorkPhone-delete" pk=WorkPhone.pk %}" class="btn btn-danger">删除</a>
-            {% endif %}
-            <button type="submit" class="btn btn-primary">保存</button>
-            <a href="{% url "WorkPhone-add" %}" class="btn btn-success">保存继续</a>
-        </div>
-    </div>    
+    </div>
 {% endblock %}

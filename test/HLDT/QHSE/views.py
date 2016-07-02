@@ -17,7 +17,11 @@ class WorkPhoneList(ListView):
     	keyword = self.request.GET.get('keyword')
     	if keyword :
     		queryset = WorkPhone.objects.filter(Q(地点__icontains=keyword)|Q(电话__icontains=keyword)|Q(备注__icontains=keyword)).order_by('地点','电话')
-    	return queryset   
+    	return queryset
+    def get_context_data(self, **kwargs):
+        context = super(WorkPhoneList, self).get_context_data(**kwargs)
+        context['Title'] = "工作电话"
+        return context   
 
 class WorkPhoneCreate(CreateView):
 	model = WorkPhone
