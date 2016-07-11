@@ -1,0 +1,35 @@
+{% extends "main.html" %}
+{% block title %} {{Title}} {% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <h1 class="page-header">{{Title}}</h1>
+    </div>
+    <div class="row">
+        {% block siderbarLeft %}
+            {%  include "sidebarLeft.html" %}
+        {% endblock %}    
+        {% block main-content %}
+            <div class="col-md-6 col-md-offset-1 ">
+                <form action="{{ post_url }}" method="POST" >
+                    {% csrf_token %}
+                    {{form}}
+                    <button type="submit" class="btn btn-primary " >保存</button>                   
+                </form>
+            </div>
+
+        {% endblock %}
+        {% block sidebarRight %}        
+            <!-- {% include "sidebarRight.html" %} -->
+        {% endblock %}       
+    </div>       
+{% endblock %}
+
+{% block JS %} 
+    <script>
+    $(document).ready(function(){
+
+
+    });    
+    </script>      
+{% endblock JS %}

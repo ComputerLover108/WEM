@@ -7,5 +7,3 @@ class WorkPhone(models.Model):
 	备注 = models.CharField(max_length=32,blank=True)
 	class Meta:
 		db_table='工作电话'
-	def __str__(self):
-		return self.地点+':'+self.电话+'['+self.备注+']'

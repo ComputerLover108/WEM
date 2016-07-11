@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.db import connection
+import json
 
 # Create your views here.
 from django.views.generic import ListView,DetailView
@@ -8,7 +10,7 @@ from .models import WorkPhone
 from django.db.models import Q
 
 class WorkPhoneList(ListView):
-    template_name = "WorkPhone_list.html"
+    template_name = "workphone_list.html"
     model = WorkPhone
     context_object_name = 'WorkPhone-list'    
     paginate_by = 10
@@ -23,10 +25,22 @@ class WorkPhoneList(ListView):
         context['Title'] = "工作电话"
         return context   
 
+# def WorkPhoneAdd(request):
+#     Title = '工作电话'
+#     tableHead = ['ID','地点','电话','备注']
+#     cursor = connection.cursor()
+#     cursor.execute("select ID,地点,电话,备注 from 工作电话 order by 地点,电话;")
+#     rows = cursor.fetchall()
+#     records = json.dumps(rows)
+#     print(rows)
+#     # records = serializers.serialize("json", WorkPhone.objects.all())
+#     return render(request, 'table.html',locals())
+    
 class WorkPhoneCreate(CreateView):
-	model = WorkPhone
-	fields = ['地点','电话','备注']
-	success_url = reverse_lazy('WorkPhone-list')
+    template_name = "QHSE/workphone_form.html"
+    model = WorkPhone
+    fields = ['地点','电话','备注']
+    success_url = reverse_lazy('WorkPhone-list')
 
 class WorkPhoneUpdate(UpdateView):
 	model = WorkPhone
@@ -38,5 +52,3 @@ class WorkPhoneDelete(DeleteView):
 	fields = ['地点','电话','备注']
 	success_url = reverse_lazy('WorkPhone-list')
 
-		
-		

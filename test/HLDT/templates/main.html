@@ -2,3 +2,21 @@
 {% block nav %}
 	{% include 'nav.html' %}
 {% endblock nav %}
+{% block content %}
+    {% block head %}
+        <div class="row">
+            <h1 class="page-header">{{Title}}</h1>
+        </div>
+    {% endblock head %}
+    <div class="row">
+    {% block siderbarLeft %}
+        <!-- {%  include "sidebarLeft.html" %} -->
+    {% endblock %}    
+    {% block main-content %}
+     
+    {% endblock %}
+    {% block sidebarRight %}        
+        <!-- {% include "sidebarRight.html" %} -->
+    {% endblock %}       
+    </div>    
+{% endblock content %}
