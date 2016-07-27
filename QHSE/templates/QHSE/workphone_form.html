@@ -1,0 +1,59 @@
+{% extends "main.html" %}
+{% block title %} {{Title}} {% endblock title %}
+
+{% block content %}
+    <div class="row">
+        <h1 class="page-header">{{Title}}</h1>
+    </div>
+    <div class="row">
+        {% block siderbarLeft %}
+            {%  include "sidebarLeft.html" %}
+        {% endblock %}    
+        {% block main-content %}
+            <div class="col-md-6 col-md-offset-1 ">
+                <form action="" method="POST" >
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>地点</th>
+                            <th>电话</th>
+                            <th>备注</th>
+                        </tr>
+                        {% for WorkPhone in object_list %}
+                            <tr>
+                                <td>
+                                    <input type="text" name="address" value="{{ WorkPhone.地点 }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="telephone" value="{{ WorkPhone.电话 }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="remark" value="{{ WorkPhone.备注 }}">
+                                </td>
+                            </tr>          
+                        {% endfor %}
+                    </table>                                       
+                </form>
+            </div>
+        {% endblock %}
+        {% block sidebarRight %}        
+            <div class="col-md-2">
+<!--                 <div class = "search">
+                    <form action="" method="get" class = "search-form">
+                     <input type="text" name="keyword">
+                     <input type="submit" value="查询">
+                    </form>
+                </div> -->                
+                <a class="btn btn-block btn-info" id='save' role="button">OK</a>
+            </div> 
+        {% endblock %}       
+    </div>       
+{% endblock %}
+
+{% block JS %} 
+    <script>
+    $(document).ready(function(){
+
+
+    });    
+    </script>      
+{% endblock JS %}

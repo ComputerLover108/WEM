@@ -1,0 +1,444 @@
+{% extends "main.html" %}
+
+{% block CSS %}
+    <!-- <link rel="stylesheet" type="text/css" href="/static/css/print.css" /> -->
+    <style type="text/css">
+    table,td {
+        text-align: center;
+        font-size:  12px;
+    }
+    caption {
+        font-size: 18px;
+    }
+    th {
+        text-align: center;
+        font-size: 16px;
+    }
+    .签名 {
+        border-top : 1px
+    }
+/*    table { width: 80%; }
+    tr { height: 10px; }*/
+    </style>
+{% endblock CSS %}
+
+
+{% block content %}
+<div id="content" class="col-md-10 col-md-offset-1">
+    <table class="table table-bordered">
+        <caption class="text-center">葫芦岛天然气终端厂生产日报</caption>
+        <tr>
+            <td id="日期" colspan="9" class="text-right">{{日期}}</td>
+        </tr>
+        <tr>
+            <th colspan="9">（一）配产/完成情况</th>
+        </tr>
+        <tr>
+            <td>产品名称</td>
+            <td>年时间进度比%</td>
+            <td>年度配产</td>
+            <td>年度累计</td>
+            <td>年度完成率%</td>
+            <td>今后需日产</td>
+            <td>月度配产</td>
+            <td>月度累计</td>
+            <td>月度完成率%</td>
+        </tr>
+        <tr>
+            <td>天然气10<sup>4</sup>Nm<sup>3</sup>
+            </td>
+            <td>{{年时间进度比}}</td>
+            <td>{{天然气年配产}}</td>
+            <td>{{总外输气量年累}}</td>
+            <td>{{天然气年度完成率}}</td>
+            <td>{{天然气需日产}}</td>
+            <td>{{天然气月配产}}</td>
+            <td>{{总外输气量月累}}</td>
+            <td>{{天然气月度完成率}}</td>
+        </tr>
+        <tr>
+            <td>轻油m<sup>3</sup>
+            </td>
+            <td>{{年时间进度比}}</td>
+            <td>{{轻油年配产}}</td>
+            <td>{{轻油年累}}</td>
+            <td>{{轻油年度完成率}}</td>
+            <td>{{轻油需日产}}</td>
+            <td>{{轻油月配产}}</td>
+            <td>{{轻油月累}}</td>
+            <td>{{轻油月度完成率}}</td>
+        </tr>
+        <tr>
+            <td>丙丁烷m<sup>3</sup>
+            </td>
+            <td>{{年时间进度比}}</td>
+            <td>{{丙丁烷年配产}}</td>
+            <td>{{丙丁烷年累}}</td>
+            <td>{{丙丁烷年度完成率}}</td>
+            <td>{{丙丁烷需日产}}</td>
+            <td>{{丙丁烷月配产}}</td>
+            <td>{{丙丁烷月累}}</td>
+            <td>{{丙丁烷月度完成率}}</td>
+        </tr>
+        <tr>
+            <th colspan="9">（二）天然气产量/外输/海管信息</th>
+        </tr>
+        <tr>
+            <td colspan="2">项目</td>
+            <td colspan="2">日产/合计</td>
+            <td>月累</td>
+            <td>年累</td>
+            <td colspan="3">海管信息</td>
+        </tr>
+        <tr>
+            <td rowspan="4">总收气量10
+                <font><sup>4</sup></font>
+                <font>m</font><sup>3</sup>
+            </td>
+            <td>稳定区</td>
+            <td colspan="2">{{稳定区数据}}</td>
+            <td>{{稳定区月累}}</td>
+            <td>{{稳定区年累}}</td>
+            <td>项目</td>
+            <td>上午</td>
+            <td>下午</td>
+        </tr>
+        <tr>
+            <td>入厂计量</td>
+            <td colspan="2">{{入厂计量数据}}</td>
+            <td>{{入厂计量月累}}</td>
+            <td>{{入厂计量年累}}</td>
+            <td>海管来液含水%</td>
+            <td>{{海管来液含水上午}}</td>
+            <td>{{海管来液含水下午}}</td>
+        </tr>
+        <tr>
+            <td>JZ20-2体系</td>
+            <td colspan="2">{{JZ202体系接收数据}}</td>
+            <td>{{JZ202体系接收月累}}</td>
+            <td>{{JZ202体系接收年累}}</td>
+            <td>海管MEG浓度%</td>
+            <td>{{海管MEG浓度上午}}</td>
+            <td>{{海管MEG浓度下午}}</td>
+        </tr>
+        <tr>
+            <td>JZ25-1S体系</td>
+            <td colspan="2">{{JZ251S体系接收数据}}</td>
+            <td>{{JZ251S体系接收月累}}</td>
+            <td>{{JZ251S体系接收年累}}</td>
+            <td>海管出口凝点℃</td>
+            <td>{{海管出口凝点上午}}</td>
+            <td>{{海管出口凝点下午}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">总外输气量10
+                <font><sup>4</sup></font>
+                <font>m3</font>
+            </td>
+            <td colspan="2">{{总外输气量数据}}</td>
+            <td>{{总外输气量月累}}</td>
+            <td>{{总外输气量年累}}</td>
+            <td>海管出口PH值</td>
+            <td>{{海管出口PH值上午}}</td>
+            <td>{{海管出口PH值下午}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">总产气量10
+                <font><sup>4</sup></font>
+                <font>m3</font>
+            </td>
+            <td colspan="2">{{总产气量数据}}</td>
+            <td>{{总产气量月累}}</td>
+            <td>{{总产气量年累}}</td>
+            <td>海管进/出口压力MPa</td>
+            <td colspan="2">{{海管进出口压力}}</td>
+        </tr>
+        <tr>
+            <td rowspan="3">锦天化10
+                <font><sup>4</sup></font>
+                <font>m3</font>
+            </td>
+            <td colspan="2">{{锦天化数据}}</td>
+            <td rowspan="5">{{锦天化数据1}}</td>
+            <td>{{锦天化月累}}</td>
+            <td>{{锦天化年累}}</td>
+            <td>海管进/出口温度℃</td>
+            <td colspan="2">{{海管进出口温度}}</td>
+        </tr>
+        <tr>
+            <td>JZ20-2体系</td>
+            <td>{{JZ202体系外输数据}}</td>
+            <td>{{JZ202体系外输月累}}</td>
+            <td>{{JZ202体系外输年累}}</td>
+            <td>JZ25-1S原油m3</td>
+            <td>{{JZ251S原油数据}}</td>
+            <td>{{JZ251S原油密度}}</td>
+        </tr>
+        <tr>
+            <td>JZ25-1S体系</td>
+            <td>{{JZ251S体系外输数据}}</td>
+            <td>{{JZ251S体系外输月累}}</td>
+            <td>{{JZ251S体系外输年累}}</td>
+            <td>JZ20-2凝析油m3</td>
+            <td>{{JZ202凝析油数据}}</td>
+            <td>{{JZ202凝析油密度}}</td>
+        </tr>
+        <tr>
+            <td>精细化工10
+                <font><sup>4</sup></font>
+                <font>m3</font>
+            </td>
+            <td colspan="2">{{精细化工数据}}</td>
+            <td>{{精细化工月累}}</td>
+            <td>{{精细化工年累}}</td>
+            <td>JZ20-2轻油m3</td>
+            <td>{{JZ202轻油数据}}</td>
+            <td>{{JZ202轻油密度}}</td>
+        </tr>
+        <tr>
+            <td>污水处理厂10
+                <font><sup>4</sup></font>
+                <font>m3</font>
+                </span>
+            </td>
+            <td colspan="2">{{污水处理厂数据}}</td>
+            <td>{{污水处理厂月累}}</td>
+            <td>{{污水处理厂年累}}</td>
+            <td colspan="3" rowspan="3">{{上下游12吋海管通球}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">新奥燃气10
+                <font><sup>4</sup></font>
+                <font>m3</font>
+            </td>
+            <td colspan="2">{{新奥燃气数据}}</td>
+            <td>{{新奥燃气月累}}</td>
+            <td>{{新奥燃气年累}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">自用气10
+                <font><sup>4</sup></font>
+                <font>m3</font>
+            </td>
+            <td colspan="2">{{自用气数据}}</td>
+            <td>{{自用气月累}}</td>
+            <td>{{自用气年累}}</td>
+        </tr>
+        <tr>
+            <th colspan="9">（三）轻油产量/外输/库存</th>
+        </tr>
+        <tr>
+            <td colspan="2">轻油</td>
+            <td>V-631A</td>
+            <td>V-631B</td>
+            <td>V-631C</td>
+            <td>轻油库存</td>
+            <td>轻油处理量m<sup>3</sup></td>
+            <td>轻油回收量m<sup>3</sup></td>
+            <td>轻油回收量t</td>
+        </tr>
+        <tr>
+            <td colspan="2">液位m</td>
+            <td>{{V631A_m}}</td>
+            <td>{{V631B_m}}</td>
+            <td>{{V631C_m}}</td>
+            <td>/</td>
+            <td>{{轻油处理量m3}}</td>
+            <td>{{轻油回收量m3}}</td>
+            <td>{{轻油回收量t}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">库存m<sup>3</sup>
+            </td>
+            <td>{{V631A_m3}}</td>
+            <td>{{V631B_m3}}</td>
+            <td>{{V631C_m3}}</td>
+            <td>{{轻油库存m3}}</td>
+            <td>饱和蒸汽压KPa</td>
+            <td>外输PH值</td>
+            <td>外输凝点℃</td>
+        </tr>
+        <tr>
+            <td colspan="2">库存t</td>
+            <td>{{V631A_t}}</td>
+            <td>{{V631B_t}}</td>
+            <td>{{V631C_t}}</td>
+            <td>{{轻油库存t}}</td>
+            <td>{{轻油饱和蒸汽压}}</td>
+            <td>{{轻油外输PH值}}</td>
+            <td>{{轻油外输凝点}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">轻油装车m3</td>
+            <td>{{轻油装车m3}}</td>
+            <td>轻油装车bbl</td>
+            <td>{{轻油装车bbl}}</td>
+            <td>轻油装车t</td>
+            <td>{{轻油装车t}}</td>
+            <td>轻油入罐前含水%<span></span></td>
+            <td>{{轻油入罐前含水}}</td>
+        </tr>
+        <tr>
+            <th colspan="9">（四）丙丁烷产量/外输/库存</th>
+        </tr>
+        <tr>
+            <td>项目</td>
+            <td>V-641A
+                <br/>（丙烷）</td>
+            <td>V-641B
+                <br/>（丙烷）</td>
+            <td>V-642
+                <br/>（丁烷）</td>
+            <td>V-643A
+                <br/>（液化气）</td>
+            <td>V-643B
+                <br/>（丁烷）</td>
+            <td>丙烷库存</td>
+            <td>丁烷库存</td>
+            <td>液化气库存</td>
+        </tr>
+        <tr>
+            <td>液位m</td>
+            <td>{{V641A_m}}</td>
+            <td>{{V641B_m}}</td>
+            <td>{{V642_m}}</td>
+            <td>{{V643A_m}}</td>
+            <td>{{V643B_m}}</td>
+            <td>/</td>
+            <td>/</td>
+            <td>/</td>
+        </tr>
+        <tr>
+            <td>库存m<sup>3</sup></td>
+            <td>{{V641A_m3}}</td>
+            <td>{{V641B_m3}}</td>
+            <td>{{V642_m3}}</td>
+            <td>{{V643A_m3}}</td>
+            <td>{{V643B_m3}}</td>
+            <td>{{丙烷库存m3}}</td>
+            <td>{{丁烷库存m3}}</td>
+            <td>{{液化气库存m3}}</td>
+        </tr>
+        <tr>
+            <td>库存t</td>
+            <td>{{V641A_t}}</td>
+            <td>{{V641B_t}}</td>
+            <td>{{V642_t}}</td>
+            <td>{{V643A_t}}</td>
+            <td>{{V643B_t}}</td>
+            <td>{{丙烷库存t}}</td>
+            <td>{{丁烷库存t}}</td>
+            <td>{{液化气库存t}}</td>
+        </tr>
+        <tr>
+            <td>丙烷装车m3</td>
+            <td>丁烷装车m3</td>
+            <td>液化气装车m3</td>
+            <td>丙烷装车t</td>
+            <td>丁烷装车t</td>
+            <td>液化气装车t</td>
+            <td>轻烃回收m3</td>
+            <td>轻烃回收t</td>
+            <td>轻烃库存t</td>
+        </tr>
+        <tr>
+            <td>{{丙烷装车m3}}</td>
+            <td>{{丁烷装车m3}}</td>
+            <td>{{液化气装车m3}}</td>
+            <td>{{丙烷装车t}}</td>
+            <td>{{丁烷装车t}}</td>
+            <td>{{液化气装车t}}</td>
+            <td>{{轻烃回收m3}}</td>
+            <td>{{轻烃回收t}}</td>
+            <td>{{轻烃库存t}}</td>
+        </tr>
+        <tr>
+            <td>数据库</td>
+            <td colspan="2">数据库轻油回收量m3</td>
+            <td colspan="2">{{数据库轻油回收量m3}}</td>
+            <td colspan="2">数据库轻烃回收量m3</td>
+            <td colspan="2">{{数据库轻烃回收量m3}}</td>
+        </tr>
+        <tr>
+            <th colspan="9">（五）物料接收/消耗</th>
+        </tr>
+        <tr>
+            <td rowspan="2">项目</td>
+            <td colspan="2">化学药剂</td>
+            <td colspan="3">水</td>
+            <td colspan="3">电</td>
+        </tr>
+        <tr>
+            <!-- <td rowspan="2">项目</td> -->
+            <td>甲醇消耗m<sup>3</sup></td>
+            <td>乙二醇回收m<sup>3</sup></td>
+            <td>外供水m<sup>3</sup></td>
+            <td>自采水m<sup>3</sup></td>
+            <td>水消耗m<sup>3</sup></td>
+            <td>外供电KWh</td>
+            <td>自发电KWh</td>
+            <td>电消耗KWh</td>
+        </tr>
+        <tr>
+            <td>日累</td>
+            <td>{{甲醇消耗m3}}</td>
+            <td>{{乙二醇回收m3}}</td>
+            <td>{{外供水m3}}</td>
+            <td>{{自采水m3}}</td>
+            <td>{{水消耗m3}}</td>
+            <td>{{外供电KWh}}</td>
+            <td>{{自发电KWh}}</td>
+            <td>{{电消耗KWh}}</td>
+        </tr>
+        <tr>
+            <td>月累</td>
+            <td>{{甲醇消耗m3月累}}</td>
+            <td>{{乙二醇回收m3月累}}</td>
+            <td>{{外供水m3月累}}</td>
+            <td>{{自采水m3月累}}</td>
+            <td>{{水消耗m3月累}}</td>
+            <td>{{外供电KWh月累}}</td>
+            <td>{{自发电KWh月累}}</td>
+            <td>{{电消耗KWh月累}}</td>
+        </tr>
+        <tr>
+            <td>年累</td>
+            <td>{{甲醇消耗m3年累}}</td>
+            <td>{{乙二醇回收m3年累}}</td>
+            <td>{{外供水m3年累}}</td>
+            <td>{{自采水m3年累}}</td>
+            <td>{{水消耗m3年累}}</td>
+            <td>{{外供电KWh年累}}</td>
+            <td>{{自发电KWh年累}}</td>
+            <td>{{电消耗KWh年累}}</td>
+        </tr>
+        <tr>
+            <td>乙二醇浓度%</td>
+            <td>{{乙二醇浓度}}</td>
+            <td>乙二醇消耗m<sup>3</sup></td>
+            <td>{{乙二醇消耗m3}}</td>
+            <td>库存水</td>
+            <td>水池水位m</td>
+            <td>{{库存水m}}</td>
+            <td>水池储水m<sup>3</sup></td>
+            <td>{{库存水m3}}</td>
+        </tr>
+        <tr>
+            <td colspan="9">
+            {{生产备注}}
+            </td>
+        </tr>
+        <tr>
+            <td class="签名">填报：</td>
+            <td colspan="2"  class="签名"></td>
+            <td class="签名">检查：</td>
+            <td class="签名"></td>
+            <td class="签名">审核：</td>
+            <td class="签名"></td>
+            <td class="签名">批准：</td>
+            <td class="签名"></td>
+        </tr>
+    </table>
+    </div>
+</div>
+{% endblock content%}

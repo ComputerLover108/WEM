@@ -1,0 +1,26 @@
+{% extends "recordView.html" %}
+
+{% block main-content %} 
+        <div class="col-md-6 col-md-offset-1">
+            <table class="table table-bordered">
+                <tr>
+                    <th>地点</th>
+                    <th>电话</th>
+                    <th>备注</th>
+                </tr>
+                {% for WorkPhone in object_list %}
+                    <tr>
+                        <td>
+                            {{ WorkPhone.地点 }}
+                        </td>
+                        <td>
+                            {{ WorkPhone.电话 }}
+                        </td>
+                        <td>
+                            {{ WorkPhone.备注 }}
+                        </td>
+                    </tr>          
+                {% endfor %}
+            </table>
+        </div> 
+{% endblock %}       

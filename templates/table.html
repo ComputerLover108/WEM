@@ -1,0 +1,49 @@
+{% extends "main.html" %}
+{% block CSS %}
+    <link rel="stylesheet" media="screen" href="/static/handsontable/css/handsontable.full.css">
+    <link rel="stylesheet" media="screen" href="/static/handsontable/css/handsontable.bootstrap.css">   
+    <!-- <link rel="stylesheet" media="screen" href="/static/handsontable/css/handsontable.removeRowPlugin.css">    -->
+{% endblock CSS %}
+
+{% block main-content %}
+    <div id="recordTable"></div>
+{% endblock %}
+
+
+{% block JS %}
+    <script src="/static/handsontable/js/handsontable.full.js"></script>
+    <!-- <script src="/static/handsontable/js/handsontable.removeRowPlugin.js"></script> -->
+    <script>
+      
+      var getData = (function () {
+        var data = {{ records|safe }}      
+        return function () {
+          var page  = parseInt(window.location.hash.replace('#', ''), 10) || 1,
+            limit = 6,
+            row   = (page - 1) * limit,
+            count = page * limit,
+            part  = [];
+
+          for (;row < count;row++) {
+            part.push(data[row]);
+          }
+
+          return part;
+        }
+    })();
+
+    var container = document.getElementById('recordTable');
+    selectFirst = document.getElementById('selectFirst')
+    var hot = new Handsontable(container,
+     {
+       data: getData(),
+       colHeaders: {{ tableHead|safe }}, 
+        removeRowPlugin: true,      
+       minSpareRows: 1 
+      });
+      // console.log(data)
+    Handsontable.Dom.addEvent(window, 'hashchange', function (event) {
+      hot.loadData(getData());
+    });
+    </script>
+{% endblock JS %}
