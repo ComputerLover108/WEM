@@ -7,11 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="吴珂鑫">	
-    <title>{% block title %}{% endblock title %}</title>
+    <title>{% block title %}{{Title}}{% endblock title %}</title>
 
     <!-- Bootstrap -->
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	{% block CSS %} {% endblock CSS %}
+    <link href="/static/bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">
+    {% block CSS %}
+        <style type="text/css">
+            h1,h2,h3 { text-align:center } 
+        </style>
+    {% endblock CSS %}
     {% block hJS %} {% endblock hJS %}
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -25,20 +29,25 @@
         <div id="header">
             <!-- 导航条 -->
             {% block nav %}{% endblock nav %}
+            
         </div>
         <div id="content">
+            <!-- 侧边栏 -->
+            <div id="sidebar">
+                {% block sidebar %}{% endblock sidebar %}
+            </div>        
             <!-- 主体 -->
-            {% block content %}{{inform}}{% endblock content %}
+            {% block content %} {% endblock content %}
         </div>
         <div id="footer">
             <!-- 页脚 -->
             {% block foot %}{% endblock foot %}
         </div>
     </div>
-	{% block JS %}{% endblock JS%}
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="/static/jQuery/jQuery-1.11.3.min.js"></script>	
+	<script src="/static/jQuery/jquery-1.12.2.min.js"></script>	
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+	{% block JS %}{% endblock JS%}    
   </body>
 </html>
