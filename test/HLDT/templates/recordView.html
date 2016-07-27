@@ -1,7 +1,12 @@
 {% extends "main.html" %}
 
 <!-- {% block title %} {{Title}} {% endblock title %} -->
-
+{% block CSS %}
+    <style type="text/css">
+        h1,h2,h3{ text-align:center; }
+        th,td {text-align: center;}
+    </style>
+{% endblock CSS %}
 {% block content %}
     <div class="row">
         <h1 class="page-header">{{Title}}</h1>
@@ -9,17 +14,17 @@
     <div class="row">
         {% block siderbarLeft %}
             {%  include "sidebarLeft.html" %}
-        {% endblock %}    
+        {% endblock %}
         {% block main-content %}
             <div>这里是默认内容，所有继承自这个模板的，如果不覆盖就显示这里的默认内容。</div>
         {% endblock %}
-        {% block sidebarRight %}        
+        {% block sidebarRight %}
             {% include "sidebarRight.html" %}
-        {% endblock %}       
+        {% endblock %}
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-8">
             {% include "pagination.html" %}
         </div>
-    </div>       
+    </div>
 {% endblock %}

@@ -1,49 +1,28 @@
-{% extends "main.html" %}
-{% block CSS %}
-    <link rel="stylesheet" media="screen" href="/static/handsontable/css/handsontable.full.css">
-    <link rel="stylesheet" media="screen" href="/static/handsontable/css/handsontable.bootstrap.css">   
-    <!-- <link rel="stylesheet" media="screen" href="/static/handsontable/css/handsontable.removeRowPlugin.css">    -->
-{% endblock CSS %}
-
-{% block main-content %}
-    <div id="recordTable"></div>
-{% endblock %}
-
+<form id="myForm" method="post" action="">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+            {% for form in formset.forms %}
+            <tr>
+              {% for filed in form %}
+                <td>{{ field }}</td>
+              {% endfor %}
+<!--                <td>{{ form.field1 }}</td>
+               <td>{{ form.field2 }}</td>
+               <td>{{ form.field3 }}</td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ formset.management_form }}
+</form>
 
 {% block JS %}
-    <script src="/static/handsontable/js/handsontable.full.js"></script>
-    <!-- <script src="/static/handsontable/js/handsontable.removeRowPlugin.js"></script> -->
-    <script>
-      
-      var getData = (function () {
-        var data = {{ records|safe }}      
-        return function () {
-          var page  = parseInt(window.location.hash.replace('#', ''), 10) || 1,
-            limit = 6,
-            row   = (page - 1) * limit,
-            count = page * limit,
-            part  = [];
-
-          for (;row < count;row++) {
-            part.push(data[row]);
-          }
-
-          return part;
-        }
-    })();
-
-    var container = document.getElementById('recordTable');
-    selectFirst = document.getElementById('selectFirst')
-    var hot = new Handsontable(container,
-     {
-       data: getData(),
-       colHeaders: {{ tableHead|safe }}, 
-        removeRowPlugin: true,      
-       minSpareRows: 1 
-      });
-      // console.log(data)
-    Handsontable.Dom.addEvent(window, 'hashchange', function (event) {
-      hot.loadData(getData());
-    });
-    </script>
-{% endblock JS %}
+  <script src="/static/js/jquery.formset.js"></script>
+  <script type="text/javascript">
+      $(function() {
+          $('#myForm tbody tr').formset({
+              prefix: '{{ formset.prefix }}'
+          });
+      })
+  </script>
+{% endblock JS%} 

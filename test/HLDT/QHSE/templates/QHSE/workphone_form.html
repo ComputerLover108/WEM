@@ -1,35 +1,25 @@
-{% extends "main.html" %}
-{% block title %} {{Title}} {% endblock title %}
-
-{% block content %}
-    <div class="row">
-        <h1 class="page-header">{{Title}}</h1>
+{% extends "recordView.html" %}
+{% block main-content %}
+	<div class="col-md-6 col-md-offset-1">
+    <form method="post" action="">
+        {% csrf_token %}
+        {% include 'formset.html' %}
+    </form>
+	</div>
+{% endblock main-content %}
+{% block sidebarRight %}
+    <div class = "filter">  	
+        <form action="." method="get" class = "filter-form">
+        	<fieldset>
+	        	<legend>查询</legend>
+	        	地点:<input type="text" name="address"><br>
+	        	电话:<input type="text" name="telephone"><br>
+	        	备注:<input type="text" name="remark"><br>
+        	</fieldset>
+        </form>
+        <a class="btn btn-info" role="button" id="filter" >筛选</a>        
     </div>
-    <div class="row">
-        {% block siderbarLeft %}
-            {%  include "sidebarLeft.html" %}
-        {% endblock %}    
-        {% block main-content %}
-            <div class="col-md-6 col-md-offset-1 ">
-                <form action="{{ post_url }}" method="POST" >
-                    {% csrf_token %}
-                    {{form.as_p}}
-                    <button type="submit" class="btn btn-primary " >保存</button>                   
-                </form>
-            </div>
-
-        {% endblock %}
-        {% block sidebarRight %}        
-            <!-- {% include "sidebarRight.html" %} -->
-        {% endblock %}       
-    </div>       
+     <div class = "save">
+    	<input type="submit" value="提交" >
+    </div>    
 {% endblock %}
-
-{% block JS %} 
-    <script>
-    $(document).ready(function(){
-
-
-    });    
-    </script>      
-{% endblock JS %}
