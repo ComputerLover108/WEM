@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.db import connection
 from datetime import date,timedelta
+import time
 from math import pi
 from .models import 生产信息
 import re
@@ -42,6 +43,9 @@ def getDistributionData(context,date):
     unit = '方'
     state = '计划'
     Category = getFieldValues(生产信息,'类别')
+    # cursor = connection.cursor()
+    # cursor.execute("select 数据 from 生产信息 where 日期=%s and 名称 like '%配产' and 类别=%s and 状态=%s;",[date,category,state])
+    # row = cursor.fetchall()
     # print(Category)
     for name in Name:
         for a in Category:
@@ -480,13 +484,12 @@ def getBaseData(context,date):
     getRemark(context,date)
 
 # 获得生产日报数据
-def ProductionDailyData(year,month,day):
-    context = {}
-    日期=date(int(year),int(month),int(day))
-    getBaseData(context,日期)
-    getDerivedData(context,日期)
+def ProductionDailyData(date):
+    context = {}      
+    getBaseData(context,date)
+    getDerivedData(context,date)
+    context['日期'] = date
     context['Title'] = '生产日报'
-    context['日期'] = 日期
     pattern = '月累|年累'
     for k,v in context.items():
         context[k] = v if v else '/'

@@ -5,6 +5,7 @@ from .models import 生产信息
 from .ReportFormData import ProductionDailyData
 from django.views.generic import ListView
 from django.db.models import Q
+from django.db import connection
 
 # Create your views here.
 def index(request):
@@ -23,7 +24,7 @@ def index(request):
     ('化验报表','TestReport'),
     ('生产信息','ProductionData'),
     ('生产动态','ProductionStatus'),
-    ('生产日报','DailyProduction'),
+    ('生产日报','ProductionDaily'),
     ('生产月报','MonthlyProduction'),
     ('生产年报','AnnualProduction'),
     )
@@ -53,6 +54,13 @@ def ProductionAnnual(request,year):
 def ProductionMonthly(request,year,month):
 	return render(request,'ProcessProduction/ProductionMonthly.html',locals())
 
-def ProductionDaily(request,year,month,day):
-	context = ProductionDailyData(year,month,day)
-	return render(request,'ProcessProduction/ProductionDaily.html',context)
+def ProductionDaily(request,year='',month='',day=''):
+    if year and month and day:
+        日期=date(int(year),int(month),int(day))
+    else:
+        cursor = connection.cursor()
+        cursor.execute("select max(日期) from 生产信息 ;")
+        row = cursor.fetchone()
+        日期 = row
+    context = ProductionDailyData(日期)
+    return render(request,'ProcessProduction/ProductionDaily.html',context)
