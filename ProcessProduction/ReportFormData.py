@@ -43,16 +43,13 @@ def getDistributionData(context,date):
     unit = '方'
     state = '计划'
     Category = getFieldValues(生产信息,'类别')
-    # cursor = connection.cursor()
-    # cursor.execute("select 数据 from 生产信息 where 日期=%s and 名称 like '%配产' and 类别=%s and 状态=%s;",[date,category,state])
-    # row = cursor.fetchall()
-    # print(Category)
+    cursor = connection.cursor()
     for name in Name:
-        for a in Category:
-            if re.match(a,name) :
-                category = a
-                x = getData(date,name,unit,category,state)
-        context[name] = x.数据
+        cursor.execute("select 数据 from 生产信息 where 日期=%s and 名称=%s and 状态=%s;",[date,name,state])
+        temp = cursor.fetchone()[0]
+        print(name,temp,isinstance(temp,float))
+        context[name] = temp
+
 
 def getSeaPipeData(context,date):
     category = '海管'
@@ -355,8 +352,10 @@ def getDerivedData(context,d):
     context['总外输气量昨月累'] = context['锦天化昨月累'] + context['精细化工昨月累'] + context['污水处理厂昨月累'] + context['新奥燃气昨月累']
     context['天然气年累'] = context['总外输气量年累'] = context['总外输气量数据'] + context['总外输气量昨年累']
     context['天然气月累'] = context['总外输气量月累'] = context['总外输气量数据'] + context['总外输气量昨月累']
-    context['天然气年度完成率'] = context['天然气年累']/context['天然气年配产'] * 100
-    context['天然气月度完成率'] = context['天然气月累']/context['天然气月配产'] * 100
+    assert context['天然气年配产']
+    assert context['天然气月配产']
+    context['天然气年度完成率'] = context['天然气年累'] / context['天然气年配产'] * 100
+    context['天然气月度完成率'] = context['天然气月累'] / context['天然气月配产'] * 100
     context['天然气需日产'] = (context['天然气年配产']-context['天然气年累'])/(今年年末-d ).days
     context['总产气量月累']  = context['总外输气量昨月累'] + context['自用气月累']
     context['总产气量年累']  = context['总外输气量昨年累'] + context['自用气月累']

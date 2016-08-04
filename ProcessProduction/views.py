@@ -33,7 +33,7 @@ def index(request):
 class ProductionDataList(ListView):
     template_name = "QHSE/ProductionData.html"
     model = 生产信息
-    context_object_name = 'ProductionData'    
+    context_object_name = 'ProductionData'
     paginate_by = 10
     def get_queryset(self):
         queryset = 生产信息.objects.all()
@@ -46,7 +46,29 @@ class ProductionDataList(ListView):
     def get_context_data(self, **kwargs):
         context = super(ProductionData, self).get_context_data(**kwargs)
         context['Title'] = "生产信息"
-        return context 
+        return context
+
+def ProductionData(request):
+    Title = "生产信息"
+    tableName = "生产信息"
+    # columnName = [
+    #     {title:"日期"},
+    #     {title:"名称"},
+    #     {title:"单位"},
+    #     {title:"数据"},
+    #     {title:"类别"},
+    #     {title:"状态"},
+    #     {title:"备注"},
+    #     {title:"月累"},
+    #     {title:"年累"}
+    # ]
+    cursor = connection.cursor()
+    cursor.execute("select 日期,名称,单位,数据,类别,状态,备注,月累,年累 from 生产信息 ;")
+    data = cursor.fetchall()
+    return render(request,'ProcessProduction/ProductionData.html',locals())
+
+def ProductionStatus(request):
+    pass
 
 def ProductionAnnual(request,year):
 	return render(request,'ProcessProduction/ProductionAnnual.html', locals())

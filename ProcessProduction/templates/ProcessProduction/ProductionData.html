@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+{% block CSS %}
+    <link href="/static/DataTables-1.10.12/media/css/dataTables.bootstrap.min.css" rel="stylesheet">
+{% endblock CSS %}
+{% block hJS %}
+  var dataSet = {{data}}
+  $(document).ready(function() {
+      $('#{{tableName}}').DataTable( {
+          data: dataSet,
+          columns = [
+              {title:"日期"},
+              {title:"名称"},
+              {title:"单位"},
+              {title:"数据"},
+              {title:"类别"},
+              {title:"状态"},
+              {title:"备注"},
+              {title:"月累"},
+              {title:"年累"}
+          ]
+          <!-- columns : {{columnName}} -->
+      } );
+  } );
+{% endblock hJS %}
+
+{% block content %}
+<table id="{{tableName}}" class="display" width="100%"></table>
+{% endblock content %}
+
+{% block JS %}
+  <script src="/static/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
+  <script src="/static/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js"></script>
+{% endblock JS%}
