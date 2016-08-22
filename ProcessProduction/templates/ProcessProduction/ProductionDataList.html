@@ -1,0 +1,52 @@
+{% extends "recordView.html" %}
+
+{% block main-content %} 
+        <div class="col-md-6 col-md-offset-1">
+            <table class="table table-bordered">
+                <tr>
+                    <th>日期</th>
+                    <th>名称</th>
+                    <th>单位</th>
+                    <th>数据</th>
+                    <th>类别</th>
+                    <th>状态</th>
+                    <th>备注</th>
+                    <th>月累</th>
+                    <th>年累</th>
+                </tr>
+                {% for object in object_list %}
+                    <tr>
+                        <td>
+                            {{ object.日期 }}
+                        </td>
+                        <td>
+                            {{ object.名称 }}
+                        </td>
+                        <td>
+                            {{ object.单位 }}
+                        </td>
+                        <td>
+                            {{ object.数据 }}
+                        </td>
+                        <td>
+                            {{ object.类别 }}
+                        </td>
+                        <td>
+                            {{ object.状态 }}
+                        </td>
+                        <td>
+                            {{ object.备注 }}
+                        </td>
+                        <td>
+                            {{ object.月累 }}
+                        </td>
+                        <td>
+                            {{ object.年累 }}
+                        </td>                                                
+                    </tr>          
+                {% endfor %}
+            </table>
+        </div> 
+{% endblock %}
+
+

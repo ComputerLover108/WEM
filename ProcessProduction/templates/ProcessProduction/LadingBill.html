@@ -1,0 +1,53 @@
+{% extends "recordView.html" %}
+
+{% block main-content %} 
+        <div class="col-md-6 col-md-offset-1">
+            <table class="table table-bordered">
+                <tr>
+                    <th>提单号</th>
+                    <th>日期</th>
+                    <th>产品</th>
+                    <th>客户</th>
+                    <th>计划装车t</th>
+                    <th>实际装车t</th>
+                    <th>实际装车bbl</th>
+                    <th>装车数</th>
+                    <th>备注</th>
+                </tr>
+                {% for object in object_list %}
+                    <tr>
+                        <td>
+                            {{ object.提单号 }}
+                        </td>
+                        <td>
+                            {{ object.日期 }}
+                        </td>
+                        <td>
+                            {{ object.产品名称 }}
+                        </td>
+                        <td>
+                            {{ object.客户名称 }}
+                        </td>
+                        <td>
+                            {{ object.计划装车t }}
+                        </td>
+                        <td>
+                            {{ object.实际装车t}}
+                        </td>
+                        <td>
+                            {{ object.实际装车bbl}}
+                        </td>
+                        <td>
+                            {{ object.装车数量}}
+                        </td>
+                        <td>
+                            {{ object.备注 }}
+                        </td>                                                
+                    </tr>          
+                {% endfor %}
+            </table>
+        </div> 
+{% endblock %}
+
+
+

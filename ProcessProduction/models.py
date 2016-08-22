@@ -1,4 +1,5 @@
 from django.db import models
+import django_tables2 as tables
 
 # Create your models here.
 class 生产信息(models.Model):
@@ -15,9 +16,6 @@ class 生产信息(models.Model):
     数据源 = models.TextField(blank=True)
     class Meta:
         db_table='生产信息'
-#          unique_together = ("日期", "名称","单位","备注")
-    # def __str__(self):
-    #     return self.日期+':'+self.名称+'['+self.单位+']'
 
 class 生产动态(models.Model):
     时间 = models.DateTimeField()
@@ -127,3 +125,5 @@ class 水化验(models.Model):
     数据源 = models.TextField(blank=True,null=True)
     class Meta:
         db_table = '水化验'
+
+
