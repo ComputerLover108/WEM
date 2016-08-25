@@ -1,0 +1,59 @@
+{% block hJS %} 
+    <!-- <script src="/static/js/echarts.min.js"></script> -->
+    <script src="/static/js/echarts.js"></script>
+{% endblock hJS %}
+<div>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="{{图区}}" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        var dom = document.getElementById("{{图区}}");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        function fetchData(cb) {
+            // 通过 setTimeout 模拟异步加载
+            setTimeout(function () {
+                cb({
+                    categories : {{categories|safe}},
+                    data: {{data|safe}}
+                });
+            }, 1000);
+        }
+
+        // 初始 option
+        option = {
+            title: {
+                text: {{EchartsTitle|safe}}
+            },
+            tooltip: {},
+            legend: {
+                data:[{{类目|safe}}]
+            },
+            xAxis: {
+                data: []
+            },
+            yAxis: {},
+            series: [{
+                name: {{类目|safe}},
+                type: 'bar',
+                data: []
+            }]
+        };
+
+        fetchData(function (data) {
+            myChart.setOption({
+                xAxis: {
+                    data: data.categories
+                },
+                series: [{
+                    // 根据名字对应到相应的系列
+                    name: {{类目|safe}},
+                    data: data.data
+                }]
+            });
+        });;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    </script>
+</div>

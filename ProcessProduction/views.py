@@ -96,3 +96,13 @@ def ProductionDaily(request,year='',month='',day=''):
         日期 = row
     context = ProductionDailyData(日期)
     return render(request,'ProcessProduction/ProductionDaily.html',context)
+
+def ProductionDataMonth(date=date.today()):
+    data = list()
+    cursor = connection.cursor()
+    names = ['锦天化','轻油回收量','丙丁烷回收量']
+    for name in names:
+        cursor.execute("select sum(数据) from 生产信息 where 名称=%s and 单位='方' and 日期 between date_trunc('year',TIMESTAMP %s) and %s;", [name,date,date])
+        row = cursor.fetchone()
+        data.append(row[0])
+    return data
