@@ -4,56 +4,62 @@
 {% endblock hJS %}
 <div>
     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-    <div id="{{图区}}" style="width: 600px;height:400px;"></div>
+    <div id="{{EchartsTitle}}" style="width: 800px;height:400px;"></div>
     <script type="text/javascript">
-        var dom = document.getElementById("{{图区}}");
-        var myChart = echarts.init(dom);
-        var app = {};
-        option = null;
-        function fetchData(cb) {
-            // 通过 setTimeout 模拟异步加载
-            setTimeout(function () {
-                cb({
-                    categories : {{categories|safe}},
-                    data: {{data|safe}}
-                });
-            }, 1000);
-        }
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('{{EchartsTitle}}'));
 
-        // 初始 option
-        option = {
+        // 指定图表的配置项和数据
+        var option = {
             title: {
-                text: {{EchartsTitle|safe}}
+                text: '{{EchartsTitle|safe}}'
             },
-            tooltip: {},
+            tooltip : {
+                trigger: 'axis'
+            },
             legend: {
-                data:[{{类目|safe}}]
+                data: {{legend|safe}}
             },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },            
             xAxis: {
-                data: []
+                data: {{xAxis|safe}}
             },
-            yAxis: {},
-            series: [{
-                name: {{类目|safe}},
-                type: 'bar',
-                data: []
-            }]
+            // yAxis: {},
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],            
+            series: [
+                {
+                    name: '天然气10km3',
+                    type: 'line',
+                    data: {{series.锦天化|safe}}
+                },
+                {
+                    name: '轻油m3',
+                    type: 'line',
+                    data: {{series.轻油回收量|safe}}
+                },
+                                                {
+                    name: '轻烃m3',
+                    type: 'line',
+                    data: {{series.丙丁烷回收量|safe}}
+                }
+            ]
         };
 
-        fetchData(function (data) {
-            myChart.setOption({
-                xAxis: {
-                    data: data.categories
-                },
-                series: [{
-                    // 根据名字对应到相应的系列
-                    name: {{类目|safe}},
-                    data: data.data
-                }]
-            });
-        });;
-        if (option && typeof option === "object") {
-            myChart.setOption(option, true);
-        }
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
     </script>
 </div>

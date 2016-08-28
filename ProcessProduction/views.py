@@ -102,7 +102,26 @@ def ProductionDataMonth(date=date.today()):
     cursor = connection.cursor()
     names = ['锦天化','轻油回收量','丙丁烷回收量']
     for name in names:
-        cursor.execute("select sum(数据) from 生产信息 where 名称=%s and 单位='方' and 日期 between date_trunc('year',TIMESTAMP %s) and %s;", [name,date,date])
+        cursor.execute("select sum(数据) from 生产信息 where 名称=%s and 单位='方' and 日期 between date_trunc('month',TIMESTAMP %s) and %s;", [name,date,date])
+        row = cursor.fetchone()
+        data.append(row[0])
+    return data
+
+def getDistributionData(date=date.today()):
+    data = list()
+    Name = {
+        '天然气年配产',
+        # '天然气月配产',
+        '轻油年配产',
+        # '轻油月配产',
+        '丙丁烷年配产',
+        # '丙丁烷月配产'
+    }
+    unit = '方'
+    state = '计划'
+    cursor = connection.cursor()
+    for name in Name:
+        cursor.execute("select 数据 from 生产信息 where 名称=%s and 单位=%s and 状态=%s and 日期<=%s order by 日期 desc limit 1;",[name,unit,state,date])
         row = cursor.fetchone()
         data.append(row[0])
     return data
