@@ -2,12 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Q
 from datetime import date,datetime,time
-from .models import 生产信息,生产动态,提单
-from .ReportFormData import ProductionDailyData
+
 from django.views.generic import ListView
 from django.db.models import Q
 from django.db import connection
 
+from .productionData import getDistributionData,getDistributionDataSet
+from .models import 生产信息,生产动态,提单
+from .reportFormData import ProductionDailyData
 
 # Create your views here.
 def index(request):
@@ -97,31 +99,10 @@ def ProductionDaily(request,year='',month='',day=''):
     context = ProductionDailyData(日期)
     return render(request,'ProcessProduction/ProductionDaily.html',context)
 
-def ProductionDataMonth(date=date.today()):
-    data = list()
-    cursor = connection.cursor()
-    names = ['锦天化','轻油回收量','丙丁烷回收量']
-    for name in names:
-        cursor.execute("select sum(数据) from 生产信息 where 名称=%s and 单位='方' and 日期 between date_trunc('month',TIMESTAMP %s) and %s;", [name,date,date])
-        row = cursor.fetchone()
-        data.append(row[0])
-    return data
 
-def getDistributionData(date=date.today()):
-    data = list()
-    Name = {
-        '天然气年配产',
-        # '天然气月配产',
-        '轻油年配产',
-        # '轻油月配产',
-        '丙丁烷年配产',
-        # '丙丁烷月配产'
-    }
-    unit = '方'
-    state = '计划'
-    cursor = connection.cursor()
-    for name in Name:
-        cursor.execute("select 数据 from 生产信息 where 名称=%s and 单位=%s and 状态=%s and 日期<=%s order by 日期 desc limit 1;",[name,unit,state,date])
-        row = cursor.fetchone()
-        data.append(row[0])
-    return data
+def productionReview(request):
+    endDate = date.today()
+    beginDate = date(endDate.year,1,1)
+    # distributionData = getDistributionData()
+    distributionData=getDistributionDataSet(beginDate,endDate)
+    return render(request, 'ProcessProduction/productionReview.html', locals())
