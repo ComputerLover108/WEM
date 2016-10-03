@@ -101,8 +101,9 @@ def ProductionDaily(request,year='',month='',day=''):
 
 
 def productionReview(request):
+    Title = "生产情况"
     endDate = date.today()
     beginDate = date(endDate.year,1,1)
     # distributionData = getDistributionData()
-    distributionData=getDistributionDataSet(beginDate,endDate)
+    # distributionData=getDistributionDataSet(beginDate,endDate)
     return render(request, 'ProcessProduction/productionReview.html', locals())
