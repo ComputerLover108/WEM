@@ -14,18 +14,38 @@
  -->
 	<div class="row">
 		<div class="col-md-6">
-			<div id="生产" style="width: 800px;height:400px;"></div>
+			<!-- <div id="计划" style="width: 800px;height:400px;"></div> -->
+			<h3>计划</h3>
+			{{distribution}}
 		</div>
 		<div class="col-md-6">
-			<div id="接收" style="width: 800px;height:400px;"></div>
+			<!-- <div id="生产" style="width: 800px;height:400px;"></div> -->
+			<h3>生产</h3>
+			{{production}}
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<div id="外输" style="width: 800px;height:400px;"></div>
+			<!-- <div id="接收" style="width: 800px;height:400px;"></div> -->
+			<h3>接收</h3>
+			{{received}}
 		</div>
 		<div class="col-md-6">
-			<div id="消耗" style="width: 800px;height:400px;"></div>
+			<!-- <div id="外输" style="width: 800px;height:400px;"></div> -->
+			<h3>外输</h3>
+			{{output}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<!-- <div id="消耗" style="width: 800px;height:400px;"></div> -->
+			<h3>消耗</h3>
+			{{consumption}}
+		</div>	
+		<div class="col-md-6">
+			<!-- <div id="库存" style="width: 800px;height:400px;"></div> -->
+			<h3>库存</h3>
+			{{inventory}}
 		</div>
 	</div>		
 <!-- 	{% for k, v in distributionData.items%} 

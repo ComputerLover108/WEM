@@ -7,7 +7,8 @@ from django.views.generic import ListView
 from django.db.models import Q
 from django.db import connection
 
-from .productionData import getDistributionData,getDistributionDataSet
+from .productionData import getDistributionData,getProductionData,getRecivedData,getConsumptionData,getInventoryData,getOutputData
+# import .productionData
 from .models import 生产信息,生产动态,提单
 from .reportFormData import ProductionDailyData
 
@@ -102,8 +103,12 @@ def ProductionDaily(request,year='',month='',day=''):
 
 def productionReview(request):
     Title = "生产情况"
-    endDate = date.today()
-    beginDate = date(endDate.year,1,1)
-    # distributionData = getDistributionData()
-    # distributionData=getDistributionDataSet(beginDate,endDate)
+    # endDate = date.today()
+    # beginDate = date(endDate.year,1,1)
+    distribution = getDistributionData()
+    production = getProductionData()
+    received = getRecivedData()
+    output = getOutputData()
+    consumption = getConsumptionData()
+    inventory = getInventoryData()
     return render(request, 'ProcessProduction/productionReview.html', locals())

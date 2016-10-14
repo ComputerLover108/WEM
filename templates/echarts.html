@@ -49,6 +49,9 @@
                     name: '天然气10km3',
                     type: 'line',
                     data: {{series.锦天化|safe}},
+                    itemStyle:{
+                        normal:{color:'yellow'}
+                    },                    
                     markPoint: {
                         data: [
                             {type: 'max', name: '最大值'},
@@ -65,6 +68,9 @@
                     name: '轻油m3',
                     type: 'line',
                     data: {{series.轻油回收量|safe}},
+                    itemStyle:{
+                        normal:{color:'black'}
+                    },                     
                     markPoint: {
                         data: [
                             {type: 'max', name: '最大值'},
@@ -81,6 +87,9 @@
                     name: '轻烃m3',
                     type: 'line',
                     data: {{series.丙丁烷回收量|safe}},
+                    itemStyle:{
+                        normal:{color:'blue'}
+                    },                     
                     markPoint: {
                         data: [
                             {type: 'max', name: '最大值'},
