@@ -48,6 +48,7 @@ def getUpstreamData(date=date.today()):
 
     return data
 
+# 按生产状态获得数据
 # 获得配产数据
 def getDistributionData(date=date.today()):
     cursor = connection.cursor()
