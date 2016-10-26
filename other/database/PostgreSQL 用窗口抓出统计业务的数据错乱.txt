@@ -1,0 +1,101 @@
+PostgreSQL 用窗口抓出统计业务的数据错乱  
+
+2015-12-23 09:15:53|  分类： PgSQL Develop |举报|字号 订阅
+    
+  下载LOFTER我的照片书  |
+网友问的一个问题。
+
+我有一个表，结构如下。
+create table t1 (
+日期 date,
+数据 double precision,
+月累 double precision,
+年累 double precision
+)
+表中的月累，和年累，是通过当日数据加昨日月累，年累所得。
+当表中数据积累到一定量时，需要找出错误的，月累和年累。SQL语句怎么写。谢谢。
+如果你用的是PostgreSQL，恭喜你，找到错误易如反掌。
+
+首先分析问题，问题可能出在两处：
+1. 缺失日期，例如中间少了几天的数据没有插入。
+2. 数据错误
+月起始值错误
+年起始值错误
+月累加值错误
+年累加值错误
+
+创建测试表
+pipeline=# create table tbl(v_d date, data numeric, month numeric, year numeric);
+CREATE TABLE
+pipeline=# insert into tbl values ('2015-01-01', 100, 100, 100);
+INSERT 0 1
+pipeline=# insert into tbl values ('2015-01-02', 200, 300, 300);
+INSERT 0 1
+pipeline=# insert into tbl values ('2015-01-04', 200, 500, 500);
+INSERT 0 1
+
+这个查询中包含了可以帮你找到错误的所有因素，用到了窗口哦。
+pipeline=# select v_d, data, month, year, 
+lag(v_d, 1) over (order by v_d) p1, 
+lag(month, 1) over (partition by month(v_d) order by v_d) p2,
+lag(year, 1) over (partition by year(v_d) order by v_d) p3,
+first_value(data) over(partition by month(v_d) order by v_d) p4, 
+first_value(month) over(partition by month(v_d) order by v_d) p5,
+first_value(data) over(partition by year(v_d) order by v_d) p6, 
+first_value(year) over(partition by year(v_d) order by v_d) p7 
+from tbl;
+    v_d     | data | month | year |     p1     | p2  | p3  | p4  | p5  | p6  | p7  
+------------+------+-------+------+------------+-----+-----+-----+-----+-----+-----
+ 2015-01-01 |  100 |   100 |  100 |            |     |     | 100 | 100 | 100 | 100
+ 2015-01-02 |  200 |   300 |  300 | 2015-01-01 | 100 | 100 | 100 | 100 | 100 | 100
+ 2015-01-04 |  200 |   500 |  500 | 2015-01-02 | 300 | 300 | 100 | 100 | 100 | 100
+(3 rows)
+解释
+p1  昨天的日期
+p2  当月统计数据范围内，上一条月累加值
+p3  当年统计数据范围内，上一条年累加值
+p4  当月统计数据范围内，第一条月累加值
+p5  当月统计数据范围内，第一条日值
+p6  当年统计数据范围内，第一条年累加值
+p7  当年统计数据范围内，第一条日值
+
+错误判断标准如下：
+1. 缺失日期判断标准
+v_d - p1 <>1
+2. 数据错误判断标准
+月起始值错误
+p4 <> p5
+年起始值错误
+p6 <> p7
+月累加值错误
+p2+data <> month
+年累加值错误
+p3+data <> year
+
+最终SQL如下
+pipeline=# select * from 
+(
+select v_d, data, month, year, 
+lag(v_d, 1) over (order by v_d) p1, 
+lag(month, 1) over (partition by month(v_d) order by v_d) p2,
+lag(year, 1) over (partition by year(v_d) order by v_d) p3,
+first_value(data) over(partition by month(v_d) order by v_d) p4, 
+first_value(month) over(partition by month(v_d) order by v_d) p5,
+first_value(data) over(partition by year(v_d) order by v_d) p6, 
+first_value(year) over(partition by year(v_d) order by v_d) p7 
+from tbl)
+t
+where v_d - p1 <>1
+or
+p4 <> p5
+or
+p6 <> p7
+or
+p2+data <> month
+or
+p3+data <> year;
+    v_d     | data | month | year |     p1     | p2  | p3  | p4  | p5  | p6  | p7  
+------------+------+-------+------+------------+-----+-----+-----+-----+-----+-----
+ 2015-01-04 |  200 |   500 |  500 | 2015-01-02 | 300 | 300 | 100 | 100 | 100 | 100
+(1 row)
+快来试试吧。

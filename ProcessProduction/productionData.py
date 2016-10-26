@@ -103,6 +103,18 @@ def getInventoryData(date=date.today()):
     cursor.execute(SQL,args)
     data = dictfetchall(cursor)     
     return data
+def getInventoryDataSet(startDate,endDate):
+    names = ['轻油','丙烷','丁烷','液化气','水','乙二醇']
+    unit = '方'
+    state = '库存'   
+    cursor = connection.cursor()
+    for name in names:
+        if name=='水' :
+            SQL='select 日期,数据 from 生产信息 where 名称=%s and 日期 between %s and %s and 单位=%s and 状态=%s;'
+            args = ['库存水',startDate,endDate,unit,state] 
+            cursor.execute(SQL,args)
+            data[name] = dictfetchall(cursor)
+    return data
 
 # 获得消耗数据
 def getConsumptionData(date=date.today()):
