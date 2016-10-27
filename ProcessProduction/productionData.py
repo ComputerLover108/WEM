@@ -94,6 +94,7 @@ def getOutputData(date=date.today()):
     return data
        
 # 获得库存数据
+# 指定日期
 def getInventoryData(date=date.today()):
     cursor = connection.cursor()
     SQL = "select 日期,名称,单位,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
@@ -103,20 +104,25 @@ def getInventoryData(date=date.today()):
     cursor.execute(SQL,args)
     data = dictfetchall(cursor)     
     return data
-def getInventoryDataSet(startDate,endDate):
-    names = ['轻油','丙烷','丁烷','液化气','水','乙二醇']
-    unit = '方'
-    state = '库存'   
+# 指定时间段
+def getInventoryDataSet(startDate,endDate): 
     cursor = connection.cursor()
-    for name in names:
-        if name=='水' :
-            SQL='select 日期,数据 from 生产信息 where 名称=%s and 日期 between %s and %s and 单位=%s and 状态=%s;'
-            args = ['库存水',startDate,endDate,unit,state] 
-            cursor.execute(SQL,args)
-            data[name] = dictfetchall(cursor)
+    data=dict()
+    names=dict()
+    names['轻油'] = "select 日期,sum(数据) from 生产信息 where 名称 in ('V-631A','V-631B','V-631C') and 单位='方' and 类别='轻油' and 状态='库存' and 日期 between %s and %s group by 日期 order by 日期;"
+    names['丙烷'] = "select 日期,sum(数据) from 生产信息 where 备注='丙烷' and 单位='方' and 类别='丙丁烷' and 状态='库存' and 日期 between %s and %s group by 日期 order by 日期;"
+    names['丁烷'] = "select 日期,sum(数据) from 生产信息 where 备注='丁烷' and 单位='方' and 类别='丙丁烷' and 状态='库存' and 日期 between %s and %s group by 日期 order by 日期;"
+    names['液化气'] = "select 日期,sum(数据) from 生产信息 where 备注='液化气' and 单位='方' and 类别='丙丁烷' and 状态='库存' and 日期 between %s and %s group by 日期 order by 日期;"
+    names['水'] = "select 日期,sum(数据) from 生产信息 where 单位='方' and 类别='水' and 状态='库存' and 日期 between %s and %s group by 日期 order by 日期;"
+    names['乙二醇'] = "select 日期,sum(数据) from 生产信息 where 名称 in ('乙二醇库存','乙二醇死库存') and 单位='方' and 类别='化学药剂' and 状态='库存' and 日期 between %s and %s group by 日期 order by 日期;"
+    args=[startDate,endDate]
+    for k,v in names.items():
+        cursor.execute(v,args)
+        data[k]=dictfetchall(cursor)
     return data
 
 # 获得消耗数据
+# 指定日期
 def getConsumptionData(date=date.today()):
     cursor = connection.cursor()
     SQL = "select 日期,名称,单位,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
@@ -126,4 +132,19 @@ def getConsumptionData(date=date.today()):
     cursor.execute(SQL,args)
     data = dictfetchall(cursor)     
     return data
-
+# 指定时间段
+def getConsumptionDataSet(startDate,endDate):
+    cursor = connection.cursor()
+    data=dict()
+    names=['自用气','水消耗','电消耗','甲醇消耗','乙二醇消耗']
+    state = '消耗'    
+    for name in names:
+        if name=='电消耗' :
+            unit='度'
+        else:
+            unit='方'
+        SQL = "select 日期,数据 from 生产信息 where 日期 between %s and %s and 名称=%s and 单位=%s and 状态=%s  order by 日期;"
+        args = [startDate,endDate,name,unit,state]
+        cursor.execute(SQL,args)
+        data[name] = dictfetchall(cursor) 
+    return data
