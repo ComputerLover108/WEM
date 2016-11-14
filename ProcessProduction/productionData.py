@@ -1,6 +1,6 @@
 # 工艺生产数据
 from django.db import connection
-from datetime import date,datetime,time
+from datetime import date,datetime,time,timedelta
 import json
 # with connection.cursor() as c:
 #     c.execute(...)
@@ -11,6 +11,22 @@ def dictfetchall(cursor):
         dict(zip(columns, row))
         for row in cursor.fetchall()
     ]
+
+def dateList(startDate,endDate):
+    if startDate>endDate:
+        startDate,endDate=endDate,startDate
+    result = [startDate+timedelta(days=i) for i in list(range((endDate-startDate).days))]
+    result.append(endDate)
+    return result
+
+def dateSerial(startDate,endDate):
+    result=list()
+    if startDate > endDate :
+        startDate,endDate = endDate,startDate
+    while startDate <= endDate :
+        result.append(startDate)
+        startDate += timedelta(days=1)
+    return result
 
 # 获得指定日期基本生产数据,，如果没有则获得最近日期数据
 def getPrductionData(date=date.today(),*filter):
@@ -61,6 +77,7 @@ def getDistributionData(date=date.today()):
     return data
 
 # 获得生产数据
+# 指定日期
 def getProductionData(date=date.today()):
     cursor = connection.cursor()
     SQL = "select 日期,名称,单位,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
@@ -70,8 +87,31 @@ def getProductionData(date=date.today()):
     cursor.execute(SQL,args)
     data = dictfetchall(cursor)     
     return data
+# 指定时间段
+def getProductionDataSet(startDate,endDate):
+    data=dict()
+    cursor = connection.cursor()
+    unit = '方'
+    state = '生产'
+    SQL = "select distinct(名称) from 生产信息 where 日期 between %s and %s and 单位=%s and 状态=%s"
+    args = [startDate,endDate,unit,state]
+    cursor.execute(SQL,args)
+    rows = cursor.fetchall()
+    names = {row[0] for row in rows}
+    # print(names)
+    for name in names:
+        SQL = "select 日期,数据 from 生产信息 where 日期 between %s and %s and 名称=%s and 单位=%s and 状态=%s"
+        args = [startDate,endDate,name,unit,state]
+        cursor.execute(SQL,args)
+        dv=dict()
+        for row in cursor.fetchall():
+            print(row[0],row[1])
+            dv[row[0]] = row[1]
+        data[name] = dv
+    return data    
 
 # 获得接收数据
+# 指定日期
 def getRecivedData(date=date.today()):
     cursor = connection.cursor()
     SQL = "select 日期,名称,单位,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
@@ -81,8 +121,27 @@ def getRecivedData(date=date.today()):
     cursor.execute(SQL,args)
     data = dictfetchall(cursor)     
     return data
+# 指定时间段
+def getRecivedDataSet(startDate,endDate):
+    data=dict()
+    cursor = connection.cursor()
+    unit = '方'
+    state = '接收'
+    SQL = "select distinct(名称) from 生产信息 where 日期 between %s and %s and 单位=%s and 状态=%s"
+    args = [startDate,endDate,unit,state]
+    cursor.execute(SQL,args)
+    rows = cursor.fetchall()
+    names = {row[0] for row in rows}
+    # print(names)
+    for name in names:
+        SQL = "select 日期,数据 from 生产信息 where 日期 between %s and %s and 名称=%s and 单位=%s and 状态=%s"
+        args = [startDate,endDate,name,unit,state]
+        cursor.execute(SQL,args)
+        data[name] = dictfetchall(cursor)
+    return data
 
 # 获得外输数据
+# 指定日期
 def getOutputData(date=date.today()):
     cursor = connection.cursor()
     SQL = "select 日期,名称,单位,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
@@ -92,7 +151,25 @@ def getOutputData(date=date.today()):
     cursor.execute(SQL,args)
     data = dictfetchall(cursor)     
     return data
-       
+# 指定时间段
+def getOutputDataSet(startDate,endDate):
+    data=dict()
+    cursor = connection.cursor()
+    unit = '方'
+    state = '外输'
+    SQL = "select distinct(名称) from 生产信息 where 日期 between %s and %s and 单位=%s and 状态=%s"
+    args = [startDate,endDate,unit,state]
+    cursor.execute(SQL,args)
+    rows = cursor.fetchall()
+    names = {row[0] for row in rows}
+    # print(names)
+    for name in names:
+        SQL = "select 日期,数据 from 生产信息 where 日期 between %s and %s and 名称=%s and 单位=%s and 状态=%s"
+        args = [startDate,endDate,name,unit,state]
+        cursor.execute(SQL,args)
+        data[name] = dictfetchall(cursor)
+    return data
+
 # 获得库存数据
 # 指定日期
 def getInventoryData(date=date.today()):
