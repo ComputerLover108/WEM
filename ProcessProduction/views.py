@@ -111,12 +111,20 @@ def productionReview(request):
     consumption = getConsumptionDataSet(startDate,endDate)
     inventory = getInventoryDataSet(startDate,endDate)
     xAxis = [d.isoformat() for d in dateList(startDate,endDate)]
+    legendProduction = list(production.keys())
     # for x in production:
-    #     for d in xAxis:
-    #         if d not in production[x]:
-    #             production[x][d] = None
-    #             print(d,production[x][d])        
+    #     for k,v in production[x].items():
+    #         if v>=10000 :
+    #             production[x][k] = v/10000        
     for x in production:
         production[x]=list(production[x].values())
-        # print(x,len(production[x]),production[x])    
+        # print(x,len(production[x]),production[x])
+    for x in received:
+        received[x] = list(received[x].values())
+    for x in output:
+        output[x]=list(output[x].values()) 
+    for x in consumption:
+        consumption[x]=list(consumption[x].values())
+    for x in inventory:
+        inventory[x]=list(inventory[x].values())                       
     return render(request, 'ProcessProduction/productionReview.html', locals())

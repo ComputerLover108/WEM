@@ -137,7 +137,11 @@ def getRecivedDataSet(startDate,endDate):
         SQL = "select 日期,数据 from 生产信息 where 日期 between %s and %s and 名称=%s and 单位=%s and 状态=%s"
         args = [startDate,endDate,name,unit,state]
         cursor.execute(SQL,args)
-        data[name] = dictfetchall(cursor)
+        dv=dict()
+        for row in cursor.fetchall():
+            # print(row[0],row[1])
+            dv[row[0]] = row[1]
+        data[name] = dv
     return data
 
 # 获得外输数据
@@ -167,7 +171,10 @@ def getOutputDataSet(startDate,endDate):
         SQL = "select 日期,数据 from 生产信息 where 日期 between %s and %s and 名称=%s and 单位=%s and 状态=%s"
         args = [startDate,endDate,name,unit,state]
         cursor.execute(SQL,args)
-        data[name] = dictfetchall(cursor)
+        dv=dict()
+        for row in cursor.fetchall():
+            dv[row[0]] = row[1]
+        data[name] = dv
     return data
 
 # 获得库存数据
@@ -195,7 +202,10 @@ def getInventoryDataSet(startDate,endDate):
     args=[startDate,endDate]
     for k,v in names.items():
         cursor.execute(v,args)
-        data[k]=dictfetchall(cursor)
+        dv=dict()
+        for row in cursor.fetchall():
+            dv[row[0]] = row[1]
+        data[k] = dv
     return data
 
 # 获得消耗数据
@@ -223,5 +233,8 @@ def getConsumptionDataSet(startDate,endDate):
         SQL = "select 日期,数据 from 生产信息 where 日期 between %s and %s and 名称=%s and 单位=%s and 状态=%s  order by 日期;"
         args = [startDate,endDate,name,unit,state]
         cursor.execute(SQL,args)
-        data[name] = dictfetchall(cursor) 
+        dv=dict()
+        for row in cursor.fetchall():
+            dv[row[0]] = row[1]
+        data[name] = dv
     return data

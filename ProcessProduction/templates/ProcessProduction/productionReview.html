@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 
 {% block hJS %} 
-    <script src="/static/js/echarts.js"></script>   
+    <script src="/static/js/echarts.js"></script>       
 {% endblock hJS %}
 
 {% block main-content %}
@@ -21,115 +21,282 @@
 		<div class="col-md-6">
 			<h3>生产</h3>
 			<!-- {{production}}		 -->
-			<div id="生产" style="width: 800px;height:400px;"></div>
-		    <script type="text/javascript">
-		        // 基于准备好的dom，初始化echarts实例
-		        var myChart = echarts.init(document.getElementById('生产'));
-		        // 指定图表的配置项和数据
-		        var option = {
-		            title: {
-		                text: '生产'
-		            },
-		            tooltip: {
-		            	trigger: 'axis'
-		            },
-		            legend: {
-		                data:['产量']
-		            },
-		            toolbox: {
-		                show: true,
-		                feature: {
-		                    dataZoom: {
-		                        yAxisIndex: 'none'
-		                    },
-		                    dataView: {readOnly: false},
-		                    magicType: {type: ['line', 'bar']},
-		                    restore: {},
-		                    saveAsImage: {}
-		                }
-		            },		            
-		            xAxis: {
-		                data: {{xAxis|safe}}
-		            },
-		            yAxis: {},
-		            series: [
-		            {% for k,v in production.items %}
-		            {
-		                name: '{{k|safe}}',
-		                type: 'line',
-		                data: {{v|safe}},
-	                    markPoint: {
-	                        data: [
-	                            {type: 'max', name: '最大值'},
-	                            // {type: 'min', name: '最小值'}
-	                        ]
-	                    },
-	                    markLine: {
-	                        data: [
-	                            {type: 'average', name: '平均值'}
-	                        ]
-	                    }		                
-		            },
-		            {% endfor %}
-		            ]
-		        };
-
-		        // 使用刚指定的配置项和数据显示图表。
-		        myChart.setOption(option);
-		    </script>						
+			<div id="生产" style="width: 800px;height:400px;"></div>					
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<!-- <div id="接收" style="width: 800px;height:400px;"></div> -->
-			<h3>接收</h3>
-			<!-- {{received}} -->
+			<h3>接收</h3>		
+			<div id="接收" style="width: 800px;height:400px;"></div>
 		</div>
 		<div class="col-md-6">
-			<!-- <div id="外输" style="width: 800px;height:400px;"></div> -->
 			<h3>外输</h3>
-			<!-- {{output}} -->
+			<div id="外输" style="width: 800px;height:400px;"></div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<!-- <div id="消耗" style="width: 800px;height:400px;"></div> -->
 			<h3>消耗</h3>
-			<!-- {{consumption}} -->
+			<div id="消耗" style="width: 800px;height:400px;"></div>
 		</div>	
 		<div class="col-md-6">
-			<!-- <div id="库存" style="width: 800px;height:400px;"></div> -->
 			<h3>库存</h3>
-			<!-- {{inventory}} -->
+			<div id="库存" style="width: 800px;height:400px;"></div>
 		</div>
 	</div>		
-<!-- 	{% for k, v in distributionData.items%} 
-		{% if forloop.counter0|divisibleby:2 %}
-			<div class="row">
-				<div class="col-md-6">
-					{{k|safe}}:{{v|safe}}
-				</div>			
-		{% else %}
-				<div class="col-md-6">
-					{{k|safe}}:{{v|safe}}
-				</div>
-			</div>
-			{% if forloop.last %}
-				<div class="row">
-					<div class="col-md-6">
-						{{k|safe}}:{{v|safe}}
-					</div>
-				</div>		
-			{% endif %}			
-		{% endif %}
-	{% endfor %} --> 
 {% endblock %}
 
 {% block JS %}
-    <script type="text/javascript">
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var productionChart = echarts.init(document.getElementById('生产'));
+    var receivedChart = echarts.init(document.getElementById('接收'));
+    var outputChart = echarts.init(document.getElementById('外输'));
+    var consumptionChart = echarts.init(document.getElementById('消耗'));
+    var inventoryChart = echarts.init(document.getElementById('库存'));
+    // 指定图表的配置项和数据
+    var productionOption = {
+        title: {
+            text: '生产'
+        },
+        tooltip: {
+        	trigger: 'axis'
+        },
+        legend: {
+            data:['产量']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },		            
+        xAxis: {
+            data: {{xAxis|safe}}
+        },
+        yAxis: {},
+        series: [
+        {% for k,v in production.items %}
+        {
+            name: '{{k|safe}}',
+            type: 'line',
+            data: {{v|safe}},
+            markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    // {type: 'min', name: '最小值'}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }		                
+        },
+        {% endfor %}
+        ]
+    };
+    var receivedOption = {
+        title: {
+            text: '接收'
+        },
+        tooltip: {
+        	trigger: 'axis'
+        },
+        legend: {
+            data:['接收量']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },		            
+        xAxis: {
+            data: {{xAxis|safe}}
+        },
+        yAxis: {},
+        series: [
+        {% for k,v in received.items %}
+        {
+            name: '{{k|safe}}',
+            type: 'line',
+            data: {{v|safe}},
+            markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    // {type: 'min', name: '最小值'}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }		                
+        },
+        {% endfor %}
+        ]
+    };
+    var outputOption = {
+        title: {
+            text: '外输'
+        },
+        tooltip: {
+        	trigger: 'axis'
+        },
+        legend: {
+            data:['外输量']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },		            
+        xAxis: {
+            data: {{xAxis|safe}}
+        },
+        yAxis: {},
+        series: [
+        {% for k,v in output.items %}
+        {
+            name: '{{k|safe}}',
+            type: 'line',
+            data: {{v|safe}},
+            markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    // {type: 'min', name: '最小值'}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }		                
+        },
+        {% endfor %}
+        ]
+    };
 
-    var firstChart = ec.init(document.getElementById("first"));
-    var option = {};
-    firstChart.setOption(option);
-    </script>
+    var consumptionOption = {
+        title: {
+            text: '消耗'
+        },
+        tooltip: {
+        	trigger: 'axis'
+        },
+        legend: {
+            data:['消耗量']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },		            
+        xAxis: {
+            data: {{xAxis|safe}}
+        },
+        yAxis: {},
+        series: [
+        {% for k,v in consumption.items %}
+        {
+            name: '{{k|safe}}',
+            type: 'line',
+            data: {{v|safe}},
+            markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    // {type: 'min', name: '最小值'}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }		                
+        },
+        {% endfor %}
+        ]
+    }; 
+
+    var inventoryOption = {
+        title: {
+            text: '库存'
+        },
+        tooltip: {
+        	trigger: 'axis'
+        },
+        legend: {
+            data: '{{legendInventory|safe}}'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },		            
+        xAxis: {
+            data: {{xAxis|safe}}
+        },
+        yAxis: {},
+        series: [
+        {% for k,v in inventory.items %}
+        {
+            name: '{{k|safe}}',
+            type: 'line',
+            data: {{v|safe}},
+            markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    // {type: 'min', name: '最小值'}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }		                
+        },
+        {% endfor %}
+        ]
+    };           
+    // 使用刚指定的配置项和数据显示图表。
+    productionChart.setOption(productionOption);
+	receivedChart.setOption(receivedOption);
+	outputChart.setOption(outputOption);
+	consumptionChart.setOption(consumptionOption);
+	inventoryChart.setOption(inventoryOption);    
+</script>
 {% endblock JS%}
