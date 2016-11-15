@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 
 {% block hJS %} 
-    <script src="/static/js/echarts.js"></script>
+    <script src="/static/js/echarts.js"></script>   
 {% endblock hJS %}
 
 {% block main-content %}
@@ -16,36 +16,91 @@
 		<div class="col-md-6">
 			<!-- <div id="计划" style="width: 800px;height:400px;"></div> -->
 			<h3>计划</h3>
-			{{distribution}}
+			<!-- {{distribution}} -->
 		</div>
 		<div class="col-md-6">
-			<!-- <div id="生产" style="width: 800px;height:400px;"></div> -->
 			<h3>生产</h3>
-			{{production}}
+			<!-- {{production}}		 -->
+			<div id="生产" style="width: 800px;height:400px;"></div>
+		    <script type="text/javascript">
+		        // 基于准备好的dom，初始化echarts实例
+		        var myChart = echarts.init(document.getElementById('生产'));
+		        // 指定图表的配置项和数据
+		        var option = {
+		            title: {
+		                text: '生产'
+		            },
+		            tooltip: {
+		            	trigger: 'axis'
+		            },
+		            legend: {
+		                data:['产量']
+		            },
+		            toolbox: {
+		                show: true,
+		                feature: {
+		                    dataZoom: {
+		                        yAxisIndex: 'none'
+		                    },
+		                    dataView: {readOnly: false},
+		                    magicType: {type: ['line', 'bar']},
+		                    restore: {},
+		                    saveAsImage: {}
+		                }
+		            },		            
+		            xAxis: {
+		                data: {{xAxis|safe}}
+		            },
+		            yAxis: {},
+		            series: [
+		            {% for k,v in production.items %}
+		            {
+		                name: '{{k|safe}}',
+		                type: 'line',
+		                data: {{v|safe}},
+	                    markPoint: {
+	                        data: [
+	                            {type: 'max', name: '最大值'},
+	                            // {type: 'min', name: '最小值'}
+	                        ]
+	                    },
+	                    markLine: {
+	                        data: [
+	                            {type: 'average', name: '平均值'}
+	                        ]
+	                    }		                
+		            },
+		            {% endfor %}
+		            ]
+		        };
+
+		        // 使用刚指定的配置项和数据显示图表。
+		        myChart.setOption(option);
+		    </script>						
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6">
 			<!-- <div id="接收" style="width: 800px;height:400px;"></div> -->
 			<h3>接收</h3>
-			{{received}}
+			<!-- {{received}} -->
 		</div>
 		<div class="col-md-6">
 			<!-- <div id="外输" style="width: 800px;height:400px;"></div> -->
 			<h3>外输</h3>
-			{{output}}
+			<!-- {{output}} -->
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-6">
 			<!-- <div id="消耗" style="width: 800px;height:400px;"></div> -->
 			<h3>消耗</h3>
-			{{consumption}}
+			<!-- {{consumption}} -->
 		</div>	
 		<div class="col-md-6">
 			<!-- <div id="库存" style="width: 800px;height:400px;"></div> -->
 			<h3>库存</h3>
-			{{inventory}}
+			<!-- {{inventory}} -->
 		</div>
 	</div>		
 <!-- 	{% for k, v in distributionData.items%} 

@@ -102,20 +102,21 @@ def ProductionDaily(request,year='',month='',day=''):
 
 def productionReview(request):
     Title = "生产情况"
-    endDate = date(2016,9,11)
-    startDate = date(2016,9,1)
+    endDate = date.today()
+    startDate = date(date.today().year,1,1)
     distribution = getDistributionData()
     production = getProductionDataSet(startDate,endDate)
     received = getRecivedDataSet(startDate,endDate)
     output = getOutputDataSet(startDate,endDate)
     consumption = getConsumptionDataSet(startDate,endDate)
     inventory = getInventoryDataSet(startDate,endDate)
-    xAxis = dateList(startDate,endDate)
+    xAxis = [d.isoformat() for d in dateList(startDate,endDate)]
+    # for x in production:
+    #     for d in xAxis:
+    #         if d not in production[x]:
+    #             production[x][d] = None
+    #             print(d,production[x][d])        
     for x in production:
-        # print(production[x])
-        for d in xAxis:
-            if d not in production[x]:
-                production[x][d] = None
-                print(d,production[x][d])    
-    # # print(xAxis)
+        production[x]=list(production[x].values())
+        # print(x,len(production[x]),production[x])    
     return render(request, 'ProcessProduction/productionReview.html', locals())

@@ -105,7 +105,7 @@ def getProductionDataSet(startDate,endDate):
         cursor.execute(SQL,args)
         dv=dict()
         for row in cursor.fetchall():
-            print(row[0],row[1])
+            # print(row[0],row[1])
             dv[row[0]] = row[1]
         data[name] = dv
     return data    
