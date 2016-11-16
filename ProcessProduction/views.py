@@ -112,6 +112,10 @@ def productionReview(request):
     inventory = getInventoryDataSet(startDate,endDate)
     xAxis = [d.isoformat() for d in dateList(startDate,endDate)]
     legendProduction = list(production.keys())
+    legendReceived = list(received.keys())
+    legendOutput = list(output.keys())
+    legendConsumption = list(consumption.keys())
+    legendInventory = list(inventory.keys())
     # for x in production:
     #     for k,v in production[x].items():
     #         if v>=10000 :

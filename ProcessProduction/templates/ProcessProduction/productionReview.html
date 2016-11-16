@@ -63,7 +63,7 @@
         	trigger: 'axis'
         },
         legend: {
-            data:['产量']
+            data: {{legendProduction|safe}}
         },
         toolbox: {
             show: true,
@@ -110,7 +110,7 @@
         	trigger: 'axis'
         },
         legend: {
-            data:['接收量']
+            data: {{legendReceived|safe}}
         },
         toolbox: {
             show: true,
@@ -157,7 +157,7 @@
         	trigger: 'axis'
         },
         legend: {
-            data:['外输量']
+            data: {{legendOutput|safe}}
         },
         toolbox: {
             show: true,
@@ -205,7 +205,7 @@
         	trigger: 'axis'
         },
         legend: {
-            data:['消耗量']
+            data: {{legendConsumption|safe}}
         },
         toolbox: {
             show: true,
@@ -253,7 +253,7 @@
         	trigger: 'axis'
         },
         legend: {
-            data: '{{legendInventory|safe}}'
+            data: {{legendInventory|safe}}
         },
         toolbox: {
             show: true,
