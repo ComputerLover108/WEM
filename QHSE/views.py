@@ -9,6 +9,11 @@ from django.core.urlresolvers import reverse_lazy
 from .models import WorkPhone
 from django.db.models import Q
 
+def index(request):
+    title='QHSE'
+    用户='游客'
+    return render(request, 'QHSE/index.html', locals())
+
 class WorkPhoneList(ListView):
     template_name = "QHSE/workphone_list.html"
     model = WorkPhone

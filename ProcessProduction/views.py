@@ -104,7 +104,8 @@ def productionReview(request):
     Title = "生产情况"
     endDate = date.today()
     startDate = date(date.today().year,1,1)
-    distribution = getDistributionData()
+    distributionLast = getDistributionData()
+    productionLast = getProductionData()
     production = getProductionDataSet(startDate,endDate)
     received = getRecivedDataSet(startDate,endDate)
     output = getOutputDataSet(startDate,endDate)

@@ -72,8 +72,23 @@ def getDistributionData(date=date.today()):
     unit = '方'
     state = '计划'
     args = [date,unit,state]
-    cursor.execute(SQL,args)
-    data = dictfetchall(cursor)     
+    cursor.execute(SQL,args) 
+    rows = cursor.fetchall()
+    data = dict()
+    for row in rows :
+        if row[1] == '天然气月配产' :
+            data[0] = row[3]
+        if row[1] == '轻油月配产' :
+            data[1] = row[3]
+        if row[1] == '丙丁烷月配产' :
+            data[2] = row[3]
+        if row[1] == '天然气年配产' :
+            data[3] = row[3]
+        if row[1] == '轻油年配产' :
+            data[4] = row[3]
+        if row[1] == '丙丁烷年配产' :
+            data[5] = row[3]
+    print('配产',date,data.values())    
     return data
 
 # 获得生产数据
@@ -85,7 +100,9 @@ def getProductionData(date=date.today()):
     state = '生产'
     args = [date,unit,state]
     cursor.execute(SQL,args)
-    data = dictfetchall(cursor)     
+    data = cursor.fetchall().sort()
+    # print(cursor.fetchall())
+    # data = dictfetchall(cursor)     
     return data
 # 指定时间段
 def getProductionDataSet(startDate,endDate):
