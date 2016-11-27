@@ -104,8 +104,23 @@ def productionReview(request):
     Title = "生产情况"
     endDate = date.today()
     startDate = date(date.today().year,1,1)
-    distributionLast = getDistributionData()
-    productionLast = getProductionData()
+    x = getProductionCompletion()
+    pc =[
+        x['总外输气量月累']/10000,x['总外输气量年累']/10000,
+        x['轻油回收量月累'],x['轻油回收量年累'],
+        x['丙丁烷回收量月累'],x['丙丁烷回收量年累'],
+        ]
+    dc = [
+        x['天然气月配产']/10000,x['天然气年配产']/10000,
+        x['轻油月配产'],x['轻油年配产'],
+        x['丙丁烷月配产'],x['丙丁烷年配产'],    
+    ]
+    xx = [
+        '天然气月完','天然气年完',
+        '轻油月完','轻油年完',
+        '丙丁烷月完','丙丁烷年完', 
+    ]
+    print(x)
     production = getProductionDataSet(startDate,endDate)
     received = getRecivedDataSet(startDate,endDate)
     output = getOutputDataSet(startDate,endDate)

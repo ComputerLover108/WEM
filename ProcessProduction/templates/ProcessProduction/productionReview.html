@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 
 {% block hJS %} 
-    <script src="/static/js/echarts.js"></script>       
+    <script src="/static/js/echarts.min.js"></script>       
 {% endblock hJS %}
 
 {% block main-content %}
@@ -74,7 +74,7 @@
 	    },
 	    legend: {
 	        data: ['配产', '生产'],
-	        // icon: 'roundRect',
+	        icon: 'roundRect',
 	        // left: 'left'
 	    },
 	    xAxis: {
@@ -82,47 +82,49 @@
 	        axisLine: {
 	            show: false
 	        },
-	        data: ['天然气', '轻油', '轻烃' ]
+	        data: {{xx|safe}}
 	    },
 	    yAxis: {
 	        type: 'value',
-	        max: 120,
-	        splitLine: {
-	            show: false
-	        },
-	        axisLabel: {
-	            formatter: '{value} %'
-	        }
+	        // max: 120,
+	        // splitLine: {
+	        //     show: false
+	        // },
+	        // axisLabel: {
+	        //     formatter: '{value} %'
+	        // }
 	    },
 	    series: [
+        {
+            name: '配产',
+            type: 'scatter',
+            // type: 'bar',
+            // symbol: 'rect',
+            // silent: true,
+            // itemStyle: {
+            //     normal: {
+            //         color: '#F33535'
+            //     }
+            // },
+            symbolSize: [30, 5],
+            // symbolOffset: ['-30%', 0],
+            z: 20,
+            data: {{dc|safe}}
+        },        
 	    {
 	        name: '生产',
 	        type: 'bar',
 	        // barGap: '-300%',
-	        barWidth: 10,
+	        barWidth: 20,
 	        z: 10,
 	        // itemStyle: {
 	        //     normal: {
 	        //         color: '#29252C'
 	        //     }
 	        // },
-	        data: {{productionLast|safe}}
+	        data: {{pc|safe}}
 	    }, 
-	    {
-	        name: '配产',
-	        type: 'scatter',
-	        // symbol: 'rect',
-	        // silent: true,
-	        // itemStyle: {
-	        //     normal: {
-	        //         color: '#F33535'
-	        //     }
-	        // },
-	        symbolSize: [30, 5],
-	        symbolOffset: ['-30%', 0],
-	        z: 20,
-	        data: {{distributionLast|safe}}
-	    }
+
 	    ]
 	};    
     var productionOption = {
@@ -133,7 +135,8 @@
         	trigger: 'axis'
         },
         legend: {
-            data: {{legendProduction|safe}}
+            data: {{legendProduction|safe}},
+            // left: 'left',            
         },
         toolbox: {
             show: true,
@@ -180,7 +183,8 @@
         	trigger: 'axis'
         },
         legend: {
-            data: {{legendReceived|safe}}
+            data: {{legendReceived|safe}},
+            // left: 'left',            
         },
         toolbox: {
             show: true,
@@ -227,7 +231,8 @@
         	trigger: 'axis'
         },
         legend: {
-            data: {{legendOutput|safe}}
+            data: {{legendOutput|safe}},
+            left: 'left',            
         },
         toolbox: {
             show: true,
@@ -275,7 +280,8 @@
         	trigger: 'axis'
         },
         legend: {
-            data: {{legendConsumption|safe}}
+            data: {{legendConsumption|safe}},
+            // left: 'left',            
         },
         toolbox: {
             show: true,
@@ -323,7 +329,8 @@
         	trigger: 'axis'
         },
         legend: {
-            data: {{legendInventory|safe}}
+            data: {{legendInventory|safe}},
+            // left: 'left',            
         },
         toolbox: {
             show: true,

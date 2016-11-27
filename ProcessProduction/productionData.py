@@ -68,7 +68,7 @@ def getUpstreamData(date=date.today()):
 # 获得配产数据
 def getDistributionData(date=date.today()):
     cursor = connection.cursor()
-    SQL = "select 日期,名称,单位,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
+    SQL = "select 日期,名称,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
     unit = '方'
     state = '计划'
     args = [date,unit,state]
@@ -76,34 +76,44 @@ def getDistributionData(date=date.today()):
     rows = cursor.fetchall()
     data = dict()
     for row in rows :
-        if row[1] == '天然气月配产' :
-            data[0] = row[3]
-        if row[1] == '轻油月配产' :
-            data[1] = row[3]
-        if row[1] == '丙丁烷月配产' :
-            data[2] = row[3]
-        if row[1] == '天然气年配产' :
-            data[3] = row[3]
-        if row[1] == '轻油年配产' :
-            data[4] = row[3]
-        if row[1] == '丙丁烷年配产' :
-            data[5] = row[3]
-    print('配产',date,data.values())    
+        data[row[1]] = row[2]    
     return data
 
+def getProductionCompletion(date=date.today()):
+    data = getDistributionData(date)
+    cursor = connection.cursor()
+    names = ['总外输气量','轻油回收量','丙丁烷回收量']
+    filters = ['month','year']
+    unit = '方'
+    SQL = "select sum(数据) from 生产信息 where 日期 between date_trunc(%s,%s) and current_date and 名称=%s and 单位=%s;"
+    for name in names :
+        for f in filters :
+            args = [f,date,name,unit]
+            cursor.execute(SQL,args)
+            row = cursor.fetchone()
+            if f=='month' :
+                data[name+'月累'] = row[0]
+            if f=='year' :
+                data[name+'年累'] = row[0]
+    # print(data)
+    return data
 # 获得生产数据
 # 指定日期
 def getProductionData(date=date.today()):
     cursor = connection.cursor()
-    SQL = "select 日期,名称,单位,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
+    SQL = "select 日期,名称,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
     unit = '方'
     state = '生产'
     args = [date,unit,state]
     cursor.execute(SQL,args)
-    data = cursor.fetchall().sort()
+    # data = cursor.fetchall()
     # print(cursor.fetchall())
-    # data = dictfetchall(cursor)     
-    return data
+    # data = dictfetchall(cursor)
+    rows = cursor.fetchall()
+    for row in rows :
+        data[row[1]] = rows[2]     
+    return data.sort()
+
 # 指定时间段
 def getProductionDataSet(startDate,endDate):
     data=dict()
