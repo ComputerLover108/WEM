@@ -12,6 +12,28 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
+# 字典补漏,并排序
+def mend(dict,keys,filler=None):
+    for x in keys :
+        if x not in dict :
+            # print(x)
+            dict[x] = filler
+    dict=sorted(dict.items(), key=lambda d: d[0])
+    print(dict)
+    return dict      
+
+# 获得数据库内有效时间
+def getAvailableTime(table,date,upLimit=True):
+    cursor = connection.cursor()
+    if upLimit:
+        SQL = 'SELECT max(日期) FROM {} WHERE 日期 <= %s;'.format(table)
+    else :
+        SQL = 'SELECT min(日期) FROM {} WHERE 日期 >= %s;'.format(table)
+    args = [date]
+    cursor.execute(SQL,args) 
+    data = cursor.fetchone()[0]
+    return data   
+
 def dateList(startDate,endDate):
     if startDate>endDate:
         startDate,endDate=endDate,startDate
@@ -118,21 +140,25 @@ def getProductionData(date=date.today()):
 def getProductionDataSet(startDate,endDate):
     data=dict()
     cursor = connection.cursor()
-    unit = '方'
     state = '生产'
-    SQL = "select distinct(名称) from 生产信息 where 日期 between %s and %s and 单位=%s and 状态=%s"
-    args = [startDate,endDate,unit,state]
+    SQL = "select distinct(名称) from 生产信息 where 日期 between %s and %s and 状态=%s"
+    args = [startDate,endDate,state]
     cursor.execute(SQL,args)
     rows = cursor.fetchall()
     names = {row[0] for row in rows}
+    names.remove('数据库轻油回收量')
+    names.remove('数据库丙丁烷回收量')
     # print(names)
     for name in names:
+        if name=='自发电' :
+            unit = '度'
+        else :
+            unit = '方'
         SQL = "select 日期,数据 from 生产信息 where 日期 between %s and %s and 名称=%s and 单位=%s and 状态=%s"
         args = [startDate,endDate,name,unit,state]
         cursor.execute(SQL,args)
         dv=dict()
         for row in cursor.fetchall():
-            # print(row[0],row[1])
             dv[row[0]] = row[1]
         data[name] = dv
     return data    
@@ -152,15 +178,18 @@ def getRecivedData(date=date.today()):
 def getRecivedDataSet(startDate,endDate):
     data=dict()
     cursor = connection.cursor()
-    unit = '方'
     state = '接收'
-    SQL = "select distinct(名称) from 生产信息 where 日期 between %s and %s and 单位=%s and 状态=%s"
-    args = [startDate,endDate,unit,state]
+    SQL = "select distinct(名称) from 生产信息 where 日期 between %s and %s and 状态=%s"
+    args = [startDate,endDate,state]
     cursor.execute(SQL,args)
     rows = cursor.fetchall()
     names = {row[0] for row in rows}
     # print(names)
     for name in names:
+        if name=='外供电' :
+            unit = '度'
+        else :
+            unit ='方'
         SQL = "select 日期,数据 from 生产信息 where 日期 between %s and %s and 名称=%s and 单位=%s and 状态=%s"
         args = [startDate,endDate,name,unit,state]
         cursor.execute(SQL,args)
