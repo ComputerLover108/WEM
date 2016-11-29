@@ -12,15 +12,15 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
-# 字典补漏,并排序
+# 字典补漏,得到一个按键排序的值队列
 def mend(dict,keys,filler=None):
     for x in keys :
         if x not in dict :
             # print(x)
             dict[x] = filler
-    dict=sorted(dict.items(), key=lambda d: d[0])
-    print(dict)
-    return dict      
+    data = [dict[k] for k in keys]
+    # print(data)    
+    return data      
 
 # 获得数据库内有效时间
 def getAvailableTime(table,date,upLimit=True):

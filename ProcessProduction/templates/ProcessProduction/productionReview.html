@@ -47,84 +47,84 @@
 {% block JS %}
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
-    // var distributionChart = echarts.init(document.getElementById('计划'));
+    var distributionChart = echarts.init(document.getElementById('计划'));
     var productionChart = echarts.init(document.getElementById('生产'));
     var receivedChart = echarts.init(document.getElementById('接收'));
     var outputChart = echarts.init(document.getElementById('外输'));
     var consumptionChart = echarts.init(document.getElementById('消耗'));
     var inventoryChart = echarts.init(document.getElementById('库存'));
     // 指定图表的配置项和数据
-	// var distributionOption = {
-	//     // title: {
-	//     //     text: '子弹图-模仿练习',
-	//     //     subtext: '数据纯属虚构',
-	//     //     left: 'left',
-	//     // },
-	//     tooltip: {
-	//         show: true,
-	//         trigger: 'axis',
-	//         showDelay: 0,
-	//         formatter: '{a0}: {c0}<br />{a1}: {c1}',
-	//         extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
-	//         axisPointer: {
-	//             type: 'shadow'
-	//         }
-	//     },
-	//     legend: {
-	//         data: ['配产', '生产'],
-	//         icon: 'roundRect',
-	//         // left: 'left'
-	//     },
-	//     xAxis: {
-	//         boundaryGap: true,
-	//         axisLine: {
-	//             show: false
-	//         },
-	//         data: {{xx|safe}}
-	//     },
-	//     yAxis: {
-	//         type: 'value',
-	//         // max: 120,
-	//         // splitLine: {
-	//         //     show: false
-	//         // },
-	//         // axisLabel: {
-	//         //     formatter: '{value} %'
-	//         // }
-	//     },
-	//     series: [
- //        {
- //            name: '配产',
- //            type: 'scatter',
- //            // type: 'bar',
- //            // symbol: 'rect',
- //            // silent: true,
- //            // itemStyle: {
- //            //     normal: {
- //            //         color: '#F33535'
- //            //     }
- //            // },
- //            symbolSize: [30, 5],
- //            // symbolOffset: ['-30%', 0],
- //            z: 20,
- //            data: {{dc|safe}}
- //        },        
-	//     {
-	//         name: '生产',
-	//         type: 'bar',
-	//         // barGap: '-300%',
-	//         barWidth: 20,
-	//         z: 10,
-	//         // itemStyle: {
-	//         //     normal: {
-	//         //         color: '#29252C'
-	//         //     }
-	//         // },
-	//         data: {{pc|safe}}
-	//     }, 
+	var distributionOption = {
+	    // title: {
+	    //     text: '子弹图-模仿练习',
+	    //     subtext: '数据纯属虚构',
+	    //     left: 'left',
+	    // },
+	    tooltip: {
+	        show: true,
+	        trigger: 'axis',
+	        showDelay: 0,
+	        formatter: '{a0}: {c0}<br />{a1}: {c1}',
+	        extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
+	        axisPointer: {
+	            type: 'shadow'
+	        }
+	    },
+	    legend: {
+	        data: ['配产', '生产'],
+	        icon: 'roundRect',
+	        // left: 'left'
+	    },
+	    xAxis: {
+	        boundaryGap: true,
+	        axisLine: {
+	            show: false
+	        },
+	        data: {{xx|safe}}
+	    },
+	    yAxis: {
+	        type: 'value',
+	        // max: 120,
+	        // splitLine: {
+	        //     show: false
+	        // },
+	        // axisLabel: {
+	        //     formatter: '{value} %'
+	        // }
+	    },
+	    series: [
+        {
+            name: '配产',
+            type: 'scatter',
+            // type: 'bar',
+            // symbol: 'rect',
+            // silent: true,
+            // itemStyle: {
+            //     normal: {
+            //         color: '#F33535'
+            //     }
+            // },
+            symbolSize: [30, 5],
+            // symbolOffset: ['-30%', 0],
+            z: 20,
+            data: {{dc|safe}}
+        },        
+	    {
+	        name: '生产',
+	        type: 'bar',
+	        // barGap: '-300%',
+	        barWidth: 20,
+	        z: 10,
+	        // itemStyle: {
+	        //     normal: {
+	        //         color: '#29252C'
+	        //     }
+	        // },
+	        data: {{pc|safe}}
+	    }, 
 
-	//     ]
-	// };    
+	    ]
+	};    
     var productionOption = {
         // title: {
         //     text: '生产'
@@ -368,7 +368,7 @@
         ]
     };           
     // 使用刚指定的配置项和数据显示图表。
-    // distributionChart.setOption(distributionOption)
+    distributionChart.setOption(distributionOption)
     productionChart.setOption(productionOption);
 	receivedChart.setOption(receivedOption);
 	outputChart.setOption(outputOption);

@@ -106,24 +106,23 @@ def productionReview(request):
     specifiedDate = getAvailableTime(table,date.today())
     startDate = getAvailableTime(table,date(date.today().year,1,1),upLimit=False)
     endDate = getAvailableTime(table,date.today())
-    
-    
-    # x = getProductionCompletion()
-    # pc =[
-    #     x['总外输气量月累']/10000,x['总外输气量年累']/10000,
-    #     x['轻油回收量月累'],x['轻油回收量年累'],
-    #     x['丙丁烷回收量月累'],x['丙丁烷回收量年累'],
-    #     ]
-    # dc = [
-    #     x['天然气月配产']/10000,x['天然气年配产']/10000,
-    #     x['轻油月配产'],x['轻油年配产'],
-    #     x['丙丁烷月配产'],x['丙丁烷年配产'],    
-    # ]
-    # xx = [
-    #     '天然气月完','天然气年完',
-    #     '轻油月完','轻油年完',
-    #     '丙丁烷月完','丙丁烷年完', 
-    # ]
+      
+    x = getProductionCompletion(specifiedDate)
+    pc =[
+        x['总外输气量月累']/10000,x['总外输气量年累']/10000,
+        x['轻油回收量月累'],x['轻油回收量年累'],
+        x['丙丁烷回收量月累'],x['丙丁烷回收量年累'],
+        ]
+    dc = [
+        x['天然气月配产']/10000,x['天然气年配产']/10000,
+        x['轻油月配产'],x['轻油年配产'],
+        x['丙丁烷月配产'],x['丙丁烷年配产'],    
+    ]
+    xx = [
+        '天然气月完','天然气年完',
+        '轻油月完','轻油年完',
+        '丙丁烷月完','丙丁烷年完', 
+    ]
     # print(x)
     production = getProductionDataSet(startDate,endDate)
     received = getRecivedDataSet(startDate,endDate)
@@ -139,19 +138,12 @@ def productionReview(request):
     legendInventory = list(inventory.keys())   
     for x in production:
         production[x]=mend(production[x],dt,0)
-        print(x,production[x])
-        # production[x]=list(production[x].values())
-        # print(x,len(production[x]),production[x])
     for x in received:
         received[x]=mend(received[x],dt,0)
-        # received[x] = list(received[x].values())
     for x in output:
         output[x]=mend(output[x],dt,0)
-        # output[x]=list(output[x].values()) 
     for x in consumption:
         consumption[x]=mend(consumption[x],dt,0)
-        # consumption[x]=list(consumption[x].values())
     for x in inventory:
-        inventory[x]=mend(inventory[x],dt,0)
-        # inventory[x]=list(inventory[x].values())                       
+        inventory[x]=mend(inventory[x],dt,0)                       
     return render(request, 'ProcessProduction/productionReview.html', locals())
