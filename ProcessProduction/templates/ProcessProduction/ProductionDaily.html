@@ -4,28 +4,29 @@
     <!-- <link rel="stylesheet" type="text/css" href="/static/css/print.css" /> -->
     <style type="text/css">
     table,td {
+        /*height: 8px;*/
         text-align: center;
-        font-size:  12px;
+        /*font-size:  6px;*/
     }
     caption {
-        font-size: 18px;
+        /*font-size: 16px;*/
     }
     th {
         text-align: center;
-        font-size: 16px;
+        /*font-size: 12px;*/
     }
     .签名 {
         border-top : 1px
     }
-/*    table { width: 80%; }
-    tr { height: 10px; }*/
+    @page {
+      size: A4;
+    }
     </style>
 {% endblock CSS %}
 
-
 {% block content %}
 <div id="content" class="col-md-10 col-md-offset-1">
-    <table class="table table-bordered">
+    <table class="table table-condensed table-bordered">
         <caption class="text-center">葫芦岛天然气终端厂生产日报</caption>
         <tr>
             <td id="日期" colspan="9" class="text-right">{{日期}}</td>
@@ -159,7 +160,7 @@
                 <font>m3</font>
             </td>
             <td colspan="2">{{锦天化数据}}</td>
-            <td rowspan="5">{{锦天化数据1}}</td>
+            <td rowspan="6">{{锦天化数据1}}</td>
             <td>{{锦天化月累}}</td>
             <td>{{锦天化年累}}</td>
             <td>海管进/出口温度℃</td>
@@ -184,16 +185,24 @@
             <td>{{JZ202凝析油密度}}</td>
         </tr>
         <tr>
-            <td>精细化工10
-                <font><sup>4</sup></font>
-                <font>m3</font>
+            <td>
+                精细化工CNG10<font><sup>4</sup></font><font>m3</font>            
+            </td>
+            <td colspan="2">{{精细化工CNG数据}}</td>
+            <td>{{精细化工CNG月累}}</td>
+            <td>{{精细化工CNG年累}}</td>
+            <td>JZ20-2轻油m3</td>
+            <td>{{JZ202轻油数据}}</td>
+            <td>{{JZ202轻油密度}}</td>            
+        </tr>
+        <tr>
+            <td>
+                精细化工10<font><sup>4</sup></font><font>m3</font>
             </td>
             <td colspan="2">{{精细化工数据}}</td>
             <td>{{精细化工月累}}</td>
             <td>{{精细化工年累}}</td>
-            <td>JZ20-2轻油m3</td>
-            <td>{{JZ202轻油数据}}</td>
-            <td>{{JZ202轻油密度}}</td>
+            <td colspan="3" rowspan="4">{{上下游12吋海管通球}}</td>            
         </tr>
         <tr>
             <td>污水处理厂10
@@ -204,7 +213,7 @@
             <td colspan="2">{{污水处理厂数据}}</td>
             <td>{{污水处理厂月累}}</td>
             <td>{{污水处理厂年累}}</td>
-            <td colspan="3" rowspan="3">{{上下游12吋海管通球}}</td>
+            <!-- <td colspan="3" rowspan="3">{{上下游12吋海管通球}}</td> -->
         </tr>
         <tr>
             <td colspan="2">新奥燃气10
