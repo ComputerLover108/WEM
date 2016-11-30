@@ -74,7 +74,20 @@
 	        data: ['配产', '生产'],
 	        icon: 'roundRect',
 	        // left: 'left'
+            top : 'bottom',
 	    },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },        
 	    xAxis: {
 	        boundaryGap: true,
 	        axisLine: {
@@ -97,7 +110,8 @@
             name: '配产',
             type: 'scatter',
             // type: 'bar',
-            // symbol: 'rect',
+            // stack : '',
+            symbol: 'rect',
             // silent: true,
             // itemStyle: {
             //     normal: {
@@ -134,7 +148,13 @@
         },
         legend: {
             data: {{legendProduction|safe}},
-            // left: 'left',            
+            // left: 'left',
+            top : 'bottom', 
+            selected : {
+                '自采水' : false,
+                '自发电' : false,
+                '乙二醇回收' : false,
+            }           
         },
         toolbox: {
             show: true,
@@ -182,7 +202,8 @@
         },
         legend: {
             data: {{legendReceived|safe}},
-            // left: 'left',            
+            // left: 'left',
+            top : 'bottom',             
         },
         toolbox: {
             show: true,
@@ -230,7 +251,8 @@
         },
         legend: {
             data: {{legendOutput|safe}},
-            left: 'left',            
+            // left: 'left',
+            top : 'bottom',             
         },
         toolbox: {
             show: true,
@@ -279,7 +301,8 @@
         },
         legend: {
             data: {{legendConsumption|safe}},
-            // left: 'left',            
+            // left: 'left',
+            top : 'bottom',             
         },
         toolbox: {
             show: true,
@@ -328,7 +351,8 @@
         },
         legend: {
             data: {{legendInventory|safe}},
-            // left: 'left',            
+            // left: 'left', 
+            top : 'bottom', 
         },
         toolbox: {
             show: true,

@@ -47,7 +47,7 @@ def getDistributionData(context,date):
     for name in Name:
         cursor.execute("select 数据 from 生产信息 where 日期=%s and 名称=%s and 状态=%s;",[date,name,state])
         temp = cursor.fetchone()[0]
-        print(name,temp,isinstance(temp,float))
+        # print(name,temp,isinstance(temp,float))
         context[name] = temp
 
 
