@@ -26,9 +26,9 @@ def index(request):
     ('海管报表','SeaPipeReport'),
     ('装车报表','OutputReport'),
     ('化验报表','TestReport'),
-    ('生产日报','ProductionDaily'),
-    ('生产月报','MonthlyProduction'),
-    ('生产年报','AnnualProduction'),
+    # ('生产日报','ProductionDaily'),
+    # ('生产月报','MonthlyProduction'),
+    # ('生产年报','AnnualProduction'),
     ('生产信息','ProductionDataList'),
     ('生产动态','ProductionStatusList'),
     ('提单','LadingBill'),    
@@ -88,9 +88,9 @@ def ProductionAnnual(request,year):
 def ProductionMonthly(request,year,month):
 	return render(request,'ProcessProduction/ProductionMonthly.html',locals())
 
-def ProductionDaily(request,year='',month='',day=''):
-    if year and month and day:
-        日期=date(int(year),int(month),int(day))
+def ProductionDaily(request,date):
+    if date :
+        日期=date
     else:
         cursor = connection.cursor()
         cursor.execute("select max(日期) from 生产信息 ;")
