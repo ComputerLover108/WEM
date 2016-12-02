@@ -9,7 +9,14 @@ from django.db import connection
 
 from .productionData import *
 from .models import 生产信息,生产动态,提单
-from .reportFormData import ProductionDailyData
+from .ReportFormData import *
+
+import logging
+logging.basicConfig(level=logging.DEBUG,  
+                    format='%(asctime)s %(filename)s%(module)s%(funcName)s[line:%(lineno)d] %(levelname)s %(message)s',  
+                    datefmt='%b %Y-%b-%d %H:%M:%S',  
+                    filename='/tmp/HLD.log',  
+                    filemode='w')
 
 # Create your views here.
 def index(request):
@@ -82,22 +89,17 @@ class LadingBill(ListView):
         context['Title'] = "提单"
         return context
         
-def ProductionAnnual(request,year):
+def ProductionAnnual(request):
 	return render(request,'ProcessProduction/ProductionAnnual.html', locals())
 
-def ProductionMonthly(request,year,month):
+def ProductionMonthly(request):
 	return render(request,'ProcessProduction/ProductionMonthly.html',locals())
 
-def ProductionDaily(request,date):
-    if date :
-        日期=date
-    else:
-        cursor = connection.cursor()
-        cursor.execute("select max(日期) from 生产信息 ;")
-        row = cursor.fetchone()
-        日期 = row
-    context = ProductionDailyData(日期)
-    return render(request,'ProcessProduction/ProductionDaily.html',context)
+def ProductionDaily(request):
+    date=request.GET.get('Date')
+    data = getProductionDailyData(date)
+    logging.debug(data)    
+    return render(request,'ProcessProduction/ProductionDaily.html',locals())
 
 
 def productionReview(request):
@@ -109,19 +111,19 @@ def productionReview(request):
       
     x = getProductionCompletion(specifiedDate)
     pc =[
-        x['总外输气量月累']/10000,x['总外输气量年累']/10000,
+        x['总外输气量月累']/(10**4),x['总外输气量年累']/(10**4),
         x['轻油回收量月累'],x['轻油回收量年累'],
         x['丙丁烷回收量月累'],x['丙丁烷回收量年累'],
         ]
     dc = [
-        x['天然气月配产']/10000,x['天然气年配产']/10000,
+        x['天然气月配产']/(10**4),x['天然气年配产']/(10**4),
         x['轻油月配产'],x['轻油年配产'],
         x['丙丁烷月配产'],x['丙丁烷年配产'],    
     ]
     xx = [
-        '天然气月完','天然气年完',
-        '轻油月完','轻油年完',
-        '丙丁烷月完','丙丁烷年完', 
+        '天然气月完10km3','天然气年完万方10km3',
+        '轻油月完m3','轻油年完m3',
+        '丙丁烷月完m3','丙丁烷年完m3', 
     ]
     # print(x)
     production = getProductionDataSet(startDate,endDate)

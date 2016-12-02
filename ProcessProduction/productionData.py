@@ -90,15 +90,16 @@ def getUpstreamData(date=date.today()):
 # 获得配产数据
 def getDistributionData(date=date.today()):
     cursor = connection.cursor()
-    SQL = "select 日期,名称,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s ) and 单位=%s and 状态=%s"
+    SQL = "select 日期,名称,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s and 单位=%s and 状态=%s) and 单位=%s and 状态=%s"
     unit = '方'
     state = '计划'
-    args = [date,unit,state]
+    args = [date,unit,state,unit,state]
     cursor.execute(SQL,args) 
     rows = cursor.fetchall()
     data = dict()
     for row in rows :
-        data[row[1]] = row[2]    
+        data[row[1]] = row[2] 
+    # print(date,data)   
     return data
 
 def getProductionCompletion(date=date.today()):
@@ -119,6 +120,7 @@ def getProductionCompletion(date=date.today()):
                 data[name+'年累'] = row[0]
     # print(data)
     return data
+
 # 获得生产数据
 # 指定日期
 def getProductionData(date=date.today()):
@@ -128,13 +130,10 @@ def getProductionData(date=date.today()):
     state = '生产'
     args = [date,unit,state]
     cursor.execute(SQL,args)
-    # data = cursor.fetchall()
-    # print(cursor.fetchall())
-    # data = dictfetchall(cursor)
     rows = cursor.fetchall()
     for row in rows :
         data[row[1]] = rows[2]     
-    return data.sort()
+    return data
 
 # 指定时间段
 def getProductionDataSet(startDate,endDate):
