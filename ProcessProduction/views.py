@@ -9,14 +9,10 @@ from django.db import connection
 
 from .productionData import *
 from .models import 生产信息,生产动态,提单
-from .ReportFormData import *
+from .productionDaily import *
 
 import logging
-logging.basicConfig(level=logging.DEBUG,  
-                    format='%(asctime)s %(filename)s%(module)s%(funcName)s[line:%(lineno)d] %(levelname)s %(message)s',  
-                    datefmt='%b %Y-%b-%d %H:%M:%S',  
-                    filename='/tmp/HLD.log',  
-                    filemode='w')
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 def index(request):
@@ -97,8 +93,7 @@ def ProductionMonthly(request):
 
 def ProductionDaily(request):
     date=request.GET.get('Date')
-    data = getProductionDailyData(date)
-    logging.debug(data)    
+    data = getProductionDailyData(date)   
     return render(request,'ProcessProduction/ProductionDaily.html',locals())
 
 
