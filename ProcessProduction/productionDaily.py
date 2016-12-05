@@ -63,10 +63,18 @@ def getSeaPipeData(data,date,rows):
 
 # 上游
 def getUpstreamData(data,date,rows):
-    names = ['JZ20-2体系','JZ20-2凝析油','JZ25-1S原油']
+    names = [
+        'JZ20-2体系',
+        'JZ20-2凝析油',
+        'JZ20-2凝析油密度',
+        'JZ20-2轻油',
+        'JZ20-2轻油密度',        
+        'JZ25-1S原油',
+        'JZ25-1S原油密度']
     for row in rows:
         if row[1] in names:
-            key = (row[1]+row[5]+row[2]).replace('-','')
+            key = (row[1]+row[5]+row[2]).replace('-','').replace('/','每')
+            # key=key.replace('/','每')
             data[key] = row[3]
 
 # 天然气
@@ -74,7 +82,7 @@ def getGasData(data,date,rows):
     names = (
         '稳定区',
         '入厂计量',
-        # '锦天化',
+        '锦天化',
         '精细化工CNG',
         '精细化工',
         '污水处理厂',
@@ -112,25 +120,41 @@ def getHydrocarbonData(data,date,rows):
 # 化学药剂
 def getChemicalsData(data,date,rows):
     category = '化学药剂'
-    pattern = '甲醇消耗|乙二醇消耗|乙二醇回收'
+    pattern = '甲醇消耗|乙二醇消耗|乙二醇回收|乙二醇浓度'
     for row in rows :
         if row[4] == category :
             key = row[1] + row[2]
-            print(pattern,key,re.match(pattern,key))
             if re.match(pattern,key) :
                 data[key] = row[3]
 
 # 水
 def getWaterData(data,date,rows):
-    pass
+    pattern = '外供水方|自采水方|库存水米'
+    category = '水'
+    for row in rows :
+        if row[4] == category :
+            key = row[1] + row[2]
+            # print(pattern,key,re.match(pattern,key))
+            if re.match(pattern,key) :
+                data[key] = row[3]    
 
 # 电
 def getPowerData(data,date,rows):
-    pass
+    pattern = '(外供电|自发电)度'
+    category = '电'
+    for row in rows :
+        if row[4] == category :
+            key = row[1] + row[2]
+            # print(pattern,key,re.match(pattern,key))
+            if re.match(pattern,key) :
+                data[key] = row[3] 
 
 # 备注
 def getRemark(data,date,rows):
-    pass
+    names = ['上下游12吋海管通球','生产备注']
+    for row in rows:
+        if row[1] in names :
+            data[row[1]] = row[3] if row[3] else '/'
 
 # 相关数据
 def getRelatedData(data,date):
@@ -139,4 +163,22 @@ def getRelatedData(data,date):
 # 推导数据
 def getDerivedData(data,date):
     getRelatedData(data,date)
+    data['JZ251S体系接收方'] = data['入厂计量方'] - data['JZ202体系接收方']
+    data['JJZ202体系外输方'] = data['锦天化方']*(data['JZ202体系接收方']/data['入厂计量方'])
+    data['JZ251S体系外输方'] = data['锦天化方'] - data['JJZ202体系外输方']
+    names = [
+        '稳定区',
+        '入厂计量',
+        '锦天化',
+        '精细化工CNG',
+        '精细化工',
+        '污水处理厂',
+        '新奥燃气',
+        '自用气'
+    ] 
+    gas = [ data[x+'方'] for x in names if x+'方' in data ]
+    data['总产气量方'] = sum(gas)
+    data['总外输气量方'] = data['总产气量方'] - data['自用气方']
+    data['JZ202轻油方'] = data['数据库轻油回收量方'] - data['JZ202凝析油方']
+    data['数据库轻烃回收量方'] = data['数据库丙丁烷回收量方']    
 
