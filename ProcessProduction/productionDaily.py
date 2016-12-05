@@ -89,18 +89,36 @@ def getGasData(data,date,rows):
 # 轻油
 def getOilData(data,date,rows):
     category = '轻油'
+    pattern = '(V631[ABC]米)|(数据库轻油回收量方)|(轻油装车吨)'
     for row in rows :
         if row[4] == category :
             key = (row[1] + row[2]).replace('-','')
-            data[key] = row[3]
+            # print(pattern,key,re.match(pattern,key))
+            if re.match(pattern,key) :
+                data[key] = row[3]
+
 
 # 轻烃
 def getHydrocarbonData(data,date,rows):
-    pass
+    category = '丙丁烷'
+    pattern = '(V64[123][AB]{0,1}米)|(数据库丙丁烷回收量方)|([丙丁]烷装车吨)|(液化气装车吨)'
+    for row in rows :
+        if row[4] == category :
+            key = (row[1] + row[2]).replace('-','')
+            # print(pattern,key,re.match(pattern,key))
+            if re.match(pattern,key) :
+                data[key] = row[3]
 
 # 化学药剂
 def getChemicalsData(data,date,rows):
-    pass
+    category = '化学药剂'
+    pattern = '甲醇消耗|乙二醇消耗|乙二醇回收'
+    for row in rows :
+        if row[4] == category :
+            key = row[1] + row[2]
+            print(pattern,key,re.match(pattern,key))
+            if re.match(pattern,key) :
+                data[key] = row[3]
 
 # 水
 def getWaterData(data,date,rows):
