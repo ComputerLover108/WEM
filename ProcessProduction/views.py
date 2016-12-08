@@ -92,8 +92,8 @@ def ProductionMonthly(request):
 	return render(request,'ProcessProduction/ProductionMonthly.html',locals())
 
 def ProductionDaily(request):
-    date=request.GET.get('Date')
-    data = getProductionDailyData(date)   
+    sd=request.GET.get('Date')
+    data = getProductionDailyData(sd)   
     return render(request,'ProcessProduction/ProductionDaily.html',locals())
 
 
