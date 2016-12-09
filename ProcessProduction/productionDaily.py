@@ -9,18 +9,19 @@ import time
 from math import pi
 import re
 import logging
-from .models import 生产信息
-from .productionData import getAvailableTime
 
 logger = logging.getLogger(__name__)
 
 def getProductionDailyData(sd):
     table = '生产信息'
-    sd = getAvailableTime(table,sd).isoformat()
     data = dict()
     data['日期'] = sd
     getBaseData(data,sd)
-    getDerivedData(data,sd)
+    if getDerivedData(data,sd):
+        dataFinish(data)     
+    return data
+# 数据整理,除了轻油装车桶之外[保留4位小数]，其他保留2位小数
+def dataFinish(data):
     names = (
         '稳定区',
         '入厂计量',
@@ -53,9 +54,9 @@ def getProductionDailyData(sd):
     if '精细化工CNG' not in data:
         data['精细化工CNG'+'方'] = '/'    
         data['月累'+'精细化工CNG'+'方'] = '/'
-        data['年累'+'精细化工CNG'+'方'] = '/'          
-    return data
+        data['年累'+'精细化工CNG'+'方'] = '/' 
 
+# 获得基本日报数据[原始数据]
 def getBaseData(data,sd):
     cursor = connection.cursor()
     SQL = "select 日期,名称,单位,数据,类别,状态,备注,月累,年累,数据源 from 生产信息 where 日期=%s "
@@ -229,6 +230,10 @@ def getRemark(data,sd,rows):
 def getRelatedData(data,sd):
     lastday = datetime.strptime(sd,"%Y-%m-%d") - timedelta(days=1)
     cursor = connection.cursor()
+    cursor.execute("select count(*) from 生产信息 where 日期=%s",[lastday.strftime("%Y-%m-%d")])
+    condition = cursor.fetchone()[0]
+    if not condition :
+        return False
     # 所需昨日月累，年累
     names = {
         '稳定区',
@@ -283,13 +288,13 @@ def getRelatedData(data,sd):
                 key = '昨月累'+name.replace('-','')+state+unit
             if period == 'year' :
                 key = '昨年累'+name.replace('-','')+state+unit
-            data[key] = row[0]
+            data[key] = row[0] 
 
     name = '库存水'
     cursor.execute("select 数据,单位 from 生产信息 where 日期=%s and 名称=%s and 单位='方';",[lastday,name])
     row = cursor.fetchone()
     name = '昨' + name + row[1]
-    data[name] = row[0]
+    data[name] = row[0] 
 
     name = '轻油密度'
     cursor.execute("select 数据 from 生产信息 where 名称=%s and 日期<=%s order by 日期 desc limit 1",[name,sd])
@@ -302,18 +307,20 @@ def getRelatedData(data,sd):
         cursor.execute("select 数据 from 生产信息 where 名称=%s and 单位=%s and 日期<=%s order by 日期 desc limit 1",[name,unit,sd])
         row = cursor.fetchone()
         name = name.replace('-','') + '密度'+unit.replace('/','每')
-        data[name] = row[0] if row else 0
+        data[name] = row[0] 
 
     cursor.execute("select sum(数据) from 生产信息 where 日期=%s and 名称 in ('V-631A','V-631B','V-631C') and 单位='吨' ;",[lastday])
     row = cursor.fetchone()
     data['昨轻油库存吨'] = row[0]
     cursor.execute("select sum(数据) from 生产信息 where 日期=%s and 名称 in ('V-641A','V-641B','V-642','V-643A','V-643B') and 单位='吨' ;",[lastday])
     row = cursor.fetchone()
-    data['昨轻烃库存吨'] = row[0] if row else 0
+    data['昨轻烃库存吨'] = row[0]
+    return True 
 
 # 推导数据
 def getDerivedData(data,sd):
-    getRelatedData(data,sd)
+    if not getRelatedData(data,sd):
+        return False
     
     data['JZ202体系外输方'] = data['锦天化方']*(data['JZ202体系接收方']/data['入厂计量方'])
     data['JZ202轻油接收方'] = data['数据库轻油回收量方'] - data['JZ202凝析油方']
@@ -415,4 +422,5 @@ def getDerivedData(data,sd):
     data['轻油需日产'] = (data['轻油年配产方']-data['年累轻油方'])/(今年年末-d ).days
     data['丙丁烷年度完成率'] = data['年累丙丁烷方']/data['丙丁烷年配产方'] * 100
     data['丙丁烷月度完成率'] = data['月累丙丁烷方']/data['丙丁烷月配产方'] * 100
-    data['丙丁烷需日产'] = (data['丙丁烷年配产方']-data['年累丙丁烷方'])/(今年年末-d ).days    
+    data['丙丁烷需日产'] = (data['丙丁烷年配产方']-data['年累丙丁烷方'])/(今年年末-d ).days 
+    return True   

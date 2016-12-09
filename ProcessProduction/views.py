@@ -45,7 +45,7 @@ class ProductionDataList(ListView):
     context_object_name = 'ProductionDataList'    
     paginate_by = 16
     def get_queryset(self):
-        queryset =生产信息.objects.all().order_by('日期','名称','单位','类别','状态','备注')
+        queryset =生产信息.objects.all().order_by('-日期','状态','类别','单位','名称','备注')
         # keyword = self.request.GET.get('keyword')
         # if keyword :
         #     queryset = 生产信息.objects.filter(Q(地点__icontains=keyword)|Q(电话__icontains=keyword)|Q(备注__icontains=keyword)).order_by('地点','电话')
@@ -62,7 +62,7 @@ class ProductionStatusList(ListView):
     context_object_name = 'ProductionStatusList'    
     paginate_by = 16
     def get_queryset(self):
-        queryset =生产动态.objects.all().order_by('时间','名称','单位','类别','备注')
+        queryset =生产动态.objects.all().order_by('-时间','类别','名称','单位','备注')
         # keyword = self.request.GET.get('keyword')
         # if keyword :
         #     queryset = 生产动态.objects.filter(Q(地点__icontains=keyword)|Q(电话__icontains=keyword)|Q(备注__icontains=keyword)).order_by('地点','电话')
@@ -78,7 +78,7 @@ class LadingBill(ListView):
     context_object_name = 'LadingBill'
     paginate_by = 16
     def get_queryset(self):
-        queryset = 提单.objects.all().order_by('提单号','日期','产品名称','客户名称','备注')
+        queryset = 提单.objects.all().order_by('提单号','-日期','产品名称','客户名称','备注')
         return queryset
     def get_context_data(self,**kwargs):
         context = super(LadingBill,self).get_context_data(**kwargs)

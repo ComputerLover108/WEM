@@ -41,7 +41,7 @@
 					        <h4 class="modal-title" id="生产日报Label">选择日期</h4>
 					      </div>
 					      <div class="modal-body">
-					      	<form action="/ProcessProduction/ProductionDaily" method="get" >
+					      	<form action="{% url 'productionDaily' %}" method="get" >
 					      		<input type="date" name="Date">
 					      		<input type="submit" value="OK">
 					      	</form>
@@ -63,7 +63,7 @@
 					        <h4 class="modal-title" id="生产月报Label">选择日期</h4>
 					      </div>
 					      <div class="modal-body">
-					      	<form action="." method="get">
+					      	<form action=""{% url 'productionMonthly' %}"" method="get">
 					      		<input type="month" name="date">
 					      		<input type="submit" value="OK">
 					      	</form>
