@@ -144,6 +144,22 @@ STATICFILES_DIRS = (
 # STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 STATIC_ROOT = '/var/www/static'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
+
 # %(name)s Logger的名字
 # %(levelno)s 数字形式的日志级别
 # %(levelname)s 文本形式的日志级别

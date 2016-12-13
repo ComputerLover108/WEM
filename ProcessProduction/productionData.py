@@ -2,6 +2,7 @@
 from django.db import connection
 from datetime import date,datetime,time,timedelta
 import json
+import re
 # with connection.cursor() as c:
 #     c.execute(...)
     
@@ -144,9 +145,9 @@ def getProductionDataSet(startDate,endDate):
     args = [startDate,endDate,state]
     cursor.execute(SQL,args)
     rows = cursor.fetchall()
-    names = {row[0] for row in rows}
-    names.remove('数据库轻油回收量')
-    names.remove('数据库丙丁烷回收量')
+    names = [row[0] for row in rows if not re.match('数据库',row[0]) ]
+    # names.remove('数据库轻油回收量')
+    # names.remove('数据库丙丁烷回收量')
     # print(names)
     for name in names:
         if name=='自发电' :

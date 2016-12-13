@@ -10,9 +10,10 @@ from django.db import connection
 from .productionData import *
 from .models import 生产信息,生产动态,提单
 from .productionDaily import *
-
+from .productionMonthly import *
 import logging
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
 
 # Create your views here.
 def index(request):
@@ -89,10 +90,15 @@ def ProductionAnnual(request):
 	return render(request,'ProcessProduction/ProductionAnnual.html', locals())
 
 def ProductionMonthly(request):
-	return render(request,'ProcessProduction/ProductionMonthly.html',locals())
+    Title = '葫芦岛天然气终端厂生产月报'   
+    sd = request.GET.get('productionMonthlyDate')
+    data = getProductionMonthlyData(sd)
+    # logger.info(data.keys())
+    return render(request,'ProcessProduction/ProductionMonthly.html',locals())
 
 def ProductionDaily(request):
-    sd=request.GET.get('Date')
+    Title = '葫芦岛天然气终端厂生产日报'
+    sd=request.GET.get('productionDailyDate')
     data = getProductionDailyData(sd)   
     return render(request,'ProcessProduction/ProductionDaily.html',locals())
 

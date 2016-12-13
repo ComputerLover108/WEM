@@ -1,0 +1,128 @@
+{% extends "main.html" %}
+
+{% block CSS %}
+    <!-- <link rel="stylesheet" type="text/css" href="/static/css/print.css" /> -->
+    <style type="text/css">
+/*    table,td {
+        text-align: center;
+        font-size:  12px;
+    }
+    caption {
+        font-size: 18px;
+    }
+    th {
+        text-align: center;
+        font-size: 16px;
+    }*/
+    <link rel="stylesheet" type="text/css" href="/static/DataTables-1.10.12/media/css/dataTables.bootstrap.min.js">
+    </style>
+{% endblock CSS %}
+{% block hJS %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#ProductionMonthly').DataTable();
+        } );
+    </script>
+{% endblock hJS %}
+{% block main-content %}
+<table id="ProductionMonthly" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th colspan="18">发送：销售公司辽东作业部   传真：0429-5302416</th>
+                <th>日期:</th>
+                <th colspan="3">{{sd}}</th>
+            <tr>
+                <th rowspan="2">日期</th>
+                <th colspan="6">天然气生产和外输</th>
+                <th colspan="10">轻油和轻烃生产和销售</th>
+                <th colspan="5">物料消耗和回收</th>
+            </tr>
+            <tr>
+                <th>锦天化m3</th>
+                <th>新奥燃气m3</th>
+                <th>自用气m3</th>
+                <th>精细化工CNGm3</th>
+                <th>精细化工m3</th>
+                <th>污水处理厂</th>
+                <th>轻油回收量t</th>
+                <th>轻油回收量m3</th>
+                <th>丙丁烷回收量m3</th>
+                <th>轻油装车m3</th>
+                <th>轻油装车bbl</th>
+                <th>轻油装车t</th>
+                <th>丙烷装车m3</th>
+                <th>丁烷装车m3</th>
+                <th>液化气装车m3</th>
+                <th>轻烃装车m3</th>
+                <th>外供电kwh</th>
+                <th>自发电kwh</th>
+                <th>外供水m3</th>
+                <th>自采水m3</th>
+                <th>乙二醇回收m3</th>                
+            </tr>
+        </thead>
+<!--         
+        <tfoot>
+            <tr>
+                <th>锦天化m3</th>
+                <th>新奥燃气m3</th>
+                <th>自用气m3</th>
+                <th>精细化工CNGm3</th>
+                <th>精细化工m3</th>
+                <th>污水处理厂</th>
+                <th>轻油回收量t</th>
+                <th>轻油回收量m3</th>
+                <th>丙丁烷回收量m3</th>
+                <th>轻油装车m3</th>
+                <th>轻油装车bbl</th>
+                <th>轻油装车t</th>
+                <th>丙烷装车m3</th>
+                <th>丁烷装车m3</th>
+                <th>液化气装车m3</th>
+                <th>轻烃装车m3</th>
+                <th>外供电kwh</th>
+                <th>自发电kwh</th>
+                <th>外供水m3</th>
+                <th>自采水m3</th>
+                <th>乙二醇回收m3</th>                
+            </tr>        
+        </tfoot>
+
+ -->        <tbody>
+            {% for k,v in data.items %}
+                <tr>
+                    <td>{{k}}</td>
+                    <td>{{v.锦天化方}}</td>
+                    <td>{{v.新奥燃气方}}</td>
+                    <td>{{v.自用气方}}</td>
+                    <td>{{v.精细化工CNG方}}</td>
+                    <td>{{v.精细化工方}}</td>
+                    <td>{{v.污水处理厂方}}</td>
+                    <td>{{v.轻油回收量吨}}</td>
+                    <td>{{v.轻油回收量方}}</td>
+                    <td>{{v.丙丁烷回收量方}}</td>
+                    <td>{{v.轻油装车方}}</td>
+                    <td>{{v.轻油装车桶}}</td>
+                    <td>{{v.轻油装车吨}}</td>
+                    <td>{{v.丙烷装车方}}</td>
+                    <td>{{v.丁烷装车方}}</td>
+                    <td>{{v.液化气装车方}}</td>
+                    <td>{{v.轻烃装车方}}</td>
+                    <td>{{v.外供电度}}</td>
+                    <td>{{v.自发电度}}</td>
+                    <td>{{v.外供水方}}</td>
+                    <td>{{v.自采水方}}</td>
+                    <td>{{v.乙二醇回收方}}</td>                                                             
+                </tr>
+            {% endfor row %}
+        </tbody>
+</table>
+{% endblock main-content %}
+{% block JS %}
+    <script src="/static/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $('#ProductionMonthly')
+        .removeClass( 'display' )
+        .addClass('table table-striped table-bordered');
+    </script>    
+{% endblock JS%}
