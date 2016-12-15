@@ -72,6 +72,16 @@ TEMPLATES = [
             ],
         },
     },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'APP_DIRS': True,
+        'DIRS': [
+            os.path.join(BASE_DIR,'templatesJinja2'),
+        ],
+        "OPTIONS": {
+            'environment': 'jinja2Env.environment',
+        },        
+    },    
 ]
 
 WSGI_APPLICATION = 'HLDT.wsgi.application'
