@@ -1,0 +1,66 @@
+
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#生产日报">
+			  生产日报
+			</button>
+			<!-- Modal -->
+			<div class="modal fade" id="生产日报" tabindex="-1" role="dialog" aria-labelledby="生产日报Label" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			        <h4 class="modal-title" id="生产日报Label">选择日期</h4>
+			      </div>
+			      <div class="modal-body">
+			      	<form action="{% url 'productionDaily' %}" method="get" >
+			      		<input type="date" name="productionDailyDate" />
+			      		<input type="submit" value="OK" />
+			      	</form>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#生产月报">
+			  生产月报
+			</button>
+			<!-- Modal -->
+			<div class="modal fade" id="生产月报" tabindex="-1" role="dialog" aria-labelledby="生产月报Label" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			        <h4 class="modal-title" id="生产月报Label">选择日期</h4>
+			      </div>
+			      <div class="modal-body">
+			      	<form action="{% url 'productionMonthly' %}" method="get">
+			      		<input type="date" name="productionMonthlyDate" />
+			      		<input type="submit" value="OK" />
+			      	</form>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#装车日报">
+			  装车日报
+			</button>
+			<!-- Modal -->
+			<div class="modal fade" id="装车日报" tabindex="-1" role="dialog" aria-labelledby="装车日报Label" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			        <h4 class="modal-title" id="生产日报Label">选择日期</h4>
+			      </div>
+			      <div class="modal-body">
+			      	<form action="{% url 'loadingDaily' %}" method="get" >
+			      		<input type="date" name="loadingDailyDate" />
+			      		<input type="submit" value="OK" />
+			      	</form>
+			      </div>
+			    </div>
+			  </div>
+			</div>

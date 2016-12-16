@@ -1,0 +1,34 @@
+{% extends "main.html" %}
+
+{% block CSS %}
+    <!-- <link rel="stylesheet" type="text/css" href="/static/css/print.css" /> -->
+    <style type="text/css">
+    table,td,th {
+        text-align: center;
+    }
+    <link rel="stylesheet" type="text/css" href="/static/DataTables-1.10.12/media/css/dataTables.bootstrap.min.js">
+    </style>
+{% endblock CSS %}
+{% block hJS %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#{{tableName}}').DataTable();
+        } );
+    </script>
+{% endblock hJS %}
+{% block main-content %}
+<table id="{{tableName}}" class="display" cellspacing="0" width="100%">
+    {% block dataTable %}
+
+    {% endblock dataTable %}           
+
+</table>
+{% endblock main-content %}
+{% block JS %}
+    <script src="/static/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $('#{{tableName}}')
+        .removeClass( 'display' )
+        .addClass('table table-striped table-bordered');
+    </script>    
+{% endblock JS%}

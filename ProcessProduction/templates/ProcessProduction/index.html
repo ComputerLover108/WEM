@@ -1,115 +1,75 @@
 ﻿{% extends "main.html" %}
 {% block title %}{{title}}{% endblock title %}
 {% block content %}
-	<!-- 主体 -->
-	<div class="container-fluid" >
-		<div class="row">
-			<h1 class="page-header">工艺生产</h1>
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<div class="panel panel-success">
-				  <div class="panel-heading">
-					<h3 class="panel-title">数据采集</a></h3>
-				  </div>
-				  <div class="panel-body">
-					{% for name,address in 数据采集 %}
-						<a class="btn btn-primary btn-lg" href="{{address}}" role="button">{{name}}</a>
-					{% endfor %}
-				  </div>
-				</div>			
-			</div>
-			<div class="col-md-6">
-				<div class="panel panel-warning">
-				  <div class="panel-heading">
-					<h3 class="panel-title">报表</h3>
-				  </div>
-				  <div class="panel-body">
-					{% for name,address in 报表 %}
-						<a class="btn btn-primary btn-lg" href="{{address}}" role="button">{{name}}</a>
-					{% endfor %}
-					<!-- Button trigger modal -->
-					<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#生产日报">
-					  生产日报
-					</button>
-					<!-- Modal -->
-					<div class="modal fade" id="生产日报" tabindex="-1" role="dialog" aria-labelledby="生产日报Label" aria-hidden="true">
-					  <div class="modal-dialog">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					        <h4 class="modal-title" id="生产日报Label">选择日期</h4>
-					      </div>
-					      <div class="modal-body">
-					      	<form action="{% url 'productionDaily' %}" method="get" >
-					      		<input type="date" name="productionDailyDate" />
-					      		<input type="submit" value="OK" />
-					      	</form>
-					      </div>
-					    </div>
-					  </div>
-					</div>
+    <!-- 主体 -->
+    <div class="container-fluid" >
+        <div class="row">
+            <h1 class="page-header">工艺生产</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-success">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">数据采集</a></h3>
+                  </div>
+                  <div class="panel-body">
+                    {% for name,address in 数据采集 %}
+                        <a class="btn btn-primary btn-lg" href="{{address}}" role="button">{{name}}</a>
+                    {% endfor %}
+                  </div>
+                </div>            
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-warning">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">报表</h3>
+                  </div>
+                  <div class="panel-body">
+                    {% include "ProcessProduction/dailySelectSnippet.html" %}
+                                      
+                    {% for name,address in 报表 %}
+                        <a class="btn btn-primary btn-lg" href="{{address}}" role="button">{{name}}</a>
+                    {% endfor %}
 
-					<!-- Button trigger modal -->
-					<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#生产月报">
-					  生产月报
-					</button>
-					<!-- Modal -->
-					<div class="modal fade" id="生产月报" tabindex="-1" role="dialog" aria-labelledby="生产月报Label" aria-hidden="true">
-					  <div class="modal-dialog">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					        <h4 class="modal-title" id="生产月报Label">选择日期</h4>
-					      </div>
-					      <div class="modal-body">
-					      	<form action="{% url 'productionMonthly' %}" method="get">
-					      		<input type="date" name="productionMonthlyDate" />
-					      		<input type="submit" value="OK" />
-					      	</form>
-					      </div>
-					    </div>
-					  </div>
-					</div>
 
-				  </div>
-				</div>			
-			</div>			
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<div class="panel panel-success">
-				  <div class="panel-heading">
-					<h3 class="panel-title">生产管理规定，操作程序</a></h3>
-				  </div>
-				  <div class="panel-body">
-<!-- 					{% for name,address in 数据采集 %}
-						<a class="btn btn-primary btn-lg" href="{{address}}" role="button">{{name}}</a>
-					{% endfor %} -->
-				  </div>
-				</div>			
-			</div>
-			<div class="col-md-6">
-				<div class="panel panel-warning">
-				  <div class="panel-heading">
-					<h3 class="panel-title">生产培训</h3>
-				  </div>
-				  <div class="panel-body">
-<!-- 					{% for name,address in 报表 %}
-						<a class="btn btn-primary btn-lg" href="{{address}}" role="button">{{name}}</a>
-					{% endfor %} -->
-				  </div>
-				</div>			
-			</div>			
-		</div>
-		<div class="row">
-				<div class="panel panel-warning">
-				  <div class="panel-heading">
-					<h3 class="panel-title">生产大事记</h3>
-				  </div>
-				  <div class="panel-body">
-				  </div>
-				</div>		
-		</div>						
-	</div>		
+                  </div>
+                </div>            
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-success">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">生产管理规定，操作程序</a></h3>
+                  </div>
+                  <div class="panel-body">
+<!--                     {% for name,address in 数据采集 %}
+                        <a class="btn btn-primary btn-lg" href="{{address}}" role="button">{{name}}</a>
+                    {% endfor %} -->
+                  </div>
+                </div>            
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-warning">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">生产培训</h3>
+                  </div>
+                  <div class="panel-body">
+<!--                     {% for name,address in 报表 %}
+                        <a class="btn btn-primary btn-lg" href="{{address}}" role="button">{{name}}</a>
+                    {% endfor %} -->
+                  </div>
+                </div>            
+            </div>            
+        </div>
+        <div class="row">
+                <div class="panel panel-warning">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">生产大事记</h3>
+                  </div>
+                  <div class="panel-body">
+                  </div>
+                </div>        
+        </div>                        
+    </div>        
 {% endblock content%}

@@ -1,5 +1,5 @@
 set PGADMINISTRATOR=ComputerLover
-set PGHOME=D:\public\portable\database\x64\pgsql
+set PGHOME=D:\public\portable\database\pg9.6\pgsql
 set PGDATA=D:\public\database\MasterPG\data
 set PGPASSWORD=pgpassword
 set PGPASSFILE=pgpass.conf
@@ -23,9 +23,9 @@ psql -d HLD -U ComputerLover -c " GRANT worker TO ""operator"" GRANTED BY ""Comp
 
 psql -d HLD -U ComputerLover -c " ALTER DATABASE ""HLD"" OWNER TO ""operator""; "
 
-rem psql -d HLD -U ComputerLover -c " ALTER ROLE ""ComputerLover"" WITH ENCRYPTED PASSWORD 'wkx9dragon Xue Xi.' ; "
+psql -d HLD -U ComputerLover -c " ALTER ROLE ""ComputerLover"" WITH ENCRYPTED PASSWORD 'wkx9dragon Xue Xi.' ; "
 
 pg_ctl -D  %PGDATA% stop
-copy %PGBACKUP%\pg_hba.conf %PGDATA%\
-copy %PGBACKUP%\postgresql.conf %PGDATA%
+copy pg_hba.conf %PGDATA%\
+copy postgresql.conf %PGDATA%
 pg_ctl -D  %PGDATA% start

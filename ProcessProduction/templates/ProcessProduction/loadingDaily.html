@@ -1,0 +1,32 @@
+{% extends "dataTable.html" %}
+{% block dataTable %}
+<thead>
+    <tr>
+        <th colspan="5">葫芦岛天然气处理厂</th>
+        <th>{{sd}}</th>
+    </tr>
+	<tr>
+		<th rowspan="2">客户</th>
+		<th rowspan="2">丙烷t</th>
+		<th rowspan="2">丁烷t</th>
+		<th rowspan="2">液化气t</th>
+		<th>轻油</th>
+	</tr>
+	<tr>
+		<th>t</th>
+		<th>bbl</th>
+	</tr>
+</thead>
+<tbody>
+	{% for k,v in data.items %}
+		<tr>
+			<td>{{k}}</td>
+			<td>{{v.丙烷}}</td>
+			<td>{{v.丁烷}}</td>
+			<td>{{v.液化气}}</td>
+			<td>{{v.轻油t}}</td>
+			<td>{{v.轻油bbl}}</td>
+		</tr>
+	{% endfor %}
+</tbody> 
+{% endblock dataTable %}
