@@ -21,11 +21,11 @@
 	{% for k,v in data.items %}
 		<tr>
 			<td>{{k}}</td>
-			<td>{{v.丙烷}}</td>
-			<td>{{v.丁烷}}</td>
-			<td>{{v.液化气}}</td>
-			<td>{{v.轻油t}}</td>
-			<td>{{v.轻油bbl}}</td>
+			<td>{{v.丙烷t|default:0}}</td>
+			<td>{{v.丁烷t|default:0}}</td>
+			<td>{{v.液化气t|default:0}}</td>
+			<td>{{v.轻油t|default:0}}</td>
+			<td>{{v.轻油bbl|default:0}}</td>
 		</tr>
 	{% endfor %}
 </tbody> 
