@@ -10,7 +10,7 @@
 		<th rowspan="2">丙烷t</th>
 		<th rowspan="2">丁烷t</th>
 		<th rowspan="2">液化气t</th>
-		<th>轻油</th>
+		<th colspan="2">轻油</th>
 	</tr>
 	<tr>
 		<th>t</th>
@@ -18,15 +18,40 @@
 	</tr>
 </thead>
 <tbody>
-	{% for k,v in data.items %}
+	{% for row in data  %}
 		<tr>
-			<td>{{k}}</td>
-			<td>{{v.丙烷t|default:0}}</td>
-			<td>{{v.丁烷t|default:0}}</td>
-			<td>{{v.液化气t|default:0}}</td>
-			<td>{{v.轻油t|default:0}}</td>
-			<td>{{v.轻油bbl|default:0}}</td>
+		{% for column in row %}
+			{% if column == "日累" %}
+				<td>合计</td>
+			{% else %}
+				<td>{{column|default_if_none:""}}</td>
+			{% endif %}			
+		{% endfor column %}
 		</tr>
-	{% endfor %}
+	{% endfor row %}
+<!-- 	<tr>
+		<td>合计</td>
+		<td>{{data.日累.丙烷t}}</td>
+		<td>{{data.日累.丁烷t}}</td>
+		<td>{{data.日累.液化气t}}</td>
+		<td>{{data.日累.轻油t}}</td>
+		<td>{{data.日累.轻油bbl}}</td>
+	</tr>
+	<tr>
+		<td>月累</td>
+		<td>{{data.月累.丙烷t}}</td>
+		<td>{{data.月累.丁烷t}}</td>
+		<td>{{data.月累.液化气t}}</td>
+		<td>{{data.月累.轻油t}}</td>
+		<td>{{data.月累.轻油bbl}}</td>
+	</tr>
+					<tr>
+		<td>年累</td>
+		<td>{{data.年累.丙烷t}}</td>
+		<td>{{data.年累.丁烷t}}</td>
+		<td>{{data.年累.液化气t}}</td>
+		<td>{{data.年累.轻油t}}</td>
+		<td>{{data.年累.轻油bbl}}</td>
+	</tr> -->
 </tbody> 
 {% endblock dataTable %}

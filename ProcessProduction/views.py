@@ -120,8 +120,10 @@ def ProductionAnnual(request):
 # 装车日报
 def loadingDaily(request):
     Title = '葫芦岛天然气终端厂装车日报'
+    tableName = 'loadingDaily'
     sd = request.GET.get('loadingDailyDate')
     data = getLoadingData(sd)
+    times = ['日累','月累','年累']
     return render(request, 'ProcessProduction/loadingDaily.html', locals())
 
 

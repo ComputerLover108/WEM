@@ -17,15 +17,17 @@
     </script>
 {% endblock hJS %}
 {% block main-content %}
-<table id="{{tableName}}" class="display" cellspacing="0" width="100%">
+<table id="{{tableName}}" class="display" cellspacing="0" width="90%">
     {% block dataTable %}
 
     {% endblock dataTable %}           
 </table>
 {% endblock main-content %}
 {% block JS %}
+    <script src="/static/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
     <script src="/static/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js"></script>
-    <script type="text/javascript">
+
+    <script type="text/javascript">  
         $('#{{tableName}}')
         .removeClass( 'display' )
         .addClass('table table-striped table-bordered');
