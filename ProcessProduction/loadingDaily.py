@@ -86,5 +86,5 @@ def getLoadingData(sd):
             record[5] = v['轻油bbl'] 
         records.append(record)    
                                   
-    logger.info(records)
+    # logger.info(records)
     return records
