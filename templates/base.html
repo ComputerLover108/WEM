@@ -10,7 +10,7 @@
     <title>{% block title %}{{Title}}{% endblock title %}</title>
 
     <!-- Bootstrap -->
-    <link href="/static/bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
         h1,h2,h3 { text-align:center }         
     </style>
@@ -30,11 +30,7 @@
             {% block nav %}{% endblock nav %}
             
         </div>
-        <div id="content">
-            <!-- 侧边栏 -->
-<!--             <div id="sidebar">
-                {% block sidebar %}{% endblock sidebar %}
-            </div>  -->       
+        <div id="content">     
             <!-- 主体 -->
             {% block content %} {% endblock content %}
         </div>
@@ -44,9 +40,9 @@
         </div>
     </div>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="/static/jQuery/jquery-1.12.2.min.js"></script>	
+    <script src="/static/jQuery/jquery-3.1.1.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/static/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 	{% block JS %}{% endblock JS%}    
   </body>
 </html>
