@@ -9,7 +9,7 @@ from datetime import date
 def home(request):
     title = "主页"
     EchartsTitle = "生产统计"
-    legend = ['天然气10kNm3', '轻油m3', '轻烃m3']
+    legend = ['天然气m3', '轻油m3', '轻烃m3']
     pdate = date.today()
     cursor = connection.cursor()
     cursor.execute(
