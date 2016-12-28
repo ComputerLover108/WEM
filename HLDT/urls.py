@@ -25,3 +25,4 @@ urlpatterns = [
     url(r'^EquipmentMaintenance/',include('EquipmentMaintenance.urls')),
     url(r'^QHSE/',include('QHSE.urls')),
 ]
+

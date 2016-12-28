@@ -155,6 +155,9 @@ STATICFILES_DIRS = (
 # STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 STATIC_ROOT = '/var/www/static'
 
+MEDIA_URL = '/public/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public')
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
