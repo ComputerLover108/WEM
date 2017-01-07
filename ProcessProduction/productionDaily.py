@@ -10,7 +10,21 @@ from math import pi
 import re
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
+
+def isMonthHead(sd):
+    x = datetime.strptime(sd,"%Y-%m-%d")
+    if x.day==1 :
+        return True
+    else:
+        return False
+
+def isYearHead(sd):
+    x = datetime.strptime(sd,"%Y-%m-%d")
+    if x.month==1 and x.day==1 :
+        return True
+    else:
+        return False
 
 def getProductionDailyData(sd):
     table = '生产信息'
@@ -48,13 +62,22 @@ def dataFinish(data):
                 data[k] = round(v,4)
             else:
                 if k in nameC or re.search('配产|需日产',k):
-                    data[k] = round(v/pow(10,4),2)
+                    data[k] = round(v/pow(10,4),4)
                 else:
-                    data[k] = round(v,2)
-    if '精细化工CNG' not in data:
+                    data[k] = round(v,4)
+    if '精细化工CNG方' not in data:
         data['精细化工CNG'+'方'] = '/'    
         data['月累'+'精细化工CNG'+'方'] = '/'
-        data['年累'+'精细化工CNG'+'方'] = '/' 
+        data['年累'+'精细化工CNG'+'方'] = '/'
+    sd = data['日期']
+    for name in names:
+        x = name+'方'
+        y = '月累' + x
+        z = '年累' + x
+        data[y]= data[x] if isMonthHead(sd) else data[y] 
+        data[z] = data[x] if isYearHead(sd) else data[z]
+
+
 
 # 获得基本日报数据[原始数据]
 def getBaseData(data,sd):
@@ -63,7 +86,7 @@ def getBaseData(data,sd):
     args = [sd]
     cursor.execute(SQL,args)
     rows = cursor.fetchall()
-
+    data['日期'] = sd
     getDistributionData(data,sd,rows)
     getUpstreamData(data,sd,rows)
     getSeaPipeData(data,sd,rows)
@@ -139,7 +162,11 @@ def getGasData(data,sd,rows):
     category = '天然气'    
     for row in rows :
         if (row[1] in names) and row[4]==category:
-            data[row[1]+row[2]] =row[3]
+            key = row[1]+row[2]
+            data[key] =row[3]
+            # if key=='精细化工CNG方':
+            #     logger.info(key)
+            #     logger.info(row[3])
 
 # 轻油
 def getOilData(data,sd,rows):
@@ -240,6 +267,7 @@ def getRelatedData(data,sd):
         '入厂计量',
         '锦天化',
         '精细化工',
+        '精细化工CNG',
         '污水处理厂',
         '新奥燃气',
         '自用气',
@@ -258,7 +286,7 @@ def getRelatedData(data,sd):
     }    
     unit = ''
     for name in names :
-        pattern = '稳定区|入厂计量|锦天化|精细化工|污水处理厂|新奥燃气|自用气|轻油回收量|丙丁烷回收量|甲醇消耗|乙二醇消耗|乙二醇回收|外供水|自采水|水消耗'
+        pattern = '稳定区|入厂计量|锦天化|精细化工|精细化工CNG|污水处理厂|新奥燃气|自用气|轻油回收量|丙丁烷回收量|甲醇消耗|乙二醇消耗|乙二醇回收|外供水|自采水|水消耗'
         if re.match(pattern,name) :
             unit = '方'
         pattern = '外供电|自发电|电消耗'
@@ -319,6 +347,8 @@ def getRelatedData(data,sd):
 
 # 推导数据
 def getDerivedData(data,sd):
+    # for k in data.keys():
+    #     logger.info(k)
     if not getRelatedData(data,sd):
         return False
     
@@ -373,8 +403,7 @@ def getDerivedData(data,sd):
             if re.match(pattern,key) :
                 n1= key.replace('昨','')
                 n2 = key.replace(pattern,'')
-                dt[n1] = data[n2] + data[key]
-                # print(n1,dt[n1])
+                dt[n1] = data[n2] + data[key]   
     for k,v in dt.items():
         data[k] = v
     names = [
@@ -412,15 +441,16 @@ def getDerivedData(data,sd):
     d = date(d1.year,d1.month,d1.day)
     去年年末 = date(d.year-1,12,31)
     今年年末 = date(d.year,12,31)
+    剩余天数 = (今年年末-d ).days if (今年年末-d ).days else 1
     年时间进度比 = (d - 去年年末) / (今年年末 - 去年年末) * 100
     data['年时间进度比']    = 年时间进度比
     data['天然气年度完成率'] = data['年累天然气方'] / data['天然气年配产方'] * 100
     data['天然气月度完成率'] = data['月累天然气方'] / data['天然气月配产方'] * 100
-    data['天然气需日产'] = (data['天然气年配产方']-data['年累天然气方'])/(今年年末-d ).days
+    data['天然气需日产'] = (data['天然气年配产方']-data['年累天然气方'])/剩余天数
     data['轻油年度完成率'] = data['年累轻油方']/data['轻油年配产方'] * 100
     data['轻油月度完成率'] = data['月累轻油方']/data['轻油月配产方'] * 100
-    data['轻油需日产'] = (data['轻油年配产方']-data['年累轻油方'])/(今年年末-d ).days
+    data['轻油需日产'] = (data['轻油年配产方']-data['年累轻油方'])/剩余天数
     data['丙丁烷年度完成率'] = data['年累丙丁烷方']/data['丙丁烷年配产方'] * 100
     data['丙丁烷月度完成率'] = data['月累丙丁烷方']/data['丙丁烷月配产方'] * 100
-    data['丙丁烷需日产'] = (data['丙丁烷年配产方']-data['年累丙丁烷方'])/(今年年末-d ).days 
+    data['丙丁烷需日产'] = (data['丙丁烷年配产方']-data['年累丙丁烷方'])/剩余天数 
     return True   
