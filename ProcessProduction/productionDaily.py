@@ -403,7 +403,8 @@ def getDerivedData(data,sd):
             if re.match(pattern,key) :
                 n1= key.replace('昨','')
                 n2 = key.replace(pattern,'')
-                dt[n1] = data[n2] + data[key]   
+                if n2 in data and key in data:
+                    dt[n1] = data[n2] + data[key]   
     for k,v in dt.items():
         data[k] = v
     names = [
@@ -414,9 +415,9 @@ def getDerivedData(data,sd):
         '新奥燃气',
         '自用气'
     ] 
-    gas = [ data[x+'方'] for x in names if x+'方' in data ]
-    gasM = [ data['昨月累'+x+'方'] for x in names if '昨月累'+x+'方' in data ]
-    gasY = [ data['昨年累'+x+'方'] for x in names if '昨年累'+x+'方' in data ]
+    gas = [ data[x+'方'] if x+'方' in data else 0 for x in names  ]
+    gasM = [ data['昨月累'+x+'方'] if '昨月累'+x+'方' in data else 0 for x in names ]
+    gasY = [ data['昨年累'+x+'方'] if '昨年累'+x+'方' in data else 0 for x in names  ]
     data['总产气量方'] = sum(gas)
     data['月累'+'总产气量方'] = sum(gasM)
     data['年累'+'总产气量方'] = sum(gasY)
