@@ -6,26 +6,32 @@
     table,td,th {
         text-align: center;
     }
-    <link rel="stylesheet" type="text/css" href="/static/DataTables-1.10.12/media/css/dataTables.bootstrap.min.js">
+    td{
+        width:160px;
+        height:30px;
+    }
+    <link rel="stylesheet" type="text/css" href="/static/DataTables-1.10.12/media/css/dataTables.min.css">
     </style>
 {% endblock CSS %}
 {% block hJS %}
-    <script type="text/javascript">
+    <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
             $('#{{tableName}}').DataTable();
         } );
     </script>
 {% endblock hJS %}
 {% block main-content %}
-<table id="{{tableName}}" class="display" cellspacing="0" width="90%">
+<div class="container">
+<table id="{{tableName}}" class="display" cellspacing="0" width="100%">
     {% block dataTable %}
 
     {% endblock dataTable %}           
 </table>
+</div>
 {% endblock main-content %}
 {% block JS %}
     <script src="/static/DataTables-1.10.12/media/js/jquery.dataTables.min.js"></script>
-    <script src="/static/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js"></script>
+    <!-- <script src="/static/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js"></script> -->
 
     <script type="text/javascript">  
         $('#{{tableName}}')

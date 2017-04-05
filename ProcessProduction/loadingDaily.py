@@ -45,7 +45,7 @@ def getLoadingData(sd):
             record[5] = v['轻油bbl'] 
         records.append(record)
 
-    rowLimit = 26
+    rowLimit = 20
     if len(records) < rowLimit :
         records += [[None]*6] * (rowLimit-len(records))
     # 添加合计，月累，年累
