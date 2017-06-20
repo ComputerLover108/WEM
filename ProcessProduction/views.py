@@ -98,18 +98,36 @@ class LadingBillList(ListView):
         return context
 
 
+def toHtmlSelectMenu(selects, name):
+    result = '<select id="' + name + '">'
+    for x in selects:
+        result += '<option>' + x + '</option>'
+    result += '</select>'
+    return result
+
+
 def LadingBillForm(request):
+    today = date.today().isoformat()
     Title = '提单'
     names = ['日期', '提单号', '产品', '客户', '计划装车t',
              '实际装车t', '实际装车bbl', '装车数', '备注']
+    # SQL = 'select DISTINCT 产品名称 from 提单;'
+    products = LadingBill.objects.order_by('产品名称').distinct(
+        '产品名称').values_list('产品名称', flat=True)
+    customers = LadingBill.objects.order_by('客户名称').distinct(
+        '客户名称').values_list('客户名称', flat=True)
+    sp = toHtmlSelectMenu(products, '产品')
+    sc = toHtmlSelectMenu(customers, '客户')
     formInput = [
-        '<input type="date" name="日期">',
+        '<input type="date" name="日期" value="' + today + '" >',
         '<input type="text" name="提单号">',
-        '<input type="text" name="客户">',
-        '<input type="text" name="产品">',
-        '<input type="number" min="0" max="1000.00" name="计划装车t">',
-        '<input type="number" min="0" max="1000.00" name="实际装车t">',
-        '<input type="number" min="0" max="8000.0000" name="实际装车bbl">',
+    ]
+    formInput.append(sp)
+    formInput.append(sc)
+    formInput += [
+        '<input type="number" min="0.00" max="1000.00" step="0.01" name="计划装车t">',
+        '<input type="number" min="0.00" max="1000.00" step="0.01" name="实际装车t">',
+        '<input type="number" min="0.0000" max="8000.0000" step="0.0001" name="实际装车bbl">',
         '<input type="number" min="0" max="100" name="装车数">',
         '<input type="text" name="备注">'
     ]

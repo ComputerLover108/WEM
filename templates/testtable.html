@@ -1,0 +1,92 @@
+<body>
+<form name="abc" action="">
+<table width="200" border="1" id="table1">
+<tr>
+<td><input type="text" name="txt_a" id="textfield" value="aaa"/></td>
+<td><input type="text" name="txt_b" id="textfield2" value="bbb" /></td>
+<td><input type="text" name="txt_c" id="textfield3" value="ccc" onclick="m_TestParentNode(this);"/></td>
+<td><select name="sel_a"><option value="a">aaa</option><option value="b">bbb</option></select></td>
+</tr>
+</table>
+<table width="200" border="1" id="myTable">
+<tr id="row_0">
+<td><input type="text" name="txt_a" id="textfield" /></td>
+<td><input type="text" name="txt_b" id="textfield2" /></td>
+<td><input type="text" name="txt_c" id="textfield3" /></td>
+<td><select name="sel_a"><option value="a">aaa</option><option value="b">bbb</option></select></td>
+</tr>
+</table>
+<table>
+<tr>
+<td><input name="btnAdd" type="button" value="Add Row" onclick="m_AddRow();"/></td>
+<td><input name="btnDel" type="button" value="Del Row" onclick="m_DelRow();"/></td>
+<td> </td>
+</tr>
+</table>
+</form>
+<mce:script language="javascript"><!--
+    var maxRows = 5;
+    function m_AddRow() {
+        var tbl = document.getElementById("myTable").tBodies[0];
+		var seq = tbl.rows.length;
+        if (tbl.rows.length >= maxRows) {
+            return;
+        }
+        try {
+            var newNode = tbl.rows[0].cloneNode(true);
+			newNode.setAttribute("id", "row_" + seq);
+			m_ClearInputs(newNode);
+			tbl.appendChild(newNode);
+        }
+        catch(e) {
+            alert(e.message);
+        }
+    }
+
+    function m_DelRow() {
+        var tbl = document.getElementById("myTable").tBodies[0];
+        var index = tbl.rows.length;
+        tbl.deleteRow(index - 1);
+    }
+
+	function m_ClearInputs(p_node) {
+        var m_node;
+        if (p_node.nodeType) {
+            m_node = p_node;
+        }
+        else {
+            m_node = document.getElementById(p_node); // the id
+        }
+
+		var i, elm, elements;
+
+        elements = m_node.getElementsByTagName('input');
+        for( i=0, elm; elm=elements.item(i++); )
+        {
+            if (elm.getAttribute('type') == "text")
+            {
+                elm.value = '';
+            }
+        }
+
+		elements = m_node.getElementsByTagName('select');
+		for( i=0, elm; elm=elements.item(i++); )
+		{
+			elm.options.selectedIndex=0;
+		}
+	}
+
+	function m_TestParentNode(p_node) {
+//		alert(p_node.parentNode.innerHTML);
+//		alert(p_node.parentNode.parentNode.innerHTML);
+		var nextSibling;
+		if (p_node.parentNode.nextSibling.nodeType == 3) { // FF
+			nextSibling = p_node.parentNode.nextSibling.nextSibling;
+		}
+		else {
+			nextSibling = p_node.parentNode.nextSibling;
+		}
+		alert(nextSibling.innerHTML);
+	}
+// --></mce:script>
+</body>

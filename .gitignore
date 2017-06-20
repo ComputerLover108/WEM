@@ -2,3 +2,5 @@
 *.1db
 *.1db
 *.pyc
+.idea
+__pycache__

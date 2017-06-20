@@ -1,18 +1,29 @@
 {% extends "main.html" %} 
 {% block hJS %}
 <script language="javascript" type="text/javascript">
+
+function clone() {
+    var tbl = document.getElementById("tab").tBodies[0];
+    if( tbl.rows.length > 1)
+    {   
+        var pos = tbl.rows.length-1
+        var newNode = tbl.rows[pos].cloneNode(true);
+        tbl.appendChild(newNode);
+    }
+}
+
 function add() {
     var otr = document.getElementById("tab").insertRow(-1);
     var otd = document.createElement("td");
-    otd.innerHTML = '<input type="checkbox" name="checkItem" />';    
+    otd.innerHTML = '<input type="checkbox" name="checkItem" />';
     otr.appendChild(otd);
- 
-    {% for x in formInput %}
+
+    {% for name in names %}
         otd=document.createElement("td")
-        otd.innerHTML = '{{x|safe}}'
+        otd.innerHTML = '<input type="text" name={{name|safe}} >'
         otr.appendChild(otd)
     {% endfor %}
-    
+
 }
 
 function del() {
@@ -49,7 +60,6 @@ function save() {
         var idArray = new Array();
         {% for name in names %}
             var {{name|safe}} =document.getElementsByName("{{name|safe}}");
-            // console.log({{name|safe}});
         {% endfor %}
         for (i = 0; i < checkboxs.length; i++) {
             var record={}
@@ -91,8 +101,9 @@ function post(URL, PARAMS) {
     <div class="center-block" id="动态表格">
         <div class="center-block">
             <button type="button" class="btn btn-success" onclick="save()">保存</button>
-            <button type="button" class="btn btn-default" onclick="add()">添加</button>
-            <button type="button" class="btn btn-danger" onclick="del()">删除</button>
+            <button type="button" class="btn btn-primary" onclick="clone()">复制尾行</button>           
+            <button type="button" class="btn btn-default" onclick="add()">添加空白行</button>
+            <button type="button" class="btn btn-danger" onclick="del()">删除</button>        
         </div>
         <table id="tab" border="1">
             <tr>
