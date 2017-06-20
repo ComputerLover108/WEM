@@ -1,0 +1,118 @@
+{% extends "main.html" %} 
+{% block hJS %}
+<script language="javascript" type="text/javascript">
+function add() {
+    var otr = document.getElementById("tab").insertRow(-1);
+    var otd = document.createElement("td");
+	otd.innerHTML = '<input type="checkbox" name="checkItem" />';    
+    otr.appendChild(otd);
+ 
+    {% for x in formInput %}
+    	otd=document.createElement("td")
+    	otd.innerHTML = '{{x|safe}}'
+    	otr.appendChild(otd)
+    {% endfor %}
+    
+}
+
+function del() {
+    var c = document.getElementsByName('checkItem');
+    var idArray = new Array();
+    for (var i = 0; i < c.length; i++)
+        if (c[i].checked)
+            idArray.push(i);
+    var rowIndex;
+    var nextDiff = 0;
+    for (j = 0; j < idArray.length; j++) {
+        rowIndex = idArray[j] + 1 - nextDiff++;
+        document.getElementById("tab").deleteRow(rowIndex);
+    }
+}
+
+function alldell() {
+    var des = document.getElementsByName('checkItem');
+    for (var i = 0; i < des.length; i++) {
+        if (des[i].checked = document.getElementById('delall').checked) {
+            des[i].parentNode.parentNode.className = "checkBg";
+            des[i].parentNode.nextSibling.firstChild.className = "checkTxt";
+            des[i].parentNode.nextSibling.nextSibling.firstChild.className = "checkTxt";
+        } else {
+            des[i].parentNode.parentNode.className = "";
+            des[i].parentNode.nextSibling.firstChild.className = "";
+            des[i].parentNode.nextSibling.nextSibling.firstChild.className = "";
+        }
+    }
+}
+
+function save() {
+    var checkboxs = document.getElementsByName("checkItem");
+        var idArray = new Array();
+        {% for name in names %}
+			var {{name|safe}} =document.getElementsByName("{{name|safe}}");
+			// console.log({{name|safe}});
+    	{% endfor %}
+        for (i = 0; i < checkboxs.length; i++) {
+        	var record={}
+        	record= {
+        		{% for name in names %}
+        			"{{name|safe}}":{{name|safe}}[i].value,
+        		{% endfor %}
+        	}
+        	console.log(record);
+            idArray.push(record);
+        }
+        var result = JSON.stringify(idArray);
+        console.log(result);
+
+}
+
+function post(URL, PARAMS) {
+    var temp = document.createElement("form");
+    temp.action = URL;
+    temp.method = "post";
+    temp.style.display = "none";
+    for (var x in PARAMS) {
+        var opt = document.createElement("textarea");
+        opt.name = x;
+        opt.value = PARAMS[x];
+        // alert(opt.name)
+        temp.appendChild(opt);
+    }
+    document.body.appendChild(temp);
+    temp.submit();
+    return temp;
+}
+//调用方法 如        
+// post('pages/statisticsJsp/excel.action', {html :prnhtml,cm1:'sdsddsd',cm2:'haha'});
+</script>
+{% endblock hJS %} 
+{% block main-content %}
+<div class="col-md-10 col-md-offset-1">
+    <div class="center-block" id="动态表格">
+        <div class="center-block">
+            <button type="button" class="btn btn-success" onclick="save()">保存</button>
+            <button type="button" class="btn btn-default" onclick="add()">添加</button>
+            <button type="button" class="btn btn-danger" onclick="del()">删除</button>
+        </div>
+        <table id="tab" border="1">
+            <tr>
+                <th>
+                    <input type="checkbox" id="delall" onclick="alldell()">
+                </th>
+                {% for name in names %}
+                <th>{{name}}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" name="checkItem">
+                </td>
+                {% for x in formInput %}
+                <td>{{x|safe}}</td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+</div>
+
+{% endblock main-content %}

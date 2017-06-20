@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.db import connection
 
 from .productionData import *
-from .models import 生产信息, 生产动态, 提单
+from .models import 生产信息, 生产动态, LadingBill
 from .productionDaily import *
 from .productionMonthly import *
 from .loadingDaily import *
@@ -25,7 +25,7 @@ def index(request):
     数据采集 = (
         ('配产数据', 'Proration'),
         ('快速录入', 'QuickInput'),
-        ('装车数据', 'OutputData'),
+        ('装车数据', 'LadingBillForm'),
         ('海管数据', 'SeaPipeData'),
         ('化验数据', 'TestData'),
     )
@@ -38,7 +38,7 @@ def index(request):
         # ('生产年报','AnnualProduction'),
         ('生产信息', 'ProductionDataList'),
         ('生产动态', 'ProductionStatusList'),
-        ('提单', 'LadingBill'),
+        ('提单', 'LadingBillList'),
     )
     return render(request, 'ProcessProduction/index.html', locals())
 
@@ -82,20 +82,38 @@ class ProductionStatusList(ListView):
         return context
 
 
-class LadingBill(ListView):
-    template_name = "ProcessProduction/LadingBill.html"
-    model = 提单
+class LadingBillList(ListView):
+    template_name = "ProcessProduction/LadingBillList.html"
+    model = LadingBill
     context_object_name = 'LadingBill'
     paginate_by = 16
 
     def get_queryset(self):
-        queryset = 提单.objects.all().order_by('提单号', '-日期', '产品名称', '客户名称', '备注')
+        queryset = LadingBill.objects.all().order_by('-日期', '提单号', '产品名称', '客户名称', '备注')
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = super(LadingBill, self).get_context_data(**kwargs)
+        context = super(LadingBillList, self).get_context_data(**kwargs)
         context['Title'] = "提单"
         return context
+
+
+def LadingBillForm(request):
+    Title = '提单'
+    names = ['日期', '提单号', '产品', '客户', '计划装车t',
+             '实际装车t', '实际装车bbl', '装车数', '备注']
+    formInput = [
+        '<input type="date" name="日期">',
+        '<input type="text" name="提单号">',
+        '<input type="text" name="客户">',
+        '<input type="text" name="产品">',
+        '<input type="number" min="0" max="1000.00" name="计划装车t">',
+        '<input type="number" min="0" max="1000.00" name="实际装车t">',
+        '<input type="number" min="0" max="8000.0000" name="实际装车bbl">',
+        '<input type="number" min="0" max="100" name="装车数">',
+        '<input type="text" name="备注">'
+    ]
+    return render(request, 'dynamicForm.html', locals())
 
 
 def ProductionDaily(request):
@@ -123,7 +141,7 @@ def loadingDaily(request):
     tableName = 'loadingDaily'
     sd = request.GET.get('loadingDailyDate')
     data = getLoadingData(sd)
-    times = ['日累','月累','年累']
+    times = ['日累', '月累', '年累']
     return render(request, 'ProcessProduction/loadingDaily.html', locals())
 
 
