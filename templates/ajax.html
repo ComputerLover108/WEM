@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>AjaxTest</title>
+    <style>
+        .success{
+            color: green;
+        }
+        .error{
+            color: gray;
+        }
+     </style>
+</head>
+<body>
+<div>
+<h1>Ajex</h1>
+<p>Username:<input type="text" id="username"></p>
+<p>Password:<input type="password" id ="password"></p>
+<p><a onclick="tijiao1();">tijiao</a></p>
+<span id="status"></span>
+</div>
+<script type="text/javascript" src="/static/js/jquery-2.2.4.min.js"></script>
+<script>
+    function tijiao1(){
+        var  user =$('#username').val()
+        var pwd =$('#password').val()
+        $.ajax({
+            url:'/ajax/',
+            type:'POST',
+            data:{username:user,password:pwd},
+            success:function(callback){
+                var callback_dict = $.parseJSON(callback);
+                if (callback_dict.status==1002){
+                    $('#status').text('success');
+                    $('#status').removeClass('error').addClass('success');
+                }else if(callback_dict.status == 1001){
+                    $('#status').text(callback_dict.error);
+                    $('#status').removeClass('success').addClass('error')
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>
+
+
+Django views Code
+from django.shortcuts import render,HttpResponse
+import  json
+# Create your views here.
+def ajax(request):
+    if request.method =='POST':
+        ret={'status':1001,'error':''}
+        user=request.POST.get('username')
+        pwd=request.POST.get('password')
+        print (user,pwd)
+        if user == 'freeman' and pwd == 'redhat':
+            ret['status'] = 1002
+        else:
+            ret['error']='Username oR password error'
+        return  HttpResponse(json.dumps(ret))
+    return render(request,'ajax.html')

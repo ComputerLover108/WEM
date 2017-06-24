@@ -12,6 +12,7 @@ from .models import 生产信息, 生产动态, LadingBill
 from .productionDaily import *
 from .productionMonthly import *
 from .loadingDaily import *
+import json
 import logging
 # logger = logging.getLogger(__name__)
 logger = logging.getLogger('django')
@@ -106,6 +107,10 @@ def toHtmlSelectMenu(selects, name):
     return result
 
 
+def ladingBillDataSave(request):
+    return HttpResponse(json.dump(data))
+
+
 def LadingBillForm(request):
     today = date.today().isoformat()
     Title = '提单'
@@ -124,6 +129,10 @@ def LadingBillForm(request):
     ]
     formInput.append(sp)
     formInput.append(sc)
+    # formInput += [
+    #     '<input type="text" name="产品" >',
+    #     '<input type="text" name="客户" >',
+    # ]
     formInput += [
         '<input type="number" min="0.00" max="1000.00" step="0.01" name="计划装车t">',
         '<input type="number" min="0.00" max="1000.00" step="0.01" name="实际装车t">',
@@ -131,7 +140,7 @@ def LadingBillForm(request):
         '<input type="number" min="0" max="100" name="装车数">',
         '<input type="text" name="备注">'
     ]
-    return render(request, 'dynamicForm.html', locals())
+    return render(request, 'ProcessProduction/LadingBillForm.html', locals())
 
 
 def ProductionDaily(request):
