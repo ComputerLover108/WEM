@@ -33,14 +33,14 @@
 
     }
 
-    function save() {
+    function dataAcquisition() {
         var dynamicTable = document.getElementById('dynamicTable');
         var data = new Array();
         for (var i = 1; i < dynamicTable.rows.length; i++) {
             var record = {}
             for (var j = 1; j < dynamicTable.rows[i].cells.length; j++) {
                 var x = dynamicTable.rows[i].cells[j].firstChild
-                    // console.log(x.nodeName,x.name)
+                console.log(x.nodeName,x.name)
                 switch (x.nodeName) {
                     case "INPUT":
                         record[x.name] = x.value;
@@ -55,6 +55,5 @@
             data.push(record);
         }
         // console.log(data);
-        alert(JSON.stringify(data));
-        return JSON.stringify(data)
+        return data
     }

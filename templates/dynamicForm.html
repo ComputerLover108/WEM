@@ -1,14 +1,14 @@
 {% extends "main.html" %}
-{% block hJS %}
-    <script src="/static/js/dynamicTable.js"></script>
-{% endblock hJS %} 
+ 
 {% block main-content %}
     <div class="col-md-10 col-md-offset-1" id="动态表格">
         <div>
-            <button type="button" class="btn btn-success" onclick="save()">保存</button>
-            <button type="button" class="btn btn-primary" onclick="clone()">复制尾行</button>           
+            
+            <button type="button" class="btn btn-primary" onclick="clone()">复制尾行</button>          
             <button type="button" class="btn btn-default" onclick="add()">添加空白行</button>
-            <button type="button" class="btn btn-danger" onclick="del()">删除</button>        
+            <button type="button" class="btn btn-warning" onclick="del()">删除</button>
+            <button type="button" class="btn btn-success" onclick="save()">保存</button>
+            <button type="button" class="btn btn-danger" onclick="save('isErase')">真实删除</button>        
         </div>
         <table id="dynamicTable" border="1" width="90%">
             <tr>
@@ -32,3 +32,6 @@
 
 
 {% endblock main-content %}
+{% block JS %}
+    <script src="/static/js/dynamicTable.js"></script>
+{% endblock JS %}

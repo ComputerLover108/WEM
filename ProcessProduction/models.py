@@ -38,12 +38,13 @@ class 生产动态(models.Model):
 
 
 class LadingBill(models.Model):
+    提单号 = models.CharField(max_length=32, primary_key=True)
     日期 = models.DateField()
-    提单号 = models.CharField(max_length=32)
     产品名称 = models.CharField(max_length=32)
     客户名称 = models.CharField(max_length=32)
     计划装车t = models.FloatField()
     实际装车t = models.FloatField()
+    实际装车m3 = models.FloatField(null=True)
     实际装车bbl = models.FloatField(null=True)
     装车数量 = models.IntegerField()
     备注 = models.TextField(blank=True)

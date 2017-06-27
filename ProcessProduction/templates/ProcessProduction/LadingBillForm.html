@@ -1,9 +1,9 @@
 {% extends "dynamicForm.html" %} 
 {% block CSS %}
-      
+  
 {% endblock CSS %}
 {% block hJS %}
-<script src="/static/js/dynamicTable.js"></script>
+<!-- <script src="/static/js/dynamicTable.js"></script> -->
 <script type="text/javascript">
     function add() {
         var otr = document.getElementById("dynamicTable").insertRow(-1);
@@ -18,31 +18,42 @@
         {% endfor %}
 
     }
-    // function save() {
-    //     var dynamicTable = document.getElementById('dynamicTable');
-    //     var data=new Array();
-    //     for(var i=1;i<dynamicTable.rows.length;i++){
-    //         var record={}
-    //         for(var j=1;j<dynamicTable.rows[i].cells.length;j++){
-    //             var x=dynamicTable.rows[i].cells[j].firstChild
-    //             // console.log(x.nodeName,x.name)
-    //             switch(x.nodeName){
-    //                 case "INPUT":
-    //                     record[x.name]=x.value;
-    //                     break;
-    //                 case "SELECT":
-    //                     record[x.name]=x.options[x.selectedIndex].value;
-    //                     break;
-    //                 default:
-    //                     record[x.name]="";
-    //             }             
-    //         }
-    //         data.push(record);
-    //     }
-    //     // console.log(data);
-    //     // alert(JSON.stringify(data));
-    //     return JSON.stringify(data)
-    // }
 
+    // $.ajaxSetup({ data: {csrfmiddlewaretoken: '{{ csrf_token }}' }, });
+   
+    function save(isErase){
+        var mydata;
+        switch (arguments.length) {
+        case 0:
+            mydata = {'save':dataAcquisition()}
+            break;
+        case 1:
+            mydata = {'delete':dataAcquisition()}
+            break;
+        }
+        mydata=JSON.stringify(mydata)
+        console.log(mydata);
+        $.ajax({
+            url:"{% url 'ladingBillForm' %}",
+            type:'POST',
+            dataType:"json",
+            contentType: "application/json; charset=utf-8",
+            headers: {'X-CSRFToken': '{{ csrf_token }}'}, 
+            data: mydata,
+            success:function(data){
+                if(isErase){
+                    alert('数据已删除！')
+                }
+                else{
+                    alert('数据已保存！')
+                }
+                result=JSON.parse(data)
+                console.log(result)
+            },
+            error:function(){
+                alert('操作失败！')
+            }
+        })                
+    }    
 </script>
 {% endblock hJS %} 

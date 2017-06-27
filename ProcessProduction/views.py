@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 from datetime import date, datetime, time
 
@@ -100,27 +100,25 @@ class LadingBillList(ListView):
 
 
 def toHtmlSelectMenu(selects, name):
-    result = '<select id="' + name + '">'
+    result = '<select name="{}">'.format(name)
     for x in selects:
-        result += '<option>' + x + '</option>'
+        x = '<option class="{}">{}</option>'.format(x, x)
+        result += x
     result += '</select>'
     return result
 
 
-def ladingBillDataSave(request):
-    return HttpResponse(json.dump(data))
-
-
-def LadingBillForm(request):
+# @csrf_exempt
+def ladingBillForm(request):
     today = date.today().isoformat()
     Title = '提单'
     names = ['日期', '提单号', '产品', '客户', '计划装车t',
-             '实际装车t', '实际装车bbl', '装车数', '备注']
+             '实际装车t', '实际装车m3', '实际装车bbl', '装车数', '备注']
     # SQL = 'select DISTINCT 产品名称 from 提单;'
-    products = LadingBill.objects.order_by('产品名称').distinct(
-        '产品名称').values_list('产品名称', flat=True)
-    customers = LadingBill.objects.order_by('客户名称').distinct(
-        '客户名称').values_list('客户名称', flat=True)
+    products = LadingBill.objects.distinct(
+        '产品名称').values_list('产品名称', flat=True).order_by('产品名称')
+    customers = LadingBill.objects.distinct(
+        '客户名称').values_list('客户名称', flat=True).order_by('客户名称')
     sp = toHtmlSelectMenu(products, '产品')
     sc = toHtmlSelectMenu(customers, '客户')
     formInput = [
@@ -136,10 +134,44 @@ def LadingBillForm(request):
     formInput += [
         '<input type="number" min="0.00" max="1000.00" step="0.01" name="计划装车t">',
         '<input type="number" min="0.00" max="1000.00" step="0.01" name="实际装车t">',
+        '<input type="number" min="0.00" max="3000.00" step="0.01" name="实际装车m3">',
         '<input type="number" min="0.0000" max="8000.0000" step="0.0001" name="实际装车bbl">',
         '<input type="number" min="0" max="100" name="装车数">',
         '<input type="text" name="备注">'
     ]
+    if request.method == "POST" and request.is_ajax():
+        rawData = request.body.decode("utf-8")
+        logger.info(rawData)
+        data = json.loads(rawData)
+        isErase = False
+        if 'save' in data.keys():
+            records = data['save']
+            # message = {'删除数据：': ''}
+        if 'delete' in data.keys():
+            isErase = True
+            records = data['delete']
+            # message = {'保存数据：': ''}
+        for record in records:
+            if record['日期'] and record['提单号'] and record['产品'] and record['客户'] and record['计划装车t'] and record['实际装车t'] and record['装车数']:
+                m = LadingBill()
+                m.日期 = record['日期']
+                m.提单号 = record['提单号']
+                m.产品名称 = record['产品']
+                m.客户名称 = record['客户']
+                m.计划装车t = float(record['计划装车t'])
+                m.实际装车t = float(record['实际装车t'])
+                if record['实际装车m3']:
+                    m.实际装车m3 = float(record['实际装车m3'])
+                if record['实际装车bbl']:
+                    m.实际装车bbl = float(record['实际装车bbl'])
+                m.装车数量 = int(record['装车数'])
+                m.备注 = record['备注']
+                logger.info(m)
+                if isErase:
+                    m.delete()
+                else:
+                    m.save()
+        return HttpResponse(json.dumps(records))
     return render(request, 'ProcessProduction/LadingBillForm.html', locals())
 
 
