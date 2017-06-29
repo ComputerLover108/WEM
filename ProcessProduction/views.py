@@ -14,6 +14,8 @@ from .productionMonthly import *
 from .loadingDaily import *
 import json
 import logging
+from pypinyin import pinyin, lazy_pinyin
+import pypinyin
 # logger = logging.getLogger(__name__)
 logger = logging.getLogger('django')
 
@@ -101,10 +103,20 @@ class LadingBillList(ListView):
 
 def toHtmlSelectMenu(selects, name):
     result = '<select name="{}">'.format(name)
+    result += '<option selected="selected"></option>'
     for x in selects:
         x = '<option class="{}">{}</option>'.format(x, x)
         result += x
     result += '</select>'
+    return result
+
+
+def arrange(temp):
+    logger.info(len(temp))
+    temp = [x.strip() for x in temp]
+    temp = list(set(temp))
+    result = sorted(temp, key=pinyin)
+    logger.info(len(result))
     return result
 
 
@@ -114,11 +126,16 @@ def ladingBillForm(request):
     Title = '提单'
     names = ['日期', '提单号', '产品', '客户', '计划装车t',
              '实际装车t', '实际装车m3', '实际装车bbl', '装车数', '备注']
-    # SQL = 'select DISTINCT 产品名称 from 提单;'
-    products = LadingBill.objects.distinct(
-        '产品名称').values_list('产品名称', flat=True).order_by('产品名称')
-    customers = LadingBill.objects.distinct(
-        '客户名称').values_list('客户名称', flat=True).order_by('客户名称')
+    SQL = 'select DISTINCT 产品名称 from 提单 order by 产品名称 collate "zh_CN.utf8";'
+
+    temp = LadingBill.objects.distinct(
+        '产品名称').values_list('产品名称', flat=True)
+    products = arrange(temp)
+
+    temp = LadingBill.objects.distinct(
+        '客户名称').values_list('客户名称', flat=True)
+    customers = arrange(temp)
+
     sp = toHtmlSelectMenu(products, '产品')
     sc = toHtmlSelectMenu(customers, '客户')
     formInput = [
