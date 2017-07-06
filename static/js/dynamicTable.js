@@ -40,7 +40,7 @@
             var record = {}
             for (var j = 1; j < dynamicTable.rows[i].cells.length; j++) {
                 var x = dynamicTable.rows[i].cells[j].firstChild
-                console.log(x.nodeName,x.name)
+                // console.log(x.nodeName,x.name)
                 switch (x.nodeName) {
                     case "INPUT":
                         record[x.name] = x.value;

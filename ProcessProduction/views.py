@@ -126,7 +126,7 @@ def ladingBillForm(request):
     Title = '提单'
     names = ['日期', '提单号', '产品', '客户', '计划装车t',
              '实际装车t', '实际装车m3', '实际装车bbl', '装车数', '备注']
-    SQL = 'select DISTINCT 产品名称 from 提单 order by 产品名称 collate "zh_CN.utf8";'
+    # SQL = 'select DISTINCT 产品名称 from 提单 order by 产品名称 collate "zh_CN.utf8";'
 
     temp = LadingBill.objects.distinct(
         '产品名称').values_list('产品名称', flat=True)
@@ -190,6 +190,45 @@ def ladingBillForm(request):
                     m.save()
         return HttpResponse(json.dumps(records))
     return render(request, 'ProcessProduction/LadingBillForm.html', locals())
+
+
+def SeaPipeData(request):
+    today = date.today()
+    Title = '海管数据'
+    names = ['时间', '压力MPa', '温度℃', '流量Nm3/h']
+    formInput = [
+        '<input type="datetime" name="时间" value="00:00" >',
+        '<input type="number" min="0.00" max="6.00" step="0.01" name="压力">',
+        '<input type="number" min="-50" max="60" step="1" name="温度">',
+        '<input type="number" min="0.00" max="50000" step="1" name="流量">',
+    ]
+    if request.method == "POST" and request.is_ajax():
+        rawData = request.body.decode("utf-8")
+        logger.info(rawData)
+        data = json.loads(rawData)
+        isErase = False
+        if 'save' in data.keys():
+            records = data['save']
+            # message = {'删除数据：': ''}
+        if 'delete' in data.keys():
+            isErase = True
+            records = data['delete']
+            # message = {'保存数据：': ''}
+        for record in records:
+            if record['时间'] and record['压力'] and record['温度']:
+                m = LadingBill()
+                m.时间 = record['时间']
+                m.压力 = record['压力']
+                m.温度 = record['温度']
+                if record['流量']:
+                    m.流量 = float(record['流量'])
+                logger.info(m)
+                if isErase:
+                    m.delete()
+                else:
+                    m.save()
+        return HttpResponse(json.dumps(records))
+    return render(request, 'ProcessProduction/SeaPipeData.html', locals())
 
 
 def ProductionDaily(request):
