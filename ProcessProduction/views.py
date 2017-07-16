@@ -12,6 +12,7 @@ from .models import 生产信息, 生产动态, LadingBill
 from .productionDaily import *
 from .productionMonthly import *
 from .loadingDaily import *
+from .forms import QuickInputForm,AllocationForm
 import json
 import logging
 from pypinyin import pinyin, lazy_pinyin
@@ -308,3 +309,25 @@ def productionReview(request):
     for x in inventory:
         inventory[x] = mend(inventory[x], dt, 0)
     return render(request, 'ProcessProduction/productionReview.html', locals())
+
+#配产
+def proration(request):
+    title='配产任务'
+    today=date.today()
+    if request.method == 'POST':
+        form = AllocationForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('/thanks/')
+    else:
+        form = AllocationForm()
+
+    return render(request, 'ProcessProduction/proration.html', locals())
+#快速录入
+def quickInput(request):
+    if request.method == 'POST':
+        form = QuickInputForm(request.POST)
+        if form.is_valid():
+            return render(request, 'ProcessProduction/ProductionDaily.html', locals())
+        else:
+            form = QuickInputForm()
+    return render(request,'ProcessProduction/quickInput.html',locals())

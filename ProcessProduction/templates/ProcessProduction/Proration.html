@@ -1,21 +1,35 @@
-﻿{% extends "main.html" %}
-{% block title %}{{title}}{% endblock title %}
-{% block content %}
-	<!-- 主体 -->
-	<div class="container-fluid" >     
-        <form class="form-horizontal" action="{% url '配产' %}" method="post">
-        {% csrf_token %}
-            <div class="row">
-                <div class="form-group">
-                    <div class="col-md-5">
-                        <h1 class="bg-danger">请按制表键[tab](键盘Q字母左边)，输入下一个数据</h1>
-                    </div>
-                    <div class="col-md-2 ">
-                        <button type="submit" class="btn btn-primary btn-block" >保存</button>
-                    </div>
-                </div>
-            </div>
-            {% include "form_snippet.html" %}
-        </form>
-	</div>		
-{% endblock content%}
+{% extends "main.html" %} 
+{% block title %}{{title}}{% endblock title %} 
+{% block main-content %}
+<form action="{% url 'proration'  %}" method="post">
+    <div class="col-md-10">
+    <input type="date" name="日期" value={{today}} />
+    <table class="table table-bordered">
+        <tr>
+            <th>名称</th>
+            <th>月配产</th>
+            <th>年配产</th>
+        </tr>
+        <tr>
+            <td>天然气104Nm3</td>
+            <td><input type="text" name="天然气月配产"  required /></td>
+            <td><input type="text" name="天然气年配产"  required /></td>
+        </tr>
+        <tr>
+            <td>轻油104m3</td>
+            <td><input type="text" name="轻油月配产"  required /></td>
+            <td><input type="text" name="轻油年配产"  required /></td>
+        </tr>
+        <tr>
+            <td>轻烃104m3</td>
+            <td><input type="text" name="轻烃月配产"  required /></td>
+            <td><input type="text" name="轻烃年配产"  required /></td>
+        </tr>
+    </table>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary btn-block" >提交</button>
+    </div>
+
+</form>
+{% endblock main-content %}

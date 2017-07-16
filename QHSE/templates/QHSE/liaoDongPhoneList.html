@@ -1,0 +1,50 @@
+{% extends "recordView.html" %}
+
+{% block main-content %} 
+        <div class="col-md-10 ">
+            <table class="table table-bordered ">
+                <tr>
+                    <th>姓名</th>
+                    <th>电话</th>
+                    <th>手机</th>
+                    <th>电邮</th>
+                    <th>单位</th>
+                    <th>部门</th>
+                    <th>岗位</th>                    
+                    <th>办公地点</th>
+                    <th>备注</th>                    
+                </tr>
+                {% for liaoDongPhone in object_list %}
+                    <tr>                   
+                        <td>
+                            {{ liaoDongPhone.姓名|default:"" }}
+                        </td>
+                        <td>
+                            {{ liaoDongPhone.电话|default:"" }}
+                        </td>
+                        <td>
+                            {{ liaoDongPhone.手机|default:"" }}
+                        </td>                    
+                        <td>
+                            {{ liaoDongPhone.电邮|default:"" }}
+                        </td>
+                        <td>
+                            {{ liaoDongPhone.单位|default:"" }}
+                        </td>
+                        <td>
+                            {{ liaoDongPhone.部门|default:"" }}
+                        </td>
+                        <td>
+                            {{ liaoDongPhone.岗位|default:"" }}
+                        </td>                        
+                        <td>
+                            {{ liaoDongPhone.办公地点|default:"" }}
+                        </td>
+                        <td>
+                            {{ liaoDongPhone.备注|default:"" }}
+                        </td>
+                    </tr>          
+                {% endfor %}
+            </table>
+        </div> 
+{% endblock %} 

@@ -101,10 +101,10 @@ DATABASES = {
         'NAME': 'HLD',
         'USER': 'operator',
         'PASSWORD': '5302469',
-        'HOST': '127.0.0.1',
+        # 'HOST': '127.0.0.1',
         # 'HOST': 'localhost',
         # 'HOST': '10.30.29.80',
-        #'HOST': '192.168.0.122',
+        'HOST': '192.168.0.122',
         'PORT': '2012',
     }    
 }
