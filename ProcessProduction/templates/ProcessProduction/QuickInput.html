@@ -1,120 +1,226 @@
 ﻿{% extends "main.html" %}
+{% block CSS %}
+    td{
+        text-align:center;
+        vertical-align:middle;
+    }
+{% endblock CSS %}
 {% block title %}{{title}}{% endblock title %}
 
-{% block content %}
+{% block main-content %}
 	<!-- 主体 -->
-	<div class="container-fluid" >     
-        <form class="form-horizontal" action="{% url '生产日报'  %}" method="post">
+<form  action="{% url 'quickInput'  %}" method="post">
         {% csrf_token %}
             <div class="row">
-                <div clas="form-group">
-                `   <label for="日期" class="col-md-3 control-label">日期</label>
+                `   <label for="日期" class="col-md-3">日期</label>
                     <div class="col-md-2">
-                        <input type="date" class="form-control" placeholder={{Date}}>
+                        <input type="date"  value="{{today|date:"Y-m-d"}}"/>
                     </div>
                     <div class="col-md-1">
                         <button type="submit" class="btn btn-primary btn-block" >保存</button>
                     </div>
-                </div>
             </div>
 
-        </form>
-        <div class="col-md-6">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>            
-                        <th>类别</th>
-                        <th>名称</th>
-                        <th>数据</th>
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <!--上游-->
+                    <tr>
+                        <td rowspan="3" id="上游" >上游</td>
+                        <td>JZ20-2体系Nm<sup>3</sup></td>
+                        <td>
+                            <input type="text" name="JZ202体系" />
+                        </td>
                     </tr>
-                </thead>
-                <tbody>                   
-                    {% for v in categorys %}
-                        {% if v == "天然气" %}
-                            {% for x in 天然气 %}
-                                <tr>
-                                {% if forloop.first %}<td rowspan="{{天然气|length}}">天然气</td>{% endif %} 
-                                 
-                                <td>{{x}}</td>
-                                <td><input type="number" name="{{x}}"  class="form-control" placeholder="数据"></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                        {% if v == "轻油" %}
-                            {% for x in 轻油 %}
-                                <tr>
-                                {% if forloop.first %}<td rowspan="{{轻油|length}}">轻油</td>{% endif %} 
-                                 
-                                <td>{{x}}</td>
-                                <td><input type="number" name="{{x}}"  class="form-control" placeholder="数据"></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                        {% if v == "轻烃" %}
-                            {% for x in 轻烃 %}
-                                <tr>
-                                {% if forloop.first %}<td rowspan="{{轻烃|length}}">轻烃</td>{% endif %} 
-                                 
-                                <td>{{x}}</td>
-                                <td><input type="number" name="{{x}}"  class="form-control" placeholder="数据"></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                        {% if v == "化学药剂" %}
-                            {% for x in 化学药剂 %}
-                                <tr>
-                                {% if forloop.first %}<td rowspan="{{化学药剂|length}}">化学药剂</td>{% endif %} 
-                                 
-                                <td>{{x}}</td>
-                                <td><input type="number" name="{{x}}"  class="form-control" placeholder="数据"></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                        {% if v == "水" %}
-                            {% for x in 水 %}
-                                <tr>
-                                {% if forloop.first %}<td rowspan="{{水|length}}">水</td>{% endif %} 
-                                 
-                                <td>{{x}}</td>
-                                <td><input type="number" name="{{x}}"  class="form-control" placeholder="数据"></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}                        
-                        {% if v == "电" %}
-                            {% for x in 电 %}
-                                <tr>
-                                {% if forloop.first %}<td rowspan="{{电|length}}">电</td>{% endif %} 
-                                 
-                                <td>{{x}}</td>
-                                <td><input type="number" name="{{x}}"  class="form-control" placeholder="数据"></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                        {% if v == "数据库" %}
-                            {% for x in 数据库 %}
-                                <tr>
-                                {% if forloop.first %}<td rowspan="{{数据库|length}}">数据库</td>{% endif %} 
-                                 
-                                <td>{{x}}</td>
-                                <td><input type="number" name="{{x}}"  class="form-control" placeholder="数据"></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}                        
-                        {% if v == "上游" %}
-                            {% for x in 上游 %}
-                                <tr>
-                                {% if forloop.first %}<td rowspan="{{上游|length}}">上游</td>{% endif %} 
-                                 
-                                <td>{{x}}</td>
-                                <td><input type="number" name="{{x}}"  class="form-control" placeholder="数据"></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                       
+                    <tr>
+                        <td>JZ20-2凝析油m<sup>3</sup></td>
+                        <td>
+                            <input type="text" name="JZ20-2凝析油" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>JZ20-2凝析油密度kg/m<sup>3</sup></td>
+                        <td>
+                            <input type="text" name="JZ202凝析油密度" />
+                        </td>
+                    </tr>
+                    <!--天然气-->
+                    <tr>
+                        <td rowspan="8" id="天然气">天然气</td>
+                        <td>稳定区Nm<sup>3</sup></td>
+                        <td>
+                            <input type="text" name="稳定区" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>入厂计量Nm<sup>3</sup></td>
+                        <td><input type="text" name="入厂计量" /> </td>
+                    </tr>
+                    <tr>
+                        <td>锦天化Nm<sup>3</sup></td>
+                        <td><input type="text" name="锦天化" /> </td>
+                    </tr>
+                    <tr>
+                        <td>精细化工CNGNm<sup>3</sup></td>
+                        <td><input type="text" name="精细化工CNG" /> </td>
+                    </tr>
+                    <tr>
+                        <td>精细化工Nm<sup>3</sup></td>
+                        <td><input type="text" name="精细化工" /> </td>
+                    </tr>
+                    <tr>
+                        <td>污水处理厂Nm<sup>3</sup></td>
+                        <td><input type="text" name="污水处理厂" /> </td>
+                    </tr>
+                    <tr>
+                        <td>新奥燃气Nm<sup>3</sup></td>
+                        <td><input type="text" name="新奥燃气" /> </td>
+                    </tr>
+                    <tr>
+                        <td>自用气Nm<sup>3</sup></td>
+                        <td><input type="text" name="自用气" /> </td>
+                    </tr>
+                    <!--轻油-->
+                    <tr>
+                        <td rowspan="3" id="轻油">轻油</td>
+                        <td>V-631A液位m</td>
+                        <td><input type="text" name="V631A液位" /></td>
+                    </tr>
+                    <tr>
+                        <td>V-631B液位m</td>
+                        <td><input type="text" name="V631B液位" /></td>
+                    </tr>
+                    <tr>
+                        <td>V-631C液位m</td>
+                        <td><input type="text" name="V631C液位" /></td>
+                    </tr>
+                    <!--轻烃-->
+                    <tr>
+                        <td rowspan="5" id="轻烃">轻烃</td>
+                        <td>V-641A液位m</td>
+                        <td><input type="text" name="V641A液位" /></td>
+                    </tr>
+                    <tr>
+                        <td>V-641B液位m</td>
+                        <td><input type="text" name="V641B液位" /></td>
+                    </tr>
+                    <tr>
+                        <td>V-642液位m</td>
+                        <td><input type="text" name="V642液位" /></td>
+                    </tr>
+                    <tr>
+                        <td>V-643A液位m</td>
+                        <td><input type="text" name="V643A液位" /></td>
+                    </tr>
+                    <tr>
+                        <td>V-643B液位m</td>
+                        <td><input type="text" name="V643B液位" /></td>
+                    </tr>
+                    <!--数据库-->
+                    <tr>
+                        <td rowspan="2" id="数据库">数据库</td>
+                        <td>数据库轻油回收量m<sup>3</sup></td>
+                        <td><input type="text" name="数据库轻油回收量" /></td>
+                    </tr>
+                    <tr>
+                        <td>数据库轻烃回收量m<sup>3</sup></td>
+                        <td><input type="text" name="数据库轻烃回收量" /></td>
+                    </tr>
+                    <!--化学药剂-->
+                    <tr>
+                        <td rowspan="2" id="化学药剂">化学药剂</td>
+                        <td>甲醇消耗m<sup>3</sup></td>
+                        <td><input type="text" name="甲醇消耗" /> </td>
+                    </tr>
+                    <tr>
+                        <td>乙二醇消耗m<sup>3</sup></td>
+                        <td><input type="text" name="乙二醇消耗" /></td>
+                    </tr>
+                    <!--水-->
+                    <tr>
+                        <td rowspan="4" id="水">水</td>
+                        <td>外供水m<sup>3</sup></td>
+                        <td><input type="text" name="外供水" /></td>
+                    </tr>
+                    <tr>
+                        <td>自采水m<sup>3</sup></td>
+                        <td><input type="text" name="自采水" </td>
+                    </tr>
+                    <tr>
+                        <td>污水外排m<sup>3</sup></td>
+                        <td><input type="text" name="污水外排" </td>
+                    </tr>
+                    <tr>
+                        <td>水池水位m</td>
+                        <td><input type="text" name="水池水位" </td>
+                    </tr>
+                    <!--电-->
+                    <tr>
+                        <td rowspan="2" id="电">电</td>
+                        <td>外供电KWh</td>
+                        <td><input type="text" name="外供电" /></td>
+                    </tr>
+                    <tr>
+                        <td>自发电KWh</td>
+                        <td><input type="text" name="自发电" /> </td>
+                    </tr>
+                    <!--备注-->
+                    <tr>
+                        <td rowspan="2" id="备注">备注</td>
+                        <td>海管通球备注</td>
+                        <td><input type="text" name="海管通球备注" /></td>
+                    </tr>
+                    <tr>
+                        <td>生产备注</td>
+                        <td><input type="text" name="生产备注" /></td>
+                    </tr>
+                    <!--非生产日报数据-->
+                    <tr>
+                        <td rowspan="3" id="生产动态">生产动态</td>
+                        <td>FIQ-6102 m<sup>3</sup></td>
+                        <td><input type="text" name="FIQ6102" /></td>
+                    </tr>
+                    <tr>
+                        <td>FIQ-5014 KNm<sup>3</sup> (热油炉)</td>
+                        <td><input type="text" name="FIQ5014" /> </td>
+                    </tr>
+                    <tr>
+                        <td>FIQ-2043 Nm<sup>3</sup> (V-502)</td>
+                        <td><input type="text" name="FIQ2043" /></td>
+                    </tr>
+                </table>
+            </div>
 
-                    {% endfor %}                   
-                </tbody>
-            </table>
-        </div>    
-	</div>		
-{% endblock content%}
+            <div class="col-md-6">
+                <h3>相关数据</h3>
+                <table class="table table-bordered">
+                    <tr>
+                        <td rowspan="2" id="海管">海管</td>
+                        <td>海管进出/口压力MP<sub>a</sub></td>
+                        <td>
+                            <input type="text" name="海管进口压力" />
+                        </td>
+                        <td>
+                            <input type="text" name="海管出口压力" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>海管进/口温度</td>
+                        <td>
+                            <input type="text" name="海管进口温度" />
+                        </td>
+                        <td>
+                            <input type="text" name="海管出口温度" />
+                        </td>
+                    </tr>
+                    <!--<tr>-->
+                        <!--<td>海管通球备注</td>-->
+                        <!--<td>-->
+                            <!--<input type="text" name="海管通球备注" />-->
+                        <!--</td>-->
+                    <!--</tr>-->
+                </table>
+            </div>
+        </div>
+</form>
+{% endblock main-content%}

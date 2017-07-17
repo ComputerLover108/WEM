@@ -12,7 +12,7 @@ from .models import 生产信息, 生产动态, LadingBill
 from .productionDaily import *
 from .productionMonthly import *
 from .loadingDaily import *
-from .forms import QuickInputForm,AllocationForm
+from .forms import QuickInputForm,ProrationForm
 import json
 import logging
 from pypinyin import pinyin, lazy_pinyin
@@ -315,15 +315,24 @@ def proration(request):
     title='配产任务'
     today=date.today()
     if request.method == 'POST':
-        form = AllocationForm(request.POST)
+        form = ProrationForm(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect('/thanks/')
+            data['天然气月配产'] = form.cleaned_data['天然气月配产']
+            data['天然气年配产'] = form.cleaned_data['天然气年配产']
+            data['轻油月配产'] = form.cleaned_data['轻油月配产']
+            data['轻油年配产'] = form.cleaned_data['轻油年配产']
+            data['轻烃月配产'] = form.cleaned_data['轻烃月配产']
+            data['轻烃年配产'] = form.cleaned_data['轻烃年配产']
+            data['日期'] = form.cleaned_data['日期']
+            print(data)
+            return render(request, 'ProcessProduction/ProductionDaily.html', locals())
     else:
-        form = AllocationForm()
-
+        form = ProrationForm()
     return render(request, 'ProcessProduction/proration.html', locals())
 #快速录入
 def quickInput(request):
+    title='快速录入'
+    today=date.today()
     if request.method == 'POST':
         form = QuickInputForm(request.POST)
         if form.is_valid():

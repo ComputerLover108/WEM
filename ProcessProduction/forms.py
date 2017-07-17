@@ -2,7 +2,7 @@ from django.forms import modelformset_factory
 from django import forms
 from datetime import date
 # 配产
-class AllocationForm(forms.Form):
+class ProrationForm(forms.Form):
     日期 = forms.DateField()
     天然气月配产=forms.FloatField()
     天然气年配产=forms.FloatField()
@@ -54,8 +54,8 @@ class QuickInputForm(forms.Form):
     污水 = forms.FloatField()
     水池水位m = forms.FloatField()
 # 电
-    日外供电量= forms.FloatField()
-    日自发电量= forms.FloatField()
+    外供电= forms.FloatField()
+    自发电= forms.FloatField()
 # 备注
     生产备注= forms.CharField(max_length=256)
 # 非日报数据
