@@ -4,8 +4,9 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         {% csrf_token %}
+        <!--{{form.as_table}}-->
         <form action="{% url 'proration'  %}" method="post">
-            <input type="date" name="日期" value={{today|date:"Y-m-d"}} />
+            <input type="date" id="日期" value={{today|date:"Y-m-d"}} />
             <table class="table table-bordered">
                 <tr>
                     <th>名称</th>
@@ -14,18 +15,18 @@
                 </tr>
                 <tr>
                     <td>天然气10<sup>4</sup>Nm<sup>3</sup></td>
-                    <td><input type="text" name="天然气月配产"  required /></td>
-                    <td><input type="text" name="天然气年配产"  required /></td>
+                    <td><input type="number" name="天然气月配产" id="天然气月配产"  required /></td>
+                    <td><input type="number" name="天然气年配产" id="天然气年配产" required /></td>
                 </tr>
                 <tr>
                     <td>轻油10<sup>4</sup>m<sup>3</sup></td>
-                    <td><input type="text" name="轻油月配产"  required /></td>
-                    <td><input type="text" name="轻油年配产"  required /></td>
+                    <td><input type="number" id="轻油月配产" name="轻油月配产"  required /></td>
+                    <td><input type="number" id="轻油年配产" name="轻油年配产"  required /></td>
                 </tr>
                 <tr>
                     <td>轻烃10<sup>4</sup>m<sup>3</sup></td>
-                    <td><input type="text" name="轻烃月配产"  required /></td>
-                    <td><input type="text" name="轻烃年配产"  required /></td>
+                    <td><input type="number" id="轻烃月配产" name="轻烃月配产"  required /></td>
+                    <td><input type="number" id="轻烃年配产" name="轻烃年配产"  required /></td>
                 </tr>
             </table>
         </form>

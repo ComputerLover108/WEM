@@ -314,8 +314,11 @@ def productionReview(request):
 def proration(request):
     title='配产任务'
     today=date.today()
+    logger.info('request.method is {}'.format(request.method))
+    logger.info(request)
     if request.method == 'POST':
         form = ProrationForm(request.POST)
+        logger.info(form.is_valid())
         if form.is_valid():
             data['天然气月配产'] = form.cleaned_data['天然气月配产']
             data['天然气年配产'] = form.cleaned_data['天然气年配产']
@@ -324,8 +327,7 @@ def proration(request):
             data['轻烃月配产'] = form.cleaned_data['轻烃月配产']
             data['轻烃年配产'] = form.cleaned_data['轻烃年配产']
             data['日期'] = form.cleaned_data['日期']
-            print(data)
-            return render(request, 'ProcessProduction/ProductionDaily.html', locals())
+            return HttpResponseRedirect('/')
     else:
         form = ProrationForm()
     return render(request, 'ProcessProduction/proration.html', locals())

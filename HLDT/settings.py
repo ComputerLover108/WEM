@@ -26,7 +26,7 @@ SECRET_KEY = 'aj2o)&gfkz*twkq7_f_-4igws$ep==a(2l-3=e2vde1-kct07i'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+INTERNAL_IPS = ('127.0.0.1',)
 
 # Application definition
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ProcessProduction',
     'EquipmentMaintenance',
     'QHSE',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -53,6 +54,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'HLDT.urls'
