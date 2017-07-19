@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.db.models import Q
 from datetime import date, datetime, time
 
@@ -14,11 +14,8 @@ from .productionMonthly import *
 from .loadingDaily import *
 from .forms import QuickInputForm,ProrationForm
 import json
-import logging
+
 from pypinyin import pinyin, lazy_pinyin
-import pypinyin
-# logger = logging.getLogger(__name__)
-logger = logging.getLogger('django')
 
 # Create your views here.
 
@@ -113,11 +110,11 @@ def toHtmlSelectMenu(selects, name):
 
 
 def arrange(temp):
-    logger.info(len(temp))
+   
     temp = [x.strip() for x in temp]
     temp = list(set(temp))
     result = sorted(temp, key=pinyin)
-    logger.info(len(result))
+
     return result
 
 
@@ -159,7 +156,7 @@ def ladingBillForm(request):
     ]
     if request.method == "POST" and request.is_ajax():
         rawData = request.body.decode("utf-8")
-        logger.info(rawData)
+
         data = json.loads(rawData)
         isErase = False
         if 'save' in data.keys():
@@ -184,7 +181,7 @@ def ladingBillForm(request):
                     m.实际装车bbl = float(record['实际装车bbl'])
                 m.装车数量 = int(record['装车数'])
                 m.备注 = record['备注']
-                logger.info(m)
+
                 if isErase:
                     m.delete()
                 else:
@@ -205,7 +202,7 @@ def SeaPipeData(request):
     ]
     if request.method == "POST" and request.is_ajax():
         rawData = request.body.decode("utf-8")
-        logger.info(rawData)
+
         data = json.loads(rawData)
         isErase = False
         if 'save' in data.keys():
@@ -223,7 +220,7 @@ def SeaPipeData(request):
                 m.温度 = record['温度']
                 if record['流量']:
                     m.流量 = float(record['流量'])
-                logger.info(m)
+
                 if isErase:
                     m.delete()
                 else:
@@ -243,7 +240,7 @@ def ProductionMonthly(request):
     Title = '葫芦岛天然气终端厂生产月报'
     sd = request.GET.get('productionMonthlyDate')
     data = getProductionMonthlyData(sd)
-    # logger.info(data.keys())
+
     return render(request, 'ProcessProduction/ProductionMonthly.html', locals())
 
 
@@ -314,11 +311,9 @@ def productionReview(request):
 def proration(request):
     title='配产任务'
     today=date.today()
-    logger.info('request.method is {}'.format(request.method))
-    logger.info(request)
+    data={}
     if request.method == 'POST':
         form = ProrationForm(request.POST)
-        logger.info(form.is_valid())
         if form.is_valid():
             data['天然气月配产'] = form.cleaned_data['天然气月配产']
             data['天然气年配产'] = form.cleaned_data['天然气年配产']
@@ -326,8 +321,21 @@ def proration(request):
             data['轻油年配产'] = form.cleaned_data['轻油年配产']
             data['轻烃月配产'] = form.cleaned_data['轻烃月配产']
             data['轻烃年配产'] = form.cleaned_data['轻烃年配产']
-            data['日期'] = form.cleaned_data['日期']
-            return HttpResponseRedirect('/')
+            日期 = form.cleaned_data['日期']
+            数据源 = request.user.username+'@'+request.META['REMOTE_ADDR']
+            print(data,数据源,request.user.username)
+            for k,v in data.items():
+                record = 生产信息()
+                record.日期 = 日期
+                record.名称 = k
+                record.单位 = '方'
+                record.数据 = v*10000
+                record.类别 = k[:-3]
+                record.状态 = '计划'
+                record.数据源 = 数据源
+                record.save()
+            s='数据提交成功！'
+            return HttpResponse(s)
     else:
         form = ProrationForm()
     return render(request, 'ProcessProduction/proration.html', locals())
@@ -338,7 +346,11 @@ def quickInput(request):
     if request.method == 'POST':
         form = QuickInputForm(request.POST)
         if form.is_valid():
-            return render(request, 'ProcessProduction/ProductionDaily.html', locals())
+            data['日期'] = form.cleaned_data['日期']
+            data['JZ202体系'] = form.cleaned_data['JZ202体系']
+            # print(form.cleaned_data)
+            print(data)
+            return HttpResponseRedirect('/')
         else:
             form = QuickInputForm()
     return render(request,'ProcessProduction/quickInput.html',locals())
