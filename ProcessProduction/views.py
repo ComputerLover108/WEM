@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.db.models import Q
 from datetime import date, datetime, time
-
+from django.contrib.auth.decorators import permission_required,login_required
 from django.views.generic import ListView
 from django.db.models import Q
 from django.db import connection
@@ -308,6 +308,8 @@ def productionReview(request):
     return render(request, 'ProcessProduction/productionReview.html', locals())
 
 #配产
+@login_required(login_url='/Account/login')
+@permission_required('生产信息.add', login_url='/Account/login')
 def proration(request):
     title='配产任务'
     today=date.today()
@@ -323,17 +325,19 @@ def proration(request):
             data['轻烃年配产'] = form.cleaned_data['轻烃年配产']
             日期 = form.cleaned_data['日期']
             数据源 = request.user.username+'@'+request.META['REMOTE_ADDR']
-            print(data,数据源,request.user.username)
+            单位 = '方'
+            状态 = '计划'
+            with connection.cursor() as cursor:
+                cursor.execute("update 生产信息 set 备注='' where 备注 is null;")
+                cursor.execute("delete from 生产信息 where 日期=%s and 状态=%s ;",[日期,状态])
             for k,v in data.items():
-                record = 生产信息()
-                record.日期 = 日期
-                record.名称 = k
-                record.单位 = '方'
-                record.数据 = v*10000
-                record.类别 = k[:-3]
-                record.状态 = '计划'
-                record.数据源 = 数据源
-                record.save()
+                名称=k
+                数据=v*10000
+                类别=k[:-3]
+                with connection.cursor() as cursor:
+                    cursor.execute("insert into 生产信息 (日期,名称,单位,数据,类别,状态,数据源) values (%s,%s,%s,%s,%s,%s,%s)",[日期,名称,单位,数据,类别,状态,数据源])
+                # record = 生产信息(日期=日期, 名称=k, 单位='方', 数据=v * 10000, 类别=k[:-3], 状态='计划', 数据源=数据源)
+                # record.save()
             s='数据提交成功！'
             return HttpResponse(s)
     else:

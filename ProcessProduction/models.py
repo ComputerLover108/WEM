@@ -4,20 +4,23 @@ from django.db import models
 
 
 class 生产信息(models.Model):
-    id = models.AutoField(primary_key=True)
     日期 = models.DateField()
     名称 = models.CharField(max_length=32)
     单位 = models.CharField(max_length=32, blank=True)
     数据 = models.FloatField(null=True)
     类别 = models.CharField(max_length=32)
     状态 = models.CharField(max_length=32)
-    备注 = models.TextField(blank=True)
+    备注 = models.TextField(blank=True,)
     月累 = models.FloatField(null=True)
     年累 = models.FloatField(null=True)
     数据源 = models.TextField(blank=True)
 
     class Meta:
         db_table = '生产信息'
+        # unique_together = ('日期', '名称','单位','类别','状态','备注')
+    def __str__(self):
+        s = str(self.日期)+':'+self.名称+'['+self.单位+']'+self.备注
+        return s
 
 
 class 生产动态(models.Model):
@@ -30,7 +33,7 @@ class 生产动态(models.Model):
 
     class Meta:
         db_table = '生产动态'
-##            unique_together = ("时间", "名称","单位")
+        # unique_together = ("时间", "名称","单位")
 
     def __str__(self):
         s = str(self.时间) + ':' + self.名称 + '[' + self.单位 + ']'
