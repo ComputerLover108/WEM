@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import json
 # from ProcessProduction.views import ProductionDataMonth
-from ProcessProduction.models import 生产信息
+from ProcessProduction.models import ProductionData
 from django.db import connection
 from datetime import date
 

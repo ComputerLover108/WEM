@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-class 生产信息(models.Model):
+class ProductionData(models.Model):
     日期 = models.DateField()
     名称 = models.CharField(max_length=32)
     单位 = models.CharField(max_length=32, blank=True)
@@ -23,7 +23,7 @@ class 生产信息(models.Model):
         return s
 
 
-class 生产动态(models.Model):
+class ProductionStatus(models.Model):
     时间 = models.DateTimeField()
     名称 = models.CharField(max_length=32)
     单位 = models.CharField(max_length=32)

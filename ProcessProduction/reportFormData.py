@@ -3,7 +3,7 @@ from django.db import connection
 from datetime import date,timedelta
 import time
 from math import pi
-from .models import 生产信息
+from .models import ProductionData
 import re
 
 # Category = ['天然气','轻油','丙丁烷','化学药剂','水','电','海管']
@@ -24,9 +24,9 @@ def getFieldValues(Table,FieldName):
 def getData(date,name,unit,category,state,remark=None):
     # print('date={},name={},unit={},category={},state={}'.format(date,name,unit,category,state))
     if remark:
-        records=生产信息.objects.filter(Q(日期=date),Q(名称=name),Q(单位=unit),Q(类别=category),Q(状态=state),Q(备注=remark))
+        records=ProductionData.objects.filter(Q(日期=date), Q(名称=name), Q(单位=unit), Q(类别=category), Q(状态=state), Q(备注=remark))
     else:
-        records=生产信息.objects.filter(Q(日期=date),Q(名称=name),Q(单位=unit),Q(类别=category),Q(状态=state))
+        records=ProductionData.objects.filter(Q(日期=date), Q(名称=name), Q(单位=unit), Q(类别=category), Q(状态=state))
     if len(records) == 1:
         data = records[0]
         return data
@@ -42,7 +42,7 @@ def getDistributionData(context,date):
     }
     unit = '方'
     state = '计划'
-    Category = getFieldValues(生产信息,'类别')
+    Category = getFieldValues(ProductionData, '类别')
     cursor = connection.cursor()
     for name in Name:
         cursor.execute("select 数据 from 生产信息 where 日期=%s and 名称=%s and 状态=%s;",[date,name,state])
@@ -53,7 +53,7 @@ def getDistributionData(context,date):
 
 def getSeaPipeData(context,date):
     category = '海管'
-    records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
+    records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     for record in records :
 #       print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
        pattern = '海管(MEG浓度|出口PH值|出口凝点|来液含水|来液密度)'
@@ -73,7 +73,7 @@ def getSeaPipeData(context,date):
 
 def getUpstreamData(context,date):
     category = '上游'
-    records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
+    records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     for record in records:
         if re.match('JZ20-2凝析油',record.名称) :
             # print('{}\t{}\t{}'.format(record.名称,record.单位,record.数据))
@@ -89,7 +89,7 @@ def getUpstreamData(context,date):
 def getGasData(context,date):
     unit = '方'
     category = '天然气'
-    records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
+    records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     Name = {
         '稳定区',
         '入厂计量',
@@ -115,7 +115,7 @@ def getGasData(context,date):
 
 def getOilData(context,date):
     category = '轻油'
-    records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
+    records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     x=y='-'
     for record in records:
 #        print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
@@ -166,7 +166,7 @@ def getOilData(context,date):
 
 def getHydrocarbonData(context,date):
     category = '丙丁烷'
-    records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
+    records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     for record in records:
 #        print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
         pattern = 'V-64([13][AB]|2)'
@@ -191,7 +191,7 @@ def getHydrocarbonData(context,date):
 
 def getChemicalsData(context,date):
     category = '化学药剂'
-    records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
+    records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     for record in records:
 #        print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
         pattern = '甲醇消耗|乙二醇消耗|乙二醇回收'
@@ -205,7 +205,7 @@ def getChemicalsData(context,date):
 
 def getWaterData(context,date):
     category = '水'
-    records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
+    records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     for record in records:
 #        print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
         pattern = '外供水|自采水'
@@ -220,7 +220,7 @@ def getWaterData(context,date):
 
 def getPowerData(context,date):
     category = '电'
-    records = 生产信息.objects.filter(Q(日期=date),Q(类别=category))
+    records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     for record in records:
         pattern = '外供电|自发电'
         if re.match(pattern,record.名称) :
@@ -231,7 +231,7 @@ def getPowerData(context,date):
 
 def getRemark(context,date):
     names = ['上下游12吋海管通球','生产备注']
-    records = 生产信息.objects.filter(Q(日期=date),Q(名称__in=names))
+    records = ProductionData.objects.filter(Q(日期=date), Q(名称__in=names))
     for record in records :
         context[record.名称] = record.备注
 

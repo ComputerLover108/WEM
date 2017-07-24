@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.db import connection
 
 from .productionData import *
-from .models import 生产信息, 生产动态, LadingBill
+from .models import ProductionData, ProductionStatus, LadingBill
 from .productionDaily import *
 from .productionMonthly import *
 from .loadingDaily import *
@@ -46,13 +46,13 @@ def index(request):
 
 class ProductionDataList(ListView):
     template_name = "ProcessProduction/ProductionDataList.html"
-    model = 生产信息
+    model = ProductionData
     fields = ['日期', '名称', '单位', '数据', '类别', '状态', '备注', '月累', '年累']
     context_object_name = 'ProductionDataList'
     paginate_by = 16
 
     def get_queryset(self):
-        queryset = 生产信息.objects.all().order_by('-日期', '状态', '类别', '单位', '名称', '备注')
+        queryset = ProductionData.objects.all().order_by('-日期', '状态', '类别', '单位', '名称', '备注')
         # keyword = self.request.GET.get('keyword')
         # if keyword :
         #     queryset = 生产信息.objects.filter(Q(地点__icontains=keyword)|Q(电话__icontains=keyword)|Q(备注__icontains=keyword)).order_by('地点','电话')
@@ -66,12 +66,12 @@ class ProductionDataList(ListView):
 
 class ProductionStatusList(ListView):
     template_name = "ProcessProduction/ProductionStatusList.html"
-    model = 生产动态
+    model = ProductionStatus
     context_object_name = 'ProductionStatusList'
     paginate_by = 16
 
     def get_queryset(self):
-        queryset = 生产动态.objects.all().order_by('-时间', '类别', '名称', '单位', '备注')
+        queryset = ProductionStatus.objects.all().order_by('-时间', '类别', '名称', '单位', '备注')
         # keyword = self.request.GET.get('keyword')
         # if keyword :
         #     queryset = 生产动态.objects.filter(Q(地点__icontains=keyword)|Q(电话__icontains=keyword)|Q(备注__icontains=keyword)).order_by('地点','电话')
@@ -119,7 +119,10 @@ def arrange(temp):
 
 
 # @csrf_exempt
+@login_required(login_url='/Account/login')
 def ladingBillForm(request):
+    if request.user.username != '工艺':
+        return HttpResponse('请使用工艺账户登录！')
     today = date.today().isoformat()
     Title = '提单'
     names = ['日期', '提单号', '产品', '客户', '计划装车t',
@@ -189,8 +192,10 @@ def ladingBillForm(request):
         return HttpResponse(json.dumps(records))
     return render(request, 'ProcessProduction/LadingBillForm.html', locals())
 
-
+@login_required(login_url='/Account/login')
 def SeaPipeData(request):
+    if request.user.username != '工艺':
+        return HttpResponse('请使用工艺账户登录！')
     today = date.today()
     Title = '海管数据'
     names = ['时间', '压力MPa', '温度℃', '流量Nm3/h']
@@ -309,8 +314,9 @@ def productionReview(request):
 
 #配产
 @login_required(login_url='/Account/login')
-@permission_required('生产信息.add', login_url='/Account/login')
 def proration(request):
+    if request.user.username != '工艺':
+        return HttpResponse('请使用工艺账户登录！')
     title='配产任务'
     today=date.today()
     data={}
@@ -344,7 +350,10 @@ def proration(request):
         form = ProrationForm()
     return render(request, 'ProcessProduction/proration.html', locals())
 #快速录入
+@login_required(login_url='/Account/login')
 def quickInput(request):
+    if request.user.username != '工艺':
+        return HttpResponse('请使用工艺账户登录！')
     title='快速录入'
     today=date.today()
     if request.method == 'POST':
