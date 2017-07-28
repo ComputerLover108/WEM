@@ -238,6 +238,8 @@ def ProductionDaily(request):
     Title = '葫芦岛天然气终端厂生产日报'
     sd = request.GET.get('productionDailyDate')
     data = getProductionDailyData(sd)
+    if request.method == 'POST':
+        print('POST OK!')
     return render(request, 'ProcessProduction/ProductionDaily.html', locals())
 
 
@@ -327,8 +329,8 @@ def proration(request):
             data['天然气年配产'] = form.cleaned_data['天然气年配产']
             data['轻油月配产'] = form.cleaned_data['轻油月配产']
             data['轻油年配产'] = form.cleaned_data['轻油年配产']
-            data['轻烃月配产'] = form.cleaned_data['轻烃月配产']
-            data['轻烃年配产'] = form.cleaned_data['轻烃年配产']
+            data['丙丁烷月配产'] = form.cleaned_data['丙丁烷月配产']
+            data['丙丁烷年配产'] = form.cleaned_data['丙丁烷年配产']
             日期 = form.cleaned_data['日期']
             数据源 = request.user.username+'@'+request.META['REMOTE_ADDR']
             单位 = '方'
@@ -359,11 +361,10 @@ def quickInput(request):
     if request.method == 'POST':
         form = QuickInputForm(request.POST)
         if form.is_valid():
-            data['日期'] = form.cleaned_data['日期']
-            data['JZ202体系'] = form.cleaned_data['JZ202体系']
-            # print(form.cleaned_data)
+            data = form.cleaned_data
             print(data)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('ProcessProduction/ProductionDaily')
         else:
+            print(form.errors.as_data())
             form = QuickInputForm()
     return render(request,'ProcessProduction/quickInput.html',locals())

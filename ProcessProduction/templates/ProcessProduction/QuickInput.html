@@ -11,6 +11,7 @@
 	<!-- 主体 -->
 <form class="form-horizontal"  action="{% url 'quickInput'  %}" method="post">
         {% csrf_token %}
+        {{ form.errors }}
         <div class="row">
             <div class="form-group">
                 <label for="日期" class="col-md-2 col-md-offset-2 control-label">日期</label>
@@ -122,8 +123,8 @@
                         <td><input class="form-control" type="text" name="数据库轻油回收量" /></td>
                     </tr>
                     <tr>
-                        <td>数据库轻烃回收量m<sup>3</sup></td>
-                        <td><input class="form-control" type="text" name="数据库轻烃回收量" /></td>
+                        <td>数据库丙丁烷回收量m<sup>3</sup></td>
+                        <td><input class="form-control" type="text" name="数据库丙丁烷回收量" /></td>
                     </tr>
                     <!--化学药剂-->
                     <tr>
@@ -147,7 +148,7 @@
                     </tr>
                     <tr>
                         <td>污水外排m<sup>3</sup></td>
-                        <td><input class="form-control" type="text" name="污水外排" </td>
+                        <td><input class="form-control" type="text" name="污水" </td>
                     </tr>
                     <tr>
                         <td>水池水位m</td>
