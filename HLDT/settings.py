@@ -63,7 +63,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR,'templates'),
+            os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -79,12 +79,12 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'APP_DIRS': True,
         'DIRS': [
-            os.path.join(BASE_DIR,'templatesJinja2'),
+            os.path.join(BASE_DIR, 'templatesJinja2'),
         ],
         "OPTIONS": {
             'environment': 'jinja2Env.environment',
-        },        
-    },    
+        },
+    },
 ]
 
 WSGI_APPLICATION = 'HLDT.wsgi.application'
@@ -99,16 +99,17 @@ DATABASES = {
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'HLD',
         'USER': 'operator',
         'PASSWORD': '5302469',
-        # 'HOST': '127.0.0.1',
+        'HOST': '127.0.0.1',
         # 'HOST': 'localhost',
         # 'HOST': '10.30.29.80',
-        'HOST': '192.168.0.122',
+        # 'HOST': '192.168.0.122',
         'PORT': '2012',
-    }    
+    }
 }
 
 
@@ -196,7 +197,7 @@ LOGGING = {
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': True,
-#     #日志格式 
+#     #日志格式
 #     'formatters': {
 #         'simple' : {
 #             'format' : '[%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
@@ -206,7 +207,7 @@ LOGGING = {
 #         },
 #         'verbose':{
 #             'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
-#         }  
+#         }
 #     },
 #     'filters': {
 #     },
@@ -219,9 +220,9 @@ LOGGING = {
 #         'default': {
 #             'level':'DEBUG',
 #             'class':'logging.handlers.RotatingFileHandler',
-#             'filename': os.path.join(LOGGER_ROOT,'debug.log'),    
+#             'filename': os.path.join(LOGGER_ROOT,'debug.log'),
 #             'maxBytes': 1024*1024*8,                                #文件大小
-#             'backupCount': 2, 
+#             'backupCount': 2,
 #             'formatter':'simple',                                 #使用哪种formatters日志格式
 #         },
 #         'error': {
@@ -240,16 +241,16 @@ LOGGING = {
 #         'request_handler': {
 #             'level':'DEBUG',
 #             'class':'logging.handlers.RotatingFileHandler',
-#             'filename': os.path.join(LOGGER_ROOT,'script.log'), 
-#             'maxBytes': 1024*1024*8, 
+#             'filename': os.path.join(LOGGER_ROOT,'script.log'),
+#             'maxBytes': 1024*1024*8,
 #             'backupCount': 2,
 #             'formatter':'verbose',
 #         },
 #         'scprits_handler': {
 #             'level':'DEBUG',
 #             'class':'logging.handlers.RotatingFileHandler',
-#             'filename':os.path.join(LOGGER_ROOT,'script.log'), 
-#             'maxBytes': 1024*1024*8, 
+#             'filename':os.path.join(LOGGER_ROOT,'script.log'),
+#             'maxBytes': 1024*1024*8,
 #             'backupCount': 2,
 #             'formatter':'verbose',
 #         }
@@ -258,17 +259,17 @@ LOGGING = {
 #         'django': {
 #             'handlers': ['default', 'console'],
 #             'level': 'DEBUG',
-#             'propagate': False 
+#             'propagate': False
 #         },
 #         'django.request': {
 #             'handlers': ['request_handler'],
 #             'level': 'DEBUG',
 #             'propagate': False,
 #         },
-#         'scripts': { 
+#         'scripts': {
 #             'handlers': ['scprits_handler'],
 #             'level': 'INFO',
 #             'propagate': False
 #         },
-#     } 
+#     }
 # }
