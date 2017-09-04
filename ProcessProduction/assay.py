@@ -11,16 +11,16 @@ def test():
     dataMining(file)
 
 # 化验报表拆分成12个小报表
-# 乙二醇浓度 [3,1][7,11]
+# 乙二醇 [3,1][7,11]
 # 轻油 [3,14][9,25]
-# 液化石油气 [3,26][12,30]
+# 液化气 [3,26][12,30]
 # 轻油饱和蒸汽压 [8,1][13,9]
 # 运行单机滑油 [10,14][13,25]
 # 轻烃组分 [14,1][26,26]
 # 外输丙丁烷 [14,27][21,31]
 # 锅炉水 [22,27][26,30]
 # 循环水 [27,1][29,25]
-# 原油凝点 [30,1][30,25]
+# 原油 [30,1][30,25]
 # 备注 [27,27][27,28]
 # 签名 [31,1]
 
@@ -35,10 +35,13 @@ def split(sheet):
             temp = sheet.cell(row, column).value
             if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
                 temp = temp.strip()
+                if re.match(Title, temp):
+                    beginRow = row
+                    beginColumn = column
                 if re.match('乙二醇浓度', temp):
                     ro = 4
                     co = 10
-                    data['乙二醇浓度'] = [row, column, row + ro, column + co]
+                    data['乙二醇'] = [row, column, row + ro, column + co]
                 if '轻油' == temp:
                     ro = 6
                     co = 11
@@ -70,43 +73,26 @@ def split(sheet):
                     ro = 0
                     co = 1
                     data['备注'] = [row, column, row + ro, column + co]
-    data['轻烃'] = [13, 0, 25, 25]
-    data['外输丙丁烷'] = [13, 26, 20, 30]
-    for k, v in data.items():
-        print(k, v)
+    data['轻烃'] = [beginRow + 13, beginColumn, beginRow + 25, beginColumn + 25]
+    data['外输丙丁烷'] = [beginRow + 13, beginColumn +
+                     26, beginRow + 20, beginColumn + 30]
+    # for k, v in data.items():
+    #     print(k, v)
+    return data
+
+# 乙二醇数据
 
 
-def dataMining(file):
-    # 打开指定文件路径的excel文件
-    # xlsfile = r'D:\AutoPlan\apisnew.xls'
-    book = xlrd.open_workbook(file)  # 获得excel的book对象
-
-    # 获取sheet对象，方法有2种：
-    # sheet_name = book.sheet_names()[0]  # 获得指定索引的sheet名字
-    sheet_name = '化验报表'
-    # 通过sheet名字来获取，当然如果你知道sheet名字了可以直接指定
-    sheet = book.sheet_by_name(sheet_name)
-    # sheet0 = book.sheet_by_index(0)  # 通过sheet索引获得sheet对象
-    split(sheet)
-    # 获取行数和列数：
-    nrows = sheet.nrows  # 行总数
-    ncols = sheet.ncols  # 列总数
-    # print(file,sheet_name,nrows,ncols)
-    title = r'葫芦岛天然气终端厂化验日报'
-    data = dict()
-    for row in range(sheet.nrows):
-        for column in range(sheet.ncols):
+def getGlycoData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
             temp = sheet.cell(row, column).value
             if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
                 temp = temp.strip()
-                # print(row,column,temp)
-                if temp == title:
-                    ro = 1
-                    # 日期 = sheet.cell(row+ro,column).value
-                    year, month, day, hour, minute, nearest_second = xlrd.xldate_as_tuple(
-                        sheet.cell(row + ro, column).value, book.datemode)
-                    data['日期'] = date(year, month, day)
-                    # print(row+ro,column,data)
                 if temp == 'V-611':
                     ro = 1
                     co = 2
@@ -119,23 +105,26 @@ def dataMining(file):
                     data['乙二醇浓度'] = sheet.cell(row + ro, column + co).value
                     ro = 3
                     data['乙二醇日回收量m3'] = sheet.cell(row + ro, column + co).value
-                if temp == "V-601(%)":
+                if temp == "V-616":
                     ro = 1
-                    co = 1
-                    data['上午海管来液含水'] = sheet.cell(row + ro, column + co).value
-                    ro = 2
-                    data['下午海管来液含水'] = sheet.cell(row + ro, column + co).value
-                    ro = 4
-                    data['海管来液密度'] = sheet.cell(row + ro, column).value
-                if re.match("V-601.*9:00", temp):
-                    co = 5
-                    data['上午海管出口凝点'] = sheet.cell(row, column + co).value
-                    co = 11
-                    data['下午海管出口凝点'] = sheet.cell(row, column + co).value
-                    co = 18
-                    data['上午海管出口PH值'] = sheet.cell(row, column + co).value
-                    co = 21
-                    data['下午海管出口PH值'] = sheet.cell(row, column + co).value
+                    co = 3
+                    data['乙二醇浓度'] = sheet.cell(row + ro, column + co).value
+                    ro = 3
+                    data['乙二醇日回收量m3'] = sheet.cell(row + ro, column + co).value
+
+# 轻油
+
+
+def getLightOilData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
                 if temp == '轻油外输数据':
                     co = 6
                     data['轻油外输PH值'] = sheet.cell(row, column + co).value
@@ -168,6 +157,20 @@ def dataMining(file):
                         row + ro + 1, column + co).value
                     data['V631C密度'] = sheet.cell(
                         row + ro + 2, column + co).value
+
+# 轻油饱和蒸汽压
+
+
+def getLightOilSaturatedVaporPressureData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
                 if temp == "混合进罐前":
                     ro = 1
                     co = 0
@@ -181,12 +184,103 @@ def dataMining(file):
                     ro = 5
                     data['轻油稳定塔底操作温度℃'] = sheet.cell(
                         row + ro, column + co).value
-                if temp == "V-616":
-                    ro = 1
-                    co = 3
-                    data['乙二醇浓度'] = sheet.cell(row + ro, column + co).value
+
+# 滑油
+
+
+def getOilData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
+                if re.match('运动粘度', sheet.cell(row, column).value):
+                    ro = 2
+                    co = -4
+                    name = sheet.cell(
+                        row + ro, column + co).value + '运动粘度'
+                    data[name] = sheet.cell(row + ro, column).value
                     ro = 3
-                    data['乙二醇日回收量m3'] = sheet.cell(row + ro, column + co).value
+                    name = sheet.cell(
+                        row + ro, column + co).value + '运动粘度'
+                    data[name] = sheet.cell(row + ro, column).value
+                if re.match('机械杂质', sheet.cell(row, column).value):
+                    ro = 2
+                    co = -7
+                    name = sheet.cell(
+                        row + ro, column + co).value + '机械杂质'
+                    data[name] = sheet.cell(row + ro, column).value
+                    ro = 3
+                    name = sheet.cell(
+                        row + ro, column + co).value + '机械杂质'
+                    data[name] = sheet.cell(row + ro, column).value
+                if re.match('含水', sheet.cell(row, column).value):
+                    ro = 2
+                    co = -9
+                    name = sheet.cell(row + ro, column + co).value + '含水'
+                    data[name] = sheet.cell(row + ro, column).value
+                    ro = 3
+                    name = sheet.cell(row + ro, column + co).value + '含水'
+                    data[name] = sheet.cell(row + ro, column).value
+
+# 轻烃
+
+
+def getLightHydrocarbonData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
+
+# 液化气
+
+
+def getLiquefiedGasData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
+
+# 外输丙丁烷
+
+
+def getOutputButaneData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
+
+
+# 锅炉水
+def getBoilerWaterData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
                 if temp == "软化水":
                     ro = 1
                     data['锅炉软化水PH值'] = sheet.cell(row + ro, column + co).value
@@ -194,14 +288,27 @@ def dataMining(file):
                     data['锅炉软化水总硬度'] = sheet.cell(row + ro, column + co).value
                     ro = ro + 1
                     data['锅炉软化水总碱度'] = sheet.cell(row + ro, column + co).value
-                if temp == "循环水" and sheet.cell(row, column - 2).value == '软化水':
+                if temp == "循环水":
                     ro = 1
                     data['锅炉循环水PH值'] = sheet.cell(row + ro, column + co).value
                     ro = ro + 1
                     data['锅炉循环水总硬度'] = sheet.cell(row + ro, column + co).value
                     ro = ro + 1
                     data['锅炉循环水总碱度'] = sheet.cell(row + ro, column + co).value
-                if temp == "循环水" and column == 0:
+# 循环水
+
+
+def getCirculatingWaterData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
+                if temp == "循环水":
                     # print(row,column,temp)
                     ro = 1
                     co = 2
@@ -234,38 +341,77 @@ def dataMining(file):
                     co = 24
                     if sheet.cell(row, column + co).value == "总铁":
                         data['循环水总铁'] = sheet.cell(row + ro, column + co).value
-                if re.match('运动粘度', sheet.cell(row, column).value):
-                    ro = 2
-                    co = -4
-                    name = sheet.cell(
-                        row + ro, column + co).value + '运动粘度'
-                    data[name] = sheet.cell(row + ro, column).value
-                    ro = 3
-                    name = sheet.cell(
-                        row + ro, column + co).value + '运动粘度'
-                    data[name] = sheet.cell(row + ro, column).value
-                if re.match('机械杂质', sheet.cell(row, column).value):
-                    ro = 2
-                    co = -7
-                    name = sheet.cell(
-                        row + ro, column + co).value + '机械杂质'
-                    data[name] = sheet.cell(row + ro, column).value
-                    ro = 3
-                    name = sheet.cell(
-                        row + ro, column + co).value + '机械杂质'
-                    data[name] = sheet.cell(row + ro, column).value
-                if re.match('含水', sheet.cell(row, column).value):
-                    ro = 2
-                    co = -9
-                    name = sheet.cell(row + ro, column + co).value + '含水'
-                    data[name] = sheet.cell(row + ro, column).value
-                    ro = 3
-                    name = sheet.cell(row + ro, column + co).value + '含水'
-                    data[name] = sheet.cell(row + ro, column).value
+
+# 原油
+
+
+def getCrudeOilData(sheet, table, data):
+    beginRow = table[0]
+    endRow = table[2]
+    beginColumn = table[1]
+    endColumn = table[3]
+    for row in range(beginRow, endRow):
+        for column in range(beginColumn, endColumn):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
+                if re.match("V-601.*9:00", temp):
+                    co = 5
+                    data['上午海管出口凝点'] = sheet.cell(row, column + co).value
+                    co = 11
+                    data['下午海管出口凝点'] = sheet.cell(row, column + co).value
+                    co = 18
+                    data['上午海管出口PH值'] = sheet.cell(row, column + co).value
+                    co = 21
+                    data['下午海管出口PH值'] = sheet.cell(row, column + co).value
+
+
+def dataMining(file):
+    # 打开指定文件路径的excel文件
+    # xlsfile = r'D:\AutoPlan\apisnew.xls'
+    book = xlrd.open_workbook(file)  # 获得excel的book对象
+
+    # 获取sheet对象，方法有2种：
+    # sheet_name = book.sheet_names()[0]  # 获得指定索引的sheet名字
+    sheet_name = '化验报表'
+    # 通过sheet名字来获取，当然如果你知道sheet名字了可以直接指定
+    sheet = book.sheet_by_name(sheet_name)
+    # sheet0 = book.sheet_by_index(0)  # 通过sheet索引获得sheet对象
+    table = split(sheet)
+    data = dict()
+    getGlycoData(sheet, table['乙二醇'], data)
+    # 获取行数和列数：
+    # nrows = sheet.nrows  # 行总数
+    # ncols = sheet.ncols  # 列总数
+    # # print(file,sheet_name,nrows,ncols)
+    # title = r'葫芦岛天然气终端厂化验日报'
+    # data = dict()
+    # for row in range(sheet.nrows):
+    #     for column in range(sheet.ncols):
+    #         temp = sheet.cell(row, column).value
+    #         if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+    #             temp = temp.strip()
+    #             # print(row,column,temp)
+    #             if temp == title:
+    #                 ro = 1
+    #                 # 日期 = sheet.cell(row+ro,column).value
+    #                 year, month, day, hour, minute, nearest_second = xlrd.xldate_as_tuple(
+    #                     sheet.cell(row + ro, column).value, book.datemode)
+    #                 data['日期'] = date(year, month, day)
+    #                 # print(row+ro,column,data)
+
+    #             if temp == "V-601(%)":
+    #                 ro = 1
+    #                 co = 1
+    #                 data['上午海管来液含水'] = sheet.cell(row + ro, column + co).value
+    #                 ro = 2
+    #                 data['下午海管来液含水'] = sheet.cell(row + ro, column + co).value
+    #                 ro = 4
+    #                 data['海管来液密度'] = sheet.cell(row + ro, column).value
 
     # print(len(data))
-    # for k, v in data.items():
-    #     print(k, v)
+    for k, v in data.items():
+        print(k, v)
 
 
 if __name__ == '__main__':
