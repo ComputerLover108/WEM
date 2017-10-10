@@ -19,4 +19,4 @@ copy %PGDATA%\pg_hba.conf %PGDATA%\pg_hba.bak
 copy %PGDATA%\postgresql.conf %PGDATA%\postgresql.bak
 copy pg_hba.conf %PGDATA%\
 copy postgresql.conf %PGDATA%
-REM pg_ctl -D  %PGDATA% start
+pg_ctl -D  %PGDATA% start

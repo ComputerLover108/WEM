@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.db.models import Q
 from datetime import date, datetime, time
-from django.contrib.auth.decorators import permission_required,login_required
+from django.contrib.auth.decorators import permission_required, login_required
 from django.views.generic import ListView
 from django.db.models import Q
 from django.db import connection
@@ -12,12 +12,13 @@ from .models import ProductionData, ProductionStatus, LadingBill
 from .productionDaily import *
 from .productionMonthly import *
 from .loadingDaily import *
-from .forms import QuickInputForm,ProrationForm
+from .forms import QuickInputForm, ProrationForm
 import json
 
 from pypinyin import pinyin, lazy_pinyin
 
 # Create your views here.
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -52,7 +53,8 @@ class ProductionDataList(ListView):
     paginate_by = 16
 
     def get_queryset(self):
-        queryset = ProductionData.objects.all().order_by('-日期', '状态', '类别', '单位', '名称', '备注')
+        queryset = ProductionData.objects.all().order_by(
+            '-日期', '状态', '类别', '单位', '名称', '备注')
         # keyword = self.request.GET.get('keyword')
         # if keyword :
         #     queryset = 生产信息.objects.filter(Q(地点__icontains=keyword)|Q(电话__icontains=keyword)|Q(备注__icontains=keyword)).order_by('地点','电话')
@@ -110,7 +112,7 @@ def toHtmlSelectMenu(selects, name):
 
 
 def arrange(temp):
-   
+
     temp = [x.strip() for x in temp]
     temp = list(set(temp))
     result = sorted(temp, key=pinyin)
@@ -192,6 +194,7 @@ def ladingBillForm(request):
         return HttpResponse(json.dumps(records))
     return render(request, 'ProcessProduction/LadingBillForm.html', locals())
 
+
 @login_required(login_url='/Account/login')
 def SeaPipeData(request):
     if request.user.username != '工艺':
@@ -272,6 +275,7 @@ def productionReview(request):
     startDate = getAvailableTime(table, date(
         date.today().year, 1, 1), upLimit=False)
     endDate = getAvailableTime(table, date.today())
+    logger.debug(startDate, endDate, specifiedDate)
 
     x = getProductionCompletion(specifiedDate)
     pc = [
@@ -314,14 +318,16 @@ def productionReview(request):
         inventory[x] = mend(inventory[x], dt, 0)
     return render(request, 'ProcessProduction/productionReview.html', locals())
 
-#配产
+# 配产
+
+
 @login_required(login_url='/Account/login')
 def proration(request):
     if request.user.username != '工艺':
         return HttpResponse('请使用工艺账户登录！')
-    title='配产任务'
-    today=date.today()
-    data={}
+    title = '配产任务'
+    today = date.today()
+    data = {}
     if request.method == 'POST':
         form = ProrationForm(request.POST)
         if form.is_valid():
@@ -332,32 +338,36 @@ def proration(request):
             data['丙丁烷月配产'] = form.cleaned_data['丙丁烷月配产']
             data['丙丁烷年配产'] = form.cleaned_data['丙丁烷年配产']
             日期 = form.cleaned_data['日期']
-            数据源 = request.user.username+'@'+request.META['REMOTE_ADDR']
+            数据源 = request.user.username + '@' + request.META['REMOTE_ADDR']
             单位 = '方'
             状态 = '计划'
             with connection.cursor() as cursor:
                 cursor.execute("update 生产信息 set 备注='' where 备注 is null;")
-                cursor.execute("delete from 生产信息 where 日期=%s and 状态=%s ;",[日期,状态])
-            for k,v in data.items():
-                名称=k
-                数据=v*10000
-                类别=k[:-3]
+                cursor.execute(
+                    "delete from 生产信息 where 日期=%s and 状态=%s ;", [日期, 状态])
+            for k, v in data.items():
+                名称 = k
+                数据 = v * 10000
+                类别 = k[:-3]
                 with connection.cursor() as cursor:
-                    cursor.execute("insert into 生产信息 (日期,名称,单位,数据,类别,状态,数据源) values (%s,%s,%s,%s,%s,%s,%s)",[日期,名称,单位,数据,类别,状态,数据源])
+                    cursor.execute("insert into 生产信息 (日期,名称,单位,数据,类别,状态,数据源) values (%s,%s,%s,%s,%s,%s,%s)", [
+                                   日期, 名称, 单位, 数据, 类别, 状态, 数据源])
                 # record = 生产信息(日期=日期, 名称=k, 单位='方', 数据=v * 10000, 类别=k[:-3], 状态='计划', 数据源=数据源)
                 # record.save()
-            s='数据提交成功！'
+            s = '数据提交成功！'
             return HttpResponse(s)
     else:
         form = ProrationForm()
     return render(request, 'ProcessProduction/proration.html', locals())
-#快速录入
+# 快速录入
+
+
 @login_required(login_url='/Account/login')
 def quickInput(request):
     if request.user.username != '工艺':
         return HttpResponse('请使用工艺账户登录！')
-    title='快速录入'
-    today=date.today()
+    title = '快速录入'
+    today = date.today()
     if request.method == 'POST':
         form = QuickInputForm(request.POST)
         if form.is_valid():
@@ -367,4 +377,4 @@ def quickInput(request):
         else:
             print(form.errors.as_data())
             form = QuickInputForm()
-    return render(request,'ProcessProduction/quickInput.html',locals())
+    return render(request, 'ProcessProduction/quickInput.html', locals())
