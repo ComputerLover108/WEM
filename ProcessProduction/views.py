@@ -18,6 +18,7 @@ import json
 from pypinyin import pinyin, lazy_pinyin
 
 # Create your views here.
+import logging
 logger = logging.getLogger(__name__)
 
 
@@ -269,13 +270,13 @@ def loadingDaily(request):
 
 
 def productionReview(request):
+    logger.info('This is test log!')
     Title = "生产情况"
     table = "生产信息"
     specifiedDate = getAvailableTime(table, date.today())
     startDate = getAvailableTime(table, date(
         date.today().year, 1, 1), upLimit=False)
     endDate = getAvailableTime(table, date.today())
-    logger.debug(startDate, endDate, specifiedDate)
 
     x = getProductionCompletion(specifiedDate)
     pc = [

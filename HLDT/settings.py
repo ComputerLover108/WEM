@@ -159,25 +159,6 @@ STATIC_ROOT = '/var/www/static'
 MEDIA_URL = '/public/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'public')
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '../HLDT_debug.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
-
 # %(name)s Logger的名字
 # %(levelno)s 数字形式的日志级别
 # %(levelname)s 文本形式的日志级别
@@ -193,84 +174,49 @@ LOGGING = {
 # %(threadName)s 线程名。可能没有
 # %(process)d 进程ID。可能没有
 # %(message)s用户输出的消息
-# LOGGER_ROOT = '/tmp'
+LOGGER_ROOT = '/tmp'
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': True,
-#     #日志格式
-#     'formatters': {
-#         'simple' : {
-#             'format' : '[%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
-#         },
-#         'standard': {
-#             'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
-#         },
-#         'verbose':{
-#             'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
-#         }
-#     },
-#     'filters': {
-#     },
-#     'handlers': {
-#         'mail_admins': {
-#             'level': 'ERROR',
-#             'class': 'django.utils.log.AdminEmailHandler',
-#             'include_html': True,
-#         },
-#         'default': {
-#             'level':'DEBUG',
-#             'class':'logging.handlers.RotatingFileHandler',
-#             'filename': os.path.join(LOGGER_ROOT,'debug.log'),
-#             'maxBytes': 1024*1024*8,                                #文件大小
-#             'backupCount': 2,
-#             'formatter':'simple',                                 #使用哪种formatters日志格式
-#         },
-#         'error': {
-#             'level':'ERROR',
-#             'class':'logging.handlers.RotatingFileHandler',
-#             'filename': os.path.join(LOGGER_ROOT,'error.log'),
-#             'maxBytes':1024*1024*8,
-#             'backupCount': 2,
-#             'formatter':'verbose',
-#         },
-#         'console':{
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'simple'
-#         },
-#         'request_handler': {
-#             'level':'DEBUG',
-#             'class':'logging.handlers.RotatingFileHandler',
-#             'filename': os.path.join(LOGGER_ROOT,'script.log'),
-#             'maxBytes': 1024*1024*8,
-#             'backupCount': 2,
-#             'formatter':'verbose',
-#         },
-#         'scprits_handler': {
-#             'level':'DEBUG',
-#             'class':'logging.handlers.RotatingFileHandler',
-#             'filename':os.path.join(LOGGER_ROOT,'script.log'),
-#             'maxBytes': 1024*1024*8,
-#             'backupCount': 2,
-#             'formatter':'verbose',
-#         }
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['default', 'console'],
-#             'level': 'DEBUG',
-#             'propagate': False
-#         },
-#         'django.request': {
-#             'handlers': ['request_handler'],
-#             'level': 'DEBUG',
-#             'propagate': False,
-#         },
-#         'scripts': {
-#             'handlers': ['scprits_handler'],
-#             'level': 'INFO',
-#             'propagate': False
-#         },
-#     }
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    #日志格式
+    'formatters': {
+        'simple' : {
+            'format' : '[%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+        },
+        'standard': {
+            'format': '[%(asctime)s]  [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+        },
+        'verbose':{
+            'format': '[%(asctime)s] [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+        }
+    },
+    'handlers': {
+        'console':{
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },    
+        'file': {
+            'level':'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGGER_ROOT,'HLDT_debug.log'),
+            'formatter':'standard',                                 #使用哪种formatters日志格式
+        },
+        'error': {
+            'level':'ERROR',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGGER_ROOT,'HLDT_error.log'),
+            'maxBytes':1024*1024*8,
+            'backupCount': 2,
+            'formatter':'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console','file'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+    }
+}

@@ -4,7 +4,9 @@ import json
 from ProcessProduction.models import ProductionData
 from django.db import connection
 from datetime import date
+import logging
 
+logger = logging.getLogger(__name__)
 
 def home(request):
     title = "主页"
@@ -26,6 +28,7 @@ def home(request):
         cursor.execute(
             "select 数据 from 生产信息 where 名称=%s and 单位='方' and 日期 between date_trunc('year',current_date) and current_date order by 日期;", [name])
         rows = cursor.fetchall()
+
         # if name == '锦天化':
         # 	data = [row[0]/10000 for row in rows]
         # else:
@@ -33,4 +36,5 @@ def home(request):
         data = [row[0] for row in rows]
         series[name] = data
     # print(series)
+    logger.info(pdate)
     return render(request, "home.html", locals())

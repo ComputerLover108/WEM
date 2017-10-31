@@ -1,23 +1,26 @@
 #!/bin/sh
-VERSION=9.6
+VERSION=10.0
 PGHOME=/opt/pgsql$VERSION
 PGDATA=/home/postgres/pgdata/$VERSION/MasterPG/data
-#PGPASSWORD=pgpassword
+PGPASSWORD=pgpassword
 #PGPASSFILE=pgpass.conf
 #PGBACKUP=/home/postgres/pgdata/backup
-#PGHOST=localhost
-#PGPORT=5432
+PGHOST=localhost
+PGPORT=5432
 PGUSER=postgres
+PGADMINISTRATOR=ComputerLover
 DATABASE=postgres
-export PATH=$PGHOME/bin:$PATH:.
+
+export PATH=$PGHOME/bin:$PATH
+export LD_LIBRARY_PATH=$PGHOME/lib:$LD_LIBRARY_PATH
+
 pg_ctl -D  $PGDATA stop
 rm -rf $PGDATA
-#initdb -E UTF8 --locale=C  --pwfile=$PGPASSWORD -D $PGDATA 
-initdb -E UTF8 -D $PGDATA 
+initdb -E UTF8   -U $PGADMINISTRATOR --pwfile=$PGPASSWORD -D $PGDATA
+sed -i 's/#password_encryption = md5/password_encryption = scram-sha-256/' $PGDATA/postgresql.conf
 pg_ctl -D  $PGDATA start 
-#psql -h $PGHOST -p $PGPORT -U $PGUSER -f initHLD.sql $DATABASE
 sleep 9
-psql -f initHLD.sql  
+psql -U $PGADMINISTRATOR -f initHLD.sql  -d $DATABASE 
 pg_ctl -D $PGDATA stop 
 sleep 9
 cp -v pg_hba.conf postgresql.conf $PGDATA/
