@@ -6,7 +6,7 @@ import json
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
-from .models import WorkPhone, liaoDongPhone
+from .models import WorkPhone, LiaoDongPhone
 from django.db.models import Q
 
 
@@ -22,10 +22,10 @@ def contact(request):
     return render(request, 'QHSE/contact.html', locals())
 
 
-class liaoDongPhoneList(ListView):
+class LiaoDongPhoneList(ListView):
     template_name = "QHSE/liaoDongPhonelist.html"
-    model = liaoDongPhone
-    context_object_name = 'liaoDongPhonelist'
+    model = LiaoDongPhone
+    context_object_name = 'LiaoDongPhonelist'
     paginate_by = 10
 
     def get_queryset(self):

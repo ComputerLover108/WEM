@@ -12,7 +12,7 @@ class WorkPhone(models.Model):
         db_table = '工作电话'
 
 
-class liaoDongPhone(models.Model):
+class LiaoDongPhone(models.Model):
     姓名 = models.CharField(max_length=32)
     电话 = models.CharField(max_length=64)
     手机 = models.CharField(max_length=32)

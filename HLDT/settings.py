@@ -102,10 +102,10 @@ DATABASES = {
         'NAME': 'HLD',
         'USER': 'operator',
         'PASSWORD': '5302469',
-        'HOST': '127.0.0.1',
+        # 'HOST': '127.0.0.1',
         # 'HOST': 'localhost',
         # 'HOST': '10.30.29.80',
-        # 'HOST': '192.168.0.122',
+        'HOST': '192.168.0.122',
         'PORT': '2012',
     }
 }
@@ -174,7 +174,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'public')
 # %(threadName)s 线程名。可能没有
 # %(process)d 进程ID。可能没有
 # %(message)s用户输出的消息
-LOGGER_ROOT = '/tmp'
+# LOGGER_ROOT = '/tmp'
+LOGGER_ROOT = '../'
 
 LOGGING = {
     'version': 1,
@@ -185,10 +186,10 @@ LOGGING = {
             'format' : '[%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
         },
         'standard': {
-            'format': '[%(asctime)s]  [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+            'format': '[%(asctime)s]  [%(lineno)d:%(name)s:%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
         },
         'verbose':{
-            'format': '[%(asctime)s] [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+            'format': '[%(asctime)s] [%(threadName)s:%(thread)d] [%(lineno)d:%(name)s:%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
         }
     },
     'handlers': {
@@ -198,10 +199,10 @@ LOGGING = {
             'formatter': 'simple'
         },    
         'file': {
-            'level':'INFO',
+            'level':'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(LOGGER_ROOT,'HLDT_debug.log'),
-            'formatter':'standard',                                 #使用哪种formatters日志格式
+            'formatter':'standard',
         },
         'error': {
             'level':'ERROR',
@@ -214,7 +215,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console','file'],
+            'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': False
         },

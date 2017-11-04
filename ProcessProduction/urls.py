@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^ProductionMonthly', views.ProductionMonthly, name='productionMonthly'),
     url(r'^ProductionAnnual', views.ProductionAnnual, name='productionAnnual'),
     url(r'^loadingDaily', views.loadingDaily, name='loadingDaily'),
+    url(r'^assay/getLaboratoryDaily',views.getLaboratoryDaily,name='getLaboratoryDaily'),
 
     url(r'^ProductionDataList', views.ProductionDataList.as_view(),
         name='ProductionDataList'),

@@ -2,7 +2,9 @@ import xlrd
 import os
 from datetime import date
 import re
-
+import logging
+# logger = logging.getLogger(__name__)
+logger = logging.getLogger('django')
 
 def test():
     dir = r'E:\public\test\2017年化验日报\8月'
@@ -411,7 +413,7 @@ def dataMining(file):
 
     # print(len(data))
     for k, v in data.items():
-        print(k, v)
+        logger.info(k, v)
 
 
 if __name__ == '__main__':

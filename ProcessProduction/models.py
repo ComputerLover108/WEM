@@ -16,6 +16,7 @@ class ProductionData(models.Model):
     数据源 = models.TextField(blank=True)
 
     class Meta:
+        managed = False
         db_table = '生产信息'
         # unique_together = ('日期', '名称','单位','类别','状态','备注')
     def __str__(self):
@@ -32,6 +33,7 @@ class ProductionStatus(models.Model):
     备注 = models.TextField(blank=True)
 
     class Meta:
+        managed = False
         db_table = '生产动态'
         # unique_together = ("时间", "名称","单位")
 
@@ -53,6 +55,7 @@ class LadingBill(models.Model):
     备注 = models.TextField(blank=True)
 
     class Meta:
+        managed = False
         db_table = '提单'
 
     def __str__(self):
