@@ -15,6 +15,7 @@ from .loadingDaily import *
 from .assay import dataMining
 
 from .forms import QuickInputForm, ProrationForm
+from django.conf import settings
 import json
 
 from pypinyin import pinyin, lazy_pinyin
@@ -32,7 +33,7 @@ def index(request):
         ('快速录入', 'QuickInput'),
         ('装车数据', 'LadingBillForm'),
         ('海管数据', 'SeaPipeData'),
-        ('化验数据', 'TestData'),
+        ('化验数据', 'assay/getLaboratoryDaily'),
     )
     报表 = (
         ('海管报表', 'SeaPipeReport'),
@@ -383,8 +384,10 @@ def quickInput(request):
 
 # @login_required(login_url='/Account/login')
 def getLaboratoryDaily(request):
-    Tile='化验日报'
-    # location = os.path.join(MEDIA_ROOT,'化验日报')
+    Title='化验日报'
+    location = os.path.join(settings.MEDIA_ROOT,'化验日报')
+    if not os.path.exists(location):
+        os.mkdir(location)
     if request.method == "POST":    # 请求方法为POST时，进行处理
         myFile =request.FILES.get("myfile", None)    # 获取上传的文件，如果没有文件，则默认为None
         if not myFile:
@@ -393,6 +396,11 @@ def getLaboratoryDaily(request):
         # for chunk in myFile.chunks():      # 分块写入文件
         #     destination.write(chunk)
         # destination.close()
-        dataMining(myfile)
+        absFileName = os.path.join(location, myFile.name)
+        with open(absFileName,'wb') as destination:
+            for chunk in myFile.chunks():
+                destination.write(chunk)
+        logger.info(absFileName)
+        dataMining(absFileName)
         return HttpResponse("提交成功!")
     return render(request, 'ProcessProduction/getLaboratoryDaily.html', locals())

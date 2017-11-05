@@ -1,8 +1,7 @@
 {% extends "main.html" %}
-{% block title %}{{title}}{% endblock title %}
-{% block content %}
 
-<form enctype="multipart/form-data" action={% url 'getLaboratoryDaily' %} method="post">
+{% block main-content %}
+<form enctype="multipart/form-data" action="{% url 'getLaboratoryDaily' %}" method="post">
 	{% csrf_token %}
    <input type="file" name="myfile" />
    <br/>

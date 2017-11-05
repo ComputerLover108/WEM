@@ -78,8 +78,8 @@ def split(sheet):
     data['轻烃'] = [beginRow + 13, beginColumn, beginRow + 25, beginColumn + 25]
     data['外输丙丁烷'] = [beginRow + 13, beginColumn +
                      26, beginRow + 20, beginColumn + 30]
-    # for k, v in data.items():
-    #     print(k, v)
+    for k, v in data.items():
+        logger.info('[%s,%s]',k,v)
     return data
 
 # 乙二醇数据
@@ -367,6 +367,23 @@ def getCrudeOilData(sheet, table, data):
                     co = 21
                     data['下午海管出口PH值'] = sheet.cell(row, column + co).value
 
+def getDate(book,sheet,data):
+    nrows = sheet.nrows  # 行总数
+    ncols = sheet.ncols  # 列总数
+    title = r'葫芦岛天然气终端厂化验日报'
+    for row in range(sheet.nrows):
+        for column in range(sheet.ncols):
+            temp = sheet.cell(row, column).value
+            if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
+                temp = temp.strip()
+                if temp == title:
+                    ro = 1
+                    # 日期 = sheet.cell(row+ro,column).value
+                    year, month, day, hour, minute, nearest_second = xlrd.xldate_as_tuple(
+                        sheet.cell(row + ro, column).value, book.datemode)
+                    data['日期'] = date(year, month, day).isoformat()
+
+
 
 def dataMining(file):
     # 打开指定文件路径的excel文件
@@ -381,39 +398,10 @@ def dataMining(file):
     # sheet0 = book.sheet_by_index(0)  # 通过sheet索引获得sheet对象
     table = split(sheet)
     data = dict()
+    getDate(book,sheet,data)
     getGlycoData(sheet, table['乙二醇'], data)
-    # 获取行数和列数：
-    # nrows = sheet.nrows  # 行总数
-    # ncols = sheet.ncols  # 列总数
-    # # print(file,sheet_name,nrows,ncols)
-    # title = r'葫芦岛天然气终端厂化验日报'
-    # data = dict()
-    # for row in range(sheet.nrows):
-    #     for column in range(sheet.ncols):
-    #         temp = sheet.cell(row, column).value
-    #         if temp and sheet.cell(row, column).ctype == xlrd.XL_CELL_TEXT:
-    #             temp = temp.strip()
-    #             # print(row,column,temp)
-    #             if temp == title:
-    #                 ro = 1
-    #                 # 日期 = sheet.cell(row+ro,column).value
-    #                 year, month, day, hour, minute, nearest_second = xlrd.xldate_as_tuple(
-    #                     sheet.cell(row + ro, column).value, book.datemode)
-    #                 data['日期'] = date(year, month, day)
-    #                 # print(row+ro,column,data)
-
-    #             if temp == "V-601(%)":
-    #                 ro = 1
-    #                 co = 1
-    #                 data['上午海管来液含水'] = sheet.cell(row + ro, column + co).value
-    #                 ro = 2
-    #                 data['下午海管来液含水'] = sheet.cell(row + ro, column + co).value
-    #                 ro = 4
-    #                 data['海管来液密度'] = sheet.cell(row + ro, column).value
-
-    # print(len(data))
     for k, v in data.items():
-        logger.info(k, v)
+        logger.info('[%s,%s]',k,v)
 
 
 if __name__ == '__main__':

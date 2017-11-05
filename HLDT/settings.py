@@ -157,7 +157,8 @@ STATICFILES_DIRS = (
 STATIC_ROOT = '/var/www/static'
 
 MEDIA_URL = '/public/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'public')
+# MEDIA_ROOT = '/media/WE2T/public'
+MEDIA_ROOT = 'f:\\public'
 
 # %(name)s Logger的名字
 # %(levelno)s 数字形式的日志级别
@@ -199,7 +200,7 @@ LOGGING = {
             'formatter': 'simple'
         },    
         'file': {
-            'level':'DEBUG',
+            'level':'INFO',
             'class': 'logging.FileHandler',
             'filename': os.path.join(LOGGER_ROOT,'HLDT_debug.log'),
             'formatter':'standard',
