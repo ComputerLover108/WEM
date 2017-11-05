@@ -413,7 +413,7 @@ def dataMining(file):
 
     # print(len(data))
     for k, v in data.items():
-        logger.info(k, v)
+        logger.info('[%s,%s]',k,v)
 
 
 if __name__ == '__main__':

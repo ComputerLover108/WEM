@@ -383,16 +383,17 @@ def quickInput(request):
 
 # @login_required(login_url='/Account/login')
 def getLaboratoryDaily(request):
-    Tile='化验日报'
-    # location = os.path.join(MEDIA_ROOT,'化验日报')
+    Title='化验日报'
+    location = os.path.join('e:\\public\\test','化验日报')
     if request.method == "POST":    # 请求方法为POST时，进行处理
         myFile =request.FILES.get("myfile", None)    # 获取上传的文件，如果没有文件，则默认为None
         if not myFile:
             return HttpResponse("请重新提交!")
-        # destination = open(os.path.join(location,myFile.name),'wb+')    # 打开特定的文件进行二进制的写操作
-        # for chunk in myFile.chunks():      # 分块写入文件
-        #     destination.write(chunk)
-        # destination.close()
-        dataMining(myfile)
+        destination = open(os.path.join(location,myFile.name),'wb+')    # 打开特定的文件进行二进制的写操作
+        for chunk in myFile.chunks():      # 分块写入文件
+            destination.write(chunk)
+        destination.close()
+        logger.info(os.path.join(location,myFile.name))
+        dataMining(os.path.join(location,myFile.name))
         return HttpResponse("提交成功!")
     return render(request, 'ProcessProduction/getLaboratoryDaily.html', locals())
