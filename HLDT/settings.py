@@ -157,8 +157,12 @@ STATICFILES_DIRS = (
 STATIC_ROOT = '/var/www/static'
 
 MEDIA_URL = '/public/'
+<<<<<<< HEAD
 # MEDIA_ROOT = '/media/WE2T/public'
 MEDIA_ROOT = 'f:\\public'
+=======
+MEDIA_ROOT = os.path.join(BASE_DIR, "../")
+>>>>>>> c1938d63887ae876501f8ba4448cf62d3232c78f
 
 # %(name)s Logger的名字
 # %(levelno)s 数字形式的日志级别

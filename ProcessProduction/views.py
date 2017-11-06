@@ -385,13 +385,18 @@ def quickInput(request):
 # @login_required(login_url='/Account/login')
 def getLaboratoryDaily(request):
     Title='化验日报'
+<<<<<<< HEAD
     location = os.path.join(settings.MEDIA_ROOT,'化验日报')
     if not os.path.exists(location):
         os.mkdir(location)
+=======
+    location = os.path.join('e:\\public\\test','化验日报')
+>>>>>>> c1938d63887ae876501f8ba4448cf62d3232c78f
     if request.method == "POST":    # 请求方法为POST时，进行处理
         myFile =request.FILES.get("myfile", None)    # 获取上传的文件，如果没有文件，则默认为None
         if not myFile:
             return HttpResponse("请重新提交!")
+<<<<<<< HEAD
         # destination = open(os.path.join(location,myFile.name),'wb+')    # 打开特定的文件进行二进制的写操作
         # for chunk in myFile.chunks():      # 分块写入文件
         #     destination.write(chunk)
@@ -402,5 +407,13 @@ def getLaboratoryDaily(request):
                 destination.write(chunk)
         logger.info(absFileName)
         dataMining(absFileName)
+=======
+        destination = open(os.path.join(location,myFile.name),'wb+')    # 打开特定的文件进行二进制的写操作
+        for chunk in myFile.chunks():      # 分块写入文件
+            destination.write(chunk)
+        destination.close()
+        logger.info(os.path.join(location,myFile.name))
+        dataMining(os.path.join(location,myFile.name))
+>>>>>>> c1938d63887ae876501f8ba4448cf62d3232c78f
         return HttpResponse("提交成功!")
     return render(request, 'ProcessProduction/getLaboratoryDaily.html', locals())
