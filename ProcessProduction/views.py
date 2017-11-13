@@ -25,6 +25,14 @@ import logging
 # logger = logging.getLogger(__name__)
 logger = logging.getLogger('django')
 
+def getDataSource():
+    if request.META.has_key('HTTP_X_FORWARDED_FOR'):  
+        ip =  request.META['HTTP_X_FORWARDED_FOR']  
+    else:  
+        ip = request.META['REMOTE_ADDR']
+    user=request.user.username
+    return user+'@'+ip
+
 def index(request):
     title = '工艺生产'
     用户 = '游客'
@@ -347,13 +355,13 @@ def proration(request):
             with connection.cursor() as cursor:
                 cursor.execute("update 生产信息 set 备注='' where 备注 is null;")
                 cursor.execute(
-                    "delete from 生产信息 where 日期=%s and 状态=%s ;", [日期, 状态])
+                    "delete from 生产信息 where 日期=%r and 状态=%r ;", [日期, 状态])
             for k, v in data.items():
                 名称 = k
                 数据 = v * 10000
                 类别 = k[:-3]
                 with connection.cursor() as cursor:
-                    cursor.execute("insert into 生产信息 (日期,名称,单位,数据,类别,状态,数据源) values (%s,%s,%s,%s,%s,%s,%s)", [
+                    cursor.execute("insert into 生产信息 (日期,名称,单位,数据,类别,状态,数据源) values (%r,%r,%r,%r,%r,%r,%r)", [
                                    日期, 名称, 单位, 数据, 类别, 状态, 数据源])
                 # record = 生产信息(日期=日期, 名称=k, 单位='方', 数据=v * 10000, 类别=k[:-3], 状态='计划', 数据源=数据源)
                 # record.save()
@@ -382,9 +390,16 @@ def quickInput(request):
             form = QuickInputForm()
     return render(request, 'ProcessProduction/quickInput.html', locals())
 
-# @login_required(login_url='/Account/login')
+@login_required(login_url='/Account/login')
 def getLaboratoryDaily(request):
     Title='化验日报'
+    # if request.META.has_key('HTTP_X_FORWARDED_FOR'):  
+    #     ip =  request.META['HTTP_X_FORWARDED_FOR']  
+    # else:  
+    #     ip = request.META['REMOTE_ADDR']
+    # user=request.user.username   
+    source = request.user.username+'@'+request.META['REMOTE_ADDR']
+    # logger.info(source)
     location = os.path.join(settings.MEDIA_ROOT,'化验日报')
     if not os.path.exists(location):
         os.mkdir(location)
@@ -402,6 +417,101 @@ def getLaboratoryDaily(request):
                 destination.write(chunk)
         logger.info(absFileName)
         data=dataMining(absFileName)
+        for k in data.keys():
+            if not data[k]:
+                continue
+            if k == '日期':
+                continue
+            if re.match('未凝.*',str(data[k])):
+                value=data[k][2:] 
+            else:
+                value=data[k]
+            name=unit=category=remark=None           
+            if re.match('.*乙二醇.*',k):
+                category='乙二醇' 
+            if k=='乙二醇日回收量m3':
+                name='乙二醇日回收量'
+                value=data[k]
+                category='乙二醇'
+                unit='方'
+                if ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category).exists():
+                    ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category).update(数据=value,数据源=source)
+                else:
+                    p=ProductionData.objects.create(日期=data['日期'],名称=name,单位=unit,数据=value,类别=category,数据源=source)
+                    p.save()
+                continue               
+            if re.match('轻油',k):
+                if k=='轻油外输凝点℃':
+                    name='外输凝点'
+                    unit='摄氏度'
+                if k=='轻油饱和蒸汽压KPa':
+                    name ='饱和蒸汽压'
+                    unit = '千帕'
+                if k=='轻油稳定塔顶压力MPa':
+                    name ='轻油稳定塔顶压力'
+                    unit = '兆帕'
+                if k=='轻油稳定塔底操作温度℃':
+                    name = '轻油稳定塔底操作温度'
+                    unit = '摄氏度'
+                if re.match('.*PH值',k):
+                    name=re.sub('轻油','',k)
+                    logger.info('%r,%r',k,name)
+                # value=data[k]
+                category='轻油'
+                logger.info('%r,%r,%r,%r,%r,%r',data['日期'],name,unit,value,category,remark)
+                if ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category,备注=remark).exists():
+                    ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category,备注=remark).update(数据=value,数据源=source)
+                else:
+                    p=ProductionData.objects.create(日期=data['日期'],名称=name,单位=unit,数据=value,类别=category,备注=remark,数据源=source)
+                    p.save()
+                continue                               
+            if re.match('[上,下]午.*',k) :
+                name = k[2:]
+                remark = k[:2]
+                if re.match('.*轻油.*',k):
+                    name=re.sub('轻油','',name)
+                    category = '轻油'
+                if re.match('.*海管.*',k):
+                    category='海管'
+                if re.match('.*凝点',k):
+                    unit='摄氏度'               
+                if ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category,备注=remark).exists():
+                    ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category,备注=remark).update(数据=value,数据源=source)
+                else:
+                    p=ProductionData.objects.create(日期=data['日期'],名称=name,单位=unit,数据=value,类别=category,备注=remark,数据源=source)
+                    p.save()
+                logger.info('%r,%r,%r,%r,%r,%r',data['日期'],name,unit,value,category,remark)
+                continue 
+            # if re.match('V631',k):
+            #     name = k
+            #     value = data[k]
+            #     if re.match('饱和蒸气压',k):
+            #         unit = '千帕'
+            #     if re.match('密度',k):
+            #         unit = '千克/立方米'
+            #     if re.match('含水',k):
+            #         unit = None
+            #     category = '轻油'
+            #     remark = None
+            #     if ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category,备注=remark).exists():
+            #         ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category,备注=remark).update(数据=value)
+            #     else:
+            #         p=ProductionData.objects.create(日期=data['日期'],名称=name,单位=unit,数据=value,类别=category,备注=remark)
+            #         p.save()
+            #     logger.info('%r,%r,%r,%r,%r,%r',data['日期'],name,unit,value,category,remark)                
+        if data['V631A密度'] or data['V631B密度'] or data['V631C密度']:
+            name = '轻油密度'
+            value = max(data['V631A密度'],data['V631B密度'],data['V631C密度'])
+            unit = '千克/立方米'
+            category = '轻油'
+            remark = None
+            if ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category,备注=remark).exists():
+                ProductionData.objects.filter(日期=data['日期'],名称=name,单位=unit,类别=category,备注=remark).update(数据=value,数据源=source)
+            else:
+                p=ProductionData.objects.create(日期=data['日期'],名称=name,单位=unit,数据=value,类别=category,备注=remark,数据源=source)
+                p.save()
+            logger.info('%r,%r,%r,%r,%r,%r',data['日期'],name,unit,value,category,remark)
+
 
         return render(request, 'ProcessProduction/getLaboratoryDaily.html', locals())
     return render(request, 'ProcessProduction/getLaboratoryDaily.html', locals())

@@ -174,13 +174,13 @@ def getLightOilSaturatedVaporPressureData(sheet, table, data):
                 if temp == "混合进罐前":
                     ro = 1
                     co = 0
-                    data['轻油饱和蒸汽压'] = sheet.cell(row + ro, column + co).value
+                    data['轻油饱和蒸汽压KPa'] = sheet.cell(row + ro, column + co).value
                 if temp == "E-613饱和蒸汽压":
                     ro = 2
                     co = 8
-                    data['轻油饱和蒸汽压'] = sheet.cell(row + ro, column + co).value
+                    data['轻油饱和蒸汽压KPa'] = sheet.cell(row + ro, column + co).value
                     ro = 3
-                    data['轻油稳定塔顶压力'] = sheet.cell(row + ro, column + co).value
+                    data['轻油稳定塔顶压力MPa'] = sheet.cell(row + ro, column + co).value
                     ro = 5
                     data['轻油稳定塔底操作温度℃'] = sheet.cell(
                         row + ro, column + co).value
