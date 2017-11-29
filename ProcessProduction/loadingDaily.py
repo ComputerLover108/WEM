@@ -1,8 +1,38 @@
 from django.db import connection
 from datetime import date, datetime, timedelta
+from .models import LadingBill
 import logging
 
 logger = logging.getLogger('django')
+
+
+def getSimpleLoadingData(sd,data):
+    names = ['丙烷','丁烷','液化气','轻油']
+    # names = LadingBill.objects.distinct('产品名称')
+    logger.info('%r',names)
+    data=dict()
+    cursor = connection.cursor()
+    SQL = "SELECT 日期,产品名称,sum(实际装车m3),sum(实际装车bbl),sum(实际装车t) FROM 提单 WHERE 日期=%s GROUP BY 日期,产品名称;"
+    args = [sd]
+    cursor.execute(SQL, args)
+    rows = cursor.fetchall()
+    if not rows:
+        return False
+    logger.info('%r',rows)
+    for row in rows:
+        for name in names:      
+            if name == row[1]:
+                if row[2]:
+                    ns = name+'装车方'
+                    data[ns] = row[2]
+                if row[3]:
+                    ns = name+'装车桶'
+                    data[ns] = row[3]
+                if row[4]:
+                    ns = name + '装车吨'
+                    data[ns] = row[4]
+    logger.info('%r',data)
+    return True
 
 
 def getLoadingData(sd):
@@ -12,6 +42,7 @@ def getLoadingData(sd):
     args = [sd]
     cursor.execute(SQL, args)
     rows = cursor.fetchall()
+    logger.info('%r:%r',sd,rows)
     names = set()
     names = [row[0] for row in rows]
     # logger.info(names)
@@ -86,5 +117,5 @@ def getLoadingData(sd):
             record[5] = v['轻油bbl'] 
         records.append(record)    
                                   
-    # logger.info(records)
+    logger.info('%r',records)
     return records

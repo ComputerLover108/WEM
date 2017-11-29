@@ -330,8 +330,6 @@ def productionReview(request):
     return render(request, 'ProcessProduction/productionReview.html', locals())
 
 # 配产
-
-
 @login_required(login_url='/Account/login')
 def proration(request):
     if request.user.username != '工艺':
@@ -370,9 +368,8 @@ def proration(request):
     else:
         form = ProrationForm()
     return render(request, 'ProcessProduction/proration.html', locals())
+
 # 快速录入
-
-
 @login_required(login_url='/Account/login')
 def quickInput(request):
     if request.user.username != '工艺':
@@ -383,15 +380,22 @@ def quickInput(request):
         form = QuickInputForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            print(data)
-            return HttpResponseRedirect('ProcessProduction/ProductionDaily')
+            sd = data['日期'].isoformat()
+            
+            if getDerivedData(data,sd):
+                return render(request,'ProcessProduction/ProductionDaily.html',locals())
+            else:
+                return HttpResponse('今天或昨日数据不全！')
         else:
-            print(form.errors.as_data())
+            logger.info('r%',form.errors.as_data())
             form = QuickInputForm()
     return render(request, 'ProcessProduction/quickInput.html', locals())
 
+# 化验日报数据
 @login_required(login_url='/Account/login')
 def getLaboratoryDaily(request):
+    if request.user.username != '工艺':
+        return HttpResponse('请使用工艺账户登录！')    
     Title='化验日报'
     # if request.META.has_key('HTTP_X_FORWARDED_FOR'):  
     #     ip =  request.META['HTTP_X_FORWARDED_FOR']  
@@ -440,12 +444,15 @@ def getLaboratoryDaily(request):
                     p=ProductionData.objects.create(日期=data['日期'],名称=name,单位=unit,数据=value,类别=category,数据源=source)
                     p.save()
                 continue               
-            if re.match('轻油',k):
+            if re.match('轻油|E-613',k):
                 if k=='轻油外输凝点℃':
                     name='外输凝点'
                     unit='摄氏度'
-                if k=='轻油饱和蒸汽压KPa':
-                    name ='饱和蒸汽压'
+                if k=='E-613饱和蒸汽压KPa':
+                    name ='E-613饱和蒸汽压'
+                    unit = '千帕'
+                if k=='轻油混合进罐前饱和蒸汽压KPa':
+                    name = '轻油混合进罐前饱和蒸汽压'
                     unit = '千帕'
                 if k=='轻油稳定塔顶压力MPa':
                     name ='轻油稳定塔顶压力'

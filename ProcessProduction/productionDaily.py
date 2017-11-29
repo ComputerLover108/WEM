@@ -5,6 +5,7 @@
 
 from django.db import connection
 from datetime import date,datetime,timedelta
+from .loadingDaily import *
 import time
 from math import pi
 import re
@@ -180,14 +181,16 @@ def getOilData(data,sd,rows):
                 data[key] = row[3]
     
     cursor = connection.cursor()
-    names = ['外输凝点','外输PH值','E-613饱和蒸汽压']
+    names = ['外输凝点','外输PH值','E-613饱和蒸汽压','轻油混合进罐前饱和蒸汽压']
     for name in names :
         SQL = "select 日期,名称,单位,数据,备注 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s and 名称=%s) and 名称=%s"
+        logger.info('SQL:r%',SQL)
         args = [sd,name,name]
         cursor.execute(SQL,args)
         row = cursor.fetchone()
-        key = row[1]+row[2]
-        data[key] = row[3]
+        if row:
+            key = row[1]+row[2]
+            data[key] = row[3]
 
     name = '轻油入罐前含水' 
     SQL = "select 日期,名称,单位,数据,备注 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s and 名称=%s) and 名称=%s"
@@ -201,7 +204,13 @@ def getOilData(data,sd,rows):
     if '下午轻油入罐前含水' not in data:
         data['下午轻油入罐前含水'] = '-'        
     data['轻油入罐前含水'] = '{}/{}'.format(data['上午轻油入罐前含水'],data['下午轻油入罐前含水'])
-    data['轻油饱和蒸汽压千帕'] = data['E-613饱和蒸汽压千帕']
+    a = 'E-613饱和蒸汽压'
+    b = '轻油混合进罐前饱和蒸汽压'
+    if a and b :
+        c = min(a,b)
+    else:
+        c = a if a else  b
+    data['轻油饱和蒸汽压千帕'] = c
 
 # 轻烃
 def getHydrocarbonData(data,sd,rows):
@@ -255,6 +264,8 @@ def getRemark(data,sd,rows):
 
 # 相关数据
 def getRelatedData(data,sd):
+    if not getSimpleLoadingData(sd,data):
+        return False     
     lastday = datetime.strptime(sd,"%Y-%m-%d") - timedelta(days=1)
     cursor = connection.cursor()
     cursor.execute("select count(*) from 生产信息 where 日期=%s",[lastday.strftime("%Y-%m-%d")])
@@ -347,8 +358,7 @@ def getRelatedData(data,sd):
 
 # 推导数据
 def getDerivedData(data,sd):
-    # for k in data.keys():
-    #     logger.info(k)
+    dataReduction(data)
     if not getRelatedData(data,sd):
         return False
     
@@ -409,6 +419,8 @@ def getDerivedData(data,sd):
         data[k] = v
     names = [
         '锦天化',
+
+
         '精细化工CNG',
         '精细化工',
         '污水处理厂',
@@ -453,5 +465,73 @@ def getDerivedData(data,sd):
     data['轻油需日产'] = (data['轻油年配产方']-data['年累轻油方'])/剩余天数
     data['丙丁烷年度完成率'] = data['年累丙丁烷方']/data['丙丁烷年配产方'] * 100
     data['丙丁烷月度完成率'] = data['月累丙丁烷方']/data['丙丁烷月配产方'] * 100
-    data['丙丁烷需日产'] = (data['丙丁烷年配产方']-data['年累丙丁烷方'])/剩余天数 
-    return True   
+    data['丙丁烷需日产'] = (data['丙丁烷年配产方']-data['年累丙丁烷方'])/剩余天数
+    for k,v in data.items():
+        logger.info('r%:r%',k,v) 
+    return True
+
+# 数据整理
+def dataReduction(data):
+    names = {
+        '稳定区',
+        '入厂计量',
+        '锦天化',
+        '精细化工',
+        '精细化工CNG',
+        '污水处理厂',
+        '新奥燃气',
+        '自用气',
+        # 'JZ202体系',
+        'JZ202凝析油',
+        '轻油回收量',
+        '丙丁烷回收量',
+        '甲醇消耗',
+        '乙二醇消耗',
+        '乙二醇回收',
+        '外供水',
+        '自采水',
+        '污水',
+        'FIQ6102',
+        'FIQ2043',
+        '数据库丙丁烷回收量',
+        '数据库轻油回收量',
+    }
+    kl=list(data.keys())    
+    for k in kl:
+        # condition = re.match('电|压力|温度|密度|[水液]位',k)
+        # logger.info('r%,r%',k,condition)
+        # FIQ5014单位千方
+        if k == 'FIQ5014':
+            name = k + '方'
+            data[name] = data[k]*1000
+            # logger.info('r%,data[%r]=r%',k,name,data[name])
+            continue
+        if k == 'JZ202体系':
+            name = 'JZ202体系接收方'
+            data[name] = data[k]
+            continue
+        if re.match('.*电$',k):
+            name=k+'度'
+            data[name]=data[k]
+        if re.match('.*液位$',k):
+            name = re.sub('液位','米',k)
+            data[name]=data[k]
+        if re.match('.*水池水位$',k):
+            name = k + '米'
+            data[name] = data[k]
+        if re.match('.*压力$',k):
+            name = k + '兆帕'
+            data[name]=data[k]
+        if re.match('.*温度$',k):
+            name = k + '摄氏度'
+            data[name]=data[k]
+        if re.match('.*密度$',k):
+            name = k + '千克/米'
+            data[name]=data[k]
+        if k in names:
+            name = k + '方'
+            data[name]=data[k]    
+    
+    for k in data.keys():
+        logger.info('%r:%r',k,data[k])
+    return False    

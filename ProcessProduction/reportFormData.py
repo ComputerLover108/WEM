@@ -55,21 +55,14 @@ def getSeaPipeData(context,date):
     category = '海管'
     records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     for record in records :
-#       print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
        pattern = '海管(MEG浓度|出口PH值|出口凝点|来液含水|来液密度)'
        if re.match(pattern,record.名称) :
            name = record.名称 + record.备注 if record.备注 else record.名称
            context[name] = record.数据
-#           print(name,context[name])
        pattern = '海管(进口温度|进口压力|出口温度|出口压力)'
        if re.match(pattern,record.名称) :
          name = record.名称
          context[name] = record.数据 if record.数据 else '-'
-#         print(name,context[name])
-#       if context['海管进口温度'] and context['海管出口温度'] :
-#           context['海管进出口温度'] = '{}/{}'.format(context['海管进口温度'],context['海管出口温度'])
-#       if context['海管进口压力'] and context['海管出口压力'] :
-#           context['海管进出口压力'] = '{}/{}'.format(context['海管进口压力'],context['海管出口压力'])
 
 def getUpstreamData(context,date):
     category = '上游'
@@ -118,14 +111,12 @@ def getOilData(context,date):
     records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     x=y='-'
     for record in records:
-#        print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
         state = '库存'
         if re.match(state,record.状态) :
             name = record.名称.replace('-','')
             context[name+'_m'] = record.数据
         name = '轻油装车'
         if re.match(name,record.名称) :
-#            print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
             if record.单位 == '方' :
                 context[name+'m3'] = record.数据
             if record.单位 == '桶' :
@@ -152,23 +143,14 @@ def getOilData(context,date):
         if re.match(pattern,record.名称) :
             if record.备注 == '上午' :
                 x = record.数据
-#                print(record.名称,record.备注,record.数据,x,y)
             if record.备注 == '下午' :
                 y = record.数据
-#                print(record.名称,record.备注,record.数据,x,y)
-        pattern = '数据库轻油回收量'
-        if re.match(pattern,record.名称):
-            name = '数据库轻油回收量m3'
-            context[name] = record.数据
-    context['轻油入罐前含水'] = '{}/{}'.format(x,y)
-#    print('轻油入罐前含水',context['轻油入罐前含水'])
 
 
 def getHydrocarbonData(context,date):
     category = '丙丁烷'
     records = ProductionData.objects.filter(Q(日期=date), Q(类别=category))
     for record in records:
-#        print('{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(record.名称,record.单位,record.数据,record.类别,record.状态,record.月累,record.年累,record.备注))
         pattern = 'V-64([13][AB]|2)'
         if re.match(pattern,record.名称):
             unit ='米'
