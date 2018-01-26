@@ -1,9 +1,9 @@
-from django.conf.urls import url
+from django.urls import path
 
 from . import views
 from .views import EquipmentList
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-	url(r'EquipmentList/$',EquipmentList.as_view(),name='EquipmentList'),        
+    path('', views.index, name='index'),
+	path('EquipmentList/',EquipmentList.as_view(),name='EquipmentList'),
 ]

@@ -5,7 +5,7 @@ import json
 # Create your views here.
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from .models import WorkPhone, LiaoDongPhone
 from django.db.models import Q
 
