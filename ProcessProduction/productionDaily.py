@@ -70,6 +70,12 @@ def dataFinish(data):
         data['精细化工CNG'+'方'] = '/'    
         data['月累'+'精细化工CNG'+'方'] = '/'
         data['年累'+'精细化工CNG'+'方'] = '/'
+    if 'JZ251S原油方' not in data:
+        data['JZ251S原油方'] = '/'
+    if 'JZ251S原油密度吨每立方米' not in data:
+        data['JZ251S原油密度吨每立方米'] = '/'
+    if not data['JZ251S原油密度吨每立方米'] :
+        data['JZ251S原油密度吨每立方米'] = '/'
     sd = data['日期']
     for name in names:
         x = name+'方'
@@ -184,7 +190,7 @@ def getOilData(data,sd,rows):
     names = ['外输凝点','外输PH值','E-613饱和蒸汽压','轻油混合进罐前饱和蒸汽压']
     for name in names :
         SQL = "select 日期,名称,单位,数据,备注 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s and 名称=%s) and 名称=%s"
-        logger.info('SQL:r%',SQL)
+        # logger.info('SQL:r%',SQL)
         args = [sd,name,name]
         cursor.execute(SQL,args)
         row = cursor.fetchone()
@@ -366,8 +372,10 @@ def getDerivedData(data,sd):
     data['JZ202轻油接收方'] = data['数据库轻油回收量方'] - data['JZ202凝析油方']
     tankDiameter = 14.5
     for x in ['V631A','V631B','V631C'] :
-        data[x+'方'] = (pi/4)*pow(tankDiameter,2)*data[x+'米']
-        data[x+'吨'] = data['轻油密度'] * data[x+'方']
+        # data[x+'方'] = (pi/4)*pow(tankDiameter,2)*data[x+'米']
+        # data[x+'吨'] = data['轻油密度'] * data[x+'方']
+        data[x + '方'] = 165 * data[x+'米']
+        data[x + '吨'] = 122 * data[x+'米']
     data['轻油库存方'] = data['V631A方']  + data['V631B方'] +data['V631C方']
     data['轻油库存吨'] = data['V631A吨']  + data['V631B吨'] +data['V631C吨']   
 
@@ -380,8 +388,12 @@ def getDerivedData(data,sd):
     sphericalDiameter = 12.3
     for x in names :
         key = x.replace('-','') 
-        data[key+'方'] = pi/3*(3*sphericalDiameter/2-data[key+'米'])*pow(data[key+'米'],2)
-        data[key+'吨'] = data[key+'方'] * data[key+'密度'+'吨每立方米']
+        # data[key+'方'] = pi/3*(3*sphericalDiameter/2-data[key+'米'])*pow(data[key+'米'],2)
+        data[key + '方'] = 19.311*pow(data[key+'米'],2)-pow(data[key+'米'],3)*1.047
+        # data[key+'吨'] = data[key+'方'] * data[key+'密度'+'吨每立方米']
+        data[key + '吨'] = (3*6.15-data[key+'米'])*3.1415*pow(data[key+'米'],2)/3*data[key+'密度'+'吨每立方米']
+        # data[key+'方'] = round(data[key+'方'],2)
+        # data[key + '吨'] = round(data[key + '吨'], 2)
     for u in ['方','吨']:
         data['丙烷库存'+u] = data['V641A'+u] + data['V641B'+u]
         data['丁烷库存'+u] = data['V642'+u] + data['V643B'+u]
@@ -428,8 +440,8 @@ def getDerivedData(data,sd):
         '自用气'
     ] 
     gas = [ data[x+'方'] if x+'方' in data else 0 for x in names  ]
-    gasM = [ data['昨月累'+x+'方'] if '昨月累'+x+'方' in data else 0 for x in names ]
-    gasY = [ data['昨年累'+x+'方'] if '昨年累'+x+'方' in data else 0 for x in names  ]
+    gasM = [ data['昨月累'+x+'方'] if '昨月累'+x+'方' in data else 0 for x in names ] + gas
+    gasY = [ data['昨年累'+x+'方'] if '昨年累'+x+'方' in data else 0 for x in names  ] + gas
     data['总产气量方'] = sum(gas)
     data['月累'+'总产气量方'] = sum(gasM)
     data['年累'+'总产气量方'] = sum(gasY)
@@ -466,8 +478,8 @@ def getDerivedData(data,sd):
     data['丙丁烷年度完成率'] = data['年累丙丁烷方']/data['丙丁烷年配产方'] * 100
     data['丙丁烷月度完成率'] = data['月累丙丁烷方']/data['丙丁烷月配产方'] * 100
     data['丙丁烷需日产'] = (data['丙丁烷年配产方']-data['年累丙丁烷方'])/剩余天数
-    for k,v in data.items():
-        logger.info('r%:r%',k,v) 
+    # for k,v in data.items():
+    #     logger.info('r%:r%',k,v)
     return True
 
 # 数据整理
@@ -532,6 +544,6 @@ def dataReduction(data):
             name = k + '方'
             data[name]=data[k]    
     
-    for k in data.keys():
-        logger.info('%r:%r',k,data[k])
+    # for k in data.keys():
+    #     logger.info('%r:%r',k,data[k])
     return False    

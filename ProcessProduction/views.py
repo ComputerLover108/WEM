@@ -22,7 +22,6 @@ from pypinyin import pinyin, lazy_pinyin
 import os
 # Create your views here.
 import logging
-# logger = logging.getLogger(__name__)
 logger = logging.getLogger('django')
 
 def getDataSource():
