@@ -91,28 +91,28 @@
  -->        <tbody>
             {% for k,v in data.items %}
                 <tr>
-                    <td>{{k}}</td>
-                    <td>{{v.锦天化方}}</td>
-                    <td>{{v.新奥燃气方}}</td>
-                    <td>{{v.自用气方}}</td>
-                    <td>{{v.精细化工CNG方|default:0}}</td>
-                    <td>{{v.精细化工方}}</td>
-                    <td>{{v.污水处理厂方|default:0}}</td>
-                    <td>{{v.轻油回收量吨}}</td>
-                    <td>{{v.轻油回收量方}}</td>
-                    <td>{{v.丙丁烷回收量方}}</td>
-                    <td>{{v.轻油装车方}}</td>
-                    <td>{{v.轻油装车桶}}</td>
-                    <td>{{v.轻油装车吨}}</td>
-                    <td>{{v.丙烷装车方}}</td>
-                    <td>{{v.丁烷装车方}}</td>
-                    <td>{{v.液化气装车方}}</td>
-                    <td>{{v.轻烃装车方}}</td>
-                    <td>{{v.外供电度}}</td>
-                    <td>{{v.自发电度}}</td>
-                    <td>{{v.外供水方}}</td>
-                    <td>{{v.自采水方|default:0}}</td>
-                    <td>{{v.乙二醇回收方}}</td>                                                             
+                    <td>{{k|date:"d"}}</td>
+                    <td>{{v.锦天化方|floatformat}}</td>
+                    <td>{{v.新奥燃气方|floatformat}}</td>
+                    <td>{{v.自用气方|floatformat}}</td>
+                    <td>{{v.精细化工CNG方|floatformat|default:0}}</td>
+                    <td>{{v.精细化工方|floatformat}}</td>
+                    <td>{{v.污水处理厂方|floatformat|default:0}}</td>
+                    <td>{{v.轻油回收量吨|floatformat}}</td>
+                    <td>{{v.轻油回收量方|floatformat}}</td>
+                    <td>{{v.丙丁烷回收量方|floatformat}}</td>
+                    <td>{{v.轻油装车方|floatformat}}</td>
+                    <td>{{v.轻油装车桶|floatformat:4|default:0}}</td>
+                    <td>{{v.轻油装车吨|floatformat}}</td>
+                    <td>{{v.丙烷装车方|floatformat}}</td>
+                    <td>{{v.丁烷装车方|floatformat}}</td>
+                    <td>{{v.液化气装车方|floatformat}}</td>
+                    <td>{{v.轻烃装车方|floatformat}}</td>
+                    <td>{{v.外供电度|floatformat}}</td>
+                    <td>{{v.自发电度|floatformat}}</td>
+                    <td>{{v.外供水方|floatformat}}</td>
+                    <td>{{v.自采水方|floatformat|default:0}}</td>
+                    <td>{{v.乙二醇回收方|floatformat|default:0}}</td>                                                             
                 </tr>
             {% endfor row %}
         </tbody>

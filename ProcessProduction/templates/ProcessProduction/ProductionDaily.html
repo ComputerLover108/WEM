@@ -21,6 +21,10 @@
     .签名 {
         border-top : 1px
     }
+    .备注 {
+        vertical-align:top;
+        text-align: left;
+    }
 /*    table { width: 80%; }
     tr { height: 10px; }*/
     </style>
@@ -100,36 +104,36 @@
                 <font><sup>4</sup></font><font>m</font><sup>3</sup>
             </td>
             <td>稳定区10<font><sup>4</sup></font><font>m</font><sup>3</sup></td>
-            <td colspan="2">{{data.稳定区方|floatformat:4}}</td>
-            <td>{{data.月累稳定区方|floatformat:4}}</td>
-            <td>{{data.年累稳定区方|floatformat:4}}</td>
+            <td colspan="2">{{data.稳定区万方|floatformat:4}}</td>
+            <td>{{data.月累稳定区万方|floatformat:4}}</td>
+            <td>{{data.年累稳定区万方|floatformat:4}}</td>
             <td>项目</td>
             <td>上午</td>
             <td>下午</td>
         </tr>
         <tr>
             <td>入厂计量10<font><sup>4</sup></font><font>m</font><sup>3</sup></td>
-            <td colspan="2">{{data.入厂计量方|floatformat:4}}</td>
-            <td>{{data.月累入厂计量方|floatformat:4}}</td>
-            <td>{{data.年累入厂计量方|floatformat:4}}</td>
+            <td colspan="2">{{data.入厂计量万方|floatformat:4}}</td>
+            <td>{{data.月累入厂计量万方|floatformat:4}}</td>
+            <td>{{data.年累入厂计量万方|floatformat:4}}</td>
             <td>海管来液含水%</td>
             <td>{{data.海管来液含水上午}}</td>
             <td>{{data.海管来液含水下午}}</td>
         </tr>
         <tr>
             <td>JZ20-2体系10<font><sup>4</sup></font><font>m</font><sup>3</sup></td>
-            <td colspan="2">{{data.JZ202体系接收方|floatformat:4}}</td>
-            <td>{{data.月累JZ202体系接收方|floatformat:4}}</td>
-            <td>{{data.年累JZ202体系接收方|floatformat:4}}</td>
+            <td colspan="2">{{data.JZ202体系接收万方|floatformat:4}}</td>
+            <td>{{data.月累JZ202体系接收万方|floatformat:4}}</td>
+            <td>{{data.年累JZ202体系接收万方|floatformat:4}}</td>
             <td>海管MEG浓度%</td>
             <td>{{data.海管MEG浓度上午}}</td>
             <td>{{data.海管MEG浓度下午}}</td>
         </tr>
         <tr>
             <td>JZ25-1S体系10<font><sup>4</sup></font><font>m</font><sup>3</sup></td>
-            <td colspan="2">{{data.JZ251S体系接收方|floatformat:4}}</td>
-            <td>{{data.月累JZ251S体系接收方|floatformat:4}}</td>
-            <td>{{data.年累JZ251S体系接收方|floatformat:4}}</td>
+            <td colspan="2">{{data.JZ251S体系接收万方|floatformat:4}}</td>
+            <td>{{data.月累JZ251S体系接收万方|floatformat:4}}</td>
+            <td>{{data.年累JZ251S体系接收万方|floatformat:4}}</td>
             <td>海管出口凝点℃</td>
             <td>{{data.海管出口凝点上午摄氏度}}</td>
             <td>{{data.海管出口凝点下午摄氏度}}</td>
@@ -137,11 +141,11 @@
         <tr>
             <td colspan="2">总外输气量10
                 <font><sup>4</sup></font>
-                <font>m3</font>
+                <font>m</font><sup>3</sup>
             </td>
-            <td colspan="2">{{data.总外输气量方|floatformat:4}}</td>
-            <td>{{data.月累总外输气量方|floatformat:4}}</td>
-            <td>{{data.年累总外输气量方|floatformat:4}}</td>
+            <td colspan="2"><strong>{{data.总外输气量万方|floatformat:4}}</strong></td>
+            <td>{{data.月累总外输气量万方|floatformat:4}}</td>
+            <td>{{data.年累总外输气量万方|floatformat:4}}</td>
             <td>海管出口PH值</td>
             <td>{{data.海管出口PH值上午}}</td>
             <td>{{data.海管出口PH值下午}}</td>
@@ -149,92 +153,92 @@
         <tr>
             <td colspan="2">总产气量10
                 <font><sup>4</sup></font>
-                <font>m3</font>
+                <font>m</font><sup>3</sup>
             </td>
-            <td colspan="2">{{data.总产气量方|floatformat:4}}</td>
-            <td>{{data.月累总产气量方|floatformat:4}}</td>
-            <td>{{data.年累总产气量方|floatformat:4}}</td>
+            <td colspan="2">{{data.总产气量万方|floatformat:4}}</td>
+            <td>{{data.月累总产气量万方|floatformat:4}}</td>
+            <td>{{data.年累总产气量万方|floatformat:4}}</td>
             <td>海管进/出口压力MPa</td>
             <td colspan="2">{{data.海管进出口压力兆帕}}</td>
         </tr>
         <tr>
             <td rowspan="3">锦天化10
                 <font><sup>4</sup></font>
-                <font>m3</font>
+                <font>m</font><sup>3</sup>
             </td>
-            <td colspan="2">{{data.锦天化方|floatformat:4}}</td>
-            <td rowspan="6">{{data.锦天化计量仪表方|floatformat:4}}</td>
-            <td>{{data.月累锦天化方|floatformat:4}}</td>
-            <td>{{data.年累锦天化方|floatformat:4}}</td>
+            <td colspan="2">{{data.锦天化万方|floatformat:4}}</td>
+            <td rowspan="6"><strong>{{data.锦天化计量仪表万方|floatformat:4}}</strong></td>
+            <td>{{data.月累锦天化万方|floatformat:4}}</td>
+            <td>{{data.年累锦天化万方|floatformat:4}}</td>
             <td>海管进/出口温度℃</td>
             <td colspan="2">{{data.海管进出口温度摄氏度}}</td>
         </tr>
         <tr>
             <td>JZ20-2体系(外输)</td>
-            <td>{{data.JZ202体系外输方|floatformat:4}}</td>
-            <td>{{data.月累JZ202体系外输方|floatformat:4}}</td>
-            <td>{{data.年累JZ202体系外输方|floatformat:4}}</td>
-            <td>JZ25-1S原油m3</td>
-            <td>{{data.JZ251S原油方|floatformat:4}}</td>
-            <td>{{data.JZ251S原油密度吨每立方米}}</td>
+            <td>{{data.JZ202体系外输万方|floatformat:4}}</td>
+            <td>{{data.月累JZ202体系外输万方|floatformat:4}}</td>
+            <td>{{data.年累JZ202体系外输万方|floatformat:4}}</td>
+            <td>JZ25-1S原油<font>m</font><sup>3</sup></td>
+            <td>{{data.JZ251S原油万方|floatformat:4|default:"/"}}</td>
+            <td>{{data.JZ251S原油密度吨每立方米|default:"/"}}</td>
         </tr>
         <tr>
             <td>JZ25-1S体系(外输)</td>
-            <td>{{data.JZ251S体系外输方|floatformat:4}}</td>
-            <td>{{data.月累JZ251S体系外输方|floatformat:4}}</td>
-            <td>{{data.年累JZ251S体系外输方|floatformat:4}}</td>
-            <td>JZ20-2凝析油m3</td>
+            <td>{{data.JZ251S体系外输万方|floatformat:4}}</td>
+            <td>{{data.月累JZ251S体系外输万方|floatformat:4}}</td>
+            <td>{{data.年累JZ251S体系外输万方|floatformat:4}}</td>
+            <td>JZ20-2凝析油<font>m</font><sup>3</sup></td>
             <td>{{data.JZ202凝析油方|floatformat:4}}</td>
             <td>{{data.JZ202凝析油密度吨每立方米}}</td>
         </tr>
         <tr>
             <td>
-                精细化工CNG10<font><sup>4</sup></font><font>m3</font>
+                精细化工CNG10<font><sup>4</sup></font><font>m</font><sup>3</sup>
             </td>
-            <td colspan="2">{{data.精细化工CNG方|floatformat:4}}</td>
-            <td>{{data.月累精细化工CNG方|floatformat:4}}</td>
-            <td>{{data.年累精细化工CNG方|floatformat:4}}</td>
-            <td>JZ20-2轻油m3</td>
+            <td colspan="2">{{data.精细化工CNG万方|floatformat:4}}</td>
+            <td>{{data.月累精细化工CNG万方|floatformat:4}}</td>
+            <td>{{data.年累精细化工CNG万方|floatformat:4}}</td>
+            <td>JZ20-2轻油<font>m</font><sup>3</sup></td>
             <td>{{data.JZ202轻油方|floatformat:4}}</td>
             <td>{{data.JZ202轻油密度吨每立方米}}</td>
         </tr>        
         <tr>
-            <td>精细化工10<font><sup>4</sup></font><font>m3</font>    
+            <td>精细化工10<font><sup>4</sup></font><font>m</font><sup>3</sup>    
             </td>
-            <td>{{data.精细化工方|floatformat:4}}</td>
-            <td rowspan="2">{{data.精细化工计量仪表方|floatformat:4}}</td>
-            <td>{{data.月累精细化工方|floatformat:4}}</td>
-            <td>{{data.年累精细化工方|floatformat:4}}</td>
-            <td colspan="3" rowspan="4" valign="middle">{{data.上下游12吋海管通球}}</td>
+            <td>{{data.精细化工万方|floatformat:4}}</td>
+            <td rowspan="2">{{data.精细化工计量仪表万方|floatformat:4}}</td>
+            <td>{{data.月累精细化工万方|floatformat:4}}</td>
+            <td>{{data.年累精细化工万方|floatformat:4}}</td>
+            <td class="备注" colspan="3" rowspan="4">{{data.上下游12吋海管通球}}</td>
         </tr>
         <tr>
             <td>污水处理厂10
                 <font><sup>4</sup></font>
-                <font>m3</font>
+                <font>m</font><sup>3</sup>
                 </span>
             </td>
-            <td>{{data.污水处理厂方|floatformat:4}}</td>
-            <td>{{data.月累污水处理厂方|floatformat:4}}</td>
-            <td>{{data.年累污水处理厂方|floatformat:4}}</td>
+            <td>{{data.污水处理厂万方|floatformat:4}}</td>
+            <td>{{data.月累污水处理厂万方|floatformat:4}}</td>
+            <td>{{data.年累污水处理厂万方|floatformat:4}}</td>
             
         </tr>
         <tr>
             <td colspan="2">新奥燃气10
                 <font><sup>4</sup></font>
-                <font>m3</font>
+                <font>m</font><sup>3</sup>
             </td>
-            <td colspan="2">{{data.新奥燃气方|floatformat:4}}</td>
-            <td>{{data.月累新奥燃气方|floatformat:4}}</td>
-            <td>{{data.年累新奥燃气方|floatformat:4}}</td>
+            <td colspan="2">{{data.新奥燃气万方|floatformat:4}}</td>
+            <td>{{data.月累新奥燃气万方|floatformat:4}}</td>
+            <td>{{data.年累新奥燃气万方|floatformat:4}}</td>
         </tr>
         <tr>
             <td colspan="2">自用气10
                 <font><sup>4</sup></font>
-                <font>m3</font>
+                <font>m</font><sup>3</sup>
             </td>
-            <td colspan="2">{{data.自用气方|floatformat:4}}</td>
-            <td>{{data.月累自用气方|floatformat:4}}</td>
-            <td>{{data.年累自用气方|floatformat:4}}</td>
+            <td colspan="2">{{data.自用气万方|floatformat:4}}</td>
+            <td>{{data.月累自用气万方|floatformat:4}}</td>
+            <td>{{data.年累自用气万方|floatformat:4}}</td>
         </tr>
         <tr>
             <th colspan="9">（三）轻油产量/外输/库存</th>
@@ -255,8 +259,8 @@
             <td>{{data.V631B米}}</td>
             <td>{{data.V631C米}}</td>
             <td>{{data.轻油库存米}}</td>
-            <td>{{data.轻油处理量方|floatformat:2}}</td>
-            <td>{{data.轻油回收量方|floatformat:2}}</td>
+            <td><strong>{{data.轻油处理量方|floatformat:2}}</strong></td>
+            <td><strong>{{data.轻油回收量方|floatformat:2}}</strong></td>
             <td>{{data.轻油回收量吨|floatformat:2}}</td>
         </tr>
         <tr>
@@ -281,7 +285,7 @@
             <td>{{data.外输凝点摄氏度}}</td>
         </tr>
         <tr>
-            <td colspan="2">轻油装车m3</td>
+            <td colspan="2">轻油装车<font>m</font><sup>3</sup></td>
             <td>{{data.轻油装车方|floatformat:2}}</td>
             <td>轻油装车bbl</td>
             <td>{{data.轻油装车桶|floatformat:4}}</td>
@@ -343,13 +347,13 @@
             <td>{{data.液化气库存吨|floatformat:2}}</td>
         </tr>
         <tr>
-            <td>丙烷装车m3</td>
+            <td>丙烷装车<font>m</font><sup>3</sup></td>
             <td>丙烷装车t</td>
-            <td>丁烷装车m3</td>
+            <td>丁烷装车<font>m</font><sup>3</sup></td>
             <td>丁烷装车t</td>
-            <td>液化气装车m3</td>
+            <td>液化气装车<font>m</font><sup>3</sup></td>
             <td>液化气装车t</td>
-            <td>轻烃回收m3</td>
+            <td>轻烃回收<font>m</font><sup>3</sup></td>
             <td>轻烃回收t</td>
             <td>轻烃库存t</td>
         </tr>
@@ -360,16 +364,16 @@
             <td>{{data.丁烷装车吨|floatformat:2}}</td>
             <td>{{data.液化气装车方|floatformat:2}}</td>
             <td>{{data.液化气装车吨|floatformat:2}}</td>
-            <td>{{data.轻烃回收方|floatformat:2}}</td>
-            <td>{{data.轻烃回收吨|floatformat:2}}</td>
+            <td><strong>{{data.轻烃回收方|floatformat:2}}</strong></td>
+            <td><strong>{{data.轻烃回收吨|floatformat:2}}</strong></td>
             <td>{{data.轻烃库存吨|floatformat:2}}</td>
         </tr>
         <tr>
             <td>数据库</td>
-            <td colspan="2">数据库轻油回收量m3</td>
-            <td colspan="2">{{data.数据库轻油回收量方|floatformat:2}}</td>
-            <td colspan="2">数据库轻烃回收量m3</td>
-            <td colspan="2">{{data.数据库轻烃回收量方|floatformat:2}}</td>
+            <td colspan="2">数据库轻油回收量<font>m</font><sup>3</sup></td>
+            <td colspan="2"><strong>{{data.数据库轻油回收量方|floatformat:2}}</strong></td>
+            <td colspan="2">数据库轻烃回收量<font>m</font><sup>3</sup></td>
+            <td colspan="2"><strong>{{data.数据库轻烃回收量方|floatformat:2}}</strong></td>
         </tr>
         <tr>
             <th colspan="9">（五）物料接收/消耗</th>
@@ -420,13 +424,13 @@
             <td>{{data.年累外供水方|floatformat}}</td>
             <td>{{data.年累自采水方|floatformat}}</td>
             <td>{{data.年累水消耗方|floatformat:2}}</td>
-            <td>{{data.年累外供电|floatformat}}</td>
+            <td>{{data.年累外供电度|floatformat}}</td>
             <td>{{data.年累自发电度|floatformat}}</td>
             <td>{{data.年累电消耗度|floatformat}}</td>
         </tr>
         <tr>
             <td>乙二醇浓度%</td>
-            <td>{{data.乙二醇浓度|floatformat}}</td>
+            <td>{{data.乙二醇浓度|floatformat|default:"/"}}</td>
             <td>乙二醇消耗m<sup>3</sup></td>
             <td>{{data.乙二醇消耗方|floatformat}}</td>
             <td>库存水</td>
@@ -436,7 +440,7 @@
             <td>{{data.库存水方|floatformat}}</td>
         </tr>
         <tr>
-            <td colspan="9" valign="middle">
+            <td class="备注" rowspan="3" colspan="9" >
             {{data.生产备注}}
             </td>
         </tr>
