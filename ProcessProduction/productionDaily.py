@@ -62,10 +62,12 @@ def dataFinish(data):
             if k=='轻油装车桶':
                 data[k] = round(v,4)
             else:
-                if k in nameC or re.search('配产|需日产',k):
+                if k in nameC :
                     data[k] = round(v/pow(10,4),4)
-                else:
-                    data[k] = round(v,4)
+            #     else:
+            #         data[k] = round(v,2)
+    data['锦天化计量仪表方'] = round(data['锦天化计量仪表方'] / pow(10,4),4)
+    data['精细化工计量仪表方'] = round(data['精细化工计量仪表方'] / pow(10,4),4)
     if '精细化工CNG方' not in data:
         data['精细化工CNG'+'方'] = '/'    
         data['月累'+'精细化工CNG'+'方'] = '/'
@@ -210,13 +212,18 @@ def getOilData(data,sd,rows):
     if '下午轻油入罐前含水' not in data:
         data['下午轻油入罐前含水'] = '-'        
     data['轻油入罐前含水'] = '{}/{}'.format(data['上午轻油入罐前含水'],data['下午轻油入罐前含水'])
-    a = 'E-613饱和蒸汽压'
-    b = '轻油混合进罐前饱和蒸汽压'
-    if a and b :
-        c = min(a,b)
+    if 'E-613饱和蒸汽压千帕' in data:
+        c=a = data['E-613饱和蒸汽压千帕']
     else:
-        c = a if a else  b
+        a=None
+    if '轻油混合进罐前饱和蒸汽压千帕' in data:
+        c=b=data['轻油混合进罐前饱和蒸汽压千帕']
+    else:
+        b=None
     data['轻油饱和蒸汽压千帕'] = c
+    if a and b:
+        c = min(a,b)
+        data['轻油饱和蒸汽压千帕'] = c
 
 # 轻烃
 def getHydrocarbonData(data,sd,rows):
@@ -266,7 +273,8 @@ def getRemark(data,sd,rows):
     names = ['上下游12吋海管通球','生产备注']
     for row in rows:
         if row[1] in names :
-            data[row[1]] = row[3] if row[3] else '/'
+            data[row[1]] = row[6] if row[6] else '/'
+            # logger.info('r%,r%,r%',row[1],row[5],row[6])
 
 # 相关数据
 def getRelatedData(data,sd):
@@ -370,12 +378,15 @@ def getDerivedData(data,sd):
     
     data['JZ202体系外输方'] = data['锦天化方']*(data['JZ202体系接收方']/data['入厂计量方'])
     data['JZ202轻油接收方'] = data['数据库轻油回收量方'] - data['JZ202凝析油方']
+    data['精细化工计量仪表方'] = data['精细化工方']+data['污水处理厂方']
+    data['锦天化计量仪表方'] = data['锦天化方']+data['精细化工CNG方']+data['精细化工方']+data['污水处理厂方']
     tankDiameter = 14.5
     for x in ['V631A','V631B','V631C'] :
         # data[x+'方'] = (pi/4)*pow(tankDiameter,2)*data[x+'米']
         # data[x+'吨'] = data['轻油密度'] * data[x+'方']
         data[x + '方'] = 165 * data[x+'米']
         data[x + '吨'] = 122 * data[x+'米']
+    data['轻油库存米'] = data['V631A米']  + data['V631B米'] +data['V631C米']
     data['轻油库存方'] = data['V631A方']  + data['V631B方'] +data['V631C方']
     data['轻油库存吨'] = data['V631A吨']  + data['V631B吨'] +data['V631C吨']   
 
