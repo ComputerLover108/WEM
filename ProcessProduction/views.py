@@ -256,6 +256,12 @@ def ProductionDaily(request):
         print('POST OK!')
     return render(request, 'ProcessProduction/ProductionDaily.html', locals())
 
+def specifiedProductionDaily(request,sd):
+    Title = '葫芦岛天然气终端厂生产日报'
+    request.session['productionDailyData']=getProductionDailyData(sd)
+    logger.info('%r',request.session['productionDailyData'])
+    data = request.session['productionDailyData']
+    return render(request, 'ProcessProduction/ProductionDaily.html', {'Title':Title,'data':data})
 
 def ProductionMonthly(request):
     Title = '葫芦岛天然气终端厂生产月报'
@@ -388,7 +394,7 @@ def quickInput(request):
         else:
             logger.info('r%',form.errors.as_data())
             form = QuickInputForm()
-    return render(request, 'ProcessProduction/quickInput.html', locals())
+    return render(request, 'ProcessProduction/QuickInput.html', locals())
 
 # 化验日报数据
 @login_required(login_url='/Account/login')

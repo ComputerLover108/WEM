@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,re_path
 
 from . import views
 
@@ -10,6 +10,7 @@ urlpatterns = [
     path('SeaPipeData', views.SeaPipeData, name='SeaPipeData'),
     path('ProductionReview', views.productionReview, name='productionReview'),
     path('ProductionDaily', views.ProductionDaily, name='productionDaily'),
+    re_path(r'^ProductionDaily/(?P<sd>[0-9]{4}-[0-9]{2}-[0-9]{2})/$',views.specifiedProductionDaily,name='specifiedProductionDaily'),
     path('ProductionMonthly', views.ProductionMonthly, name='productionMonthly'),
     path('ProductionAnnual', views.ProductionAnnual, name='productionAnnual'),
     path('loadingDaily', views.loadingDaily, name='loadingDaily'),
