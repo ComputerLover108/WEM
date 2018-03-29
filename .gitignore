@@ -3,4 +3,5 @@
 *.1db
 *.pyc
 .idea
+.vscode
 __pycache__
