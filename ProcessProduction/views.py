@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.db.models import Q
 from datetime import date, datetime, time
@@ -249,16 +250,15 @@ def SeaPipeData(request):
 
 
 def ProductionDaily(request):
-    Title = '葫芦岛天然气终端厂生产日报'
     sd = request.GET.get('productionDailyDate')
-    data = getProductionDailyData(sd)
-    if request.method == 'POST':
-        print('POST OK!')
-    return render(request, 'ProcessProduction/ProductionDaily.html', locals())
+    request.session['productionDailyData']=getProductionDailyData(sd)
+    # if request.method == 'POST':
+    #     print('POST OK!')
+    return HttpResponseRedirect(reverse('specifiedProductionDaily',args=(sd,)))    
 
 def specifiedProductionDaily(request,sd):
     Title = '葫芦岛天然气终端厂生产日报'
-    request.session['productionDailyData']=getProductionDailyData(sd)
+    # request.session['productionDailyData']=getProductionDailyData(sd)
     logger.info('%r',request.session['productionDailyData'])
     data = request.session['productionDailyData']
     return render(request, 'ProcessProduction/ProductionDaily.html', {'Title':Title,'data':data})
@@ -386,13 +386,16 @@ def quickInput(request):
         if form.is_valid():
             data = form.cleaned_data
             sd = data['日期'].isoformat()
-            
-            if getDerivedData(data,sd):
-                return render(request,'ProcessProduction/ProductionDaily.html',locals())
-            else:
-                return HttpResponse('今天或昨日数据不全！')
+            data['日期'] = sd
+            logger.info('%r',data)
+            request.session['productionDailyData'] = data
+            return HttpResponseRedirect(reverse('specifiedProductionDaily',args=(sd,)))    
+            # if getDerivedData(data,sd):
+            #     return render(request,'ProcessProduction/ProductionDaily.html',locals())
+            # else:
+            #     return HttpResponse('今天或昨日数据不全！')
         else:
-            logger.info('r%',form.errors.as_data())
+            # logger.info('r%',form.errors.as_data())
             form = QuickInputForm()
     return render(request, 'ProcessProduction/QuickInput.html', locals())
 
