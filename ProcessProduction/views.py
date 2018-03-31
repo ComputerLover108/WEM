@@ -387,6 +387,7 @@ def quickInput(request):
             data = form.cleaned_data
             sd = data['日期'].isoformat()
             data['日期'] = sd
+            getDistributionData(data,sd)
             logger.info('%r',data)
             request.session['productionDailyData'] = data
             return HttpResponseRedirect(reverse('specifiedProductionDaily',args=(sd,)))    

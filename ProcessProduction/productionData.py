@@ -3,6 +3,9 @@ from django.db import connection
 from datetime import date,datetime,time,timedelta
 import json
 import re
+import logging
+
+logger = logging.getLogger('django')
 # with connection.cursor() as c:
 #     c.execute(...)
     
@@ -89,19 +92,16 @@ def getUpstreamData(date=date.today()):
 
 # 按生产状态获得数据
 # 获得配产数据
-def getDistributionData(date=date.today()):
+def getDistributionData(data,date=date.today()):
     cursor = connection.cursor()
-    SQL = "select 日期,名称,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s and 单位=%s and 状态=%s) and 单位=%s and 状态=%s"
-    unit = '方'
+    SQL = "select 日期,名称,单位,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s and 状态=%s) and 状态=%s"
     state = '计划'
-    args = [date,unit,state,unit,state]
+    args = [date,state,state]
     cursor.execute(SQL,args) 
     rows = cursor.fetchall()
-    data = dict()
     for row in rows :
-        data[row[1]] = row[2] 
-    # print(date,data)   
-    return data
+        data[row[1]+row[2]] = row[3] 
+    # logger.info(data)  
 
 def getProductionCompletion(date=date.today()):
     data = getDistributionData(date)
