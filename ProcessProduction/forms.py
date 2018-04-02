@@ -19,7 +19,6 @@ class QuickInputForm(forms.Form):
     海管出口压力兆帕  = forms.FloatField()
     海管进口温度摄氏度 = forms.FloatField()
     海管出口温度摄氏度  = forms.FloatField()
-    海管通球备注 = forms.CharField(max_length=256,required=False)
 # 上游
     JZ202凝析油方 = forms.FloatField()
     # JZ202轻油 = forms.FloatField()
@@ -48,6 +47,9 @@ class QuickInputForm(forms.Form):
 # 数据库
     数据库轻油回收量方  = forms.FloatField()
     数据库丙丁烷回收量方 =forms.FloatField()
+# 化学药剂    
+    甲醇消耗方 = forms.FloatField()
+    乙二醇消耗方 = forms.FloatField()
 # 水
     外供水方  = forms.FloatField()
     自采水方  = forms.FloatField()
@@ -57,6 +59,7 @@ class QuickInputForm(forms.Form):
     外供电度= forms.FloatField()
     自发电度= forms.FloatField()
 # 备注
+    上下游12吋海管通球= forms.CharField(max_length=256,required=False)
     生产备注= forms.CharField(max_length=256,required=False)
 # 非日报数据
     FIQ6102方 = forms.FloatField()

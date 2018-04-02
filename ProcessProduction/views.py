@@ -387,12 +387,9 @@ def quickInput(request):
             data = form.cleaned_data
             sd = data['日期'].isoformat()
             data['日期'] = sd
-            getDistributionData(data,sd)
-            logger.info('%r',data)
+            makeProductionDailyData(data,sd)
             request.session['productionDailyData'] = data
             return HttpResponseRedirect(reverse('specifiedProductionDaily',args=(sd,)))    
-            # if getDerivedData(data,sd):
-            #     return render(request,'ProcessProduction/ProductionDaily.html',locals())
             # else:
             #     return HttpResponse('今天或昨日数据不全！')
         else:

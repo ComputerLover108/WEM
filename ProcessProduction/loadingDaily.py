@@ -6,19 +6,15 @@ import logging
 logger = logging.getLogger('django')
 
 
-def getSimpleLoadingData(sd, data):
+def getSimpleLoadingData(data,sd):
     names = ['丙烷', '丁烷', '液化气', '轻油']
     # names = LadingBill.objects.distinct('产品名称')
     # logger.info('%r',names)
-    data = dict()
     cursor = connection.cursor()
     SQL = "SELECT 日期,产品名称,sum(实际装车m3),sum(实际装车bbl),sum(实际装车t) FROM 提单 WHERE 日期=%s GROUP BY 日期,产品名称;"
     args = [sd]
     cursor.execute(SQL, args)
     rows = cursor.fetchall()
-    if not rows:
-        return False
-    # logger.info('%r', rows)
     for row in rows:
         for name in names:
             if name == row[1]:
@@ -31,8 +27,11 @@ def getSimpleLoadingData(sd, data):
                 if row[4]:
                     ns = name + '装车吨'
                     data[ns] = row[4]
-    # logger.info('%r', data)
-    return True
+    names = ['丙烷装车吨','丁烷装车吨','液化气装车吨','轻油装车吨','轻油装车桶','轻油装车方']
+    for name in names:
+        data[name] = data[name] if name in data else 0               
+        logger.info('data[%r]=%r',name,data[name])
+    logger.info('%r', data)
 
 
 def getLoadingData(sd):

@@ -1,11 +1,12 @@
 # 获得日报数据步骤
 # 1.获得基础数据 getBaseData() [上游，海管，天然气，轻油，轻烃，化学药剂，水，电，备注，数据库]
-# 2.获得相关数据 getRelatedData()
+# 2.获得相关数据 getRelatedData()[配产，装车，化验，昨外輸，生产，库存]
 # 3.获得推导数据 getDerivedData()
 
 from django.db import connection
 from datetime import date, datetime, timedelta
-from .loadingDaily import *
+from .loadingDaily import getSimpleLoadingData
+from .productionData import getDistributionData
 import time
 from math import pi
 import re
@@ -91,7 +92,12 @@ def dataFinish(data):
         z = '年累' + x
         data[y] = data[x] if isMonthHead(sd) else data[y]
         data[z] = data[x] if isYearHead(sd) else data[z]
-
+    data['海管进出口压力兆帕'] = '{0}/{1}'.format(data['海管进口压力兆帕'], data['海管出口压力兆帕'])
+    data['海管进出口温度摄氏度'] = '{0}/{1}'.format(data['海管进口温度摄氏度'], data['海管出口温度摄氏度'])
+    remarks = ['上下游12吋海管通球','生产备注']        
+    prefix = '备注:'
+    for remark in remarks:
+        data[remark] = prefix + data[remark] if remark in data else prefix 
 
 # 获得基本日报数据[原始数据]
 def getBaseData(data, sd):
@@ -112,16 +118,6 @@ def getBaseData(data, sd):
     getPowerData(data, sd, rows)
     getRemark(data, sd, rows)
 
-# 配产
-
-
-def getDistributionData(data, sd, rows):
-    state = '计划'
-    for row in rows:
-        if row[5] == state:
-            data[row[1] + row[2]] = row[3]
-
-# 海管
 
 
 def getSeaPipeData(data, sd, rows):
@@ -146,8 +142,6 @@ def getSeaPipeData(data, sd, rows):
     for name in names:
         if name not in data:
             data[name] = '-'
-    data['海管进出口压力兆帕'] = '{0}/{1}'.format(data['海管进口压力兆帕'], data['海管出口压力兆帕'])
-    data['海管进出口温度摄氏度'] = '{0}/{1}'.format(data['海管进口温度摄氏度'], data['海管出口温度摄氏度'])
 
 # 上游
 
@@ -301,12 +295,65 @@ def getRemark(data, sd, rows):
             data[row[1]] = '备注：' + row[6] if row[6] else '备注：'
             # logger.info('r%,r%,r%',row[1],row[5],row[6])
 
+# 生产日报所需化验数据
+def getTestData(data,sd):
+    seaPipenames = ['海管来液含水','海管MEG浓度','海管出口凝点','海管出口PH值',]
+    oilNames = ['轻油入罐前含水','外输PH值','外输凝点','轻油比重','轻油混合进罐前饱和蒸汽压','E-613饱和蒸汽压']
+    chemicalsNames = ['乙二醇回收','乙二醇浓度']
+    names = seaPipenames + oilNames 
+    cursor = connection.cursor()
+    for name in names:
+        SQL = "select 名称,备注,单位,数据,日期 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s and 名称=%s) and 名称=%s;"
+        args = [sd,name,name]
+        cursor.execute(SQL,args)
+        rows = cursor.fetchall()
+        for row in rows:
+            data[ row[0]+row[1]+row[2] ] = row[3] if row else ''
+            logger.info('data[%r]=%r,%s',row[0]+row[1]+row[2],row[3],row[4])  
+        
+    SQL = "select 名称,单位,数据,日期 from 生产信息 where 日期=%s and 名称 in %s;"
+    args = [sd,chemicalsNames]
+    rows = cursor.fetchall()
+    for row in rows:
+        data[ row[0]+row[1]+row[2] ] = row[3] if row else ''
+        logger.info('data[%r]=%r,%s',row[0]+row[1]+row[2],row[3],row[4])  
+    data['乙二醇回收方'] = data['乙二醇回收方'] if '乙二醇回收方' in data else 0
+
+    if '轻油入罐前含水上午' not in data:
+        data['轻油入罐前含水上午'] = '-'
+    if '轻油入罐前含水下午' not in data:
+        data['轻油入罐前含水下午'] = '-'
+    data['轻油入罐前含水'] = '{}/{}'.format(data['轻油入罐前含水上午'], data['轻油入罐前含水下午'])
+    if 'E-613饱和蒸汽压千帕' in data:
+        c = a = data['E-613饱和蒸汽压千帕']
+    else:
+        a = None
+    if '轻油混合进罐前饱和蒸汽压千帕' in data:
+        c = b = data['轻油混合进罐前饱和蒸汽压千帕']
+    else:
+        b = None
+    data['轻油饱和蒸汽压千帕'] = c
+    if a and b:
+        c = min(a, b)
+
 # 相关数据
 
 
 def getRelatedData(data, sd):
-    if not getSimpleLoadingData(sd, data):
-        return False
+    getTestData(data,sd)
+    getDistributionData(data,sd)
+    getSimpleLoadingData(data,sd)
+    logger.info('%r',data)
+
+
+# 相关数据
+
+
+def getRelatedData(data, sd):
+    getTestData(data,sd)
+    getDistributionData(data,sd)
+    getSimpleLoadingData(data,sd)
+    logger.info('%r',data)
     lastday = datetime.strptime(sd, "%Y-%m-%d") - timedelta(days=1)
     cursor = connection.cursor()
     cursor.execute("select count(*) from 生产信息 where 日期=%s",
@@ -407,12 +454,13 @@ def getRelatedData(data, sd):
 
 
 def getDerivedData(data, sd):
-    dataReduction(data)
+    # dataReduction(data)
     if not getRelatedData(data, sd):
         return False
 
     data['JZ202体系外输方'] = data['锦天化方'] * (data['JZ202体系接收方'] / data['入厂计量方'])
-    data['JZ202轻油接收方'] = data['数据库轻油回收量方'] - data['JZ202凝析油方']
+    data['JZ202轻油密度吨每方']=data['JZ202凝析油密度吨每方']
+    data['JZ202轻油方'] = data['数据库轻油回收量方'] - data['JZ202凝析油方']
     data['精细化工计量仪表方'] = data['精细化工方'] + data['污水处理厂方']
     data['锦天化计量仪表方'] = data['锦天化方'] + \
         data['精细化工CNG方'] + data['精细化工方'] + data['污水处理厂方']
@@ -478,6 +526,7 @@ def getDerivedData(data, sd):
                 n2 = key.replace(pattern, '')
                 if n2 in data and key in data:
                     dt[n1] = data[n2] + data[key]
+                    logger.info('%r=%r+%r',n1,n2,key)
     for k, v in dt.items():
         data[k] = v
     names = [
@@ -536,9 +585,12 @@ def getDerivedData(data, sd):
     #     logger.info('r%:r%',k,v)
     return True
 
+def makeProductionDailyData(data,sd):
+    if getDerivedData(data,sd):
+        dataFinish(data)
+        logger.info('%r',data)
+       
 # 数据整理
-
-
 def dataReduction(data):
     names = {
         '稳定区',
@@ -599,7 +651,3 @@ def dataReduction(data):
         if k in names:
             name = k + '方'
             data[name] = data[k]
-
-    # for k in data.keys():
-    #     logger.info('%r:%r',k,data[k])
-    return False
