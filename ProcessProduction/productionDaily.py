@@ -31,14 +31,6 @@ def isYearHead(sd):
         return False
 
 
-def getProductionDailyData(sd):
-    table = '生产信息'
-    data = dict()
-    data['日期'] = sd
-    getBaseData(data, sd)
-    if getDerivedData(data, sd):
-        dataFinish(data)
-    return data
 # 数据整理,除了轻油装车桶之外[保留4位小数]，其他保留2位小数
 
 
@@ -337,18 +329,6 @@ def getTestData(data,sd):
         c = min(a, b)
 
 # 相关数据
-
-
-def getRelatedData(data, sd):
-    getTestData(data,sd)
-    getDistributionData(data,sd)
-    getSimpleLoadingData(data,sd)
-    logger.info('%r',data)
-
-
-# 相关数据
-
-
 def getRelatedData(data, sd):
     getTestData(data,sd)
     getDistributionData(data,sd)
@@ -451,8 +431,6 @@ def getRelatedData(data, sd):
     return True
 
 # 推导数据
-
-
 def getDerivedData(data, sd):
     # dataReduction(data)
     if not getRelatedData(data, sd):
@@ -585,11 +563,91 @@ def getDerivedData(data, sd):
     #     logger.info('r%:r%',k,v)
     return True
 
+# 数据完成
+def dataComplete(data):
+    names = (
+        '稳定区',
+        '入厂计量',
+        '锦天化',
+        '精细化工CNG',
+        '精细化工',
+        '污水处理厂',
+        '新奥燃气',
+        '自用气',
+        'JZ202体系接收',
+        'JZ251S体系接收',
+        'JZ202体系外输',
+        'JZ251S体系外输',
+        '总产气量',
+        '总外输气量',
+    )
+    wdata = dict()
+    for key in data.keys():
+        for name in names:
+            # logger.info('%r,%r,%r',name,key,re.match(name,key))
+            if re.match(name,key):
+                x=key.replace('方','万方')
+                wdata[x] = data[key] / pow(10,4)
+                # logger.info('%r',wdata)     
+    data.update(wdata)
+    data['精细化工计量仪表方'] = data['精细化工方'] + data['污水处理厂方']
+    data['锦天化计量仪表方'] = data['锦天化方'] + data['精细化工CNG方'] + data['精细化工计量仪表方']
+    data['锦天化计量仪表万方'] = data['锦天化计量仪表方'] / pow(10, 4)
+    data['精细化工计量仪表万方'] = data['精细化工计量仪表方'] / pow(10, 4)
+    data['海管进出口压力兆帕'] = '{0}/{1}'.format(data['海管进口压力兆帕'], data['海管出口压力兆帕'])
+    data['海管进出口温度摄氏度'] = '{0}/{1}'.format(data['海管进口温度摄氏度'], data['海管出口温度摄氏度'])
+    remarks = ['上下游12吋海管通球','生产备注']        
+    prefix = '备注:'
+    for remark in remarks:
+        if data[remark]:
+            logger.info('data[%r]=%r',remark,data[remark]) 
+            data[remark] = prefix + data[remark] 
+        else:
+            data[remark] = prefix
+
+# 通过快速录入生成生产日报数据
 def makeProductionDailyData(data,sd):
     if getDerivedData(data,sd):
         dataFinish(data)
         logger.info('%r',data)
        
+#从数据库里获得生产日报数据
+def getProductionDailyData(sd):
+    data = dict()
+    data['日期'] = sd
+    cursor = connection.cursor()
+    SQL = "select 日期,名称,单位,数据,类别,状态,月累,年累,备注 from 生产信息 where 日期=%s;"
+    args = [sd]
+    cursor.execute(SQL,args)
+    rows = cursor.fetchall()
+    for row in rows:
+        # logger.info('%r',row)
+        date = row[0]
+        name = row[1]
+        unit = row[2]
+        value = row[3]
+        category = row[4]
+        status = row[5]
+        mValue = row[6]
+        yValue = row[7]
+        name = name.replace('-','')
+        # logger.info('%r,%r',name,re.match('.*体系',name))
+        if re.match('.*体系',name) :
+            name = name + status + unit
+            # logger.info('%r',name)
+        else:
+            name = name + unit
+        data[name] = value
+        if mValue:
+            prefix = '月累'
+            data[prefix+name] = mValue
+        if yValue:
+            prefix = '年累'
+            data[prefix+name] = yValue
+
+    dataComplete(data)
+    return data
+
 # 数据整理
 def dataReduction(data):
     names = {
