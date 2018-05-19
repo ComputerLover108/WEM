@@ -585,7 +585,7 @@ def dataComplete(data):
     for key in data.keys():
         for name in names:
             # logger.info('%r,%r,%r',name,key,re.match(name,key))
-            if re.match(name,key):
+            if re.match(name,key) or re.match('月累|年累',key):
                 x=key.replace('方','万方')
                 wdata[x] = data[key] / pow(10,4)
                 # logger.info('%r',wdata)     
@@ -604,6 +604,29 @@ def dataComplete(data):
             data[remark] = prefix + data[remark] 
         else:
             data[remark] = prefix
+
+    d1 = datetime.strptime(data['日期'], "%Y-%m-%d")
+    d = date(d1.year, d1.month, d1.day)
+    去年年末 = date(d.year - 1, 12, 31)
+    今年年末 = date(d.year, 12, 31)
+    剩余天数 = (今年年末 - d).days if (今年年末 - d).days else 1
+    年时间进度比 = (d - 去年年末) / (今年年末 - 去年年末) * 100
+    data['年时间进度比'] = 年时间进度比
+    data['月累天然气方'] = data['月累总外输气量方']
+    data['年累天然气方'] = data['年累总外输气量方']
+    data['月累轻油方'] = data['月累轻油回收量方']
+    data['年累轻油方'] = data['年累轻油回收量方']
+    data['月累丙丁烷方'] = data['月累丙丁烷回收量方']
+    data['年累丙丁烷方'] = data['年累丙丁烷回收量方']    
+    data['天然气年度完成率'] = data['年累天然气方'] / data['天然气年配产方'] * 100
+    data['天然气月度完成率'] = data['月累天然气方'] / data['天然气月配产方'] * 100
+    data['天然气需日产'] = (data['天然气年配产方'] - data['年累天然气方']) / 剩余天数
+    data['轻油年度完成率'] = data['年累轻油方'] / data['轻油年配产方'] * 100
+    data['轻油月度完成率'] = data['月累轻油方'] / data['轻油月配产方'] * 100
+    data['轻油需日产'] = (data['轻油年配产方'] - data['年累轻油方']) / 剩余天数
+    data['丙丁烷年度完成率'] = data['年累丙丁烷方'] / data['丙丁烷年配产方'] * 100
+    data['丙丁烷月度完成率'] = data['月累丙丁烷方'] / data['丙丁烷月配产方'] * 100
+    data['丙丁烷需日产'] = (data['丙丁烷年配产方'] - data['年累丙丁烷方']) / 剩余天数
 
 # 通过快速录入生成生产日报数据
 def makeProductionDailyData(data,sd):
