@@ -612,6 +612,20 @@ def dataComplete(data):
     剩余天数 = (今年年末 - d).days if (今年年末 - d).days else 1
     年时间进度比 = (d - 去年年末) / (今年年末 - 去年年末) * 100
     data['年时间进度比'] = 年时间进度比
+    data['轻油库存米'] = data['轻油库存合计米'] 
+    data['轻油库存方'] = data['轻油库存合计方'] 
+    data['轻油库存吨'] = data['轻油库存合计吨']
+    data['丙烷库存方'] = data['V641A方'] + data['V641B方']
+    data['丙烷库存吨'] = data['V641A吨'] + data['V641B吨']
+    data['丁烷库存方'] = data['V642方'] + data['V643B方']
+    data['丁烷库存吨'] = data['V642吨'] + data['V643B吨']
+    data['液化气库存方'] = data['V643A方']
+    data['液化气库存吨'] = data['V643A吨']
+    data['轻烃回收方'] = data['丙丁烷回收量方']
+    data['轻烃回收吨'] = data['丙丁烷回收量吨']
+    data['数据库轻烃回收量方'] = data['数据库丙丁烷回收量方']
+
+    data['轻油饱和蒸汽压千帕'] = data['E613饱和蒸汽压千帕']
     data['月累天然气方'] = data['月累总外输气量方']
     data['年累天然气方'] = data['年累总外输气量方']
     data['月累轻油方'] = data['月累轻油回收量方']
@@ -653,8 +667,16 @@ def getProductionDailyData(sd):
         status = row[5]
         mValue = row[6]
         yValue = row[7]
+        remark = row[8]
         name = name.replace('-','')
         # logger.info('%r,%r',name,re.match('.*体系',name))
+        if unit == '吨/立方米':
+            unit='吨每方'
+        if category == '海管' and remark=='上午' or remark=='下午':
+            name = name + unit + remark 
+            data[name] = value
+            # logger.info('%r=%r',name,value)
+            continue
         if re.match('.*体系',name) :
             name = name + status + unit
             # logger.info('%r',name)

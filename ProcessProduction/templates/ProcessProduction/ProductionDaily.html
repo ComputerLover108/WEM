@@ -135,8 +135,8 @@
             <td>{{data.月累JZ251S体系接收万方|floatformat:4}}</td>
             <td>{{data.年累JZ251S体系接收万方|floatformat:4}}</td>
             <td>海管出口凝点℃</td>
-            <td>{{data.海管出口凝点上午摄氏度}}</td>
-            <td>{{data.海管出口凝点下午摄氏度}}</td>
+            <td>{{data.海管出口凝点摄氏度上午}}</td>
+            <td>{{data.海管出口凝点摄氏度下午}}</td>
         </tr>
         <tr>
             <td colspan="2">总外输气量10
@@ -180,7 +180,7 @@
             <td>{{data.年累JZ202体系外输万方|floatformat:4}}</td>
             <td>JZ25-1S原油<font>m</font><sup>3</sup></td>
             <td>{{data.JZ251S原油万方|floatformat:4|default:"/"}}</td>
-            <td>{{data.JZ251S原油密度吨每立方米|default:"/"}}</td>
+            <td>{{data.JZ251S原油密度吨每方|default:"/"}}</td>
         </tr>
         <tr>
             <td>JZ25-1S体系(外输)</td>
@@ -408,31 +408,31 @@
         </tr>
         <tr>
             <td>月累</td>
-            <td>{{data.月累甲醇消耗方|floatformat}}</td>
-            <td>{{data.月累乙二醇回收方|floatformat}}</td>
-            <td>{{data.月累外供水方|floatformat}}</td>
-            <td>{{data.月累自采水方|floatformat}}</td>
-            <td>{{data.月累水消耗方|floatformat:2}}</td>
-            <td>{{data.月累外供电度|floatformat}}</td>
-            <td>{{data.月累自发电度|floatformat}}</td>
-            <td>{{data.月累电消耗度|floatformat}}</td>
+            <td>{{data.月累甲醇消耗方|floatformat|default:0}}</td>
+            <td>{{data.月累乙二醇回收方|floatformat|default:0}}</td>
+            <td>{{data.月累外供水方|floatformat|default:0}}</td>
+            <td>{{data.月累自采水方|floatformat|default:0}}</td>
+            <td>{{data.月累水消耗方|floatformat:2|default:0}}</td>
+            <td>{{data.月累外供电度|floatformat|default:0}}</td>
+            <td>{{data.月累自发电度|floatformat|default:0}}</td>
+            <td>{{data.月累电消耗度|floatformat|default:0}}</td>
         </tr>
         <tr>
             <td>年累</td>
-            <td>{{data.年累甲醇消耗方|floatformat}}</td>
-            <td>{{data.年累乙二醇回收方|floatformat}}</td>
-            <td>{{data.年累外供水方|floatformat}}</td>
-            <td>{{data.年累自采水方|floatformat}}</td>
-            <td>{{data.年累水消耗方|floatformat:2}}</td>
-            <td>{{data.年累外供电度|floatformat}}</td>
-            <td>{{data.年累自发电度|floatformat}}</td>
-            <td>{{data.年累电消耗度|floatformat}}</td>
+            <td>{{data.年累甲醇消耗方|floatformat|default:0}}</td>
+            <td>{{data.年累乙二醇回收方|floatformat|default:0}}</td>
+            <td>{{data.年累外供水方|floatformat|default:0}}</td>
+            <td>{{data.年累自采水方|floatformat|default:0}}</td>
+            <td>{{data.年累水消耗方|floatformat:2|default:0}}</td>
+            <td>{{data.年累外供电度|floatformat|default:0}}</td>
+            <td>{{data.年累自发电度|floatformat|default:0}}</td>
+            <td>{{data.年累电消耗度|floatformat|default:0}}</td>
         </tr>
         <tr>
             <td>乙二醇浓度%</td>
             <td>{{data.乙二醇浓度|floatformat|default:"/"}}</td>
             <td>乙二醇消耗m<sup>3</sup></td>
-            <td>{{data.乙二醇消耗方|floatformat}}</td>
+            <td>{{data.乙二醇消耗方|floatformat|default:0}}</td>
             <td>库存水</td>
             <td>水池水位m</td>
             <td>{{data.库存水米|floatformat}}</td>
