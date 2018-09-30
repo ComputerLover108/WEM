@@ -65,9 +65,16 @@ select 日期,sum(数据) from 生产信息 where
 
 CREATE UNIQUE INDEX IF NOT EXISTS  生产信息唯一索引  ON 生产信息 (日期,名称,单位,类别,状态,备注); 
 INSERT INTO 生产信息 (日期,名称,单位,数据,备注)
-    VALUES (5, 'Gizmo Transglobal') ON CONFLICT (生产信息唯一索引) 
-    DO UPDATE 
-    SET 
-    数据 = EXCLUDED.数据 
-    where  
-    生产信息.数据 is distinct from EXCLUDED.数据;
+    VALUES (5, 'Gizmo Transglobal') 
+    ON CONFLICT (生产信息唯一索引) DO UPDATE SET 数据 = EXCLUDED.数据 where  生产信息.数据 is distinct from EXCLUDED.数据;
+"INSERT INTO 生产信息 ( 日期,名称,单位,数据,类别) VALUES ( '2018/9/17','FIQ-5014日累','方','0','天然气') ON CONFLICT (生产信息唯一索引) DO UPDATE SET 数据 = EXCLUDED.数据 where  生产信息.数据 is distinct from EXCLUDED.数据;"    
+INSERT INTO 生产信息 ( 日期,名称,单位,数据,类别,状态,备注,数据源,月累,年累) VALUES ( '2018/9/17','轻油比重','',.725,'轻油','','','',,) ON CONFLICT (生产信息唯一索引) DO UPDATE SET 数据 = EXCLUDED.数据 where  生产信息.数据 is distinct from EXCLUDED.数据;
+-2147467259   错误: 语法错误 在 "," 或附近的;
+Error while executing the query           INSERT INTO 生产信息 ( 日期,名称,单位,数据,类别,状态,备注,数据源,月累,年累) VALUES ( '2018/9/17','轻油比重','',.725,'轻油','','','',,) ON CONFLICT (生产信息唯一索引) DO UPDATE SET 数据 = EXCLUDED.数据 where  生产信息.数据 is distinct from EXCLUDED.数据;
+ 0 
+-2147467259 错误: 字段 "生产信息唯一索引" 不存在;
+Error while executing the query
+0   
+20  无错误恢复
+
+

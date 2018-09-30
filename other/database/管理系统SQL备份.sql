@@ -1,3 +1,19 @@
+-- PostgreSQL pgadmin4 the application server could not be contacted
+-- 2018年03月10日 18:15:03 pierian_d 阅读数：2440 标签： PostgreSQL pgadmin4 免安装压缩版  更多
+-- 个人分类： 数据库
+-- 看到PostgreSQL的使用增长迅猛，又看到文章介绍PostgreSQL比MYSQL少一些坑决定下载一个试用一下，不想安装，下了个postgresql-10.3-1-windows-x64-binaries压缩版。
+
+-- 然而我不会用，按照PostgreSQL免安装部署方法，然后打开pgAdmin的时候总是报错“The application server could not be contacted.”，尝试了网上的删除c:\Users\your_name\AppData\Roaming\pgAdmin 之内的删除所有文件和文件夹，然后在C:\Program Files\PostgreSQL\10\pgAdmin 4\web 找到config_distro.py文件，添加：MINIFY_HTML=False
+-- DATA_DIR = "C:/Data/pgAdmin" # set non-ascii path here，都不行！
+
+-- 然后找到技术人生上一篇帖子，该作者从官网下载pgAdmin2.0的安装版试了一下，竟然可以正常使用，经过对比发现竟然是只少了1个空文件！
+
+-- pgAdmin 4/venv/Lib/site-packages/backports/__init__.py
+
+-- 0字节的空文件，创建一个即可，然后pgAdmin就能正常工作了！
+
+
+
 drop index IF EXISTS 生产信息唯一索引;
 ALTER TABLE IF EXISTS 生产信息 ALTER 单位 SET DEFAULT '';
 ALTER TABLE IF EXISTS 生产信息 ALTER 类别 SET DEFAULT '';
