@@ -61,3 +61,13 @@ select 日期,sum(数据) from 生产信息 where
     and 状态='库存'
     group by 日期 order by 日期
  ;
+
+
+CREATE UNIQUE INDEX IF NOT EXISTS  生产信息唯一索引  ON 生产信息 (日期,名称,单位,类别,状态,备注); 
+INSERT INTO 生产信息 (日期,名称,单位,数据,备注)
+    VALUES (5, 'Gizmo Transglobal') ON CONFLICT (生产信息唯一索引) 
+    DO UPDATE 
+    SET 
+    数据 = EXCLUDED.数据 
+    where  
+    生产信息.数据 is distinct from EXCLUDED.数据;

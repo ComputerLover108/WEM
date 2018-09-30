@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'QHSE',
 ]
 
-MIDDLEWARE= [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,16 +73,16 @@ TEMPLATES = [
             ],
         },
     },
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'APP_DIRS': True,
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templatesJinja2'),
-        ],
-        "OPTIONS": {
-            'environment': 'jinja2Env.environment',
-        },
-    },
+    # {
+    #     'BACKEND': 'django.template.backends.jinja2.Jinja2',
+    #     'APP_DIRS': True,
+    #     'DIRS': [
+    #         os.path.join(BASE_DIR, 'templatesJinja2'),
+    #     ],
+    #     "OPTIONS": {
+    #         'environment': 'jinja2Env.environment',
+    #     },
+    # },
 ]
 
 WSGI_APPLICATION = 'HLDT.wsgi.application'
@@ -185,35 +185,35 @@ LOGGING = {
     'disable_existing_loggers': True,
     #日志格式
     'formatters': {
-        'simple' : {
-            'format' : '[%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
+        'simple': {
+            'format': '[%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
         },
         'standard': {
             'format': '[%(asctime)s]  [%(lineno)d:%(name)s:%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
         },
-        'verbose':{
+        'verbose': {
             'format': '[%(asctime)s] [%(threadName)s:%(thread)d] [%(lineno)d:%(name)s:%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'
         }
     },
     'handlers': {
-        'console':{
+        'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
-        },    
+        },
         'file': {
-            'level':'INFO',
+            'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGGER_ROOT,'HLDT_debug.log'),
-            'formatter':'standard',
+            'filename': os.path.join(LOGGER_ROOT, 'HLDT_debug.log'),
+            'formatter': 'standard',
         },
         'error': {
-            'level':'ERROR',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGGER_ROOT,'HLDT_error.log'),
-            'maxBytes':1024*1024*8,
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGGER_ROOT, 'HLDT_error.log'),
+            'maxBytes': 1024 * 1024 * 8,
             'backupCount': 2,
-            'formatter':'verbose',
+            'formatter': 'verbose',
         },
     },
     'loggers': {
