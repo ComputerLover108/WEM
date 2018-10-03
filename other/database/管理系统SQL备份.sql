@@ -13,6 +13,17 @@
 -- 0字节的空文件，创建一个即可，然后pgAdmin就能正常工作了！
 
 
+CREATE TABLE if not exists "生产动态"
+(
+    id serial primary key,
+    "时间" timestamp NOT NULL,
+    "名称" varchar NOT NULL,
+    "单位" varchar DEFAULT '',
+    "数据" double precision NOT NULL,
+    "类别" varchar DEFAULT '',
+    "备注" varchar DEFAULT '',
+    UNIQUE (时间,名称,单位)
+);
 
 drop index IF EXISTS 生产信息唯一索引;
 ALTER TABLE IF EXISTS 生产信息 ALTER 单位 SET DEFAULT '';
