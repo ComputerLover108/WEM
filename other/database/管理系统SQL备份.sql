@@ -40,6 +40,94 @@ AND 名称 IN ('热油炉',
    'FIQ-2043')
 ORDER BY 名称;
 
+with otb as (
+  SELECT
+    时间,
+    名称,
+    单位,
+    数据
+  FROM
+    生产动态
+  WHERE
+    名称 IN (
+      'FIQ-5014',
+      '锅炉房用气',
+      '火炬长明灯',
+      '火炬放空量',
+      'FIQ-2043'
+    )
+    and 时间 < (
+      select
+        max(时间)
+      from
+        生产动态
+    )
+),
+ntb as (
+  SELECT
+    时间,
+    名称,
+    单位,
+    数据
+  FROM
+    生产动态
+  WHERE
+    名称 IN (
+      'FIQ-5014',
+      '锅炉房用气',
+      '火炬长明灯',
+      '火炬放空量',
+      'FIQ-2043'
+    )
+    and 时间 > (
+      select
+        min(时间)
+      from
+        生产动态
+    )
+)
+select
+  otb.时间,
+  ntb.时间,
+  otb.名称,
+  ntb.数据 - otb.数据 as 日累
+from
+  otb,
+  ntb
+where
+  otb.名称 = ntb.名称
+  and ntb.时间 - otb.时间 = '1 day' order by ntb.时间,ntb.名称;
+
+
+WITH otb AS (
+		SELECT 时间, 名称, 单位, 数据
+		FROM 生产动态
+		WHERE 名称 IN ('FIQ-5014', '锅炉房用气', '火炬长明灯', '火炬放空量', 'FIQ-2043')
+			AND 时间 < (
+				SELECT MAX(时间)
+				FROM 生产动态
+			)
+	), 
+	ntb AS (
+		SELECT 时间, 名称, 单位, 数据
+		FROM 生产动态
+		WHERE 名称 IN ('FIQ-5014', '锅炉房用气', '火炬长明灯', '火炬放空量', 'FIQ-2043')
+			AND 时间 > (
+				SELECT MIN(时间)
+				FROM 生产动态
+			)
+	)
+SELECT otb.时间 as t1, ntb.时间 as t2, otb.名称 as name, otb.数据 as d1, ntb.数据 as d2
+	, ntb.数据 - otb.数据 AS 日累
+FROM otb, ntb
+WHERE otb.名称 = ntb.名称
+	AND ntb.时间 - otb.时间 = '1 day'
+ORDER BY ntb.时间, ntb.名称;
+
+select distinct 名称 from 生产动态;
+
+SELECT 名称,数据 FROM 生产信息 WHERE 日期= date_trunc('month', timestamp '2018-9-17') AND 名称 IN ('热油炉','锅炉房用气','火炬长明灯','火炬放空量','FIQ-2043') ORDER BY 名称;
+SELECT 名称,数据 FROM 生产信息 WHERE 日期= date_trunc('year', timestamp '2018-9-17') AND 名称 IN ('热油炉','锅炉房用气','火炬长明灯','火炬放空量','FIQ-2043') ORDER BY 名称;
 
 SELECT 名称,sum(数据) AS 月累
 FROM 生产信息
@@ -110,6 +198,3 @@ OR 生产信息.年累 IS DISTINCT
 FROM EXCLUDED.年累
 OR 生产信息.数据源 IS DISTINCT
 FROM EXCLUDED.数据源;
-
-
-
