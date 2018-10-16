@@ -178,7 +178,7 @@ MEDIA_ROOT = 'f:\\public'
 # %(process)d 进程ID。可能没有
 # %(message)s用户输出的消息
 # LOGGER_ROOT = '/tmp'
-LOGGER_ROOT = '../'
+LOGGER_ROOT = '../log/'
 
 LOGGING = {
     'version': 1,
