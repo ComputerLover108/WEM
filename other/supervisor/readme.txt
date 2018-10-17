@@ -3,13 +3,13 @@ pip install supervisor
 配置
 # 默认配置 
 # 使用echo_supervisord_conf命令查看默认配置
-root@tianshl:~# echo_supervisord_conf
+root@tianshl:~# echo supervisord_conf
 
 # 自定义配置
 root@tianshl:~# mkdir /etc/supervisor
 root@tianshl:~# mkdir /etc/supervisor/conf.d
 
-root@tianshl:~# echo_supervisord_conf > /etc/supervisor/supervisor.conf
+root@tianshl:~# echo supervisord_conf > /etc/supervisor/supervisor.conf
 
 root@tianshl:~# vim /etc/supervisor/supervisor.conf
 
