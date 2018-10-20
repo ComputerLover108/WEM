@@ -77,20 +77,16 @@ TEMPLATES = [
     #     'BACKEND': 'django.template.backends.jinja2.Jinja2',
     #     'APP_DIRS': True,
     #     'DIRS': [
-    #         os.path.join(BASE_DIR, 'templatesJinja2'),
+    #         os.path.join(BASE_DIR, 'Jinja2'),
     #     ],
     #     "OPTIONS": {
-    #         'environment': 'jinja2Env.environment',
+    #         'environment': 'HLDT.jinja2Env.environment',
     #     },
     # },
 ]
 
 WSGI_APPLICATION = 'HLDT.wsgi.application'
-
-
 # Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
@@ -102,18 +98,16 @@ DATABASES = {
         'NAME': 'HLD',
         'USER': 'operator',
         'PASSWORD': '5302469',
-        'HOST': '127.0.0.1',
+        # 'HOST': '127.0.0.1',
         # 'HOST': 'localhost',
         # 'HOST': '10.30.29.80',
-        # 'HOST': '192.168.0.122',
+        'HOST': '192.168.0.122',
         'PORT': '2012',
     }
 }
 
 
 # Password validation
-# https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -131,11 +125,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.9/topics/i18n/
-
 # LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'zh-hans'
-
 # TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -153,13 +144,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
-# STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = '/var/www/static'
 
 MEDIA_URL = '/public/'
 # MEDIA_ROOT = '/media/WE2T/public'
-MEDIA_ROOT = 'f:\\public'
-# MEDIA_ROOT = os.path.join(BASE_DIR, "../")
+# MEDIA_ROOT = 'f:\\public'
+MEDIA_ROOT = os.path.join(BASE_DIR, "../")
 
 
 # %(name)s Logger的名字

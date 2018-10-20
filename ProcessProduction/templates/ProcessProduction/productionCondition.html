@@ -3,7 +3,7 @@
 {% endblock hJS %}
 <div>
     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-    <div id="{{EchartsTitle}}" style="width: 800px;height:400px;"></div>
+    <div id="{{EchartsTitle}}" style="width:800px;height:400px;"></div>
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('{{EchartsTitle}}'));
@@ -18,10 +18,6 @@
             },
             legend: {
                 data: {{legend|safe}},
-                selected: {
-                    '轻油m3':false,
-                    '轻烃m3':false,
-                }
             },
             toolbox: {
                 show: true,
@@ -41,19 +37,30 @@
                 // data: ['周一','周二','周三','周四','周五','周六','周日']
                 data: {{xAxis|safe}}
             },
-            yAxis: {
-                type: 'value',
-                // axisLabel: {
-                //     formatter: '{value} °C'
-                // }
-            },
+            yAxis: [
+                {
+                    name: '装车',
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value} m3'
+                    },
+                },
+                {
+                    name: '外输',
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value} 万Nm3'
+                    },                    
+                }
+            ],
             series: [
                 {
-                    name: '天然气m3',
+                    name: '天然气',
                     type: 'line',
                     data: {{series.锦天化|safe}},
+                    yAxisIndex:1,
                     itemStyle:{
-                        normal:{color:'yellow'}
+                        normal:{color:'red'}
                     },                    
                     markPoint: {
                         data: [
@@ -68,9 +75,10 @@
                     }                                      
                 },            
                 {
-                    name: '轻油m3',
+                    name: '轻油',
                     type: 'line',
                     data: {{series.轻油回收量|safe}},
+                    yAxisIndex:0,
                     itemStyle:{
                         normal:{color:'black'}
                     },                     
@@ -80,16 +88,19 @@
                             // {type: 'min', name: '最小值'}
                         ]
                     },
+
                     markLine: {
                         data: [
                             {type: 'average', name: '平均值'}
                         ]
-                    }                     
+                    }
+                                         
                 },
                 {
-                    name: '轻烃m3',
+                    name: '轻烃',
                     type: 'line',
                     data: {{series.丙丁烷回收量|safe}},
+                    yAxisIndex:0,
                     itemStyle:{
                         normal:{color:'blue'}
                     },                     
@@ -109,5 +120,11 @@
         };
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
+        //用于使chart自适应高度和宽度
+        window.onresize = function () {
+            //重置容器高宽
+            resizeWorldMapContainer();
+            myChart.resize();
+        };        
     </script>
 </div>
