@@ -92,18 +92,22 @@ def getUpstreamData(date=date.today()):
 
 # 按生产状态获得数据
 # 获得配产数据
-def getDistributionData(data,date=date.today()):
+def getDistributionData(date=date.today()):
     cursor = connection.cursor()
     SQL = "select 日期,名称,单位,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s and 状态=%s) and 状态=%s"
     state = '计划'
     args = [date,state,state]
     cursor.execute(SQL,args) 
     rows = cursor.fetchall()
+    data = dict()
     for row in rows :
-        data[row[1]+row[2]] = row[3] 
-    # logger.info(data)  
+        name = row[1] + row[2]
+        data[name] = row[3] 
+    logger.info(data)
+    return data  
 
 def getProductionCompletion(date=date.today()):
+    data = dict()
     data = getDistributionData(date)
     cursor = connection.cursor()
     names = ['总外输气量','轻油回收量','丙丁烷回收量']

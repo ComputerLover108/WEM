@@ -1,16 +1,12 @@
 from django.test import TestCase
-from ProcessProduction.productionDaily import getBaseData,getRelatedData,getDerivedData
+from ProcessProduction.models import ProductionData,ProductionStatus
+
 # Create your tests here.
+class ProductionDataTestCase(TestCase):
+    def setUp(self):
+        pass
 
-class TestProductionDaily(TestCase):
-    def test_getBaseData(self):
-        data=dict()
-        sd='2017-1-8'
-        getBaseData(data,sd)
-        self.assertEquals(data[日期],'2017-1-8')
-
-    # def test_getRelatedData(self):
-    #     pass
-    #
-    # def test_getDerivedData(self):
-    #     pass
+class ProductionStatusTestCase(TestCase):
+    def setUp(self):
+        ProductionStatus.objects.Create(时间='2018-10-26',名称='FIQ-5014',单位='方',类别='天然气',数据=199.9,备注='test')
+    
