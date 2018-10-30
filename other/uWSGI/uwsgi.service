@@ -1,6 +1,7 @@
 #sudo cp ~/test/WEM/other/uWSGI/uwsgi.service /etc/systemd/system/
 [Unit]
 Description=uWSGI Emperor service
+After=syslog.target network.target
  
 [Service]
 ExecStartPre=/bin/bash -c 'mkdir -p /run/uwsgi; chown wkx:www-data /run/uwsgi'
