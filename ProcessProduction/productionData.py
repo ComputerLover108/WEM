@@ -1,10 +1,22 @@
 # 工艺生产数据
-from django.db import connection
+# from django.db import connection
+import psycopg2
 from datetime import date,datetime,time,timedelta
 import json
 import re
 import logging
+import logging.config
 
+log_filename = '../LOG/HLDT.log'
+logging.basicConfig(
+    filename=log_filename,
+    level=logging.DEBUG,
+    format='[%(asctime)s] %(levelname)s [%(funcName)s: %(filename)s, %(lineno)d] %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+    filemode='a'
+    )
+
+connection = psycopg2.connect(dbname="HLD", user="operator",password="5302469", host="192.168.0.122", port="2012")
 logger = logging.getLogger('django')
 # with connection.cursor() as c:
 #     c.execute(...)
@@ -27,7 +39,7 @@ def mend(dict,keys,filler=None):
     return data      
 
 # 获得数据库内有效时间
-def getAvailableTime(table,date,upLimit=True):
+def getAvailableTime(table,date=date.today(),upLimit=True):
     cursor = connection.cursor()
     if upLimit:
         SQL = 'SELECT max(日期) FROM {} WHERE 日期 <= %s;'.format(table)
@@ -55,22 +67,27 @@ def dateSerial(startDate,endDate):
     return result
 
 # 获得指定日期基本生产数据,，如果没有则获得最近日期数据
-def getPrductionData(date=date.today(),*filter):
+def getPrductionData(date=date.today()):
     cursor = connection.cursor()
-    SQL = "select 名称,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s )"
+    SQL = "select concat(名称,单位) as name ,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s )"
+    args = [date]
     cursor.execute(SQL,args)
     data = dictfetchall(cursor)
+    # logging.debug(data)
     return data 
 
    
 
 # 获得指定时间段生产统计数据（例如年累，月累，周累等）
-def getProductionstatistics(startDate,endDate,unit=None,category=None,state=None):
+def getProductionstatistics(startDate,endDate):
     data = dict()
     cursor = connection.cursor()
-    SQL = "select 名称,sum(数据) from 生产信息 where 日期 between %s and %s and 状态=%s and 单位=%s group by 名称 order by 名称;"    
-    cursor.execute(SQL,[startDate,endDate,state,unite])
-    data = dictfetchall(cursor)    
+    SQL = "select concat(名称,单位) as name,sum(数据) from 生产信息 where 日期 between %s and %s and 名称 is not null and 状态 in ('接收','生产','消耗','外输') group by 名称,单位 order by 名称,单位;"    
+    # logging.debug(SQL)
+    args = [startDate,endDate]
+    cursor.execute(SQL,args)
+    data = dictfetchall(cursor)
+    logging.debug(data)    
     return data
     
 # select 名称,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=current_date ) ;
@@ -120,9 +137,9 @@ def getProductionCompletion(date=date.today()):
             cursor.execute(SQL,args)
             row = cursor.fetchone()
             if f=='month' :
-                data[name+'月累'] = row[0]
+                data['月累'+name+unit] = row[0]
             if f=='year' :
-                data[name+'年累'] = row[0]
+                data['年累'+name+unit] = row[0]
     # print(data)
     return data
 
@@ -150,6 +167,7 @@ def getProductionDataSet(startDate,endDate):
     cursor.execute(SQL,args)
     rows = cursor.fetchall()
     names = [row[0] for row in rows if not re.match('数据库',row[0]) ]
+    logging.debug(names)
     # names.remove('数据库轻油回收量')
     # names.remove('数据库丙丁烷回收量')
     # print(names)
@@ -164,7 +182,8 @@ def getProductionDataSet(startDate,endDate):
         dv=dict()
         for row in cursor.fetchall():
             dv[row[0]] = row[1]
-        data[name] = dv
+        data[name+unit] = dv
+        logging.debug(data)
     return data    
 
 # 获得接收数据
@@ -298,3 +317,26 @@ def getConsumptionDataSet(startDate,endDate):
             dv[row[0]] = row[1]
         data[name] = dv
     return data
+
+def test():
+    table ='生产信息'
+    specifiedDate = getAvailableTime(table, date.today())
+    startDate = getAvailableTime(table, date(
+        date.today().year, 1, 1), upLimit=False)
+    endDate = getAvailableTime(table, date.today())
+    getPrductionData()
+    x = getProductionCompletion(specifiedDate) 
+    getProductionstatistics(startDate,endDate)   
+    # production = getProductionDataSet(startDate, endDate)
+    # received = getRecivedDataSet(startDate, endDate)
+    # output = getOutputDataSet(startDate, endDate)
+    # consumption = getConsumptionDataSet(startDate, endDate)
+    # inventory = getInventoryDataSet(startDate, endDate)
+    # dt = dateList(startDate, endDate)
+    # logging.debug(x)
+
+def main():
+    test()
+
+if __name__ == "__main__":
+    main()
