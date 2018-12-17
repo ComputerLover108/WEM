@@ -4,10 +4,11 @@ import psycopg2
 from datetime import date,datetime,time,timedelta
 import json
 import re
+import copy
 import logging
 import logging.config
 
-log_filename = '../LOG/HLDT.log'
+log_filename = '../log/HLDT_debug.log'
 logging.basicConfig(
     filename=log_filename,
     level=logging.DEBUG,
@@ -66,17 +67,23 @@ def dateSerial(startDate,endDate):
         startDate += timedelta(days=1)
     return result
 
-# 获得指定日期基本生产数据,，如果没有则获得最近日期数据
-def getPrductionData(date=date.today()):
+# 获得指定日期基本生产数据,如果没有则获得最近日期数据
+def getPrductionData(data,date=date.today()):
     cursor = connection.cursor()
-    SQL = "select concat(名称,单位) as name ,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s )"
+    # SQL = "select concat(备注,名称,单位) as name ,数据 from 生产信息 where 日期=(select max(日期) from 生产信息 where 日期<=%s )"
+    SQL = "select 名称,单位,数据,状态,备注 from 生产信息 where 日期=%s"
     args = [date]
     cursor.execute(SQL,args)
-    data = dictfetchall(cursor)
-    # logging.debug(data)
-    return data 
-
-   
+    temp = cursor.fetchall()
+    flags = ['JZ20-2体系','JZ25-1S体系']
+    for x in temp:
+        if x[0] in flags:
+            name = str(x[3])+str(x[0])+str(x[1])
+            # logging.debug(x)
+        else:
+            name = str(x[4])+str(x[0])+str(x[1])
+        data[name] = x[2]
+    return data  
 
 # 获得指定时间段生产统计数据（例如年累，月累，周累等）
 def getProductionstatistics(startDate,endDate):
@@ -321,12 +328,18 @@ def getConsumptionDataSet(startDate,endDate):
 def test():
     table ='生产信息'
     specifiedDate = getAvailableTime(table, date.today())
-    startDate = getAvailableTime(table, date(
-        date.today().year, 1, 1), upLimit=False)
-    endDate = getAvailableTime(table, date.today())
-    getPrductionData()
-    x = getProductionCompletion(specifiedDate) 
-    getProductionstatistics(startDate,endDate)   
+    # startDate = getAvailableTime(table, date(
+    #     date.today().year, 1, 1), upLimit=False)
+    # endDate = getAvailableTime(table, date.today())
+    data = dict()
+    data['日期'] = specifiedDate
+    getPrductionData(data,specifiedDate)
+    logging.debug(len(data))
+    for k,v in data.items():
+        logging.debug("{}:{}".format(k,v))
+    # logging.debug(data)
+    # x = getProductionCompletion(specifiedDate) 
+    # getProductionstatistics(startDate,endDate)   
     # production = getProductionDataSet(startDate, endDate)
     # received = getRecivedDataSet(startDate, endDate)
     # output = getOutputDataSet(startDate, endDate)
