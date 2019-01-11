@@ -1755,7 +1755,7 @@ Private Sub getRelevantData(ByRef data As Object)
         name = "昨" + results(row, 1)
         value = results(row, 2)
         data.Add name, value
-'        Debug.Print name, value
+'        Debug.Print name, data(name)
     Next row
     Const MAX_fuelGas As Long = 999999
     data("热油炉") = data("FIQ-5014方") - data("昨FIQ-5014方")
@@ -1769,30 +1769,77 @@ Private Sub getRelevantData(ByRef data As Object)
     data.Remove ("昨锅炉房用气方")
     data.Remove ("昨火炬长明灯方")
     data.Remove ("昨火炬放空量方")
-'    row = UBound(results, 1)
-'    column = UBound(results, 2)
-'    For Each temp In results
-'        data.Add temp(0), temp(1)
-'    Next temp
 '    Debug.Print results
-'    names2 = Array("热油炉", "锅炉房用气", "火炬放空量", "火炬长明灯", "锦天化", "精细化工", "精细化工CNG", "入厂计量", "稳定区", "污水处理厂", "新奥燃气", "自用气", "总产气量", "总外输气量", "轻油回收量", "丙丁烷回收量", "甲醇消耗", "乙二醇回收", "水消耗", "外供水", "自采水", "自发电", "电消耗", "外供电")
+    Call getAggregateData(data, "year", yesterday)
+    Call getAggregateData(data, "month", yesterday)
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Sub
+' 单位转换
 Private Sub unitConvert(ByRef data As Object)
+    On Error GoTo ErrorHandler
     Dim key, newKey As String
     Dim ar As Variant
+    Dim h As New help
     For Each key In data
-        newKey = replace(key, "Nm3", "方")
-        newKey = replace(key, "m3", "方")
-        newKey = replace(key, "m", "米")
-        newKey = replace(key, "Kwh", "度")
-        newKey = replace(key, "bbl", "桶")
-        newKey = replace(key, "t", "吨")
-        newKey = replace(key, "MPa", "兆帕")
-        newKey = replace(key, "kPa", "千帕")
-        newKey = replace(key, "℃", "摄氏度")
+        newKey = key
+        newKey = h.replace(newKey, "N{0,1}m3", "方")
+        newKey = h.replace(newKey, "(V-6\d+[ABC]{0,1})(m)", "$1米")
+        newKey = replace(newKey, "Kwh", "度")
+        newKey = replace(newKey, "bbl", "桶")
+        newKey = replace(newKey, "t", "吨")
+        newKey = replace(newKey, "MPa", "兆帕")
+        newKey = replace(newKey, "kPa", "千帕")
+        newKey = replace(newKey, "℃", "摄氏度")
         data.key(key) = newKey
     Next key
+ErrorHandler:
+        Debug.Print Err.Number & vbTab & Err.Description
+        Resume Next
 End Sub
+'获得月累，年累数据
+Private Sub getAggregateData(ByRef data As Object, ByVal interval As String, ByVal sd As Date)
+    On Error GoTo ErrorHandler
+    Dim names, arr, results, name, value As Variant
+    Dim s, SQL As String
+    Dim psql As New PostgreSQL
+    Dim row As Long
+    names = Array("热油炉", "锅炉房用气", "火炬放空量", "火炬长明灯", "锦天化", "精细化工", "精细化工CNG", "入厂计量", "稳定区", "污水处理厂", "新奥燃气", "自用气", "总产气量", "总外输气量", "轻油回收量", "丙丁烷回收量", "甲醇消耗", "乙二醇回收", "水消耗", "外供水", "自采水", "自发电", "电消耗", "外供电")
+    s = "'" + Join(names, "','") + "'"
+    SQL = "SELECT 名称||单位 as name,SUM(数据) as sum from 生产信息 WHERE 日期 BETWEEN date_trunc('%0',timestamp '%1') and '%1' and 名称 in (%2) GROUP BY name order by name;"
+    SQL = replace(SQL, "%0", interval)
+    SQL = replace(SQL, "%1", sd)
+    SQL = replace(SQL, "%2", s)
+    Debug.Print SQL
+    arr = psql.cnn.Execute(SQL).GetRows
+    If IsNull(arr) Or IsEmpty(arr) Then
+        MsgBox sd & " 数据丢失，请补填数据！"
+        Exit Sub
+    End If
+    results = Application.Transpose(arr)
+        row = UBound(results, 1)
+    For row = 1 To UBound(results, 1)
+        name = results(row, 1)
+        value = results(row, 2)
+        Select Case interval
+            Case "year"
+                name = "年累" + name
+            Case "month"
+                name = "月累" + name
+        End Select
+        data.Add name, value
+'        Debug.Print name, data(name)
+    Next row
+ErrorHandler:
+        Debug.Print Err.Number & vbTab & Err.Description
+        Resume Next
+End Sub
+' 推导数据
+Private sub getDerivedData(data, sd)
+    On Error GoTo ErrorHandler
+ErrorHandler:
+        Debug.Print Err.Number & vbTab & Err.Description
+        Resume Next
+End Sub
+
