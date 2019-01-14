@@ -20,8 +20,10 @@ On Error GoTo ErrorHandler
     Call getQuickInputData(data)
     Debug.Print "获得快速录入数据耗时" & DateDiff("s", t, Now) & "s!"
     Call unitConvert(data)
-    Call getRelevantData(data)
-    Debug.Print "获得生产日报相关数据耗时" & DateDiff("s", t, Now) & "s!"
+'    Call getRelevantData(data)
+'    Debug.Print "获得生产日报相关数据耗时" & DateDiff("s", t, Now) & "s!"
+    Call getDerivedData(data)
+    Debug.Print "获得生产日报计算数据耗时" & DateDiff("s", t, Now) & "s!"
     For Each k In data.Keys
         Debug.Print k, data.item(k)
     Next
@@ -1353,19 +1355,19 @@ Private Sub getQuickInputData(ByRef data As Object)
         End If
         If h.isMatch("日自发电量kwh", temp) Then
             co = 1
-            name = "日自发电量kwh"
+            name = "自发电kwh"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
         If h.isMatch("日外供电量kwh", temp) Then
             co = 1
-            name = "日外供电量kwh"
+            name = "外供电kwh"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
         If h.isMatch("水池水位m", temp) Then
             co = 1
-            name = "水池水位m"
+            name = "库存水m"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1377,7 +1379,7 @@ Private Sub getQuickInputData(ByRef data As Object)
         End If
         If h.isMatch("自采水量m3", temp) Then
             co = 1
-            name = "自采水量m3"
+            name = "自采水m3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1389,13 +1391,13 @@ Private Sub getQuickInputData(ByRef data As Object)
         End If
         If h.isMatch("甲醇日耗量m3", temp) Then
             co = 1
-            name = "甲醇日耗量m3"
+            name = "甲醇消耗m3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
         If h.isMatch("乙二醇日耗量m3", temp) Then
             co = 1
-            name = "乙二醇日耗量m3"
+            name = "乙二醇消耗m3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1407,7 +1409,7 @@ Private Sub getQuickInputData(ByRef data As Object)
         End If
         If h.isMatch("乙二醇日回收量m3", temp) Then
             co = 1
-            name = "乙二醇日回收量"
+            name = "乙二醇回收m3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1613,31 +1615,31 @@ Private Sub getQuickInputData(ByRef data As Object)
         End If
         If h.isMatch("JZ20-2体系Nm3", temp) Then
             co = 1
-            name = "JZ20-2体系Nm3"
+            name = "接收JZ20-2体系Nm3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
         If h.isMatch("自用气量Nm3", temp) Then
             co = 1
-            name = "自用气量Nm3"
+            name = "自用气Nm3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
-        If h.isMatch("外供新奥燃气Nm3", temp) Then
+        If h.isMatch("新奥燃气Nm3", temp) Then
             co = 1
-            name = "外供新奥燃气Nm3"
+            name = "新奥燃气Nm3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
-        If h.isMatch("外供污水处理厂Nm3", temp) Then
+        If h.isMatch("污水处理厂Nm3", temp) Then
             co = 1
-            name = "外供污水处理厂Nm3"
+            name = "污水处理厂Nm3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
-        If h.isMatch("外供精细化工Nm3", temp) Then
+        If h.isMatch("精细化工Nm3", temp) Then
             co = 1
-            name = "外供精细化工Nm3"
+            name = "精细化工Nm3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1647,9 +1649,9 @@ Private Sub getQuickInputData(ByRef data As Object)
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
-        If h.isMatch("外供锦天化Nm3", temp) Then
+        If h.isMatch("锦天化Nm3", temp) Then
             co = 1
-            name = "外供锦天化Nm3"
+            name = "锦天化Nm3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1730,6 +1732,7 @@ End Sub
 
 Private Sub getRelevantData(ByRef data As Object)
     On Error GoTo ErrorHandler
+    Call getMaintenancePlaneData(data)
     Dim psql As New PostgreSQL
     Dim h As help
     Dim table, SQL As String
@@ -1758,9 +1761,9 @@ Private Sub getRelevantData(ByRef data As Object)
 '        Debug.Print name, data(name)
     Next row
     Const MAX_fuelGas As Long = 999999
-    data("热油炉") = data("FIQ-5014方") - data("昨FIQ-5014方")
-    If data("热油炉") < 0 Then
-       data ("热油炉") + MAX_fuelGas
+    data("热油炉方") = data("FIQ-5014方") - data("昨FIQ-5014方")
+    If data("热油炉方") < 0 Then
+       data ("热油炉方") + MAX_fuelGas
     End If
     data("锅炉房用气方") = data("锅炉房用气方") - data("昨锅炉房用气方")
     data("火炬长明灯方") = data("火炬长明灯方") - data("昨火炬长明灯方")
@@ -1770,13 +1773,32 @@ Private Sub getRelevantData(ByRef data As Object)
     data.Remove ("昨火炬长明灯方")
     data.Remove ("昨火炬放空量方")
 '    Debug.Print results
+'    获得昨年累数据
     Call getAggregateData(data, "year", yesterday)
+'    获得昨月累数据
     Call getAggregateData(data, "month", yesterday)
+'    获得昨日库存数据
+    SQL = "SELECT 名称||单位,数据 from 生产信息 WHERE 日期 = '%0' and 状态='库存' and 名称 ~'(V-6\d+[ABC])|水' and 单位 ~'方|吨'"
+    SQL = replace(SQL, "%0", yesterday)
+'    Debug.Print SQL
+    arr = psql.cnn.Execute(SQL).GetRows
+    If IsNull(arr) Or IsEmpty(arr) Then
+        MsgBox yesterday & " 数据丢失，请补填数据！"
+        Exit Sub
+    End If
+    results = Application.Transpose(arr)
+    row = UBound(results, 1)
+    For row = 1 To UBound(results, 1)
+        name = results(row, 1)
+        value = results(row, 2)
+        name = "昨" + name
+        data.Add name, value
+'        Debug.Print name, data(name)
+    Next row
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Sub
-' 单位转换
 Private Sub unitConvert(ByRef data As Object)
     On Error GoTo ErrorHandler
     Dim key, newKey As String
@@ -1785,13 +1807,13 @@ Private Sub unitConvert(ByRef data As Object)
     For Each key In data
         newKey = key
         newKey = h.replace(newKey, "N{0,1}m3", "方")
-        newKey = h.replace(newKey, "(V-6\d+[ABC]{0,1})(m)", "$1米")
-        newKey = replace(newKey, "Kwh", "度")
-        newKey = replace(newKey, "bbl", "桶")
-        newKey = replace(newKey, "t", "吨")
-        newKey = replace(newKey, "MPa", "兆帕")
-        newKey = replace(newKey, "kPa", "千帕")
-        newKey = replace(newKey, "℃", "摄氏度")
+        newKey = h.replace(newKey, "((V-6\d+[ABC]{0,1})|(库存水))(m)", "$1米")
+        newKey = h.replace(newKey, "[kK]wh", "度")
+        newKey = h.replace(newKey, "bbl", "桶")
+        newKey = h.replace(newKey, "t", "吨")
+        newKey = h.replace(newKey, "MPa", "兆帕")
+        newKey = h.replace(newKey, "kPa", "千帕")
+        newKey = h.replace(newKey, "℃", "摄氏度")
         data.key(key) = newKey
     Next key
 ErrorHandler:
@@ -1811,14 +1833,41 @@ Private Sub getAggregateData(ByRef data As Object, ByVal interval As String, ByV
     SQL = replace(SQL, "%0", interval)
     SQL = replace(SQL, "%1", sd)
     SQL = replace(SQL, "%2", s)
-    Debug.Print SQL
+'    Debug.Print SQL
     arr = psql.cnn.Execute(SQL).GetRows
     If IsNull(arr) Or IsEmpty(arr) Then
         MsgBox sd & " 数据丢失，请补填数据！"
         Exit Sub
     End If
     results = Application.Transpose(arr)
-        row = UBound(results, 1)
+    row = UBound(results, 1)
+    For row = 1 To UBound(results, 1)
+        name = results(row, 1)
+        value = results(row, 2)
+        Select Case interval
+            Case "year"
+                name = "年累" + name
+            Case "month"
+                name = "月累" + name
+        End Select
+        data.Add name, value
+'        Debug.Print name, data(name)
+    Next row
+    SQL = "SELECT 状态||名称||单位 as name,SUM(数据) as sum from 生产信息 WHERE 日期 BETWEEN date_trunc('%0',timestamp '%1') and '%1' and 名称 ~('%2') GROUP BY name order by name;"
+    SQL = replace(SQL, "%0", interval)
+    SQL = replace(SQL, "%1", sd)
+    s = "JZ20-2体系"
+    SQL = replace(SQL, "%2", s)
+    Erase arr
+    Erase results
+'    Debug.Print SQL
+    arr = psql.cnn.Execute(SQL).GetRows
+    If IsNull(arr) Or IsEmpty(arr) Then
+        MsgBox sd & " 数据丢失，请补填数据！"
+        Exit Sub
+    End If
+    results = Application.Transpose(arr)
+    row = UBound(results, 1)
     For row = 1 To UBound(results, 1)
         name = results(row, 1)
         value = results(row, 2)
@@ -1836,10 +1885,145 @@ ErrorHandler:
         Resume Next
 End Sub
 ' 推导数据
-Private sub getDerivedData(data, sd)
+Private Sub getDerivedData(ByRef data As Object)
     On Error GoTo ErrorHandler
+    Call getRelevantData(data)
+    Call getHightHydrocarbonDensityData(data)
+    Dim arr, temp, height, volume, quality, name As Variant
+'    天然气
+    data("接收JZ25-1S体系方") = data("入厂计量方") - data("接收JZ20-2体系方")
+    data("外输JZ20-2体系方") = data("锦天化方") * data("接收JZ20-2体系方") / data("入厂计量方")
+    data("外输JZ25-1S体系方") = data("锦天化方") - data("外输JZ20-2体系方")
+    data("总外输气量方") = data("锦天化方")+data("精细化工方")+data("精细化工CNG方")+data("污水处理厂方")+data("新奥燃气方")
+    data("总产气量方") = data("自用气方") + data("总外输气量方")
+'    轻油
+    arr = Array("V-631A", "V-631B", "V-631C")
+    For Each temp In arr
+        height = data(temp + "米")
+        volume = height * 165
+        quality = height * 122
+        name = temp + "方"
+        data.Add name, volume
+        name = temp + "吨"
+        data.Add name, quality
+        data("轻油库存吨") = data("轻油库存吨") + quality
+    Next temp
+    data("昨轻油库存吨") = data("昨V-631A吨") + data("昨V-631B吨") + data("昨V-631C吨")
+    data("轻油回收吨") = data("轻油库存吨") + data("轻油装车吨") - data("昨轻油库存吨")
+    data("轻油回收方") = data("轻油回收吨") / data("轻油比重")
+    data("轻油回收量方") = data("轻油回收方")
+'    轻烃
+    arr = Array("V-641A", "V-641B", "V-642", "V-643A", "V-643B")
+    For Each temp In arr
+        height = data(temp + "米")
+        volume = height ^ 2 * 19.311 - height ^ 3 * 1.047
+        quality = data(temp + "密度") * (3 * 6.15 - height) * 3.1415 * height ^ 2 / 3
+        name = temp + "方"
+        data.Add name, volume
+        name = temp + "吨"
+        data.Add name, quality
+        data("轻烃库存吨") = data("轻烃库存吨") + quality
+    Next temp
+    data("昨轻烃库存吨") = data("昨V-641A吨") + data("昨V-641B吨") + data("昨V-642吨") + data("昨V-643A吨") + data("昨V-643B吨")
+    data("轻烃回收吨") = data("轻烃库存吨") + data("丙烷装车吨") + data("丁烷装车吨") + data("液化气装车吨") - data("昨轻烃库存吨")
+    data("轻烃回收方") = data("轻烃回收吨") / 0.54
+    data("丙丁烷回收量方") = data("轻烃回收方")
+    
+    data("库存水方") = data("库存水米") * 1390
+    data("水消耗方") = data("昨库存水方") + data("外供水方") + data("自采水方") - data("库存水方")
+    data("电消耗度") = data("外供电度") + data("自发电度")
+'    月累年累
+    Dim names, unit, name1, name2, name3 As Variant
+    Dim h As New help
+    names = Array("热油炉", "锅炉房用气", "火炬放空量", "火炬长明灯", "锦天化", "精细化工", "精细化工CNG", "入厂计量", "稳定区", "污水处理厂", "新奥燃气", "自用气", "总产气量", "总外输气量", "轻油回收量", "丙丁烷回收量", "甲醇消耗", "乙二醇回收", "水消耗", "外供水", "自采水", "自发电", "电消耗", "外供电")
+    For Each temp In names
+        If h.isMatch("电", temp) Then
+            unit = "度"
+        Else
+            unit = "方"
+        End If
+        name1 = temp + unit
+        name2 = "月累" + name1
+        data(name2) = data(name1) + data(name2)
+'        Debug.Print name2, data(name2), name1, data(name1)
+        name2 = "年累" + name1
+        data(name2) = data(name1) + data(name2)
+'        Debug.Print name2, data(name2), name1, data(name1)
+    Next temp
+    data("月累接收JZ20-2体系方") = data("接收JZ20-2体系方") + data("月累接收JZ20-2体系方")
+    data("年累接收JZ20-2体系方") = data("接收JZ20-2体系方") + data("年累接收JZ20-2体系方")
+    data("月累外输JZ20-2体系方") = data("外输JZ20-2体系方") + data("月累外输JZ20-2体系方")
+    data("年累外输JZ20-2体系方") = data("外输JZ20-2体系方") + data("年累外输JZ20-2体系方")
+    
+    data("去年年末") = DateSerial(Year(data("日期")) - 1, 12, 31)
+    data("今年年末") = DateSerial(Year(data("日期")), 12, 31)
+    data("年度时间进度比") = (data("日期") - data("去年年末")) / (data("今年年末") - data("去年年末")) * 100
+    data("今后需日产天然气方") = (data("年配产天然气方") - data("年累总外输气量方")) / data("剩余天数")
+    data("今后需日产轻油方") = (data("年配产轻油方") - data("年累轻油回收量方")) / data("剩余天数")
+    data("今后需日产丙丁烷方") = (data("年配产丙丁烷方") - data("年累丙丁烷回收量方")) / data("剩余天数")
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Sub
+'获得丙丁烷密度
+Private Sub getHightHydrocarbonDensityData(ByRef data As Object)
+    On Error GoTo ErrorHandler
+    Dim row, column, lastRow, lastColumn, ro, co As Long
+    lastRow = Worksheets("生产日报").UsedRange.Rows.count
+    lastColumn = Worksheets("生产日报").UsedRange.Columns.count
+    Dim flag, temp, name, value As Variant
+    Dim h As New help
+    flag = "比重"
+    For row = 1 To lastRow
+        For column = 1 To lastColumn
+            temp = Worksheets("生产日报").Cells(row, column).value
+            If h.isMatch(flag, temp) Then
+                 For co = 0 To 4
+                    ro = 1
+                    name = Worksheets("生产日报").Cells(row + ro, column + co).value
+                    name = name + "密度"
+                    ro = 2
+                    value = Worksheets("生产日报").Cells(row + ro, column + co).value
+'                    Debug.Print ro, co, name, value
+                    data(name) = value
+                Next co
+                Exit Sub
+            End If
+        Next column
+    Next row
+ErrorHandler:
+        Debug.Print Err.Number & vbTab & Err.Description
+        Resume Next
+End Sub
+' 获得停产天数数据
+Sub getMaintenancePlaneData(ByRef data As Object)
+    Dim row, column, lastRow, lastColumn, ro, co As Long
+    Dim temp, flag, d, d1, d2, name, value As Variant
+    Dim h As New help
+    lastRow = UsedRange.Rows.count
+    lastColumn = UsedRange.Columns.count
+    flag = "检修计划"
+    d = data("日期")
+    For row = 1 To lastRow
+        For column = 1 To lastColumn
+            temp = Cells(row, column).value
+            If h.isMatch(flag, temp) Then
+               co = 1
+               ro = 1
+               d1 = Cells(row + ro, column + co).value
+               ro = 2
+               d2 = Cells(row + ro, column + co).value
+               name = "剩余天数"
+               If d >= d1 And d <= d2 Then
+                    value = DateSerial(Year(d), 12, 31) - d2
+               Else
+                    value = DateSerial(Year(d), 12, 31) - d
+               End If
+               data.Add name, value
+'               Debug.Print name, value
+               Exit Sub
+            End If
+        Next column
+    Next row
 
+End Sub
