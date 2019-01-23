@@ -3,7 +3,7 @@ Sub test()
     Err.Clear
 On Error GoTo ErrorHandler
 '    Call testData
-    Dim 日期, k, v, i, t
+    Dim 日期, k, v, i, t, s
 '    日期 = Cells(1, 3).value
 '    Dim gasConsumptionTable As Object
 '    Set gasConsumptionTable = CreateObject("Scripting.Dictionary")
@@ -19,7 +19,10 @@ On Error GoTo ErrorHandler
     Debug.Print "获得配产数据耗时" & DateDiff("s", t, Now) & "s!"
     Call getQuickInputData(data)
     Debug.Print "获得快速录入数据耗时" & DateDiff("s", t, Now) & "s!"
-    Call unitConvert(data)
+    For Each k In data.Keys
+        s = unitConvert(k)
+        data.key(k) = s
+    Next
 '    Call getRelevantData(data)
 '    Debug.Print "获得生产日报相关数据耗时" & DateDiff("s", t, Now) & "s!"
     Call getDerivedData(data)
@@ -27,6 +30,8 @@ On Error GoTo ErrorHandler
     For Each k In data.Keys
         Debug.Print k, data.item(k)
     Next
+    Call fillProductionDaily(data)
+    Debug.Print "填写生产日报计算数据耗时" & DateDiff("s", t, Now) & "s!"
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     Else
@@ -1481,15 +1486,17 @@ Private Sub getQuickInputData(ByRef data As Object)
         End If
         If h.isMatch("轻油入罐前上午/下午含水%", temp) Then
             co = 1
-            name = "上午轻油入罐前含水"
             temp = Cells(row, column + co)
+            name = "轻油入罐前含水%"
+            data.Add name, temp
+            name = "上午轻油入罐前含水"
             data.Add name, Split(temp, "/")(0)
             name = "下午轻油入罐前含水"
             data.Add name, Split(temp, "/")(1)
         End If
-        If h.isMatch("饱和蒸汽压Kpa", temp) Then
+        If h.isMatch("饱和蒸汽压", temp) Then
             co = 1
-            name = "饱和蒸汽压Kpa"
+            name = "饱和蒸汽压KPa"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1547,7 +1554,7 @@ Private Sub getQuickInputData(ByRef data As Object)
             temp = Cells(row, column + co)
             data.Add name, temp
             co = 2
-            name = "JZ20-2轻油密度kg/m3"
+            name = "JZ20-2轻油密度t/m3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1557,7 +1564,7 @@ Private Sub getQuickInputData(ByRef data As Object)
             temp = Cells(row, column + co)
             data.Add name, temp
             co = 2
-            name = "JZ20-2凝析油密度kg/m3"
+            name = "JZ20-2凝析油密度t/m3"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1591,25 +1598,41 @@ Private Sub getQuickInputData(ByRef data As Object)
         End If
         If h.isMatch("海管出口PH值", temp) Then
             co = 1
-            name = "海管出口PH值"
+            name = "上午海管出口PH值"
+            temp = Cells(row, column + co)
+            data.Add name, temp
+            co = 2
+            name = "下午海管出口PH值"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
         If h.isMatch("海管出口凝点℃", temp) Then
             co = 1
-            name = "海管出口凝点℃"
+            name = "上午海管出口凝点℃"
+            temp = Cells(row, column + co)
+            data.Add name, temp
+            co = 2
+            name = "下午海管出口凝点℃"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
         If h.isMatch("海管MEG浓度", temp) Then
             co = 1
-            name = "海管MEG浓度"
+            name = "上午海管MEG浓度"
+            temp = Cells(row, column + co)
+            data.Add name, temp
+            co = 2
+            name = "下午海管MEG浓度"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
         If h.isMatch("海管来液含水", temp) Then
             co = 1
-            name = "海管来液含水"
+            name = "上午海管来液含水"
+            temp = Cells(row, column + co)
+            data.Add name, temp
+            co = 2
+            name = "下午海管来液含水"
             temp = Cells(row, column + co)
             data.Add name, temp
         End If
@@ -1778,7 +1801,7 @@ Private Sub getRelevantData(ByRef data As Object)
 '    获得昨月累数据
     Call getAggregateData(data, "month", yesterday)
 '    获得昨日库存数据
-    SQL = "SELECT 名称||单位,数据 from 生产信息 WHERE 日期 = '%0' and 状态='库存' and 名称 ~'(V-6\d+[ABC])|水' and 单位 ~'方|吨'"
+    SQL = "SELECT 名称||单位,数据 from 生产信息 WHERE 日期 = '%0' and 状态='库存' and 名称 ~'(V-6\d+[ABC]{0,1})|水' and 单位 ~'方|吨'"
     SQL = replace(SQL, "%0", yesterday)
 '    Debug.Print SQL
     arr = psql.cnn.Execute(SQL).GetRows
@@ -1799,27 +1822,24 @@ ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Sub
-Private Sub unitConvert(ByRef data As Object)
+Function unitConvert(ByVal s As String)
     On Error GoTo ErrorHandler
-    Dim key, newKey As String
-    Dim ar As Variant
     Dim h As New help
-    For Each key In data
-        newKey = key
-        newKey = h.replace(newKey, "N{0,1}m3", "方")
-        newKey = h.replace(newKey, "((V-6\d+[ABC]{0,1})|(库存水))(m)", "$1米")
-        newKey = h.replace(newKey, "[kK]wh", "度")
-        newKey = h.replace(newKey, "bbl", "桶")
-        newKey = h.replace(newKey, "t", "吨")
-        newKey = h.replace(newKey, "MPa", "兆帕")
-        newKey = h.replace(newKey, "kPa", "千帕")
-        newKey = h.replace(newKey, "℃", "摄氏度")
-        data.key(key) = newKey
-    Next key
+    s = h.replace(s, "t/m3", "吨/立方米")
+    s = h.replace(s, "N{0,1}m3", "方")
+    s = h.replace(s, "((V-6\d+[ABC]{0,1})|(库存水))(m)", "$1米")
+    s = h.replace(s, "[kK]wh", "度")
+    s = h.replace(s, "bbl", "桶")
+    s = h.replace(s, "t", "吨")
+    s = h.replace(s, "M[Pp]a", "兆帕")
+    s = h.replace(s, "[kK][pP]a", "千帕")
+    s = h.replace(s, "℃", "摄氏度")
+    s = h.replace(s, "%", "")
+    unitConvert = s
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
-End Sub
+End Function
 '获得月累，年累数据
 Private Sub getAggregateData(ByRef data As Object, ByVal interval As String, ByVal sd As Date)
     On Error GoTo ErrorHandler
@@ -1894,7 +1914,7 @@ Private Sub getDerivedData(ByRef data As Object)
     data("接收JZ25-1S体系方") = data("入厂计量方") - data("接收JZ20-2体系方")
     data("外输JZ20-2体系方") = data("锦天化方") * data("接收JZ20-2体系方") / data("入厂计量方")
     data("外输JZ25-1S体系方") = data("锦天化方") - data("外输JZ20-2体系方")
-    data("总外输气量方") = data("锦天化方")+data("精细化工方")+data("精细化工CNG方")+data("污水处理厂方")+data("新奥燃气方")
+    data("总外输气量方") = data("锦天化方") + data("精细化工方") + data("精细化工CNG方") + data("污水处理厂方") + data("新奥燃气方")
     data("总产气量方") = data("自用气方") + data("总外输气量方")
 '    轻油
     arr = Array("V-631A", "V-631B", "V-631C")
@@ -1912,21 +1932,35 @@ Private Sub getDerivedData(ByRef data As Object)
     data("轻油回收吨") = data("轻油库存吨") + data("轻油装车吨") - data("昨轻油库存吨")
     data("轻油回收方") = data("轻油回收吨") / data("轻油比重")
     data("轻油回收量方") = data("轻油回收方")
+    data("轻油回收量吨") = data("轻油回收吨")
 '    轻烃
     arr = Array("V-641A", "V-641B", "V-642", "V-643A", "V-643B")
+    data("轻烃库存吨") = 0
     For Each temp In arr
         height = data(temp + "米")
         volume = height ^ 2 * 19.311 - height ^ 3 * 1.047
         quality = data(temp + "密度") * (3 * 6.15 - height) * 3.1415 * height ^ 2 / 3
         name = temp + "方"
         data.Add name, volume
+'        Debug.Print name, volume
         name = temp + "吨"
         data.Add name, quality
+'        Debug.Print name, quality, temp + "密度", data(temp + "密度")
         data("轻烃库存吨") = data("轻烃库存吨") + quality
     Next temp
+    data("丙烷密度") = data("V-641A密度")
+    data("丁烷密度") = data("V-642密度")
+    data("液化气密度") = data("V-643A密度")
+    data("丙烷装车方") = data("丙烷装车吨") / data("丙烷密度")
+    data("丁烷装车方") = data("丁烷装车吨") / data("丁烷密度")
+    data("液化气装车方") = data("液化气装车吨") / data("液化气密度")
+    
     data("昨轻烃库存吨") = data("昨V-641A吨") + data("昨V-641B吨") + data("昨V-642吨") + data("昨V-643A吨") + data("昨V-643B吨")
-    data("轻烃回收吨") = data("轻烃库存吨") + data("丙烷装车吨") + data("丁烷装车吨") + data("液化气装车吨") - data("昨轻烃库存吨")
+'    Debug.Print data("昨轻烃库存吨"), data("昨V-641A吨"), data("昨V-641B吨"), data("昨V-642吨"), data("昨V-643A吨"), data("昨V-643B吨")
+    data("轻烃回收吨") = data("丙烷装车吨") + data("丁烷装车吨") + data("液化气装车吨") + data("昨轻烃库存吨") - data("轻烃库存吨")
+'    Debug.Print data("轻烃回收吨"), data("丙烷装车吨"), data("丁烷装车吨"), data("液化气装车吨"), data("昨轻烃库存吨"), data("轻烃库存吨")
     data("轻烃回收方") = data("轻烃回收吨") / 0.54
+    data("丙丁烷回收量吨") = data("轻烃回收吨")
     data("丙丁烷回收量方") = data("轻烃回收方")
     
     data("库存水方") = data("库存水米") * 1390
@@ -1954,10 +1988,16 @@ Private Sub getDerivedData(ByRef data As Object)
     data("年累接收JZ20-2体系方") = data("接收JZ20-2体系方") + data("年累接收JZ20-2体系方")
     data("月累外输JZ20-2体系方") = data("外输JZ20-2体系方") + data("月累外输JZ20-2体系方")
     data("年累外输JZ20-2体系方") = data("外输JZ20-2体系方") + data("年累外输JZ20-2体系方")
+    data("年累天然气方") = data("年累总外输气量方")
+    data("年累轻油方") = data("年累轻油回收量方")
+    data("年累丙丁烷方") = data("年累丙丁烷回收量方")
+    data("月累天然气方") = data("月累总外输气量方")
+    data("月累轻油方") = data("月累轻油回收量方")
+    data("月累丙丁烷方") = data("月累丙丁烷回收量方")
     
     data("去年年末") = DateSerial(Year(data("日期")) - 1, 12, 31)
     data("今年年末") = DateSerial(Year(data("日期")), 12, 31)
-    data("年度时间进度比") = (data("日期") - data("去年年末")) / (data("今年年末") - data("去年年末")) * 100
+    data("年时间进度比") = (data("日期") - data("去年年末")) / (data("今年年末") - data("去年年末")) * 100
     data("今后需日产天然气方") = (data("年配产天然气方") - data("年累总外输气量方")) / data("剩余天数")
     data("今后需日产轻油方") = (data("年配产轻油方") - data("年累轻油回收量方")) / data("剩余天数")
     data("今后需日产丙丁烷方") = (data("年配产丙丁烷方") - data("年累丙丁烷回收量方")) / data("剩余天数")
@@ -1977,17 +2017,19 @@ Private Sub getHightHydrocarbonDensityData(ByRef data As Object)
     For row = 1 To lastRow
         For column = 1 To lastColumn
             temp = Worksheets("生产日报").Cells(row, column).value
-            If h.isMatch(flag, temp) Then
-                 For co = 0 To 4
-                    ro = 1
-                    name = Worksheets("生产日报").Cells(row + ro, column + co).value
-                    name = name + "密度"
-                    ro = 2
-                    value = Worksheets("生产日报").Cells(row + ro, column + co).value
-'                    Debug.Print ro, co, name, value
-                    data(name) = value
-                Next co
-                Exit Sub
+            If h.isString(temp) Then
+                If h.isMatch(flag, temp) Then
+                     For co = 0 To 4
+                        ro = 1
+                        name = Worksheets("生产日报").Cells(row + ro, column + co).value
+                        name = name + "密度"
+                        ro = 2
+                        value = Worksheets("生产日报").Cells(row + ro, column + co).value
+'                        Debug.Print row + ro, column + co, name, value
+                        data(name) = value
+                    Next co
+                    Exit Sub
+                End If
             End If
         Next column
     Next row
@@ -2026,4 +2068,230 @@ Sub getMaintenancePlaneData(ByRef data As Object)
         Next column
     Next row
 
+End Sub
+' 填写生产日报
+Sub fillProductionDaily(ByRef data As Object)
+    On Error GoTo ErrorHandler
+    Dim row, column, lastRow, lastColumn, ro, co, i As Long
+    Dim temp, arr, n, names, name, value As Variant
+    Dim flag As String
+    flag = "葫芦岛天然气终端厂生产日报"
+    arr = Array("天然气", "轻油", "丙丁烷")
+    Dim h As New help
+    Worksheets("生产日报").Select
+    lastRow = Worksheets("生产日报").UsedRange.Rows.count
+    lastColumn = Worksheets("生产日报").UsedRange.Columns.count
+    names = Array("稳定区", "入厂计量", "锦天化", "精细化工", "精细化工CNG", "污水处理厂", "新奥燃气", "自用气", "放空气", "总产气量", "总外输气量")
+    For row = 1 To lastRow
+        For column = 1 To lastColumn
+            temp = Worksheets("生产日报").Cells(row, column).value
+            If h.isString(temp) Then
+'                Debug.Print temp, row, column
+                If h.isMatch(flag, temp) Then
+                    lastColumn = Worksheets("生产日报").Cells(row, column).MergeArea.Columns.count
+                    ro = 1
+                    name = "日期"
+                    value = data(name)
+
+                    [日期] = value
+                End If
+                If h.isMatch("年时间", temp) Then
+                    For ro = 1 To 3
+                        name = "年时间进度比"
+                        value = data(name)
+                        Worksheets("生产日报").Cells(row + ro, column).value = value
+                    Next ro
+                End If
+                If h.isMatch("[月年]度配产", temp) Then
+                    For i = 0 To UBound(arr)
+                        ro = i + 1
+                        If h.isMatch("年", temp) Then
+                            name = "年配产" + arr(i) + "方"
+                        Else
+                            name = "月配产" + arr(i) + "方"
+                        End If
+                        value = data(name)
+                        Worksheets("生产日报").Cells(row + ro, column).value = value
+                    Next i
+                End If
+                If h.isMatch("[月年]度累计", temp) Then
+                    For i = 0 To UBound(arr)
+                        ro = i + 1
+                        If h.isMatch("年", temp) Then
+                            name = "年累" + arr(i) + "方"
+                        Else
+                            name = "月累" + arr(i) + "方"
+                        End If
+                        value = data(name)
+                        Worksheets("生产日报").Cells(row + ro, column).value = value
+                    Next i
+                End If
+                If h.isMatch("今后需日产", temp) Then
+                    For i = 0 To UBound(arr)
+                        ro = i + 1
+                        name = "今后需日产" + arr(i) + "方"
+                        value = data(name)
+                        Worksheets("生产日报").Cells(row + ro, column).value = value
+                    Next i
+                End If
+                For Each n In names
+                    If h.isMatch(n, temp) Then
+                        If h.isMatch("(稳定区)|(入厂计量)", n) Then
+                            co = 1
+                            name = n + "方"
+                            value = data(name)
+                            Worksheets("生产日报").Cells(row, column + co).value = value
+                            co = 3
+                            name = "月累" + n + "方"
+                            value = data(name)
+                            Worksheets("生产日报").Cells(row, column + co).value = value
+                            co = 4
+                            name = "年累" + n + "方"
+                            value = data(name)
+                            Worksheets("生产日报").Cells(row, column + co).value = value
+                        End If
+                        If h.isMatch("(锦天化)|(精细化工)|(精细化工CNG)|(污水处理厂)|(新奥燃气)|(自用气)|(放空气)", n) Then
+                            co = 1
+                            name = n + "方"
+                            value = data(name)
+                            Worksheets("生产日报").Cells(row, column + co).value = value
+                            co = 4
+                            name = "月累" + n + "方"
+                            value = data(name)
+                            Worksheets("生产日报").Cells(row, column + co).value = value
+                            co = 5
+                            name = "年累" + n + "方"
+                            value = data(name)
+                            Worksheets("生产日报").Cells(row, column + co).value = value
+                        End If
+                    End If
+                Next n
+                If h.isMatch("(海管来液含水)|(海管MEG浓度)|(海管出口凝点)|(海管出口PH值)", temp) Then
+                    co = 1
+                    n = unitConvert(temp)
+'                    name = h.replace(n, "℃", "摄氏度")
+'                    name = h.replace(n, "%", "")
+                    name = "上午" + n
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                    co = 2
+                    name = "下午" + n
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                End If
+                If h.isMatch("海管进/出口压力MPa", temp) Then
+                    co = 1
+                    value = CStr(data("进口海管压力兆帕")) + "/" + CStr(data("出口海管压力兆帕"))
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                End If
+                If h.isMatch("海管进/出口温度℃", temp) Then
+                    co = 1
+                    value = CStr(data("进口海管温度摄氏度")) + "/" + CStr(data("出口海管温度摄氏度"))
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                End If
+                If h.isMatch("(JZ20-2凝析油)|(JZ20-2轻油)", temp) Then
+                    co = 1
+                    name = unitConvert(temp)
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                    co = 2
+                    name = h.search("(JZ20-2凝析油)|(JZ20-2轻油)", name)
+                    name = name + "密度吨/立方米"
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                End If
+                If h.isMatch("(轻油回收量)|(饱和蒸汽压)|(外输凝点)|(外输PH值)", temp) Then
+                    ro = 1
+                    name = temp
+                    name = h.replace(name, "m3", "方")
+                    name = h.replace(name, "t", "吨")
+                    name = h.replace(name, "KPa", "千帕")
+                    name = h.replace(name, "℃", "摄氏度")
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row + ro, column).value = value
+                End If
+                
+                If h.isMatch("V-6[34][123][ABC]{0,1}", temp) Then
+                    ro = 1
+                    name = h.search("V-6[34][123][ABC]{0,1}", temp) + "米"
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row + ro, column).value = value
+                End If
+                If h.isMatch("轻烃库存t", temp) Then
+                    ro = 1
+                    name = "轻烃库存吨"
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row + ro, column).value = value
+                End If
+                If h.isMatch("(装车)|(丙丁烷回收量)|(轻油入罐前含水)", temp) Then
+                    co = 1
+                    name = temp
+                    name = h.replace(name, "t", "吨")
+                    name = h.replace(name, "m3", "方")
+                    name = h.replace(name, "bbl", "桶")
+                    value = data(name)
+'                    Debug.Print name, value, temp
+                    If h.isMatch("(轻油装车t)|(数据库)", temp) Then
+                        co = 2
+                    End If
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                End If
+                
+                
+                If h.isMatch("(甲醇消耗)|(乙二醇消耗|(乙二醇回收))|(外供水)|(水消耗)", temp) Then
+                    ro = 1
+                    name = replace(temp, "m3", "方")
+                    value = data(name)
+'                    Debug.Print name, value
+                    Worksheets("生产日报").Cells(row + ro, column).value = value
+                    ro = 2
+                    Worksheets("生产日报").Cells(row + ro, column).value = data("月累" + name)
+                    ro = 3
+                    Worksheets("生产日报").Cells(row + ro, column).value = data("年累" + name)
+                End If
+                If h.isMatch("(外供电)|(自发电)", temp) Then
+                    ro = 1
+                    name = replace(temp, "KWh", "度")
+                    value = data(name)
+'                    Debug.Print name, value
+                    Worksheets("生产日报").Cells(row + ro, column).value = value
+                    ro = 2
+                    Worksheets("生产日报").Cells(row + ro, column).value = data("月累" + name)
+                    ro = 3
+                    Worksheets("生产日报").Cells(row + ro, column).value = data("年累" + name)
+                End If
+                If h.isMatch("(甲醇库存)|(水池水位)|(水池储水)", temp) Then
+                    co = 1
+                    name = "库存甲醇方"
+                    value = data(name)
+'                    Debug.Print name, value
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                End If
+                If h.isMatch("乙二醇浓度", temp) Then
+                    co = 1
+                    name = temp
+                    value = data(name)
+'                    Debug.Print name, value
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                End If
+                If h.isMatch("水池水位", temp) Then
+                    co = 1
+                    name = "库存水米"
+                    value = data(name)
+'                    Debug.Print name, value
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                End If
+                If h.isMatch("水池储水", temp) Then
+                    co = 1
+                    name = "库存水方"
+                    value = data(name)
+'                    Debug.Print name, value
+                    Worksheets("生产日报").Cells(row, column + co).value = value
+                End If
+            End If
+        Next column
+    Next row
+ErrorHandler:
+        Debug.Print Err.Number & vbTab & Err.Description
+        Resume Next
 End Sub
