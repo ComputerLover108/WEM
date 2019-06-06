@@ -7,47 +7,27 @@
  -- 然后找到技术人生上一篇帖子，该作者从官网下载pgAdmin2.0的安装版试了一下，竟然可以正常使用，经过对比发现竟然是只少了1个空文件！
  -- pgAdmin 4/venv/Lib/site-packages/backports/__init__.py
  -- 0字节的空文件，创建一个即可，然后pgAdmin就能正常工作了！
-select
-  v_d,
-  data,
-  month,
-  year,
-  lag(v_d, 1) over (
-    order by
-      v_d
-  ) p1,
-  lag(month, 1) over (
-    partition by month(v_d)
-    order by
-      v_d
-  ) p2,
-  lag(year, 1) over (
-    partition by year(v_d)
-    order by
-      v_d
-  ) p3,
-  first_value(data) over(
-    partition by month(v_d)
-    order by
-      v_d
-  ) p4,
-  first_value(month) over(
-    partition by month(v_d)
-    order by
-      v_d
-  ) p5,
-  first_value(data) over(
-    partition by year(v_d)
-    order by
-      v_d
-  ) p6,
-  first_value(year) over(
-    partition by year(v_d)
-    order by
-      v_d
-  ) p7
-from
-  tbl;
+
+select v_d,
+       data,
+       month,
+       year,
+       lag(v_d, 1) over (
+                         order by v_d) p1,
+                        lag(month, 1) over (partition by month(v_d)
+                                            order by v_d) p2,
+                                           lag(year, 1) over (partition by year(v_d)
+                                                              order by v_d) p3,
+                                                             first_value(data) over(partition by month(v_d)
+                                                                                    order by v_d) p4,
+                                                                               first_value(month) over(partition by month(v_d)
+                                                                                                       order by v_d) p5,
+                                                                                                  first_value(data) over(partition by year(v_d)
+                                                                                                                         order by v_d) p6,
+                                                                                                                    first_value(year) over(partition by year(v_d)
+                                                                                                                                           order by v_d) p7
+from tbl;
+
 -- 解释
 -- p1  昨天的日期
 -- p2  当月统计数据范围内，上一条月累加值
@@ -57,20 +37,16 @@ from
 -- p6  当年统计数据范围内，第一条年累加值
 -- p7  当年统计数据范围内，第一条日值
 
-CREATE TABLE IF NOT EXISTS "生产动态" (
-  id serial PRIMARY KEY,
-  "时间" TIMESTAMP NOT NULL,
-  "名称" varchar NOT NULL,
-  "单位" varchar DEFAULT '',
-  "数据" double PRECISION NOT NULL,
-  "类别" varchar DEFAULT '',
-  "备注" varchar DEFAULT '',
-  UNIQUE (
-    时 间,
-    名 称,
-    单 位
-  )
-);
+CREATE TABLE IF NOT EXISTS "生产动态" (id serial PRIMARY KEY,
+                                                     "时间" TIMESTAMP NOT NULL,
+                                                                    "名称" varchar NOT NULL,
+                                                                                 "单位" varchar DEFAULT '',
+                                                                                                      "数据" double PRECISION NOT NULL,
+                                                                                                                            "类别" varchar DEFAULT '',
+                                                                                                                                                 "备注" varchar DEFAULT '',
+                                                                                                                                                                      UNIQUE (时 间, 名 称, 单 位));
+
+
 DROP INDEX IF EXISTS 生产信息唯一索引;
 
 
@@ -119,12 +95,7 @@ FROM 生产信息
 WHERE ID NOT IN
     (SELECT max(ID)
      FROM 生产信息
-     GROUP BY 日期,
-              名称,
-              单位,
-              类别,
-              状态,
-              备注);
+     GROUP BY 日期, 名称, 单位, 类别, 状态, 备注);
 
 
 SELECT *
@@ -141,8 +112,7 @@ SET 名称='热油炉'
 WHERE 名称='锅炉用气';
 
 
-SELECT 名称,
-       数据
+SELECT 名称, 数据
 FROM 生产信息
 WHERE 日期='2018-9-17'
   AND 名称 IN ('热油炉',
@@ -152,42 +122,33 @@ WHERE 日期='2018-9-17'
              'FIQ-2043')
 ORDER BY 名称;
 
-SELECT 名称,
-       时间,
-       数据,
-       lag(时间) OVER (
-                     ORDER BY 时间) AS p1,
-       lag(数据) over (
-                     ORDER BY 时间) as d2,
-        数据-lag(数据) over (
-                     ORDER BY 时间) as 日累
+
+SELECT 名称, 时间, 数据, lag(时间) OVER (
+                                 ORDER BY 时间) AS p1,
+                                lag(数据) over (
+                                              ORDER BY 时间) as d2, 数据-lag(数据) over (
+                                                                                   ORDER BY 时间) as 日累
 FROM 生产动态
 WHERE 名称 IN ('热油炉',
              '锅炉房用气',
              '火炬长明灯',
              '火炬放空量',
              'FIQ-2043')
-order by 时间 desc,名称
-;
+order by 时间 desc,名称 ;
 
-SELECT 时间,
-	   名称,
-       数据-lag(数据) over (
-                     ORDER BY 时间) as 日累
+
+SELECT 时间, 名称, 数据-lag(数据) over (
+                                ORDER BY 时间) as 日累
 FROM 生产动态
 WHERE 名称 IN ('热油炉',
              '锅炉房用气',
              '火炬长明灯',
              '火炬放空量',
              'FIQ-2043')
-order by 时间 desc,名称
-;
+order by 时间 desc,名称 ;
 
- WITH otb AS
-  (SELECT 时间,
-          名称,
-          单位,
-          数据
+WITH otb AS
+  (SELECT 时间, 名称, 单位, 数据
    FROM 生产动态
    WHERE 名称 IN ('FIQ-5014',
                 '锅炉房用气',
@@ -197,11 +158,8 @@ order by 时间 desc,名称
      AND 时间 <
        (SELECT max(时间)
         FROM 生产动态)),
-      ntb AS
-  (SELECT 时间,
-          名称,
-          单位,
-          数据
+     ntb AS
+  (SELECT 时间, 名称, 单位, 数据
    FROM 生产动态
    WHERE 名称 IN ('FIQ-5014',
                 '锅炉房用气',
@@ -211,22 +169,15 @@ order by 时间 desc,名称
      AND 时间 >
        (SELECT min(时间)
         FROM 生产动态))
-SELECT otb.时间,
-       ntb.时间,
-       otb.名称,
-       ntb.数据 - otb.数据 AS 日累
+SELECT otb.时间, ntb.时间, otb.名称, ntb.数据 - otb.数据 AS 日累
 FROM otb,
      ntb
 WHERE otb.名称 = ntb.名称
   AND ntb.时间 - otb.时间 = '1 day'
-ORDER BY ntb.时间 desc,
-         ntb.名称;
+ORDER BY ntb.时间 desc, ntb.名称;
 
- WITH otb AS
-  (SELECT 时间,
-          名称,
-          单位,
-          数据
+WITH otb AS
+  (SELECT 时间, 名称, 单位, 数据
    FROM 生产动态
    WHERE 名称 IN ('FIQ-5014',
                 '锅炉房用气',
@@ -236,11 +187,8 @@ ORDER BY ntb.时间 desc,
      AND 时间 <
        (SELECT MAX(时间)
         FROM 生产动态)),
-      ntb AS
-  (SELECT 时间,
-          名称,
-          单位,
-          数据
+     ntb AS
+  (SELECT 时间, 名称, 单位, 数据
    FROM 生产动态
    WHERE 名称 IN ('FIQ-5014',
                 '锅炉房用气',
@@ -251,25 +199,23 @@ ORDER BY ntb.时间 desc,
        (SELECT MIN(时间)
         FROM 生产动态))
 SELECT otb.时间 AS t1,
-       ntb.时间 AS t2,
-       otb.名称 AS name,
-       otb.数据 AS d1,
-       ntb.数据 AS d2 ,
-       ntb.数据 - otb.数据 AS 日累
+            ntb.时间 AS t2,
+                 otb.名称 AS name,
+                      otb.数据 AS d1,
+                           ntb.数据 AS d2,
+                                ntb.数据 - otb.数据 AS 日累
 FROM otb,
      ntb
 WHERE otb.名称 = ntb.名称
   AND ntb.时间 - otb.时间 = '1 day'
-ORDER BY ntb.名称,ntb.时间 desc
-;
+ORDER BY ntb.名称,ntb.时间 desc ;
 
 
 SELECT DISTINCT 名称
 FROM 生产动态;
 
 
-SELECT 名称,
-       数据
+SELECT 名称, 数据
 FROM 生产信息
 WHERE 日期= date_trunc('month', TIMESTAMP '2018-9-17')
   AND 名称 IN ('热油炉',
@@ -280,8 +226,7 @@ WHERE 日期= date_trunc('month', TIMESTAMP '2018-9-17')
 ORDER BY 名称;
 
 
-SELECT 名称,
-       数据
+SELECT 名称, 数据
 FROM 生产信息
 WHERE 日期= date_trunc('year', TIMESTAMP '2018-9-17')
   AND 名称 IN ('热油炉',
@@ -292,8 +237,7 @@ WHERE 日期= date_trunc('year', TIMESTAMP '2018-9-17')
 ORDER BY 名称;
 
 
-SELECT 名称,
-       sum(数据) AS 月累
+SELECT 名称, sum(数据) AS 月累
 FROM 生产信息
 WHERE 日期 BETWEEN date_trunc('month',TIMESTAMP '2018-9-17') AND '2018-9-17'
   AND 名称 IN ('热油炉',
@@ -305,8 +249,7 @@ GROUP BY 名称
 ORDER BY 名称 ;
 
 
-SELECT 名称,
-       sum(数据) AS 年累
+SELECT 名称, sum(数据) AS 年累
 FROM 生产信息
 WHERE 日期 BETWEEN date_trunc('year',TIMESTAMP '2018-9-17') AND '2018-9-17'
   AND 名称 IN ('热油炉',
@@ -322,13 +265,18 @@ CREATE UNIQUE INDEX IF NOT EXISTS 生产信息唯一索引 ON 生产信息 (日�
 
 
 INSERT INTO 生产信息 (日期,名称,单位,类别,状态,备注,数据源,数据,月累,年累)
-VALUES ('2018/9/17', '轻油比重', '', '轻油', '', '', '', .725, NULL,
-                                                         NULL) ON CONFLICT (日期,名称,单位,类别,状态,备注) DO
+VALUES ('2018/9/17',
+        '轻油比重',
+        '',
+        '轻油',
+        '',
+        '',
+        '',
+        .725,
+        NULL,
+        NULL) ON CONFLICT (日期,名称,单位,类别,状态,备注) DO
 UPDATE
-SET 数据源 = EXCLUDED.数据源,
-    数据 = EXCLUDED.数据,
-    月累 = EXCLUDED.月累,
-    年累 = EXCLUDED.年累
+SET 数据源 = EXCLUDED.数据源, 数据 = EXCLUDED.数据, 月累 = EXCLUDED.月累, 年累 = EXCLUDED.年累
 WHERE 生产信息.数据 IS DISTINCT
   FROM EXCLUDED.数据
   OR 生产信息.月累 IS DISTINCT
@@ -351,10 +299,7 @@ VALUES ('2018/9/17',
         NULL,
         NULL) ON CONFLICT (日期,名称,单位,类别,状态,备注) DO
 UPDATE
-SET 数据源 = EXCLUDED.数据源,
-    数据 = EXCLUDED.数据,
-    月累 = EXCLUDED.月累,
-    年累 = EXCLUDED.年累
+SET 数据源 = EXCLUDED.数据源, 数据 = EXCLUDED.数据, 月累 = EXCLUDED.月累, 年累 = EXCLUDED.年累
 WHERE 生产信息.数据 IS DISTINCT
   FROM EXCLUDED.数据
   OR 生产信息.月累 IS DISTINCT
@@ -363,3 +308,110 @@ WHERE 生产信息.数据 IS DISTINCT
   FROM EXCLUDED.年累
   OR 生产信息.数据源 IS DISTINCT
   FROM EXCLUDED.数据源;
+
+-- 盘库SQL
+
+SELECT concat(名称,单位),数据
+FROM 生产信息
+WHERE 名称 IN ('轻油月配产',
+             '轻油年配产',
+             '丙丁烷月配产',
+             '丙丁烷年配产')
+  AND 单位='方'
+  AND 状态='计划'
+  AND 日期='2019-4-30';
+
+
+SELECT concat(名称,单位),数据
+FROM 生产信息
+WHERE 名称 IN ('轻油库存合计',
+             '轻烃库存')
+  AND 单位='吨'
+  AND 状态='库存'
+  AND 日期='2019-4-30' ;
+
+-- 轻油外输月累
+
+SELECT sum(数据)
+FROM 生产信息
+WHERE 名称='轻油装车'
+  AND 单位='方' --单位='桶'，单位='吨'
+
+  AND 状态='外输'
+  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
+
+-- 轻油外输年累
+
+SELECT sum(数据)
+FROM 生产信息
+WHERE 名称='轻油装车'
+  AND 单位='吨'
+  AND 状态='外输'
+  AND 日期 BETWEEN date_trunc('year',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
+
+-- 轻烃外输月累
+
+SELECT sum(数据)
+FROM 生产信息
+WHERE 名称 IN ('丙烷装车',
+             '丁烷装车',
+             '液化气装车')
+  AND 单位='吨'
+  AND 状态='外输'
+  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
+
+
+SELECT sum(数据)
+FROM 生产信息
+WHERE 类别 IN ('丙丁烷')
+  AND 单位='吨'
+  AND 状态='外输'
+  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
+
+-- 轻烃外输年累
+
+SELECT sum(数据)
+FROM 生产信息
+WHERE 名称 IN ('丙烷装车',
+             '丁烷装车',
+             '液化气装车')
+  AND 单位='吨'
+  AND 状态='外输'
+  AND 日期 BETWEEN date_trunc('year',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
+
+-- 轻油生产月累
+
+SELECT sum(数据)
+FROM 生产信息
+WHERE 名称='轻油回收量'
+  AND 单位='方'
+  AND 状态='生产'
+  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
+
+
+SELECT sum(数据)
+FROM 生产信息
+WHERE 名称 != '数据库轻油回收量'
+  AND 类别='轻油'
+  AND 单位='方'
+  AND 状态='生产'
+  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
+
+-- 轻烃生产
+
+SELECT sum(数据)
+FROM 生产信息
+WHERE 名称 != '数据库丙丁烷回收量'
+  AND 类别 IN ('丙丁烷')
+  AND 单位='吨'
+  AND 状态='外输'
+  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
+
+-- 盘库轻油，轻烃外输，生产（方,桶,吨）
+
+SELECT 名称,数据
+FROM 生产信息
+WHERE 名称 ~'盘库'
+  AND 状态 IN ('外输',
+             '生产')
+  AND 日期 = '2019-4-30' ;
