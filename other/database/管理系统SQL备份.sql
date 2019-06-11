@@ -2,7 +2,7 @@
 -- 2018年03月10日 18:15:03 pierian_d 阅读数：2440 标签： PostgreSQL pgadmin4 免安装压缩版  更多
 -- 个人分类： 数据库
 -- 看到PostgreSQL的使用增长迅猛，又看到文章介绍PostgreSQL比MYSQL少一些坑决定下载一个试用一下，不想安装，下了个postgresql-10.3-1-windows-x64-binaries压缩版。
- -- 然而我不会用，按照PostgreSQL免安装部署方法，然后打开pgAdmin的时候总是报错“The application server could not be contacted.”，尝试了网上的删除c:\Users\your_name\AppData\Roaming\pgAdmin 之内的删除所有文件和文件夹，然后在C:\Program Files\PostgreSQL\10\pgAdmin 4\web 找到config_distro.py文件，添加：MINIFY_HTML=False
+ -- 然而我不会用，按照PostgreSQL免安装部署方法，然后打开pgAdmin的时候总是报错“The application server could not be contacted.”，尝试了网上的删除c:\Users\your_name\Approduction_data\Roaming\pgAdmin 之内的删除所有文件和文件夹，然后在C:\Program Files\PostgreSQL\10\pgAdmin 4\web 找到config_distro.py文件，添加：MINIFY_HTML=False
 -- DATA_DIR = "C:/Data/pgAdmin" # set non-ascii path here，都不行！
  -- 然后找到技术人生上一篇帖子，该作者从官网下载pgAdmin2.0的安装版试了一下，竟然可以正常使用，经过对比发现竟然是只少了1个空文件！
  -- pgAdmin 4/venv/Lib/site-packages/backports/__init__.py
@@ -336,7 +336,6 @@ SELECT sum(数据)
 FROM 生产信息
 WHERE 名称='轻油装车'
   AND 单位='方' --单位='桶'，单位='吨'
-
   AND 状态='外输'
   AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
 
@@ -360,6 +359,7 @@ WHERE 名称 IN ('丙烷装车',
   AND 状态='外输'
   AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
 
+SELECT concat('月累轻烃装车',单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('丙烷装车','丁烷装车','液化气装车') AND 单位='吨' AND 状态='外输' AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' GROUP BY 单位;
 
 SELECT sum(数据)
 FROM 生产信息
@@ -389,6 +389,8 @@ WHERE 名称='轻油回收量'
   AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
 
 
+
+
 SELECT sum(数据)
 FROM 生产信息
 WHERE 名称 != '数据库轻油回收量'
@@ -407,6 +409,10 @@ WHERE 名称 != '数据库丙丁烷回收量'
   AND 状态='外输'
   AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
 
+SELECT concat('年累',名称,单位),sum(数据) FROM 生产信息 WHERE　名称 IN ('总外输气量','自用气','放空')　AND 单位='吨'
+  AND 状态='外输'
+  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;　
+
 -- 盘库轻油，轻烃外输，生产（方,桶,吨）
 
 SELECT 名称,数据
@@ -415,3 +421,19 @@ WHERE 名称 ~'盘库'
   AND 状态 IN ('外输',
              '生产')
   AND 日期 = '2019-4-30' ;
+
+
+-- 盘库报表
+DROP TABLE IF EXISTS inventory CASCADE;
+CREATE TABLE IF NOT EXISTS inventory(
+  id serial PRIMARY KEY,
+  create_date  DATE,
+  product  VARCHAR,
+  unit  VARCHAR,
+  product_data  DOUBLE PRECISION,
+  category  VARCHAR,
+  status VARCHAR,  
+  source VARCHAR,
+  UNIQUE(create_date,product,unit,status)
+);
+INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;

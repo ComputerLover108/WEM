@@ -117,3 +117,19 @@ Function transpose2DArray(inputArray As Variant) As Variant
     
     transpose2DArray = tempArray
 End Function
+' 2维数组变字典
+Public Sub array2dic(arr As Variant, ByRef data As Object)
+    '// add declarations
+    On Error GoTo catchError
+    Dim index, name, value As Variant
+    For index = 0 To UBound(arr)
+        name = arr(index, 0)
+        value = arr(index, 1)
+        data(name) = value
+    Next index
+exitSub:
+    Exit Sub
+catchError:
+    '// add error handling
+    GoTo exitSub
+End Sub

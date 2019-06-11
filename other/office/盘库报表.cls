@@ -5,8 +5,13 @@ Private Sub test()
     On Error GoTo catchError
     Dim data As Object
     Set data = CreateObject("Scripting.Dictionary")
-    data("日期") = "2018-4-30"
+    data("日期") = "2019-4-30"
     Call getRelatedData(data)
+    Dim k As Variant
+    For Each k In data.Keys
+        Debug.Print k, data.item(k)
+    Next
+    Debug.Print data.count
 exitSub:
     Exit Sub
 catchError:
@@ -84,8 +89,8 @@ Private Sub dataAcquisition(ByVal fname As String)
     Dim aim, aims, units  As Variant
     aims = Array("轻.*油", "液.*化.*气")
     units = Array("方", "桶", "吨")
-    Dim SQL1, SQL2, name, unit, category, state, remark, dataSource As String
-    dataSource = fname
+    Dim SQL, SQL1, name, unit, category, status, remark, source As String
+    source = fname
     remark = "盘库"
     Dim psql As New PostgreSQL
     For Each sh In wb.Worksheets
@@ -118,8 +123,7 @@ Private Sub dataAcquisition(ByVal fname As String)
                                 End If
                                 temp2 = sh.Cells(row + ro, column + co).value
                                 If h.isMatch(aim, temp2) Then
-                                    SQL1 = "INSERT INTO 生产信息 (日期,名称,单位,类别,状态,数据,备注,数据源) VALUES ('$1','$2','$3','$4','$5',$6,'$7','$8') ON CONFLICT (日期,名称,单位,类别,状态,备注) DO UPDATE SET 数据 = EXCLUDED.数据,数据源=EXCLUDED.数据源;"
-                                    SQL2 = "INSERT INTO 生产信息 (日期,名称,单位,类别,状态,年累,备注,数据源) VALUES ('$1','$2','$3','$4','$5',$6,'$7','$8') ON CONFLICT (日期,名称,单位,类别,状态,备注) DO UPDATE SET 年累 = EXCLUDED.年累,数据源=EXCLUDED.数据源;"
+                                    SQL = "INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;"
                                     co = 2
                                     temp = sh.Cells(row, column + co).value
                                     If h.isMatch("轻.*油", temp2) Then
@@ -129,39 +133,45 @@ Private Sub dataAcquisition(ByVal fname As String)
                                         name = "轻烃"
                                     End If
                                     category = name
-                                    state = "库存"
-                                    SQL1 = replace(SQL1, "$1", d)
-                                    SQL1 = replace(SQL1, "$1", d)
-                                    SQL1 = replace(SQL1, "$2", name)
-                                    SQL1 = replace(SQL1, "$3", unit)
-                                    SQL1 = replace(SQL1, "$4", category)
-                                    SQL1 = replace(SQL1, "$5", state)
-                                    SQL1 = replace(SQL1, "$6", temp)
-                                    SQL1 = replace(SQL1, "$7", remark)
-                                    SQL1 = replace(SQL1, "$8", dataSource)
-                                    If Not (unit = "吨" And state = "库存") Then
-                                        Debug.Print SQL1
-                                        psql.cnn.Execute (SQL1)
-                                    End If
+                                    status = "库存"
+                                    SQL = replace(SQL, "$1", d)
+                                    SQL = replace(SQL, "$2", name)
+                                    SQL = replace(SQL, "$3", unit)
+                                    SQL = replace(SQL, "$4", temp)
+                                    SQL = replace(SQL, "$5", category)
+                                    SQL = replace(SQL, "$6", status)
+                                    SQL = replace(SQL, "$7", source)
+                                '    If Not (unit = "吨" And status = "库存") Then
+                                '        Debug.Print SQL
+                                '        psql.cnn.Execute (SQL)
+                                '    End If
+                                    psql.cnn.Execute (SQL)
                                     co = co + 2
                                     temp = sh.Cells(row, column + co).value
-                                    state = "外输"
-                                    SQL2 = replace(SQL2, "$1", d)
-                                    SQL2 = replace(SQL2, "$2", name)
-                                    SQL2 = replace(SQL2, "$3", unit)
-                                    SQL2 = replace(SQL2, "$4", category)
-                                    SQL2 = replace(SQL2, "$5", state)
-                                    SQL2 = replace(SQL2, "$6", temp)
-                                    SQL2 = replace(SQL2, "$7", remark)
-                                    SQL2 = replace(SQL2, "$8", dataSource)
-                                    Debug.Print SQL2
-                                    psql.cnn.Execute (SQL2)
+                                    status = "外输"
+                                    SQL = "INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;"
+                                    SQL = replace(SQL, "$1", d)
+                                    SQL = replace(SQL, "$2", "年累" + name)
+                                    SQL = replace(SQL, "$3", unit)
+                                    SQL = replace(SQL, "$4", temp)
+                                    SQL = replace(SQL, "$5", category)
+                                    SQL = replace(SQL, "$6", status)
+                                    SQL = replace(SQL, "$7", source)
+                                    Debug.Print SQL
+                                    psql.cnn.Execute (SQL)
                                     co = co + 2
                                     temp = sh.Cells(row, column + co).value
-                                    state = "生产"
-                                    SQL2 = replace(SQL2, "$5", state)
-                                    Debug.Print SQL2
-                                    psql.cnn.Execute (SQL2)
+                                    status = "生产"
+                                    SQL = "INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;"
+                                    SQL = replace(SQL, "$1", d)
+                                    SQL = replace(SQL, "$2", "年累" + name)
+                                    SQL = replace(SQL, "$3", unit)
+                                    SQL = replace(SQL, "$4", temp)
+                                    SQL = replace(SQL, "$5", category)
+                                    SQL = replace(SQL, "$6", status)
+                                    SQL = replace(SQL, "$7", source)
+                                    Debug.Print SQL
+                                    psql.cnn.Execute (SQL)
                                 End If
                             End If
                         Next unit
@@ -183,23 +193,68 @@ Private Sub getRelatedData(ByRef data As Object)
     On Error GoTo catchError
     Dim psql As New PostgreSQL
     Dim SQL As String
-    Dim d As Date
-    d = data("日期")
-    SQL = "select * from 生产信息 where 日期='$1';"
-    SQL = replace(SQL, "$1", d)
-    Dim rst1, rst2 As Variant
-    rst1 = psql.cnn.Execute(SQL).GetRows()
+    Dim d, lastMonth As Date
+    Dim rst1, rst2, rst3 As Variant
+    Dim temp
     Dim h As New help
+    d = data("日期")
+    lastMonth = DateSerial(Year(d), Month(d), 1) - 1
+    SQL = "SELECT concat(名称,单位),数据 FROM 生产信息 WHERE 名称 IN ('轻油月配产','轻油年配产','丙丁烷月配产','丙丁烷年配产') AND 单位='方' AND 状态='计划' AND 日期='$1';"
+    SQL = replace(SQL, "$1", d)
+    rst1 = psql.cnn.Execute(SQL).GetRows()
     rst2 = h.transpose2DArray(rst1)
-    Dim x, y As Long
-    For x = 0 To UBound(rst2)
-        For y = 0 To UBound(rst2, 2)
-            Debug.Print x, y, rst2(x, y)
-        Next y
-        Debug.Print "***"
-    Next x
-    Dim arr() 
-    arr=("总外输气量","自用气","火炬放空量","火炬长明灯")
+    Call h.array2dic(rst2, data)
+
+    SQL = "SELECT concat(名称,单位),数据 FROM 生产信息 WHERE 名称 IN ('轻油库存合计','轻烃库存') AND 单位='吨' AND 状态='库存' AND 日期='$1';"
+    SQL = replace(SQL, "$1", d)
+    rst1 = psql.cnn.Execute(SQL).GetRows()
+    rst2 = h.transpose2DArray(rst1)
+    Call h.array2dic(rst2, data)
+
+   SQL = "select concat('上月',status,product,unit),product_data from inventory where create_date='$1';"
+   SQL = replace(SQL, "$1", lastMonth)
+   Debug.Print SQL
+   rst1 = psql.cnn.Execute(SQL).GetRows()
+   rst2 = h.transpose2DArray(rst1)
+   Call h.array2dic(rst2, data)
+    
+    SQL = "SELECT concat('月累',名称,单位),sum(数据) FROM 生产信息 WHERE 名称='轻油装车' AND 单位 IN ('方','桶','吨') AND 状态='外输'  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '$1') AND '$1' GROUP BY 名称,单位;"
+    SQL = replace(SQL, "$1", d)
+   Debug.Print SQL
+   rst1 = psql.cnn.Execute(SQL).GetRows()
+   rst2 = h.transpose2DArray(rst1)
+   Call h.array2dic(rst2, data)
+
+   SQL = "SELECT concat('月累轻烃装车',单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('丙烷装车','丁烷装车','液化气装车') AND 单位='吨' AND 状态='外输' AND 日期 BETWEEN date_trunc('month',TIMESTAMP '$1') AND '$1' GROUP BY 单位;"
+   SQL = replace(SQL, "$1", d)
+   Debug.Print SQL
+   rst1 = psql.cnn.Execute(SQL).GetRows()
+   rst2 = h.transpose2DArray(rst1)
+   Call h.array2dic(rst2, data)
+
+   SQL = "SELECT concat('年累轻烃装车',单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('丙烷装车','丁烷装车','液化气装车') AND 单位='吨' AND 状态='外输' AND 日期 BETWEEN date_trunc('month',TIMESTAMP '$1') AND '$1' GROUP BY 单位;"
+   SQL = replace(SQL, "$1", d)
+   Debug.Print SQL
+   rst1 = psql.cnn.Execute(SQL).GetRows()
+   rst2 = h.transpose2DArray(rst1)
+   Call h.array2dic(rst2, data)
+
+   SQL="SELECT concat('年累',名称,单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('数据库轻油回收量','数据库丙丁烷回收量') AND 单位='方' AND 状态='生产'AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
+   SQL = replace(SQL, "$1", "year")
+   SQL = replace(SQL, "$2", d)
+   Debug.Print SQL
+   rst1 = psql.cnn.Execute(SQL).GetRows()
+   rst2 = h.transpose2DArray(rst1)
+   Call h.array2dic(rst2, data)
+
+   SQL = "SELECT concat('月累',名称,单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('总外输气量','自用气','火炬长明灯','火炬放空量') AND 单位='方' AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
+   SQL = replace(SQL, "$1", "month")
+   SQL = replace(SQL, "$2", d)
+   Debug.Print SQL
+   rst1 = psql.cnn.Execute(SQL).GetRows()
+   rst2 = h.transpose2DArray(rst1)
+   Call h.array2dic(rst2, data)
+   data("月累放空气方")=data("月累火炬长明灯方")+data("月累火炬放空量方")
 exitSub:
     Exit Sub
 catchError:
