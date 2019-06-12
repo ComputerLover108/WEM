@@ -141,10 +141,6 @@ Private Sub dataAcquisition(ByVal fname As String)
                                     SQL = replace(SQL, "$5", category)
                                     SQL = replace(SQL, "$6", status)
                                     SQL = replace(SQL, "$7", source)
-                                '    If Not (unit = "吨" And status = "库存") Then
-                                '        Debug.Print SQL
-                                '        psql.cnn.Execute (SQL)
-                                '    End If
                                     psql.cnn.Execute (SQL)
                                     co = co + 2
                                     temp = sh.Cells(row, column + co).value
@@ -176,7 +172,29 @@ Private Sub dataAcquisition(ByVal fname As String)
                             End If
                         Next unit
                     Next aim
-
+                    If h.isMatch("天然气(外输量|自用量)|放空量", temp) Then
+                        name = sh.Cells(row, column).value
+                        unit = "方"
+                        category = "天然气"
+                        If h.isMatch("外输量", name) Then
+                            status = "外输"
+                        End If
+                        If h.isMatch("自用量|放空量", name) Then
+                            status = "消耗"
+                        End If
+                        ro = 2
+                        temp = sh.Cells(row + ro, column).value
+                        SQL = "INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;"
+                        SQL = replace(SQL, "$1", d)
+                        SQL = replace(SQL, "$2", "年累" + name)
+                        SQL = replace(SQL, "$3", unit)
+                        SQL = replace(SQL, "$4", temp)
+                        SQL = replace(SQL, "$5", category)
+                        SQL = replace(SQL, "$6", status)
+                        SQL = replace(SQL, "$7", source)
+                        Debug.Print SQL
+                        psql.cnn.Execute (SQL)
+                    End If
                 End If
             Next column
         Next row
@@ -199,7 +217,7 @@ Private Sub getRelatedData(ByRef data As Object)
     Dim h As New help
     d = data("日期")
     lastMonth = DateSerial(Year(d), Month(d), 1) - 1
-    SQL = "SELECT concat(名称,单位),数据 FROM 生产信息 WHERE 名称 IN ('轻油月配产','轻油年配产','丙丁烷月配产','丙丁烷年配产') AND 单位='方' AND 状态='计划' AND 日期='$1';"
+    SQL = "SELECT concat(名称,单位),数据 FROM 生产信息 WHERE 单位='方' AND 状态='计划' AND 日期='$1';"
     SQL = replace(SQL, "$1", d)
     rst1 = psql.cnn.Execute(SQL).GetRows()
     rst2 = h.transpose2DArray(rst1)
@@ -239,27 +257,207 @@ Private Sub getRelatedData(ByRef data As Object)
    rst2 = h.transpose2DArray(rst1)
    Call h.array2dic(rst2, data)
 
-   SQL="SELECT concat('年累',名称,单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('数据库轻油回收量','数据库丙丁烷回收量') AND 单位='方' AND 状态='生产'AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
-   SQL = replace(SQL, "$1", "year")
-   SQL = replace(SQL, "$2", d)
-   Debug.Print SQL
-   rst1 = psql.cnn.Execute(SQL).GetRows()
-   rst2 = h.transpose2DArray(rst1)
-   Call h.array2dic(rst2, data)
-
-   SQL = "SELECT concat('月累',名称,单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('总外输气量','自用气','火炬长明灯','火炬放空量') AND 单位='方' AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
+   SQL = "SELECT concat('月累',名称,单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('数据库轻油回收量','数据库丙丁烷回收量') AND 单位='方' AND 状态='生产'AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
    SQL = replace(SQL, "$1", "month")
    SQL = replace(SQL, "$2", d)
    Debug.Print SQL
    rst1 = psql.cnn.Execute(SQL).GetRows()
    rst2 = h.transpose2DArray(rst1)
    Call h.array2dic(rst2, data)
-   data("月累放空气方")=data("月累火炬长明灯方")+data("月累火炬放空量方")
+
+   SQL = "SELECT concat('$0',名称,单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('总外输气量','自用气','火炬长明灯','火炬放空量') AND 单位='方' AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
+   SQL = replace(SQL, "$0", "月累")
+   SQL = replace(SQL, "$1", "month")
+   SQL = replace(SQL, "$2", d)
+   Debug.Print SQL
+   rst1 = psql.cnn.Execute(SQL).GetRows()
+   rst2 = h.transpose2DArray(rst1)
+   Call h.array2dic(rst2, data)
+   SQL = "SELECT concat('$0',名称,单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('总外输气量','自用气','火炬长明灯','火炬放空量') AND 单位='方' AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
+   SQL = replace(SQL, "$0", "上月年累")
+   SQL = replace(SQL, "$1", "year")
+   SQL = replace(SQL, "$2", lastMonth)
+   Debug.Print SQL
+   rst1 = psql.cnn.Execute(SQL).GetRows()
+   rst2 = h.transpose2DArray(rst1)
+   Call h.array2dic(rst2, data)
+
+    data("月累天然气外输量方") = data("月累总外输气量方")
+    data("月累工业天然气量方") = data("月累总外输气量方")
+    data("月累天然气自用量方") = data("月累自用气方")
+   data("月累放空量方") = data("月累火炬长明灯方") + data("月累火炬放空量方")
+   data("上月年累天然气外输量方") = data("上月外输年累天然气外输量方")
+   data("上月年累工业天然气量方") = data("上月外输年累天然气外输量方")
+   data("上月年累天然气自用量方") = data("上月消耗年累天然气自用量方")
+   data("上月年累放空量方") = data("上月消耗年累放空量方")
 exitSub:
     Exit Sub
 catchError:
     '// add error handling
     Debug.Print Err.Number & vbTab & Err.Description
+    GoTo exitSub
+End Sub
+
+Private Sub 指定日期_Click()
+    Dim sd As String
+    Dim d As Date
+    sd = InputBox("请输入指定日期：", "自动生成指定日期的盘库报表", DateValue(Now))
+    If False = IsDate(sd) Then
+        MsgBox "日期不正确!"
+        Exit Sub
+    End If
+    d = CDate(sd)
+    Dim data As Object
+    Set data = CreateObject("Scripting.Dictionary")
+    data("日期") = d
+    Call getRelatedData(data)
+    Call fillTable(data)
+'    Dim k As Variant
+'    For Each k In data.Keys
+'        Debug.Print k, data.item(k)
+'    Next
+    Debug.Print data.count
+End Sub
+
+Private Sub fillTable(ByRef data As Object)
+    '// add declarations
+    On Error GoTo catchError
+    Dim row, column, ro, co, lastRow, lastColumn As Long
+    lastRow = UsedRange.Rows.count
+    lastColumn = UsedRange.Columns.count
+    Dim h As New help
+    Dim temp, temp1 As Variant
+    Dim name As String
+    For row = 1 To lastRow
+        For column = 1 To lastColumn
+            temp = Cells(row, column).value
+            If h.isMatch("库*存", temp) Then
+                ro = -1
+                co = 0
+                temp1 = Cells(row + ro, column + co).value
+                If h.isMatch("轻*油", temp1) Then
+                    ro = 2
+                    co = 0
+                    Cells(row + ro, column + co).value = data("上月库存轻油方")
+                    ro = ro + 1
+                    Cells(row + ro, column + co).value = data("上月库存轻油桶")
+                    ro = ro + 1
+                    Cells(row + ro, column + co).value = data("上月库存轻油吨")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("轻油库存合计吨")
+                End If
+                If h.isMatch("液*化*气", temp1) Then
+                    ro = 2
+                    co = 0
+                    Cells(row + ro, column + co).value = data("上月库存轻烃方")
+                    ro = ro + 1
+                    Cells(row + ro, column + co).value = data("上月库存轻烃桶")
+                    ro = ro + 1
+                    Cells(row + ro, column + co).value = data("上月库存轻烃吨")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("轻烃库存吨")
+                End If
+            End If
+            If h.isMatch("销*售*量", temp) Then
+                ro = -1
+                co = 0
+                temp1 = Cells(row + ro, column + co).value
+                If h.isMatch("轻*油", temp1) Then
+                    ro = 2
+                    Cells(row + ro, column + co).value = data("月累轻油装车方")
+                    ro = ro + 1
+                    Cells(row + ro, column + co).value = data("月累轻油装车桶")
+                    ro = ro + 1
+                    Cells(row + ro, column + co).value = data("月累轻油装车吨")
+                End If
+                If h.isMatch("液*化*气", temp1) Then
+                    ro = 4
+                    Cells(row + ro, column + co).value = data("月累轻烃装车吨")
+                End If
+            End If
+            If h.isMatch("盘*库*产*量", temp) Then
+                ro = -1
+                co = 0
+                temp1 = Cells(row + ro, column + co).value
+                If h.isMatch("轻*油", temp1) Then
+                    ro = 2
+                    Cells(row + ro, column + co).value = data("月累数据库轻油回收量方")
+                End If
+                If h.isMatch("液*化*气", temp1) Then
+                    ro = 2
+                    Cells(row + ro, column + co).value = data("月累数据库丙丁烷回收量方")
+                End If
+            End If
+            If h.isMatch("计*划*产*量", temp) Then
+                ro = -1
+                co = 0
+                temp1 = Cells(row + ro, column + co).value
+                If h.isMatch("轻*油", temp1) Then
+                    ro = 2
+                    Cells(row + ro, column + co).value = data("轻油月配产方")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("轻油年配产方")
+                End If
+                If h.isMatch("液*化*气", temp1) Then
+                    ro = 2
+                    Cells(row + ro, column + co).value = data("丙丁烷月配产方")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("丙丁烷年配产方")
+                End If
+            End If
+            If h.isMatch("备*注", temp) Then
+                ro = -1
+                co = 0
+                temp1 = Cells(row + ro, column + co).value
+                If h.isMatch("轻*油", temp1) Then
+                    ro = 2
+                    co = 1
+                    Cells(row + ro, column + co).value = data("上月外输年累轻油方")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("上月外输年累轻油桶")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("上月外输年累轻油吨")
+                    ro = ro + 1
+                    co = 1
+                    Cells(row + ro, column + co).value = data("上月生产年累轻油方")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("上月生产年累轻油桶")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("上月生产年累轻油吨")
+                End If
+                If h.isMatch("液*化*气", temp1) Then
+                    ro = 2
+                    co = 1
+                    Cells(row + ro, column + co).value = data("上月外输年累轻烃方")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("上月外输年累轻烃桶")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("上月外输年累轻烃吨")
+                    ro = ro + 1
+                    co = 1
+                    Cells(row + ro, column + co).value = data("上月生产年累轻烃方")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("上月生产年累轻烃桶")
+                    co = co + 1
+                    Cells(row + ro, column + co).value = data("上月生产年累轻烃吨")
+                End If
+            End If
+            If h.isMatch("(工业)|天然气(外输量|自用量)|放空量", temp) Then
+                ro = 1
+                co = 0
+                temp = Trim(temp)
+                name = "月累" + temp + "方"
+                Cells(row + ro, column + co).value = data(name)
+                ro = ro + 2
+                name = "上月年累" + temp + "方"
+                Cells(row + ro, column + co).value = data(name)
+            End If
+        Next column
+    Next row
+exitSub:
+    Exit Sub
+catchError:
+    '// add error handling
     GoTo exitSub
 End Sub
 
@@ -734,4 +932,6 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
+
+
 
