@@ -336,6 +336,7 @@ SELECT sum(数据)
 FROM 生产信息
 WHERE 名称='轻油装车'
   AND 单位='方' --单位='桶'，单位='吨'
+
   AND 状态='外输'
   AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
 
@@ -359,7 +360,18 @@ WHERE 名称 IN ('丙烷装车',
   AND 状态='外输'
   AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
 
-SELECT concat('月累轻烃装车',单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('丙烷装车','丁烷装车','液化气装车') AND 单位='吨' AND 状态='外输' AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' GROUP BY 单位;
+
+SELECT concat('月累轻烃装车',单位),
+       sum(数据)
+FROM 生产信息
+WHERE 名称 IN ('丙烷装车',
+             '丁烷装车',
+             '液化气装车')
+  AND 单位='吨'
+  AND 状态='外输'
+  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30'
+GROUP BY 单位;
+
 
 SELECT sum(数据)
 FROM 生产信息
@@ -389,8 +401,6 @@ WHERE 名称='轻油回收量'
   AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
 
 
-
-
 SELECT sum(数据)
 FROM 生产信息
 WHERE 名称 != '数据库轻油回收量'
@@ -409,9 +419,27 @@ WHERE 名称 != '数据库丙丁烷回收量'
   AND 状态='外输'
   AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
 
-SELECT concat('年累',名称,单位),sum(数据) FROM 生产信息 WHERE　名称 IN ('总外输气量','自用气','放空')　AND 单位='吨'
+
+SELECT concat('年累',名称,单位),
+       sum(数据)
+FROM 生产信息
+WHERE 名称 IN ('总外输气量',
+             '自用气',
+             '放空')
+  AND 单位='吨'
   AND 状态='外输'
-  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;　
+  AND 日期 BETWEEN date_trunc('month',TIMESTAMP '2019-4-30') AND '2019-4-30' ;
+
+SELECT concat('上月年累',名称,单位),
+       sum(数据)
+FROM 生产信息
+WHERE 名称 IN ('总外输气量',
+             '自用气',
+             '火炬长明灯',
+             '火炬放空量')
+  AND 单位='方'
+  AND 日期 BETWEEN date_trunc('year',TIMESTAMP '2019/3/31') AND '2019/3/31'
+GROUP BY 名称,单位;
 
 -- 盘库轻油，轻烃外输，生产（方,桶,吨）
 
@@ -422,18 +450,24 @@ WHERE 名称 ~'盘库'
              '生产')
   AND 日期 = '2019-4-30' ;
 
-
 -- 盘库报表
+
 DROP TABLE IF EXISTS inventory CASCADE;
-CREATE TABLE IF NOT EXISTS inventory(
-  id serial PRIMARY KEY,
-  create_date  DATE,
-  product  VARCHAR,
-  unit  VARCHAR,
-  product_data  DOUBLE PRECISION,
-  category  VARCHAR,
-  status VARCHAR,  
-  source VARCHAR,
-  UNIQUE(create_date,product,unit,status)
-);
-INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;
+
+
+CREATE TABLE IF NOT EXISTS inventory( id serial PRIMARY KEY,
+                                                        create_date DATE, product VARCHAR, unit VARCHAR, product_data DOUBLE PRECISION, category VARCHAR, status VARCHAR, source VARCHAR, UNIQUE(create_date,product,unit,status));
+
+
+INSERT INTO inventory (create_date,product,unit,product_data,category,status,source)
+VALUES ('$1',
+        '$2',
+        '$3',
+        $4,
+        '$5',
+        '$6',
+        '$7') ON CONFLICT (create_date,product,unit,status) DO
+UPDATE
+SET product_data = EXCLUDED.product_data,
+    source=EXCLUDED.source;
+

@@ -286,10 +286,10 @@ Private Sub getRelatedData(ByRef data As Object)
     data("月累工业天然气量方") = data("月累总外输气量方")
     data("月累天然气自用量方") = data("月累自用气方")
    data("月累放空量方") = data("月累火炬长明灯方") + data("月累火炬放空量方")
-   data("上月年累天然气外输量方") = data("上月外输年累天然气外输量方")
-   data("上月年累工业天然气量方") = data("上月外输年累天然气外输量方")
-   data("上月年累天然气自用量方") = data("上月消耗年累天然气自用量方")
-   data("上月年累放空量方") = data("上月消耗年累放空量方")
+   data("上月年累天然气外输量方") = data("上月年累总外输气量方")
+   data("上月年累工业天然气量方") = data("上月年累天然气外输量方")
+   data("上月年累天然气自用量方") = data("上月年累自用气方")
+   data("上月年累放空量方") = data("上月年累火炬放空量方") + data("上月年累火炬长明灯方")
 exitSub:
     Exit Sub
 catchError:
@@ -312,10 +312,10 @@ Private Sub 指定日期_Click()
     data("日期") = d
     Call getRelatedData(data)
     Call fillTable(data)
-'    Dim k As Variant
-'    For Each k In data.Keys
-'        Debug.Print k, data.item(k)
-'    Next
+    Dim k As Variant
+    For Each k In data.Keys
+        Debug.Print k, data.item(k)
+    Next
     Debug.Print data.count
 End Sub
 
@@ -335,7 +335,7 @@ Private Sub fillTable(ByRef data As Object)
                 ro = -1
                 co = 0
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("轻*油", temp1) Then
+                If h.isMatch("轻.*油", temp1) Then
                     ro = 2
                     co = 0
                     Cells(row + ro, column + co).value = data("上月库存轻油方")
@@ -346,7 +346,7 @@ Private Sub fillTable(ByRef data As Object)
                     co = co + 1
                     Cells(row + ro, column + co).value = data("轻油库存合计吨")
                 End If
-                If h.isMatch("液*化*气", temp1) Then
+                If h.isMatch("液.*化.*气", temp1) Then
                     ro = 2
                     co = 0
                     Cells(row + ro, column + co).value = data("上月库存轻烃方")
@@ -358,58 +358,64 @@ Private Sub fillTable(ByRef data As Object)
                     Cells(row + ro, column + co).value = data("轻烃库存吨")
                 End If
             End If
-            If h.isMatch("销*售*量", temp) Then
+            If h.isMatch("销.*售.*量", temp) Then
                 ro = -1
-                co = 0
+                co = -2
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("轻*油", temp1) Then
+                If h.isMatch("轻.*油", temp1) Then
                     ro = 2
+                    co = 0
                     Cells(row + ro, column + co).value = data("月累轻油装车方")
                     ro = ro + 1
                     Cells(row + ro, column + co).value = data("月累轻油装车桶")
                     ro = ro + 1
                     Cells(row + ro, column + co).value = data("月累轻油装车吨")
                 End If
-                If h.isMatch("液*化*气", temp1) Then
+                If h.isMatch("液.*化.*气", temp1) Then
                     ro = 4
+                    co = 0
                     Cells(row + ro, column + co).value = data("月累轻烃装车吨")
                 End If
             End If
-            If h.isMatch("盘*库*产*量", temp) Then
+            If h.isMatch("盘.*库.*产.*量", temp) Then
                 ro = -1
-                co = 0
+                co = -4
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("轻*油", temp1) Then
+                If h.isMatch("轻.*油", temp1) Then
                     ro = 2
+                    co = 0
                     Cells(row + ro, column + co).value = data("月累数据库轻油回收量方")
                 End If
-                If h.isMatch("液*化*气", temp1) Then
+                If h.isMatch("液.*化.*气", temp1) Then
                     ro = 2
+                    co = 0
                     Cells(row + ro, column + co).value = data("月累数据库丙丁烷回收量方")
                 End If
             End If
-            If h.isMatch("计*划*产*量", temp) Then
+            If h.isMatch("计.*划.*产.*量", temp) And row < 20 Then
                 ro = -1
-                co = 0
+                co = -6
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("轻*油", temp1) Then
+                If h.isMatch("轻.*油", temp1) Then
                     ro = 2
+                    co = 0
                     Cells(row + ro, column + co).value = data("轻油月配产方")
                     co = co + 1
                     Cells(row + ro, column + co).value = data("轻油年配产方")
                 End If
-                If h.isMatch("液*化*气", temp1) Then
+                If h.isMatch("液.*化.*气", temp1) Then
                     ro = 2
+                    co = 0
                     Cells(row + ro, column + co).value = data("丙丁烷月配产方")
                     co = co + 1
                     Cells(row + ro, column + co).value = data("丙丁烷年配产方")
                 End If
             End If
-            If h.isMatch("备*注", temp) Then
+            If h.isMatch("备.*注", temp) Then
                 ro = -1
-                co = 0
+                co = -8
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("轻*油", temp1) Then
+                If h.isMatch("轻.*油", temp1) Then
                     ro = 2
                     co = 1
                     Cells(row + ro, column + co).value = data("上月外输年累轻油方")
@@ -425,7 +431,7 @@ Private Sub fillTable(ByRef data As Object)
                     co = co + 1
                     Cells(row + ro, column + co).value = data("上月生产年累轻油吨")
                 End If
-                If h.isMatch("液*化*气", temp1) Then
+                If h.isMatch("液.*化.*气", temp1) Then
                     ro = 2
                     co = 1
                     Cells(row + ro, column + co).value = data("上月外输年累轻烃方")
@@ -442,7 +448,7 @@ Private Sub fillTable(ByRef data As Object)
                     Cells(row + ro, column + co).value = data("上月生产年累轻烃吨")
                 End If
             End If
-            If h.isMatch("(工业)|天然气(外输量|自用量)|放空量", temp) Then
+            If h.isMatch("工业天然气|天然气外输量|天然气自用量|放空量", temp) Then
                 ro = 1
                 co = 0
                 temp = Trim(temp)
@@ -458,6 +464,7 @@ exitSub:
     Exit Sub
 catchError:
     '// add error handling
+    Debug.Print Err.Number & vbTab & Err.Description
     GoTo exitSub
 End Sub
 
@@ -932,6 +939,3 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
-
-
-
