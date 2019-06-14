@@ -35,8 +35,10 @@ Private Sub 文件导入_Click()
     Dim data As Object
     Set data = CreateObject("Scripting.Dictionary")
     For Each temp In fn
-        Call dataAcquisition(temp)
+        Call dataAcquisition(temp, data)
     Next temp
+    Dim panku As New Inventory
+    Call panku.save(data)
 End Sub
 
 Private Sub 信息采集_Click()
@@ -65,14 +67,17 @@ Private Sub 信息采集_Click()
     '    Debug.Print "找到" & fileList.count & "文件！"
         Dim fname
         Dim data As Object
+        Set data = CreateObject("Scripting.Dictionary")
         For Each fname In fileList.Keys
-            Call dataAcquisition(fname)
+            Call dataAcquisition(fname, data)
         Next fname
     End If
+    Dim panku As New Inventory
+    Call panku.save(data)
     hasright = False
 End Sub
 
-Private Sub dataAcquisition(ByVal fname As String)
+Private Sub dataAcquisition(ByVal fname As String, ByRef table As Object)
     On Error GoTo ErrorHandler
     Dim wb, sh As Object
     Set wb = Workbooks.Open(fname, 0, ReadOnly)
@@ -89,12 +94,9 @@ Private Sub dataAcquisition(ByVal fname As String)
     Dim aim, aims, units  As Variant
     aims = Array("轻.*油", "液.*化.*气")
     units = Array("方", "桶", "吨")
-    Dim SQL, SQL1, name, unit, category, status, remark, source As String
+    Dim SQL, name, unit, category, status, remark, source As String
     source = fname
-    remark = "盘库"
-    Dim psql As New PostgreSQL
-    SQL="CREATE TABLE IF NOT EXISTS inventory(id serial PRIMARY KEY,create_date DATE, product VARCHAR, unit VARCHAR, product_data DOUBLE PRECISION, category VARCHAR, status VARCHAR, source VARCHAR, UNIQUE(create_date,product,unit,status));"
-    psql.cnn.Execute(SQL)
+    Dim recordPK As New Inventory
     For Each sh In wb.Worksheets
         condition1 = condition2 = False
         For row = 1 To lastRow
@@ -125,7 +127,6 @@ Private Sub dataAcquisition(ByVal fname As String)
                                 End If
                                 temp2 = sh.Cells(row + ro, column + co).value
                                 If h.isMatch(aim, temp2) Then
-                                    SQL = "INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;"
                                     co = 2
                                     temp = sh.Cells(row, column + co).value
                                     If h.isMatch("轻.*油", temp2) Then
@@ -136,40 +137,46 @@ Private Sub dataAcquisition(ByVal fname As String)
                                     End If
                                     category = name
                                     status = "库存"
-                                    SQL = replace(SQL, "$1", d)
-                                    SQL = replace(SQL, "$2", name)
-                                    SQL = replace(SQL, "$3", unit)
-                                    SQL = replace(SQL, "$4", temp)
-                                    SQL = replace(SQL, "$5", category)
-                                    SQL = replace(SQL, "$6", status)
-                                    SQL = replace(SQL, "$7", source)
-                                    psql.cnn.Execute (SQL)
+                                    With recordPK
+                                        .create_date = d
+                                        .product = name
+                                        .unit = unit
+                                        .product_data = temp
+                                        .category = category
+                                        .status = status
+                                        .source = source
+                                    End With
+                                    table.Add recordPK, ""
+                                    Set recordPK = Nothing
+                        
                                     co = co + 2
                                     temp = sh.Cells(row, column + co).value
                                     status = "外输"
-                                    SQL = "INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;"
-                                    SQL = replace(SQL, "$1", d)
-                                    SQL = replace(SQL, "$2", "年累" + name)
-                                    SQL = replace(SQL, "$3", unit)
-                                    SQL = replace(SQL, "$4", temp)
-                                    SQL = replace(SQL, "$5", category)
-                                    SQL = replace(SQL, "$6", status)
-                                    SQL = replace(SQL, "$7", source)
-                                    Debug.Print SQL
-                                    psql.cnn.Execute (SQL)
+                                    With recordPK
+                                        .create_date = d
+                                        .product = name
+                                        .unit = unit
+                                        .product_data = temp
+                                        .category = category
+                                        .status = status
+                                        .source = source
+                                    End With
+                                    table.Add recordPK, ""
+                                    Set recordPK = Nothing
                                     co = co + 2
                                     temp = sh.Cells(row, column + co).value
                                     status = "生产"
-                                    SQL = "INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;"
-                                    SQL = replace(SQL, "$1", d)
-                                    SQL = replace(SQL, "$2", "年累" + name)
-                                    SQL = replace(SQL, "$3", unit)
-                                    SQL = replace(SQL, "$4", temp)
-                                    SQL = replace(SQL, "$5", category)
-                                    SQL = replace(SQL, "$6", status)
-                                    SQL = replace(SQL, "$7", source)
-                                    Debug.Print SQL
-                                    psql.cnn.Execute (SQL)
+                                    With recordPK
+                                        .create_date = d
+                                        .product = name
+                                        .unit = unit
+                                        .product_data = temp
+                                        .category = category
+                                        .status = status
+                                        .source = source
+                                    End With
+                                    table.Add recordPK, ""
+                                    Set recordPK = Nothing
                                 End If
                             End If
                         Next unit
@@ -186,16 +193,17 @@ Private Sub dataAcquisition(ByVal fname As String)
                         End If
                         ro = 2
                         temp = sh.Cells(row + ro, column).value
-                        SQL = "INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;"
-                        SQL = replace(SQL, "$1", d)
-                        SQL = replace(SQL, "$2", "年累" + name)
-                        SQL = replace(SQL, "$3", unit)
-                        SQL = replace(SQL, "$4", temp)
-                        SQL = replace(SQL, "$5", category)
-                        SQL = replace(SQL, "$6", status)
-                        SQL = replace(SQL, "$7", source)
-                        Debug.Print SQL
-                        psql.cnn.Execute (SQL)
+                        With recordPK
+                            .create_date = d
+                            .product = name
+                            .unit = unit
+                            .product_data = temp
+                            .category = category
+                            .status = status
+                            .source = source
+                        End With
+                        table.Add recordPK, ""
+                        Set recordPK = Nothing
                     End If
                 End If
             Next column
@@ -221,12 +229,14 @@ Private Sub getRelatedData(ByRef data As Object)
     lastMonth = DateSerial(Year(d), Month(d), 1) - 1
     SQL = "SELECT concat(名称,单位),数据 FROM 生产信息 WHERE 单位='方' AND 状态='计划' AND 日期='$1';"
     SQL = replace(SQL, "$1", d)
+    Debug.Print SQL
     rst1 = psql.cnn.Execute(SQL).GetRows()
     rst2 = h.transpose2DArray(rst1)
     Call h.array2dic(rst2, data)
 
     SQL = "SELECT concat(名称,单位),数据 FROM 生产信息 WHERE 名称 IN ('轻油库存合计','轻烃库存') AND 单位='吨' AND 状态='库存' AND 日期='$1';"
     SQL = replace(SQL, "$1", d)
+    Debug.Print SQL
     rst1 = psql.cnn.Execute(SQL).GetRows()
     rst2 = h.transpose2DArray(rst1)
     Call h.array2dic(rst2, data)
@@ -287,11 +297,11 @@ Private Sub getRelatedData(ByRef data As Object)
     data("月累天然气外输量方") = data("月累总外输气量方")
     data("月累工业天然气量方") = data("月累总外输气量方")
     data("月累天然气自用量方") = data("月累自用气方")
-   data("月累放空量方") = data("月累火炬长明灯方") + data("月累火炬放空量方")
-   data("上月年累天然气外输量方") = data("上月年累总外输气量方")
-   data("上月年累工业天然气量方") = data("上月年累天然气外输量方")
-   data("上月年累天然气自用量方") = data("上月年累自用气方")
-   data("上月年累放空量方") = data("上月年累火炬放空量方") + data("上月年累火炬长明灯方")
+    data("月累放空量方") = data("月累火炬长明灯方") + data("月累火炬放空量方")
+    data("上月年累天然气外输量方") = data("上月年累总外输气量方")
+    data("上月年累工业天然气量方") = data("上月年累天然气外输量方")
+    data("上月年累天然气自用量方") = data("上月年累自用气方")
+    data("上月年累放空量方") = data("上月年累火炬放空量方") + data("上月年累火炬长明灯方")
 exitSub:
     Exit Sub
 catchError:
@@ -315,9 +325,9 @@ Private Sub look_Click()
     Call getRelatedData(data)
     Call fillTable(data)
     Dim k As Variant
-    For Each k In data.Keys
-        Debug.Print k, data.item(k)
-    Next
+'    For Each k In data.Keys
+'        Debug.Print k, data.item(k)
+'    Next
     Debug.Print data.count
 End Sub
 
@@ -455,12 +465,23 @@ Private Sub fillTable(ByRef data As Object)
                 co = 0
                 temp = Trim(temp)
                 name = "月累" + temp + "万方"
-                data(name) = data("月累" + temp + "方")/power(10,4)
+                data(name) = data("月累" + temp + "方") / 10 ^ 4
                 Cells(row + ro, column + co).value = data(name)
                 ro = ro + 2
                 name = "上月年累" + temp + "万方"
-                data(name) = data("上月年累" + temp + "方")/power(10,4)
+                data(name) = data("上月年累" + temp + "方") / 10 ^ 4
                 Cells(row + ro, column + co).value = data(name)
+            End If
+            If h.isMatch("日期.*\d+[年\-\/]\d+[月\-\/]\d+[日]{0,1}", temp) Then
+                temp = h.replace(temp, "日期.*\d+[年\-\/]\d+[月\-\/]\d+[日]{0,1}", "日期：" + Format(data("日期"), "Long Date"))
+                Cells(row, column).value = temp
+                Debug.Print temp
+            End If
+            If h.isMatch("计划产量.*亿立方\/年\s+.*万立方米\/月", temp) Then
+                temp = h.replace(temp, "\d+(\.\d+)亿立方\/年", CStr(data("天然气年配产方") / 10 ^ 8) + "亿立方/年")
+                temp = h.replace(temp, "\d+(\.\d+)万立方米\/月", CStr(data("天然气月配产方") / 10 ^ 4) + "万立方米/月")
+                Cells(row, column).value = temp
+                Debug.Print temp, data("天然气年配产方"), data("天然气月配产方"), data("日期")
             End If
         Next column
     Next row
@@ -513,4 +534,3 @@ Private Sub 清除_Click()
     Worksheets("盘库报表").Cells(21, 8).ClearContents
     Worksheets("盘库报表").Cells(21, 11).ClearContents
 End Sub
-
