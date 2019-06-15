@@ -343,7 +343,12 @@ Sub save_Click()
             End If
         Next column
     Next row
-    Call recordPK.save(table)
+    if h.isMonthEnd(d) then
+        Call recordPK.save(table)
+    else
+        MsgBox "没到月底,不能保存！"
+        Exit Sub
+    end if
 ErrorHandler:
     Debug.Print Err.Number & vbTab & Err.Description
 End Sub
@@ -683,7 +688,7 @@ Private Sub 打印_Click()
 End Sub
 
 Private Sub 返回_Click()
-    Worksheets("工艺生产").Select
+    Worksheets("快速录入").Select
 End Sub
 
 Private Sub 返回主页_Click()

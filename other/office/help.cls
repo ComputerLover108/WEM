@@ -144,3 +144,13 @@ Function password()
         password = True
    End If
 End Function
+
+Function isMonthEnd(ByVal d As Date)
+    Dim tommorw As Date
+    tommorw = DateAdd("d", 1, d)
+    If Day(tommorw) = 1 Then
+        isMonthEnd = True
+    Else
+        isMonthEnd = False
+    End If
+End Function
