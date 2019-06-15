@@ -133,3 +133,14 @@ catchError:
     '// add error handling
     GoTo exitSub
 End Sub
+
+Function password()
+   Dim sd As String
+   sd = InputBox("请输入密码：", "危险操作！", "******")
+   If "工艺操作" <> sd Then
+       MsgBox "密码不对！禁止危险操作！"
+       password = False
+    Else
+        password = True
+   End If
+End Function

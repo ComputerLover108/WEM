@@ -11,10 +11,10 @@ Sub CreateTable()
     Err.Clear
     On Error GoTo errorhander
     Dim SQL As String
-    Dim tablename As String
+    Dim tablename,tableDef As String
     tablename = "inventory"
 '    PostgreSQL 表
-    tableDef = " create_date DATE, product VARCHAR, unit VARCHAR, product_data DOUBLE PRECISION, category VARCHAR, status VARCHAR, source VARCHAR, UNIQUE(create_date,product,unit,status);"
+    tableDef = " (id serial PRIMARY KEY,create_date DATE, product VARCHAR, unit VARCHAR, product_data DOUBLE PRECISION, category VARCHAR, status VARCHAR, source VARCHAR, UNIQUE(create_date,product,unit,status));"
     SQL = " CREATE TABLE IF NOT EXISTS " & tablename & tableDef
     Dim psql As New PostgreSQL
     Call psql.cnn.Execute(SQL)
@@ -38,6 +38,7 @@ Sub save(ByRef data As Object)
     tablename = "inventory"
     Dim x
     Dim psql As New PostgreSQL
+    Call CreateTable()
     For Each x In data.Keys
         SQL = "INSERT INTO inventory (create_date,product,unit,product_data,category,status,source) VALUES ('$1','$2','$3',$4,'$5','$6','$7') ON CONFLICT (create_date,product,unit,status) DO UPDATE SET product_data = EXCLUDED.product_data,source=EXCLUDED.source;"
         SQL = replace(SQL, "$1", x.create_date)
