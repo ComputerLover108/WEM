@@ -130,7 +130,13 @@ Public Sub array2dic(arr As Variant, ByRef data As Object)
 exitSub:
     Exit Sub
 catchError:
-    '// add error handling
+    If Err.Number <> 0 Then
+    errMsg = "Error number: " & Str(Err.Number) & vbNewLine & _
+            "Source: " & Err.Source & vbNewLine & _
+            "Description: " & Err.Description
+    Debug.Print errMsg
+    Err.Clear
+    End If
     GoTo exitSub
 End Sub
 
