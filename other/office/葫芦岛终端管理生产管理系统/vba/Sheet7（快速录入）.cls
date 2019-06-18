@@ -2,27 +2,30 @@ Option Explicit
 Sub test()
     Err.Clear
     On Error GoTo ErrorHandler
-    t = Now
     Dim 日期, k, v, i, t, s
     Dim data As Object
     Set data = CreateObject("Scripting.Dictionary")
-    Call getProductionAllocation(data)
-    Debug.Print "获得配产数据耗时" & DateDiff("s", t, Now) & "s!"
-    Call getQuickInputData(data)
-    Debug.Print "获得快速录入数据耗时" & DateDiff("s", t, Now) & "s!"
+    Dim SCRB As New 生产日报
+    t = Now
+    Call SCRB.getLocationTable(data)
+'    Call getProductionAllocation(data)
+'    Debug.Print "获得配产数据耗时" & DateDiff("s", t, Now) & "s!"
+'    Call getQuickInputData(data)
+'    Debug.Print "获得快速录入数据耗时" & DateDiff("s", t, Now) & "s!"
+'    For Each k In data.Keys
+'        s = unitConvert(k)
+'        data.key(k) = s
+'    Next
+'    Call getRelevantData(data)
+'    Debug.Print "获得生产日报相关数据耗时" & DateDiff("s", t, Now) & "s!"
+'    Call getDerivedData(data)
+'    Debug.Print "获得生产日报计算数据耗时" & DateDiff("s", t, Now) & "s!"
     For Each k In data.Keys
-        s = unitConvert(k)
-        data.key(k) = s
+        Debug.Print k, data(k)(0), data(k)(1)
     Next
-    Call getRelevantData(data)
-    Debug.Print "获得生产日报相关数据耗时" & DateDiff("s", t, Now) & "s!"
-    Call getDerivedData(data)
-    Debug.Print "获得生产日报计算数据耗时" & DateDiff("s", t, Now) & "s!"
-    For Each k In data.Keys
-        Debug.Print k, data.item(k)
-    Next
-    Call fillProductionDaily(data)
-    Debug.Print "填写生产日报计算数据耗时" & DateDiff("s", t, Now) & "s!"
+    Debug.Print data.count
+'    Call fillProductionDaily(data)
+'    Debug.Print "填写生产日报计算数据耗时" & DateDiff("s", t, Now) & "s!"
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     Else
@@ -552,12 +555,12 @@ Private Sub getQuickInputData(ByRef data As Object)
             co = 1
             temp = Cells(row, column + co).value
             data(name) = temp
-        End If        
-        If h.isMatch("FIQ-5014KNm3",temp) Then
+        End If
+        If h.isMatch("FIQ-5014KNm3", temp) Then
             name = "FIQ-5014方"
             co = 1
             temp = Cells(row, column + co).value
-            data(name) = temp*10^3            
+            data(name) = temp * 10 ^ 3
         End If
         If h.isString(temp) Then
             name = temp
@@ -698,7 +701,7 @@ Function unitConvert(ByVal s As String)
     s = h.replace(s, "[kK][pP]a", "千帕")
     s = h.replace(s, "℃", "摄氏度")
     s = h.replace(s, "%", "")
-    unitConvert = s
+    unitConvert = Trim(s)
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
@@ -710,7 +713,7 @@ Private Sub getAggregateData(ByRef data As Object, ByVal interval As String, ByV
     Dim s, SQL As String
     Dim psql As New PostgreSQL
     Dim row As Long
-    names = Array("热油炉", "锅炉房用气", "火炬放空量", "火炬长明灯", "锦天化", "精细化工", "精细化工CNG", "入厂计量", "稳定区", "污水处理厂", "新奥燃气", "自用气", "总产气量", "总外输气量", "轻油回收量", "丙丁烷回收量", "甲醇消耗", "乙二醇消耗", "乙二醇回收", "水消耗", "外供水", "自采水", "自发电", "电消耗", "外供电","FIQ-2043")
+    names = Array("热油炉", "锅炉房用气", "火炬放空量", "火炬长明灯", "锦天化", "精细化工", "精细化工CNG", "入厂计量", "稳定区", "污水处理厂", "新奥燃气", "自用气", "总产气量", "总外输气量", "轻油回收量", "丙丁烷回收量", "甲醇消耗", "乙二醇消耗", "乙二醇回收", "水消耗", "外供水", "自采水", "自发电", "电消耗", "外供电", "FIQ-2043")
     s = "'" + Join(names, "','") + "'"
     SQL = "SELECT 名称||单位 as name,SUM(数据) as sum from 生产信息 WHERE 日期 BETWEEN date_trunc('%0',timestamp '%1') and '%1' and 名称 in (%2) GROUP BY name order by name;"
     SQL = replace(SQL, "%0", interval)
@@ -864,6 +867,9 @@ Private Sub getDerivedData(ByRef data As Object)
     data("今后需日产天然气方") = (data("年配产天然气方") - data("年累总外输气量方")) / data("剩余天数")
     data("今后需日产轻油方") = (data("年配产轻油方") - data("年累轻油回收量方")) / data("剩余天数")
     data("今后需日产丙丁烷方") = (data("年配产丙丁烷方") - data("年累丙丁烷回收量方")) / data("剩余天数")
+    data("放空气方") = data("火炬放空量方") + data("火炬长明灯方")
+    data("月累放空气方") = data("月累火炬放空量方") + data("月累火炬长明灯方")
+    data("年累放空气方") = data("年累火炬放空量方") + data("年累火炬长明灯方")
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
@@ -1175,6 +1181,18 @@ Sub fillProductionDaily(ByRef data As Object)
                         value = data("外输JZ25-1S体系方")
                         Worksheets("生产日报").Cells(row + ro, column + co).value = value
                     End If
+                End If
+                If h.isMatch("海管信息", temp) Then
+                    ro = 11
+                    name = "海管通球备注"
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row + ro, column).value = value
+                End If
+                If h.isMatch("其他", temp) Then
+                    ro = 1
+                    name = "生产备注"
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row + ro, column).value = value
                 End If
             End If
         Next column

@@ -1,12 +1,3 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "help"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 '删除所有表内公式
 Sub AllFormulaToValue()
     For Each sh In Sheets
@@ -169,6 +160,23 @@ Function isMonthEnd(ByVal d As Date)
         isMonthEnd = False
     End If
 End Function
-
+Function unitConvert(ByVal s As String)
+    On Error GoTo ErrorHandler
+    Dim h As New help
+    s = h.replace(s, "t/m3", "吨/立方米")
+    s = h.replace(s, "N{0,1}m3", "方")
+    s = h.replace(s, "((V-6\d+[ABC]{0,1})|(库存水))(m)", "$1米")
+    s = h.replace(s, "[kK]wh", "度")
+    s = h.replace(s, "bbl", "桶")
+    s = h.replace(s, "t", "吨")
+    s = h.replace(s, "M[Pp]a", "兆帕")
+    s = h.replace(s, "[kK][pP]a", "千帕")
+    s = h.replace(s, "℃", "摄氏度")
+    s = h.replace(s, "%", "")
+    unitConvert = Trim(s)
+ErrorHandler:
+        Debug.Print Err.Number & vbTab & Err.Description
+        Resume Next
+End Function
 
 

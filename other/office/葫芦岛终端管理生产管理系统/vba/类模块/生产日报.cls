@@ -1,16 +1,7 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Éú²úÈÕ±¨"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
 Dim oldValue As Object
 Public Sub test()
 '    Dim fname As String
-'    fname = "E:\public\test\±¨±í¹²Ïí(ÍõÈ«£©\2012ÖÕ¶ËÉú²úÈÕ±¨ĞÂ\2012Äê7ÔÂ\ºùÂ«µºÌìÈ»Æø´¦Àí³§Éú²úÈÕ±¨£¨ĞÂ°æÊÔĞĞ£©2012.7.29.xls"
+'    fname = "E:\public\test\æŠ¥è¡¨å…±äº«(ç‹å…¨ï¼‰\2012ç»ˆç«¯ç”Ÿäº§æ—¥æŠ¥æ–°\2012å¹´7æœˆ\è‘«èŠ¦å²›å¤©ç„¶æ°”å¤„ç†å‚ç”Ÿäº§æ—¥æŠ¥ï¼ˆæ–°ç‰ˆè¯•è¡Œï¼‰2012.7.29.xls"
 '    Dim table
 '    Set table = CreateObject("Scripting.Dictionary")
 '    Call getValue(fname, table)
@@ -18,12 +9,12 @@ Public Sub test()
 '    For Each record In table.keys
 '        Debug.Print record.content
 '    Next record
-'    Debug.Print "¹²ÊÕ¼¯ÁË" & table.count & "¼ÇÂ¼£¡" & vbTab & fname
+'    Debug.Print "å…±æ”¶é›†äº†" & table.count & "è®°å½•ï¼" & vbTab & fname
 '    Set table = Nothing
 '    Call eraseName
 '    Call addName
 End Sub
-'»ñµÃ±í¸ñÆğÊ¼Î»
+'è·å¾—è¡¨æ ¼èµ·å§‹ä½
 Public Sub getPosition(ByVal Title As String, ByRef position)
 Err.Clear
 On Error GoTo ErrorHandler
@@ -43,7 +34,7 @@ On Error GoTo ErrorHandler
 ErrorHandler:
     Debug.Print Err.Number & vbTab & Err.Description
 End Sub
-'³õ²½·ÖÇø±í¸ñ
+'åˆæ­¥åˆ†åŒºè¡¨æ ¼
 Public Sub getAnchors(ByVal beginRow As Long, ByVal beginColumn As Long, ByRef table As Object)
 Err.Clear
 On Error GoTo ErrorHandler
@@ -51,36 +42,36 @@ On Error GoTo ErrorHandler
     Dim temp
     For row = beginRow To Rows.count
         temp = Cells(row, beginColumn).value
-        If temp Like "£¨Ò»£©Åä²ú/Íê³ÉÇé¿ö" Then
-            table.Add "£¨Ò»£©Åä²ú/Íê³ÉÇé¿ö", row
+        If temp Like "ï¼ˆä¸€ï¼‰é…äº§/å®Œæˆæƒ…å†µ" Then
+            table.Add "ï¼ˆä¸€ï¼‰é…äº§/å®Œæˆæƒ…å†µ", row
         End If
-        If temp Like "£¨¶ş£©ÌìÈ»Æø²úÁ¿/ÍâÊä/º£¹ÜĞÅÏ¢" Then
-            table.Add "£¨¶ş£©ÌìÈ»Æø²úÁ¿/ÍâÊä/º£¹ÜĞÅÏ¢", row
+        If temp Like "ï¼ˆäºŒï¼‰å¤©ç„¶æ°”äº§é‡/å¤–è¾“/æµ·ç®¡ä¿¡æ¯" Then
+            table.Add "ï¼ˆäºŒï¼‰å¤©ç„¶æ°”äº§é‡/å¤–è¾“/æµ·ç®¡ä¿¡æ¯", row
         End If
-        If temp Like "£¨Èı£©ÇáÓÍ²úÁ¿/ÍâÊä/¿â´æ" Then
-            table.Add "£¨Èı£©ÇáÓÍ²úÁ¿/ÍâÊä/¿â´æ", row
+        If temp Like "ï¼ˆä¸‰ï¼‰è½»æ²¹äº§é‡/å¤–è¾“/åº“å­˜" Then
+            table.Add "ï¼ˆä¸‰ï¼‰è½»æ²¹äº§é‡/å¤–è¾“/åº“å­˜", row
         End If
-        If temp Like "£¨ËÄ£©±û¶¡Íé²úÁ¿/ÍâÊä/¿â´æ" Then
-            table.Add "£¨ËÄ£©±û¶¡Íé²úÁ¿/ÍâÊä/¿â´æ", row
+        If temp Like "ï¼ˆå››ï¼‰ä¸™ä¸çƒ·äº§é‡/å¤–è¾“/åº“å­˜" Then
+            table.Add "ï¼ˆå››ï¼‰ä¸™ä¸çƒ·äº§é‡/å¤–è¾“/åº“å­˜", row
         End If
-        If temp Like "£¨Îå£©ÎïÁÏ½ÓÊÕ/ÏûºÄ" Then
-            table.Add "£¨Îå£©ÎïÁÏ½ÓÊÕ/ÏûºÄ", row
+        If temp Like "ï¼ˆäº”ï¼‰ç‰©æ–™æ¥æ”¶/æ¶ˆè€—" Then
+            table.Add "ï¼ˆäº”ï¼‰ç‰©æ–™æ¥æ”¶/æ¶ˆè€—", row
         End If
     Next row
 ErrorHandler:
     Debug.Print Err.Number & vbTab & Err.Description
     Resume Next
 End Sub
-'³õ²½¼ì²é±í¸ñ
+'åˆæ­¥æ£€æŸ¥è¡¨æ ¼
 Public Function verify(ByRef table As Object) As Boolean
     Dim x
     For Each x In table.Keys
         Select Case x
-            Case "£¨Ò»£©Åä²ú/Íê³ÉÇé¿ö"
-            Case "£¨¶ş£©ÌìÈ»Æø²úÁ¿/ÍâÊä/º£¹ÜĞÅÏ¢"
-            Case "£¨Èı£©ÇáÓÍ²úÁ¿/ÍâÊä/¿â´æ"
-            Case "£¨ËÄ£©±û¶¡Íé²úÁ¿/ÍâÊä/¿â´æ"
-            Case "£¨Îå£©ÎïÁÏ½ÓÊÕ/ÏûºÄ"
+            Case "ï¼ˆä¸€ï¼‰é…äº§/å®Œæˆæƒ…å†µ"
+            Case "ï¼ˆäºŒï¼‰å¤©ç„¶æ°”äº§é‡/å¤–è¾“/æµ·ç®¡ä¿¡æ¯"
+            Case "ï¼ˆä¸‰ï¼‰è½»æ²¹äº§é‡/å¤–è¾“/åº“å­˜"
+            Case "ï¼ˆå››ï¼‰ä¸™ä¸çƒ·äº§é‡/å¤–è¾“/åº“å­˜"
+            Case "ï¼ˆäº”ï¼‰ç‰©æ–™æ¥æ”¶/æ¶ˆè€—"
             Case Else
                 verify = False
                 Exit Function
@@ -88,26 +79,26 @@ Public Function verify(ByRef table As Object) As Boolean
     Next x
     verify = True
 End Function
-'´Ó±í¸ñÀï»ñµÃÖµ
+'ä»è¡¨æ ¼é‡Œè·å¾—å€¼
 Public Sub getValue(ByVal fname As String, table)
 Err.Clear
 On Error GoTo ErrorHandler
     Application.ScreenUpdating = False
 '    Application.Visible = True
     Dim Title As String
-    Title = "*ºùÂ«µºÌìÈ»ÆøÖÕ¶Ë³§Éú²úÈÕ±¨*"
+    Title = "*è‘«èŠ¦å²›å¤©ç„¶æ°”ç»ˆç«¯å‚ç”Ÿäº§æ—¥æŠ¥*"
     Dim wb
     Set wb = Workbooks.Open(fname, 0, ReadOnly)
     Dim row, column, ro, co, beginRow, beginColumn, lastRow, lastColumn As Long
-    Dim ÈÕÆÚ As Date
+    Dim æ—¥æœŸ As Date
     Dim temp
-    Dim recordSC As New Éú²úĞÅÏ¢
-'    ĞÂµÄÊı¾İÌáÈ¡·½·¨
+    Dim recordSC As New ç”Ÿäº§ä¿¡æ¯
+'    æ–°çš„æ•°æ®æå–æ–¹æ³•
     Dim anchors As Object
     Set anchors = CreateObject("Scripting.Dictionary")
-    Dim ÇáÓÍ»ØÊÕÁ¿ÔÂÀÛ·½, ÇáÓÍ»ØÊÕÁ¿ÄêÀÛ·½, ±û¶¡Íé»ØÊÕÁ¿ÔÂÀÛ·½, ±û¶¡Íé»ØÊÕÁ¿ÄêÀÛ·½ As Double
+    Dim è½»æ²¹å›æ”¶é‡æœˆç´¯æ–¹, è½»æ²¹å›æ”¶é‡å¹´ç´¯æ–¹, ä¸™ä¸çƒ·å›æ”¶é‡æœˆç´¯æ–¹, ä¸™ä¸çƒ·å›æ”¶é‡å¹´ç´¯æ–¹ As Double
     For Each sh In wb.Worksheets
-        If "ºùÂ«µºÌìÈ»Æø´¦Àí³§Éú²ú" = sh.name Or "Éú²úÈÕ±¨" = sh.name Then
+        If "è‘«èŠ¦å²›å¤©ç„¶æ°”å¤„ç†å‚ç”Ÿäº§" = sh.name Or "ç”Ÿäº§æ—¥æŠ¥" = sh.name Then
             Dim position(2) As Long
             Call getPosition(Title, position)
             beginRow = position(0)
@@ -116,111 +107,111 @@ On Error GoTo ErrorHandler
             Call getAnchors(beginRow, beginColumn, anchors)
             If verify(anchors) Then
                 ro = 1
-                ÈÕÆÚ = Cells(beginRow + ro, beginColumn).value
-'                £¨Ò»£©Åä²ú/Íê³ÉÇé¿ö
-                beginRow = anchors.item("£¨Ò»£©Åä²ú/Íê³ÉÇé¿ö") + 1
-                lastRow = anchors.item("£¨¶ş£©ÌìÈ»Æø²úÁ¿/ÍâÊä/º£¹ÜĞÅÏ¢") - 1
+                æ—¥æœŸ = Cells(beginRow + ro, beginColumn).value
+'                ï¼ˆä¸€ï¼‰é…äº§/å®Œæˆæƒ…å†µ
+                beginRow = anchors.item("ï¼ˆä¸€ï¼‰é…äº§/å®Œæˆæƒ…å†µ") + 1
+                lastRow = anchors.item("ï¼ˆäºŒï¼‰å¤©ç„¶æ°”äº§é‡/å¤–è¾“/æµ·ç®¡ä¿¡æ¯") - 1
                 For row = beginRow To lastRow
                     column = beginColumn
                     For column = beginColumn To lastColumn
                         temp = sh.Cells(row, column).value
-                        If temp Like "ÌìÈ»ÆøNm3" Then
-'                            ÌìÈ»ÆøÄêÅä²ú
+                        If temp Like "å¤©ç„¶æ°”Nm3" Then
+'                            å¤©ç„¶æ°”å¹´é…äº§
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÌìÈ»ÆøÄêÅä²ú"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "å¤©ç„¶æ°”å¹´é…äº§"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "¼Æ»®"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "è®¡åˆ’"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ÌìÈ»ÆøÔÂÅä²ú
+'                            å¤©ç„¶æ°”æœˆé…äº§
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÌìÈ»ÆøÔÂÅä²ú"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "å¤©ç„¶æ°”æœˆé…äº§"
+                                .å•ä½ = "æ–¹"
                                 co = 6
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "¼Æ»®"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "è®¡åˆ’"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "ÇáÓÍm3" Then
-'                            ÇáÓÍÄêÅä²ú
+                        If temp Like "è½»æ²¹m3" Then
+'                            è½»æ²¹å¹´é…äº§
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍÄêÅä²ú"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹å¹´é…äº§"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¼Æ»®"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "è®¡åˆ’"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ÇáÓÍÔÂÅä²ú
+'                            è½»æ²¹æœˆé…äº§
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍÔÂÅä²ú"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹æœˆé…äº§"
+                                .å•ä½ = "æ–¹"
                                 co = 6
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¼Æ»®"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "è®¡åˆ’"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                             co = 7
-                            ÇáÓÍ»ØÊÕÁ¿ÔÂÀÛ·½ = Cells(row, column + co).value
+                            è½»æ²¹å›æ”¶é‡æœˆç´¯æ–¹ = Cells(row, column + co).value
                             co = 3
-                            ÇáÓÍ»ØÊÕÁ¿ÄêÀÛ·½ = Cells(row, column + co).value
+                            è½»æ²¹å›æ”¶é‡å¹´ç´¯æ–¹ = Cells(row, column + co).value
                         End If
-                        If temp Like "±û¶¡Íém3" Then
-'                            ±û¶¡ÍéÄêÅä²ú
+                        If temp Like "ä¸™ä¸çƒ·m3" Then
+'                            ä¸™ä¸çƒ·å¹´é…äº§
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "±û¶¡ÍéÄêÅä²ú"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸™ä¸çƒ·å¹´é…äº§"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¼Æ»®"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "è®¡åˆ’"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ±û¶¡ÍéÔÂÅä²ú
+'                            ä¸™ä¸çƒ·æœˆé…äº§
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "±û¶¡ÍéÔÂÅä²ú"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸™ä¸çƒ·æœˆé…äº§"
+                                .å•ä½ = "æ–¹"
                                 co = 6
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¼Æ»®"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "è®¡åˆ’"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                             co = 7
-                            ±û¶¡Íé»ØÊÕÁ¿ÔÂÀÛ·½ = Cells(row, column + co).value
+                            ä¸™ä¸çƒ·å›æ”¶é‡æœˆç´¯æ–¹ = Cells(row, column + co).value
                             co = 3
-                            ±û¶¡Íé»ØÊÕÁ¿ÄêÀÛ·½ = Cells(row, column + co).value
+                            ä¸™ä¸çƒ·å›æ”¶é‡å¹´ç´¯æ–¹ = Cells(row, column + co).value
                         End If
                     Next column
                 Next row
-'                £¨¶ş£©ÌìÈ»Æø²úÁ¿/ÍâÊä/º£¹ÜĞÅÏ¢
-                beginRow = anchors.item("£¨¶ş£©ÌìÈ»Æø²úÁ¿/ÍâÊä/º£¹ÜĞÅÏ¢") + 1
-                lastRow = anchors.item("£¨Èı£©ÇáÓÍ²úÁ¿/ÍâÊä/¿â´æ") - 1
+'                ï¼ˆäºŒï¼‰å¤©ç„¶æ°”äº§é‡/å¤–è¾“/æµ·ç®¡ä¿¡æ¯
+                beginRow = anchors.item("ï¼ˆäºŒï¼‰å¤©ç„¶æ°”äº§é‡/å¤–è¾“/æµ·ç®¡ä¿¡æ¯") + 1
+                lastRow = anchors.item("ï¼ˆä¸‰ï¼‰è½»æ²¹äº§é‡/å¤–è¾“/åº“å­˜") - 1
                 For row = beginRow To lastRow
 '                    For column = beginColumn To lastColumn
                     column = beginColumn
@@ -230,547 +221,547 @@ On Error GoTo ErrorHandler
                             column = column + 1
                             temp = sh.Cells(row, column).value
                         End If
-'                        ÎÈ¶¨Çø
-                        If temp Like "*ÎÈ¶¨Çø*" Then
+'                        ç¨³å®šåŒº
+                        If temp Like "*ç¨³å®šåŒº*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÎÈ¶¨Çø"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ç¨³å®šåŒº"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "Éú²ú"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        Èë³§¼ÆÁ¿
-                        If temp Like "*Èë³§¼ÆÁ¿*" Then
+'                        å…¥å‚è®¡é‡
+                        If temp Like "*å…¥å‚è®¡é‡*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Èë³§¼ÆÁ¿"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "å…¥å‚è®¡é‡"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "½ÓÊÕ"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "æ¥æ”¶"
                                 co = 3
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 4
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ½ÓÊÕJZ20-2ÌåÏµ
-'                        ÍâÊäJZ20-2ÌåÏµ
-                        If temp Like "*JZ20-2ÌåÏµ*" And row < beginRow + 6 Then
-'                        ½ÓÊÕ
+'                        æ¥æ”¶JZ20-2ä½“ç³»
+'                        å¤–è¾“JZ20-2ä½“ç³»
+                        If temp Like "*JZ20-2ä½“ç³»*" And row < beginRow + 6 Then
+'                        æ¥æ”¶
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ20-2ÌåÏµ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ20-2ä½“ç³»"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "½ÓÊÕ"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "æ¥æ”¶"
                                 co = 3
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 4
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ÍâÊä
+'                            å¤–è¾“
                             ro = 5
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ20-2ÌåÏµ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ20-2ä½“ç³»"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row + ro, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "ÍâÊä"
+                                .æ•°æ® = Cells(row + ro, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "å¤–è¾“"
                                 co = 3
-                                .ÔÂÀÛ = Cells(row + ro, column + co).value
+                                .æœˆç´¯ = Cells(row + ro, column + co).value
                                 co = 4
-                                .ÄêÀÛ = Cells(row + ro, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row + ro, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ½ÓÊÕJZ25-1SÌåÏµ
-'                        ÍâÊäJZ25-1SÌåÏµ
-                        If temp Like "*JZ25-1SÌåÏµ*" And row < beginRow + 6 Then
-'                        ½ÓÊÕ
+'                        æ¥æ”¶JZ25-1Sä½“ç³»
+'                        å¤–è¾“JZ25-1Sä½“ç³»
+                        If temp Like "*JZ25-1Sä½“ç³»*" And row < beginRow + 6 Then
+'                        æ¥æ”¶
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ25-1SÌåÏµ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ25-1Sä½“ç³»"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "½ÓÊÕ"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "æ¥æ”¶"
                                 co = 3
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 4
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ÍâÊä
+'                            å¤–è¾“
                             ro = 5
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ25-1SÌåÏµ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ25-1Sä½“ç³»"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row + ro, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "ÍâÊä"
+                                .æ•°æ® = Cells(row + ro, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "å¤–è¾“"
                                 co = 3
-                                .ÔÂÀÛ = Cells(row + ro, column + co).value
+                                .æœˆç´¯ = Cells(row + ro, column + co).value
                                 co = 4
-                                .ÄêÀÛ = Cells(row + ro, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row + ro, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ×ÜÍâÊäÆøÁ¿
-                        If temp Like "*×ÜÍâÊäÆøÁ¿*" Then
+'                        æ€»å¤–è¾“æ°”é‡
+                        If temp Like "*æ€»å¤–è¾“æ°”é‡*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "×ÜÍâÊäÆøÁ¿"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ€»å¤–è¾“æ°”é‡"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "ÍâÊä"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "å¤–è¾“"
                                 co = 4
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ×Ü²úÆøÁ¿
-                        If temp Like "*×Ü²úÆøÁ¿*" Then
+'                        æ€»äº§æ°”é‡
+                        If temp Like "*æ€»äº§æ°”é‡*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "×Ü²úÆøÁ¿"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ€»äº§æ°”é‡"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "Éú²ú"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
                                 co = 4
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ½õÌì»¯
-                        If temp Like "*½õÌì»¯*" Then
+'                        é”¦å¤©åŒ–
+                        If temp Like "*é”¦å¤©åŒ–*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "½õÌì»¯"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "é”¦å¤©åŒ–"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "ÍâÊä"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "å¤–è¾“"
                                 co = 4
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ¾«Ï¸»¯¹¤CNG
-                        If temp Like "*¾«Ï¸»¯¹¤CNG104m3*" Then
+'                        ç²¾ç»†åŒ–å·¥CNG
+                        If temp Like "*ç²¾ç»†åŒ–å·¥CNG104m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "¾«Ï¸»¯¹¤CNG"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ç²¾ç»†åŒ–å·¥CNG"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "ÍâÊä"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "å¤–è¾“"
                                 co = 4
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ¾«Ï¸»¯¹¤
-                        If temp Like "*¾«Ï¸»¯¹¤104m3*" Then
+'                        ç²¾ç»†åŒ–å·¥
+                        If temp Like "*ç²¾ç»†åŒ–å·¥104m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "¾«Ï¸»¯¹¤"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ç²¾ç»†åŒ–å·¥"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "ÍâÊä"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "å¤–è¾“"
                                 co = 4
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ÎÛË®´¦Àí³§
-                        If temp Like "*ÎÛË®´¦Àí³§*" Then
+'                        æ±¡æ°´å¤„ç†å‚
+                        If temp Like "*æ±¡æ°´å¤„ç†å‚*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÎÛË®´¦Àí³§"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ±¡æ°´å¤„ç†å‚"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "ÍâÊä"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "å¤–è¾“"
                                 co = 4
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ĞÂ°ÂÈ¼Æø
-                        If temp Like "*ĞÂ°ÂÈ¼Æø*" Then
+'                        æ–°å¥¥ç‡ƒæ°”
+                        If temp Like "*æ–°å¥¥ç‡ƒæ°”*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ĞÂ°ÂÈ¼Æø"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ–°å¥¥ç‡ƒæ°”"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "ÍâÊä"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "å¤–è¾“"
                                 co = 4
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ×ÔÓÃÆø
-                        If temp Like "*×ÔÓÃÆø*" Then
+'                        è‡ªç”¨æ°”
+                        If temp Like "*è‡ªç”¨æ°”*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "×ÔÓÃÆø"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è‡ªç”¨æ°”"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÌìÈ»Æø"
-                                .×´Ì¬ = "ÏûºÄ"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "å¤©ç„¶æ°”"
+                                .çŠ¶æ€ = "æ¶ˆè€—"
                                 co = 4
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        º£¹ÜÀ´Òºº¬Ë®
-                        If temp Like "*º£¹ÜÀ´*Òºº¬Ë®*" Then
-'                        ÉÏÎç
+'                        æµ·ç®¡æ¥æ¶²å«æ°´
+                        If temp Like "*æµ·ç®¡æ¥*æ¶²å«æ°´*" Then
+'                        ä¸Šåˆ
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "º£¹ÜÀ´Òºº¬Ë®"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æµ·ç®¡æ¥æ¶²å«æ°´"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "º£¹Ü"
-                                .±¸×¢ = "ÉÏÎç"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æµ·ç®¡"
+                                .å¤‡æ³¨ = "ä¸Šåˆ"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                        ÏÂÎç
+'                        ä¸‹åˆ
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "º£¹ÜÀ´Òºº¬Ë®"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æµ·ç®¡æ¥æ¶²å«æ°´"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "º£¹Ü"
-                                .±¸×¢ = "ÏÂÎç"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æµ·ç®¡"
+                                .å¤‡æ³¨ = "ä¸‹åˆ"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        º£¹ÜMEGÅ¨¶È
-                        If temp Like "*º£¹ÜMEGÅ¨¶È*" Then
-'                        ÉÏÎç
+'                        æµ·ç®¡MEGæµ“åº¦
+                        If temp Like "*æµ·ç®¡MEGæµ“åº¦*" Then
+'                        ä¸Šåˆ
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "º£¹ÜMEGÅ¨¶È"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æµ·ç®¡MEGæµ“åº¦"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "º£¹Ü"
-                                .±¸×¢ = "ÉÏÎç"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æµ·ç®¡"
+                                .å¤‡æ³¨ = "ä¸Šåˆ"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                        ÏÂÎç
+'                        ä¸‹åˆ
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "º£¹ÜMEGÅ¨¶È"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æµ·ç®¡MEGæµ“åº¦"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "º£¹Ü"
-                                .±¸×¢ = "ÏÂÎç"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æµ·ç®¡"
+                                .å¤‡æ³¨ = "ä¸‹åˆ"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        º£¹Ü³ö¿ÚÄıµã
-                        If temp Like "*º£¹Ü³ö¿ÚÄıµã*" Then
-'                        ÉÏÎç
+'                        æµ·ç®¡å‡ºå£å‡ç‚¹
+                        If temp Like "*æµ·ç®¡å‡ºå£å‡ç‚¹*" Then
+'                        ä¸Šåˆ
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "º£¹Ü³ö¿ÚÄıµã"
-                                .µ¥Î» = "ÉãÊÏ¶È"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æµ·ç®¡å‡ºå£å‡ç‚¹"
+                                .å•ä½ = "æ‘„æ°åº¦"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "º£¹Ü"
-                                .±¸×¢ = "ÉÏÎç"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æµ·ç®¡"
+                                .å¤‡æ³¨ = "ä¸Šåˆ"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                        ÏÂÎç
+'                        ä¸‹åˆ
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "º£¹Ü³ö¿ÚÄıµã"
-                                .µ¥Î» = "ÉãÊÏ¶È"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æµ·ç®¡å‡ºå£å‡ç‚¹"
+                                .å•ä½ = "æ‘„æ°åº¦"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "º£¹Ü"
-                                .±¸×¢ = "ÏÂÎç"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æµ·ç®¡"
+                                .å¤‡æ³¨ = "ä¸‹åˆ"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        º£¹Ü³ö¿ÚPHÖµ
-                        If temp Like "*º£¹Ü³ö¿ÚPHÖµ*" Then
-'                        ÉÏÎç
+'                        æµ·ç®¡å‡ºå£PHå€¼
+                        If temp Like "*æµ·ç®¡å‡ºå£PHå€¼*" Then
+'                        ä¸Šåˆ
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "º£¹Ü³ö¿ÚPHÖµ"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æµ·ç®¡å‡ºå£PHå€¼"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "º£¹Ü"
-                                .±¸×¢ = "ÉÏÎç"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æµ·ç®¡"
+                                .å¤‡æ³¨ = "ä¸Šåˆ"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                        ÏÂÎç
+'                        ä¸‹åˆ
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "º£¹Ü³ö¿ÚPHÖµ"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æµ·ç®¡å‡ºå£PHå€¼"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "º£¹Ü"
-                                .±¸×¢ = "ÏÂÎç"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æµ·ç®¡"
+                                .å¤‡æ³¨ = "ä¸‹åˆ"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
                         Dim ta() As String
                         Dim data As String
-'                        º£¹Ü½ø/³ö¿ÚÑ¹Á¦MPa
-                        If temp Like "*º£¹Ü½ø*³ö¿Ú*Ñ¹Á¦*" Then
+'                        æµ·ç®¡è¿›/å‡ºå£å‹åŠ›MPa
+                        If temp Like "*æµ·ç®¡è¿›*å‡ºå£*å‹åŠ›*" Then
                             co = 1
                             data = Cells(row, column + co).value
                             ta = Split(data, "/")
                              count = (UBound(ta) - LBound(ta) + 1)
                              If 2 = count Then
-'                            ½ø¿Ú
+'                            è¿›å£
                                 With recordSC
-                                    .ÈÕÆÚ = ÈÕÆÚ
-                                    .Ãû³Æ = "º£¹Ü½ø¿ÚÑ¹Á¦"
-                                    .µ¥Î» = "Õ×ÅÁ"
-                                    .±¸×¢ = "½ø¿Ú"
+                                    .æ—¥æœŸ = æ—¥æœŸ
+                                    .åç§° = "æµ·ç®¡è¿›å£å‹åŠ›"
+                                    .å•ä½ = "å…†å¸•"
+                                    .å¤‡æ³¨ = "è¿›å£"
                                     data = ta(0)
                                     If IsNumeric(data) Then
-                                        .Êı¾İ = CDbl(data)
+                                        .æ•°æ® = CDbl(data)
                                     Else
-                                        .±¸×¢ = .±¸×¢ & vbTab & ta(0)
+                                        .å¤‡æ³¨ = .å¤‡æ³¨ & vbTab & ta(0)
                                     End If
-                                    .Àà±ğ = "º£¹Ü"
-                                    .Êı¾İÔ´ = fname
+                                    .ç±»åˆ« = "æµ·ç®¡"
+                                    .æ•°æ®æº = fname
                                 End With
                                 table.Add recordSC, ""
                                 Set recordSC = Nothing
-'                            ³ö¿Ú
+'                            å‡ºå£
                                 With recordSC
-                                    .ÈÕÆÚ = ÈÕÆÚ
-                                    .Ãû³Æ = "º£¹Ü³ö¿ÚÑ¹Á¦"
-                                    .µ¥Î» = "Õ×ÅÁ"
-                                    .±¸×¢ = "³ö¿Ú"
+                                    .æ—¥æœŸ = æ—¥æœŸ
+                                    .åç§° = "æµ·ç®¡å‡ºå£å‹åŠ›"
+                                    .å•ä½ = "å…†å¸•"
+                                    .å¤‡æ³¨ = "å‡ºå£"
                                     data = ta(1)
                                     If IsNumeric(data) Then
-                                        .Êı¾İ = CDbl(data)
+                                        .æ•°æ® = CDbl(data)
                                     Else
-                                        .±¸×¢ = .±¸×¢ & vbTab & ta(1)
+                                        .å¤‡æ³¨ = .å¤‡æ³¨ & vbTab & ta(1)
                                     End If
-                                    .Àà±ğ = "º£¹Ü"
-                                    .Êı¾İÔ´ = fname
+                                    .ç±»åˆ« = "æµ·ç®¡"
+                                    .æ•°æ®æº = fname
                                 End With
                                 table.Add recordSC, ""
                                 Set recordSC = Nothing
                             End If
                         End If
-'                        º£¹Ü½ø/³ö¿ÚÎÂ¶È¡æ
-                        If temp Like "*º£¹Ü½ø*³ö¿Ú*ÎÂ¶È*" Then
+'                        æµ·ç®¡è¿›/å‡ºå£æ¸©åº¦â„ƒ
+                        If temp Like "*æµ·ç®¡è¿›*å‡ºå£*æ¸©åº¦*" Then
                             co = 1
                             data = Cells(row, column + co).value
                             ta = Split(data, "/")
                              count = (UBound(ta) - LBound(ta) + 1)
                              If 2 = count Then
-'                            ½ø¿Ú
+'                            è¿›å£
                                 With recordSC
-                                    .ÈÕÆÚ = ÈÕÆÚ
-                                    .Ãû³Æ = "º£¹Ü½ø¿ÚÎÂ¶È"
-                                    .µ¥Î» = "ÉãÊÏ¶È"
-                                    .±¸×¢ = "½ø¿Ú"
+                                    .æ—¥æœŸ = æ—¥æœŸ
+                                    .åç§° = "æµ·ç®¡è¿›å£æ¸©åº¦"
+                                    .å•ä½ = "æ‘„æ°åº¦"
+                                    .å¤‡æ³¨ = "è¿›å£"
                                     data = ta(0)
                                     If IsNumeric(data) Then
-                                        .Êı¾İ = CDbl(data)
+                                        .æ•°æ® = CDbl(data)
                                     Else
-                                        .±¸×¢ = .±¸×¢ & vbTab & ta(0)
+                                        .å¤‡æ³¨ = .å¤‡æ³¨ & vbTab & ta(0)
                                     End If
-                                    .Àà±ğ = "º£¹Ü"
-                                    .Êı¾İÔ´ = fname
+                                    .ç±»åˆ« = "æµ·ç®¡"
+                                    .æ•°æ®æº = fname
                                 End With
                                 table.Add recordSC, ""
                                 Set recordSC = Nothing
-'                            ³ö¿Ú
+'                            å‡ºå£
                                 With recordSC
-                                    .ÈÕÆÚ = ÈÕÆÚ
-                                    .Ãû³Æ = "º£¹Ü³ö¿ÚÎÂ¶È"
-                                    .µ¥Î» = "ÉãÊÏ¶È"
-                                    .±¸×¢ = "³ö¿Ú"
+                                    .æ—¥æœŸ = æ—¥æœŸ
+                                    .åç§° = "æµ·ç®¡å‡ºå£æ¸©åº¦"
+                                    .å•ä½ = "æ‘„æ°åº¦"
+                                    .å¤‡æ³¨ = "å‡ºå£"
                                     data = ta(1)
                                     If IsNumeric(data) Then
-                                        .Êı¾İ = CDbl(data)
+                                        .æ•°æ® = CDbl(data)
                                     Else
-                                        .±¸×¢ = .±¸×¢ & vbTab & ta(1)
+                                        .å¤‡æ³¨ = .å¤‡æ³¨ & vbTab & ta(1)
                                     End If
-                                    .Àà±ğ = "º£¹Ü"
-                                    .Êı¾İÔ´ = fname
+                                    .ç±»åˆ« = "æµ·ç®¡"
+                                    .æ•°æ®æº = fname
                                 End With
                                 table.Add recordSC, ""
                                 Set recordSC = Nothing
-'                        ÉÏÏÂÓÎ12…¼º£¹ÜÍ¨Çò
+'                        ä¸Šä¸‹æ¸¸12å‹æµ·ç®¡é€šçƒ
                                 With recordSC
-                                    .ÈÕÆÚ = ÈÕÆÚ
-                                    .Ãû³Æ = "ÉÏÏÂÓÎ12…¼º£¹ÜÍ¨Çò"
+                                    .æ—¥æœŸ = æ—¥æœŸ
+                                    .åç§° = "ä¸Šä¸‹æ¸¸12å‹æµ·ç®¡é€šçƒ"
                                     ro = 4
-                                    .±¸×¢ = Cells(row + ro, column).value
-                                    .Àà±ğ = "º£¹Ü"
-                                    .Êı¾İÔ´ = fname
+                                    .å¤‡æ³¨ = Cells(row + ro, column).value
+                                    .ç±»åˆ« = "æµ·ç®¡"
+                                    .æ•°æ®æº = fname
                                 End With
                                 table.Add recordSC, ""
                                 Set recordSC = Nothing
                             End If
                         End If
-                        If temp Like "*JZ25-1SÔ­ÓÍ*" Then
+                        If temp Like "*JZ25-1SåŸæ²¹*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ25-1SÔ­ÓÍ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ25-1SåŸæ²¹"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÉÏÓÎ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸Šæ¸¸"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ25-1SÔ­ÓÍÃÜ¶È"
-                                .µ¥Î» = "¶Ö/Á¢·½Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ25-1SåŸæ²¹å¯†åº¦"
+                                .å•ä½ = "å¨/ç«‹æ–¹ç±³"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÉÏÓÎ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸Šæ¸¸"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*JZ20-2ÄıÎöÓÍ*" Then
+                        If temp Like "*JZ20-2å‡ææ²¹*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ20-2ÄıÎöÓÍ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ20-2å‡ææ²¹"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÉÏÓÎ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸Šæ¸¸"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ20-2ÄıÎöÓÍÃÜ¶È"
-                                .µ¥Î» = "¶Ö/Á¢·½Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ20-2å‡ææ²¹å¯†åº¦"
+                                .å•ä½ = "å¨/ç«‹æ–¹ç±³"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÉÏÓÎ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸Šæ¸¸"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*JZ20-2ÇáÓÍ*" Then
+                        If temp Like "*JZ20-2è½»æ²¹*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ20-2ÇáÓÍ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ20-2è½»æ²¹"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÉÏÓÎ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸Šæ¸¸"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "JZ20-2ÇáÓÍÃÜ¶È"
-                                .µ¥Î» = "¶Ö/Á¢·½Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "JZ20-2è½»æ²¹å¯†åº¦"
+                                .å•ä½ = "å¨/ç«‹æ–¹ç±³"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÉÏÓÎ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸Šæ¸¸"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
@@ -779,1011 +770,1011 @@ On Error GoTo ErrorHandler
                     column = column + 1
                     Loop
                 Next row
-'                £¨Èı£©ÇáÓÍ²úÁ¿/ÍâÊä/¿â´æ
-                beginRow = anchors.item("£¨Èı£©ÇáÓÍ²úÁ¿/ÍâÊä/¿â´æ") + 1
-                lastRow = anchors.item("£¨ËÄ£©±û¶¡Íé²úÁ¿/ÍâÊä/¿â´æ") - 1
+'                ï¼ˆä¸‰ï¼‰è½»æ²¹äº§é‡/å¤–è¾“/åº“å­˜
+                beginRow = anchors.item("ï¼ˆä¸‰ï¼‰è½»æ²¹äº§é‡/å¤–è¾“/åº“å­˜") + 1
+                lastRow = anchors.item("ï¼ˆå››ï¼‰ä¸™ä¸çƒ·äº§é‡/å¤–è¾“/åº“å­˜") - 1
                 For row = beginRow To lastRow
                     For column = beginColumn To lastColumn
                         temp = sh.Cells(row, column).value
-                        If temp Like "*ÒºÎ»m*" Then
+                        If temp Like "*æ¶²ä½m*" Then
 '                            V-631A
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-631A"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-631A"
+                                .å•ä½ = "ç±³"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-631B
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-631B"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-631B"
+                                .å•ä½ = "ç±³"
                                 co = 3
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-631C
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-631C"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-631C"
+                                .å•ä½ = "ç±³"
                                 co = 4
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ÇáÓÍ¿â´æºÏ¼Æ
+'                            è½»æ²¹åº“å­˜åˆè®¡
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍ¿â´æºÏ¼Æ"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹åº“å­˜åˆè®¡"
+                                .å•ä½ = "ç±³"
                                 co = 5
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*¿â´æt*" Then
+                        If temp Like "*åº“å­˜t*" Then
 '                            V-631A
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-631A"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-631A"
+                                .å•ä½ = "å¨"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-631B
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-631B"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-631B"
+                                .å•ä½ = "å¨"
                                 co = 3
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-631C
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-631C"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-631C"
+                                .å•ä½ = "å¨"
                                 co = 4
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ÇáÓÍ¿â´æºÏ¼Æ
+'                            è½»æ²¹åº“å­˜åˆè®¡
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍ¿â´æºÏ¼Æ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹åº“å­˜åˆè®¡"
+                                .å•ä½ = "å¨"
                                 co = 5
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*¿â´æm3*" Then
+                        If temp Like "*åº“å­˜m3*" Then
 '                            V-631A
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-631A"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-631A"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-631B
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-631B"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-631B"
+                                .å•ä½ = "æ–¹"
                                 co = 3
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-631C
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-631C"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-631C"
+                                .å•ä½ = "æ–¹"
                                 co = 4
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ÇáÓÍ¿â´æºÏ¼Æ
+'                            è½»æ²¹åº“å­˜åˆè®¡
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍ¿â´æºÏ¼Æ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹åº“å­˜åˆè®¡"
+                                .å•ä½ = "æ–¹"
                                 co = 5
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*ÇáÓÍ×°³µt*" Then
+                        If temp Like "*è½»æ²¹è£…è½¦t*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍ×°³µ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹è£…è½¦"
+                                .å•ä½ = "å¨"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "ÍâÊä"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "å¤–è¾“"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*ÇáÓÍ×°³µbbl*" Then
+                        If temp Like "*è½»æ²¹è£…è½¦bbl*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍ×°³µ"
-                                .µ¥Î» = "Í°"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹è£…è½¦"
+                                .å•ä½ = "æ¡¶"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "ÍâÊä"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "å¤–è¾“"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*ÍâÊäÄıµã*" Then
+                        If temp Like "*å¤–è¾“å‡ç‚¹*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÍâÊäÄıµã"
-                                .µ¥Î» = "ÉãÊÏ¶È"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "å¤–è¾“å‡ç‚¹"
+                                .å•ä½ = "æ‘„æ°åº¦"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-'                                .×´Ì¬ = ""
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+'                                .çŠ¶æ€ = ""
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*ÍâÊäPHÖµ*" Then
+                        If temp Like "*å¤–è¾“PHå€¼*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÍâÊäPHÖµ"
-'                                .µ¥Î» = ""
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "å¤–è¾“PHå€¼"
+'                                .å•ä½ = ""
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-'                                .×´Ì¬ = ""
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+'                                .çŠ¶æ€ = ""
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*ÇáÓÍ´¦ÀíÁ¿m3*" Then
+                        If temp Like "*è½»æ²¹å¤„ç†é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍ´¦ÀíÁ¿"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹å¤„ç†é‡"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "½ÓÊÕ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "æ¥æ”¶"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*ÇáÓÍ»ØÊÕÁ¿t*" Then
+                        If temp Like "*è½»æ²¹å›æ”¶é‡t*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍ»ØÊÕÁ¿"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹å›æ”¶é‡"
+                                .å•ä½ = "å¨"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "Éú²ú"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*ÇáÓÍ»ØÊÕÁ¿m3*" Then
+                        If temp Like "*è½»æ²¹å›æ”¶é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍ»ØÊÕÁ¿"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹å›æ”¶é‡"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "Éú²ú"
-                                .ÔÂÀÛ = ÇáÓÍ»ØÊÕÁ¿ÔÂÀÛ·½
-                                .ÄêÀÛ = ÇáÓÍ»ØÊÕÁ¿ÄêÀÛ·½
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
+                                .æœˆç´¯ = è½»æ²¹å›æ”¶é‡æœˆç´¯æ–¹
+                                .å¹´ç´¯ = è½»æ²¹å›æ”¶é‡å¹´ç´¯æ–¹
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*±¥ºÍÕôÆøÑ¹*" Then
+                        If temp Like "*é¥±å’Œè’¸æ°”å‹*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "±¥ºÍÕôÆøÑ¹"
-                                .µ¥Î» = "Ç§ÅÁ"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "é¥±å’Œè’¸æ°”å‹"
+                                .å•ä½ = "åƒå¸•"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-'                                .×´Ì¬ = ""
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+'                                .çŠ¶æ€ = ""
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*ÇáÓÍÈë¹ŞÇ°º¬Ë®*" Then
+                        If temp Like "*è½»æ²¹å…¥ç½å‰å«æ°´*" Then
                             ro = 1
                             data = Cells(row + ro, column).value
                             ta = Split(data, "/")
                             count = (UBound(ta) - LBound(ta) + 1)
                             If count = 2 Then
-'                                ÉÏÎç
+'                                ä¸Šåˆ
                                 With recordSC
-                                    .ÈÕÆÚ = ÈÕÆÚ
-                                    .Ãû³Æ = "ÇáÓÍÈë¹ŞÇ°º¬Ë®"
-                                    .Êı¾İ = ta(0)
-                                    .Àà±ğ = "ÇáÓÍ"
-                                    .±¸×¢ = "ÉÏÎç"
-                                    .Êı¾İÔ´ = fname
+                                    .æ—¥æœŸ = æ—¥æœŸ
+                                    .åç§° = "è½»æ²¹å…¥ç½å‰å«æ°´"
+                                    .æ•°æ® = ta(0)
+                                    .ç±»åˆ« = "è½»æ²¹"
+                                    .å¤‡æ³¨ = "ä¸Šåˆ"
+                                    .æ•°æ®æº = fname
                                 End With
                                 table.Add recordSC, ""
                                 Set recordSC = Nothing
-'                                ÏÂÎç
+'                                ä¸‹åˆ
                                 With recordSC
-                                    .ÈÕÆÚ = ÈÕÆÚ
-                                    .Ãû³Æ = "ÇáÓÍÈë¹ŞÇ°º¬Ë®"
-                                    .Êı¾İ = ta(1)
-                                    .Àà±ğ = "ÇáÓÍ"
-                                    .±¸×¢ = "ÏÂÎç"
-                                    .Êı¾İÔ´ = fname
+                                    .æ—¥æœŸ = æ—¥æœŸ
+                                    .åç§° = "è½»æ²¹å…¥ç½å‰å«æ°´"
+                                    .æ•°æ® = ta(1)
+                                    .ç±»åˆ« = "è½»æ²¹"
+                                    .å¤‡æ³¨ = "ä¸‹åˆ"
+                                    .æ•°æ®æº = fname
                                 End With
                                 table.Add recordSC, ""
                                 Set recordSC = Nothing
                             End If
                         End If
-                        If temp Like "*ÇáÓÍ×°³µm3*" Then
+                        If temp Like "*è½»æ²¹è£…è½¦m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÓÍ×°³µ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»æ²¹è£…è½¦"
+                                .å•ä½ = "æ–¹"
                                 ro = 1
-                                .Êı¾İ = Cells(row + ro, column).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "ÍâÊä"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row + ro, column).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "å¤–è¾“"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
                     Next column
                 Next row
-'                £¨ËÄ£©±û¶¡Íé²úÁ¿/ÍâÊä/¿â´æ
-                beginRow = anchors.item("£¨ËÄ£©±û¶¡Íé²úÁ¿/ÍâÊä/¿â´æ") + 1
-                lastRow = anchors.item("£¨Îå£©ÎïÁÏ½ÓÊÕ/ÏûºÄ") - 1
+'                ï¼ˆå››ï¼‰ä¸™ä¸çƒ·äº§é‡/å¤–è¾“/åº“å­˜
+                beginRow = anchors.item("ï¼ˆå››ï¼‰ä¸™ä¸çƒ·äº§é‡/å¤–è¾“/åº“å­˜") + 1
+                lastRow = anchors.item("ï¼ˆäº”ï¼‰ç‰©æ–™æ¥æ”¶/æ¶ˆè€—") - 1
                 For row = beginRow To lastRow
                     For column = beginColumn To lastColumn
                         temp = sh.Cells(row, column).value
-'                        ÒºÎ»m
-                        If temp Like "*ÒºÎ»m*" Then
+'                        æ¶²ä½m
+                        If temp Like "*æ¶²ä½m*" Then
 '                            V-641A
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-641A"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-641A"
+                                .å•ä½ = "ç±³"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "±ûÍé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸™çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-641B
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-641B"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-641B"
+                                .å•ä½ = "ç±³"
                                 co = 3
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "±ûÍé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸™çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-643A
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-643A"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-643A"
+                                .å•ä½ = "ç±³"
                                 co = 5
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "Òº»¯Æø"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "æ¶²åŒ–æ°”"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-643B
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-643B"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-643B"
+                                .å•ä½ = "ç±³"
                                 co = 6
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "¶¡Íé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-642
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-642"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-642"
+                                .å•ä½ = "ç±³"
                                 co = 8
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "¶¡Íé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ¿â´æt
-                        If temp Like "*¿â´æt*" And row < lastRow - 3 Then
+'                        åº“å­˜t
+                        If temp Like "*åº“å­˜t*" And row < lastRow - 3 Then
 '                            V-641A
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-641A"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-641A"
+                                .å•ä½ = "å¨"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "±ûÍé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸™çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-641B
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-641B"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-641B"
+                                .å•ä½ = "å¨"
                                 co = 3
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "±ûÍé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸™çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ±ûÍé¹Ş¿â´æ
+'                            ä¸™çƒ·ç½åº“å­˜
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "±ûÍé¹Ş¿â´æ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸™çƒ·ç½åº“å­˜"
+                                .å•ä½ = "å¨"
                                 co = 4
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-'                                .±¸×¢ = ""
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+'                                .å¤‡æ³¨ = ""
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-643A
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-643A"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-643A"
+                                .å•ä½ = "å¨"
                                 co = 5
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "Òº»¯Æø"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "æ¶²åŒ–æ°”"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-643B
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-643B"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-643B"
+                                .å•ä½ = "å¨"
                                 co = 6
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "¶¡Íé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            Òº»¯Æø¹Ş¿â´æ
+'                            æ¶²åŒ–æ°”ç½åº“å­˜
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Òº»¯Æø¹Ş¿â´æ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ¶²åŒ–æ°”ç½åº“å­˜"
+                                .å•ä½ = "å¨"
                                 co = 7
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-'                                .±¸×¢ = ""
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+'                                .å¤‡æ³¨ = ""
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-642
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-642"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-642"
+                                .å•ä½ = "å¨"
                                 co = 8
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "¶¡Íé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ¿â´æm3
-                        If temp Like "*¿â´æm3*" Then
+'                        åº“å­˜m3
+                        If temp Like "*åº“å­˜m3*" Then
 '                            V-641A
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-641A"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-641A"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "±ûÍé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸™çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-641B
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-641B"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-641B"
+                                .å•ä½ = "æ–¹"
                                 co = 3
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "±ûÍé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸™çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            ±ûÍé¹Ş¿â´æ
+'                            ä¸™çƒ·ç½åº“å­˜
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "±ûÍé¹Ş¿â´æ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸™çƒ·ç½åº“å­˜"
+                                .å•ä½ = "å¨"
                                 co = 4
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-'                                .±¸×¢ = ""
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+'                                .å¤‡æ³¨ = ""
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-643A
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-643A"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-643A"
+                                .å•ä½ = "æ–¹"
                                 co = 5
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "Òº»¯Æø"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "æ¶²åŒ–æ°”"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-643B
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-643B"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-643B"
+                                .å•ä½ = "æ–¹"
                                 co = 6
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "¶¡Íé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
-'                            Òº»¯Æø¹Ş¿â´æ
+'                            æ¶²åŒ–æ°”ç½åº“å­˜
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Òº»¯Æø¹Ş¿â´æ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ¶²åŒ–æ°”ç½åº“å­˜"
+                                .å•ä½ = "å¨"
                                 co = 7
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-'                                .±¸×¢ = ""
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+'                                .å¤‡æ³¨ = ""
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
 '                            V-642
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "V-642"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "V-642"
+                                .å•ä½ = "æ–¹"
                                 co = 8
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .±¸×¢ = "¶¡Íé"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .å¤‡æ³¨ = "ä¸çƒ·"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ±ûÍé×°³µt
-                        If temp Like "*±ûÍé×°³µt*" Then
+'                        ä¸™çƒ·è£…è½¦t
+                        If temp Like "*ä¸™çƒ·è£…è½¦t*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "±ûÍé×°³µ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸™çƒ·è£…è½¦"
+                                .å•ä½ = "å¨"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "ÍâÊä"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "å¤–è¾“"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ±ûÍé×°³µm3
-                        If temp Like "*±ûÍé×°³µm3*" Then
+'                        ä¸™çƒ·è£…è½¦m3
+                        If temp Like "*ä¸™çƒ·è£…è½¦m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "±ûÍé×°³µ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸™çƒ·è£…è½¦"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "ÍâÊä"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "å¤–è¾“"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ¶¡Íé×°³µt
-                        If temp Like "*¶¡Íé×°³µt*" Then
+'                        ä¸çƒ·è£…è½¦t
+                        If temp Like "*ä¸çƒ·è£…è½¦t*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "¶¡Íé×°³µ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸çƒ·è£…è½¦"
+                                .å•ä½ = "å¨"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "ÍâÊä"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "å¤–è¾“"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ¶¡Íé×°³µm3
-                        If temp Like "*¶¡Íé×°³µm3*" Then
+'                        ä¸çƒ·è£…è½¦m3
+                        If temp Like "*ä¸çƒ·è£…è½¦m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "¶¡Íé×°³µ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸çƒ·è£…è½¦"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "ÍâÊä"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "å¤–è¾“"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ±û¶¡Íé»ØÊÕÁ¿t
-                        If temp Like "*±û¶¡Íé»ØÊÕÁ¿t*" Then
+'                        ä¸™ä¸çƒ·å›æ”¶é‡t
+                        If temp Like "*ä¸™ä¸çƒ·å›æ”¶é‡t*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "±û¶¡Íé»ØÊÕÁ¿"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸™ä¸çƒ·å›æ”¶é‡"
+                                .å•ä½ = "å¨"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "Éú²ú"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ±û¶¡Íé»ØÊÕÁ¿m3
-                        If temp Like "±û¶¡Íé»ØÊÕÁ¿m3*" Then
+'                        ä¸™ä¸çƒ·å›æ”¶é‡m3
+                        If temp Like "ä¸™ä¸çƒ·å›æ”¶é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "±û¶¡Íé»ØÊÕÁ¿"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¸™ä¸çƒ·å›æ”¶é‡"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "Éú²ú"
-                                .ÔÂÀÛ = ±û¶¡Íé»ØÊÕÁ¿ÔÂÀÛ·½
-                                .ÄêÀÛ = ±û¶¡Íé»ØÊÕÁ¿ÄêÀÛ·½
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
+                                .æœˆç´¯ = ä¸™ä¸çƒ·å›æ”¶é‡æœˆç´¯æ–¹
+                                .å¹´ç´¯ = ä¸™ä¸çƒ·å›æ”¶é‡å¹´ç´¯æ–¹
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        Òº»¯Æø×°³µt
-                        If temp Like "*Òº»¯Æø×°³µt*" Then
+'                        æ¶²åŒ–æ°”è£…è½¦t
+                        If temp Like "*æ¶²åŒ–æ°”è£…è½¦t*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Òº»¯Æø×°³µ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ¶²åŒ–æ°”è£…è½¦"
+                                .å•ä½ = "å¨"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "ÍâÊä"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "å¤–è¾“"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        Òº»¯Æø×°³µm3
-                        If temp Like "*Òº»¯Æø×°³µm3*" Then
+'                        æ¶²åŒ–æ°”è£…è½¦m3
+                        If temp Like "*æ¶²åŒ–æ°”è£…è½¦m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Òº»¯Æø×°³µ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ¶²åŒ–æ°”è£…è½¦"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "ÍâÊä"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "å¤–è¾“"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ÇáÌş¿â´æt
-                        If temp Like "*ÇáÌş¿â´æt*" Then
+'                        è½»çƒƒåº“å­˜t
+                        If temp Like "*è½»çƒƒåº“å­˜t*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÇáÌş¿â´æ"
-                                .µ¥Î» = "¶Ö"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è½»çƒƒåº“å­˜"
+                                .å•ä½ = "å¨"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        Êı¾İ¿âÇáÓÍ»ØÊÕÁ¿m3
-                        If temp Like "*Êı¾İ¿âÇáÓÍ»ØÊÕÁ¿m3*" Then
+'                        æ•°æ®åº“è½»æ²¹å›æ”¶é‡m3
+                        If temp Like "*æ•°æ®åº“è½»æ²¹å›æ”¶é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Êı¾İ¿âÇáÓÍ»ØÊÕÁ¿"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ•°æ®åº“è½»æ²¹å›æ”¶é‡"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "ÇáÓÍ"
-                                .×´Ì¬ = "Éú²ú"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "è½»æ²¹"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        Êı¾İ¿â±û¶¡Íé»ØÊÕÁ¿m3
-                        If temp Like "*Êı¾İ¿â±û¶¡Íé»ØÊÕÁ¿m3*" Then
+'                        æ•°æ®åº“ä¸™ä¸çƒ·å›æ”¶é‡m3
+                        If temp Like "*æ•°æ®åº“ä¸™ä¸çƒ·å›æ”¶é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Êı¾İ¿â±û¶¡Íé»ØÊÕÁ¿"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ•°æ®åº“ä¸™ä¸çƒ·å›æ”¶é‡"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "±û¶¡Íé"
-                                .×´Ì¬ = "Éú²ú"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ä¸™ä¸çƒ·"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
                     Next column
                 Next row
-'                £¨Îå£©ÎïÁÏ½ÓÊÕ/ÏûºÄ
-                beginRow = anchors.item("£¨Îå£©ÎïÁÏ½ÓÊÕ/ÏûºÄ") + 1
+'                ï¼ˆäº”ï¼‰ç‰©æ–™æ¥æ”¶/æ¶ˆè€—
+                beginRow = anchors.item("ï¼ˆäº”ï¼‰ç‰©æ–™æ¥æ”¶/æ¶ˆè€—") + 1
                 lastRow = 56
-'                Éú²ú±¸×¢
+'                ç”Ÿäº§å¤‡æ³¨
                 With recordSC
-                    .ÈÕÆÚ = ÈÕÆÚ
-                    .Ãû³Æ = "Éú²ú±¸×¢"
-                    .Àà±ğ = "¹¤ÒÕ"
+                    .æ—¥æœŸ = æ—¥æœŸ
+                    .åç§° = "ç”Ÿäº§å¤‡æ³¨"
+                    .ç±»åˆ« = "å·¥è‰º"
                     ro = 7
-                    .±¸×¢ = Cells(beginRow + ro, beginColumn).value
-                    .Êı¾İÔ´ = fname
+                    .å¤‡æ³¨ = Cells(beginRow + ro, beginColumn).value
+                    .æ•°æ®æº = fname
                 End With
                 table.Add recordSC, ""
                 Set recordSC = Nothing
                 For row = beginRow To lastRow
                     For column = beginColumn To lastColumn
                         temp = sh.Cells(row, column).value
-'                        ÒÒ¶ş´¼»ØÊÕ
-                        If temp Like "*ÒÒ¶ş´¼ÈÕ»ØÊÕÁ¿m3*" Then
+'                        ä¹™äºŒé†‡å›æ”¶
+                        If temp Like "*ä¹™äºŒé†‡æ—¥å›æ”¶é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÒÒ¶ş´¼»ØÊÕ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¹™äºŒé†‡å›æ”¶"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
+                                .æ•°æ® = Cells(row, column + co).value
                                 ro = 3
-                                .ÔÂÀÛ = Cells(row + ro, column + co).value
+                                .æœˆç´¯ = Cells(row + ro, column + co).value
                                 ro = 4
-                                .ÄêÀÛ = Cells(row + ro, column + co).value
-                                .Àà±ğ = "»¯Ñ§Ò©¼Á"
-                                .×´Ì¬ = "Éú²ú"
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row + ro, column + co).value
+                                .ç±»åˆ« = "åŒ–å­¦è¯å‰‚"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ÒÒ¶ş´¼Å¨¶È
-                        If temp Like "*ÒÒ¶ş´¼Å¨¶È*" Then
+'                        ä¹™äºŒé†‡æµ“åº¦
+                        If temp Like "*ä¹™äºŒé†‡æµ“åº¦*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÒÒ¶ş´¼Å¨¶È"
-'                                .µ¥Î» = ""
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¹™äºŒé†‡æµ“åº¦"
+'                                .å•ä½ = ""
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "»¯Ñ§Ò©¼Á"
-'                                .×´Ì¬ = ""
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "åŒ–å­¦è¯å‰‚"
+'                                .çŠ¶æ€ = ""
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ÒÒ¶ş´¼ÏûºÄ
-                        If temp Like "*ÒÒ¶ş´¼ÈÕºÄÁ¿m3*" Then
+'                        ä¹™äºŒé†‡æ¶ˆè€—
+                        If temp Like "*ä¹™äºŒé†‡æ—¥è€—é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "ÒÒ¶ş´¼ÏûºÄ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ä¹™äºŒé†‡æ¶ˆè€—"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "»¯Ñ§Ò©¼Á"
-                                .×´Ì¬ = "ÏûºÄ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "åŒ–å­¦è¯å‰‚"
+                                .çŠ¶æ€ = "æ¶ˆè€—"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ¼×´¼ÏûºÄ
-                        If temp Like "*¼×´¼ÈÕºÄÁ¿m3*" Then
+'                        ç”²é†‡æ¶ˆè€—
+                        If temp Like "*ç”²é†‡æ—¥è€—é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "¼×´¼ÏûºÄ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ç”²é†‡æ¶ˆè€—"
+                                .å•ä½ = "æ–¹"
                                 co = 2
-                                .Êı¾İ = Cells(row, column + co).value
+                                .æ•°æ® = Cells(row, column + co).value
                                 ro = 1
-                                .ÔÂÀÛ = Cells(row + ro, column + co).value
+                                .æœˆç´¯ = Cells(row + ro, column + co).value
                                 co = 4
-                                .ÄêÀÛ = Cells(row + ro, column + co).value
-                                .Àà±ğ = "»¯Ñ§Ò©¼Á"
-                                .×´Ì¬ = "ÏûºÄ"
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row + ro, column + co).value
+                                .ç±»åˆ« = "åŒ–å­¦è¯å‰‚"
+                                .çŠ¶æ€ = "æ¶ˆè€—"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        Íâ¹©Ë®
-                        If temp Like "*Íâ¹©Ë®m3*" Then
+'                        å¤–ä¾›æ°´
+                        If temp Like "*å¤–ä¾›æ°´m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Íâ¹©Ë®"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "å¤–ä¾›æ°´"
+                                .å•ä½ = "æ–¹"
                                 co = 1
                                 ro = 0
-                                .Êı¾İ = Cells(row + ro, column + co).value
-                                .Àà±ğ = "Ë®"
-                                .×´Ì¬ = "½ÓÊÕ"
+                                .æ•°æ® = Cells(row + ro, column + co).value
+                                .ç±»åˆ« = "æ°´"
+                                .çŠ¶æ€ = "æ¥æ”¶"
                                 ro = 1
-                                .ÔÂÀÛ = Cells(row + ro, column + co).value
+                                .æœˆç´¯ = Cells(row + ro, column + co).value
                                 ro = 2
-                                .ÄêÀÛ = Cells(row + ro, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row + ro, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ×Ô²ÉË®
-                        If temp Like "*×Ô²ÉË®Á¿m3*" Then
+'                        è‡ªé‡‡æ°´
+                        If temp Like "*è‡ªé‡‡æ°´é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "×Ô²ÉË®"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è‡ªé‡‡æ°´"
+                                .å•ä½ = "æ–¹"
                                 ro = 0
                                 co = 1
-                                .Êı¾İ = Cells(row + ro, column + co).value
-                                .Àà±ğ = "Ë®"
-                                .×´Ì¬ = "Éú²ú"
+                                .æ•°æ® = Cells(row + ro, column + co).value
+                                .ç±»åˆ« = "æ°´"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
                                 ro = 1
-                                .ÔÂÀÛ = Cells(row + ro, column + co).value
+                                .æœˆç´¯ = Cells(row + ro, column + co).value
                                 ro = 2
-                                .ÄêÀÛ = Cells(row + ro, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row + ro, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ¿â´æË®
-                        If temp Like "*Ë®³ØË®Î»*" Then
+'                        åº“å­˜æ°´
+                        If temp Like "*æ°´æ± æ°´ä½*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "¿â´æË®"
-                                .µ¥Î» = "Ã×"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "åº“å­˜æ°´"
+                                .å•ä½ = "ç±³"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "Ë®"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æ°´"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-                        If temp Like "*Ë®³Ø´¢Ë®*" Then
+                        If temp Like "*æ°´æ± å‚¨æ°´*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "¿â´æË®"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "åº“å­˜æ°´"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "Ë®"
-                                .×´Ì¬ = "¿â´æ"
-                                .Êı¾İÔ´ = fname
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æ°´"
+                                .çŠ¶æ€ = "åº“å­˜"
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        Ë®ÏûºÄ
-                        If temp Like "*ÈÕºÄË®Á¿m3*" Then
+'                        æ°´æ¶ˆè€—
+                        If temp Like "*æ—¥è€—æ°´é‡m3*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Ë®ÏûºÄ"
-                                .µ¥Î» = "·½"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "æ°´æ¶ˆè€—"
+                                .å•ä½ = "æ–¹"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "Ë®"
-                                .×´Ì¬ = "ÏûºÄ"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "æ°´"
+                                .çŠ¶æ€ = "æ¶ˆè€—"
                                 ro = 4
                                 co = -1
-                                .ÔÂÀÛ = Cells(row + ro, column + co).value
+                                .æœˆç´¯ = Cells(row + ro, column + co).value
                                 co = 1
-                                .ÄêÀÛ = Cells(row + ro, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row + ro, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        Íâ¹©µç
-                        If temp Like "*ÈÕÍâ¹©µçÁ¿*" Then
+'                        å¤–ä¾›ç”µ
+                        If temp Like "*æ—¥å¤–ä¾›ç”µé‡*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "Íâ¹©µç"
-                                .µ¥Î» = "¶È"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "å¤–ä¾›ç”µ"
+                                .å•ä½ = "åº¦"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "µç"
-                                .×´Ì¬ = "½ÓÊÕ"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ç”µ"
+                                .çŠ¶æ€ = "æ¥æ”¶"
                                 co = 3
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        ×Ô·¢µç
-                        If temp Like "*ÈÕ×Ô·¢µçÁ¿*" Then
+'                        è‡ªå‘ç”µ
+                        If temp Like "*æ—¥è‡ªå‘ç”µé‡*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "×Ô·¢µç"
-                                .µ¥Î» = "¶È"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "è‡ªå‘ç”µ"
+                                .å•ä½ = "åº¦"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "µç"
-                                .×´Ì¬ = "Éú²ú"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ç”µ"
+                                .çŠ¶æ€ = "ç”Ÿäº§"
                                 co = 3
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
                         End If
-'                        µçÏûºÄ
-                        If temp Like "*ÈÕºÄµçÁ¿*" Then
+'                        ç”µæ¶ˆè€—
+                        If temp Like "*æ—¥è€—ç”µé‡*" Then
                             With recordSC
-                                .ÈÕÆÚ = ÈÕÆÚ
-                                .Ãû³Æ = "µçÏûºÄ"
-                                .µ¥Î» = "¶È"
+                                .æ—¥æœŸ = æ—¥æœŸ
+                                .åç§° = "ç”µæ¶ˆè€—"
+                                .å•ä½ = "åº¦"
                                 co = 1
-                                .Êı¾İ = Cells(row, column + co).value
-                                .Àà±ğ = "µç"
-                                .×´Ì¬ = "ÏûºÄ"
+                                .æ•°æ® = Cells(row, column + co).value
+                                .ç±»åˆ« = "ç”µ"
+                                .çŠ¶æ€ = "æ¶ˆè€—"
                                 co = 3
-                                .ÔÂÀÛ = Cells(row, column + co).value
+                                .æœˆç´¯ = Cells(row, column + co).value
                                 co = 5
-                                .ÄêÀÛ = Cells(row, column + co).value
-                                .Êı¾İÔ´ = fname
+                                .å¹´ç´¯ = Cells(row, column + co).value
+                                .æ•°æ®æº = fname
                             End With
                             table.Add recordSC, ""
                             Set recordSC = Nothing
@@ -1803,123 +1794,123 @@ ErrorHandler:
     Debug.Print Err.Number & vbTab & Err.Description
     Resume Next
 End Sub
-'ÌîĞ´±í¸ñ
-Public Sub putData(ByVal ÈÕÆÚ As Date)
+'å¡«å†™è¡¨æ ¼
+Public Sub putData(ByVal æ—¥æœŸ As Date)
 On Error GoTo ErrorHandler
     Dim SQL, filter, filter2, filter3 As String
-    Dim ÔÂ³õ, Äê³õ As Date
-    ÔÂ³õ = DateSerial(Year(ÈÕÆÚ), Month(dÈÕÆÚ), 1)
-    Äê³õ = DateSerial(Year(ÈÕÆÚ), 1, 1)
-    filter = "ÈÕÆÚ = " & "'" & ÈÕÆÚ & "'"
-    filter2 = "ÈÕÆÚ between #" & ÔÂ³õ & "# and #" & ÈÕÆÚ & "#"
-    filter3 = "ÈÕÆÚ between #" & Äê³õ & "# and #" & ÈÕÆÚ & "#"
-'    Èë³§¼ÆÁ¿
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢  WHERE " & filter & " and Ãû³Æ='Èë³§¼ÆÁ¿' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='Èë³§¼ÆÁ¿' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='Èë³§¼ÆÁ¿' "
-'    ½õÌì»¯
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢  WHERE " & filter & " and Ãû³Æ='½õÌì»¯' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='½õÌì»¯' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='½õÌì»¯' "
-'    ¾«Ï¸»¯¹¤
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢  WHERE " & filter & " and Ãû³Æ='¾«Ï¸»¯¹¤' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='¾«Ï¸»¯¹¤' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='¾«Ï¸»¯¹¤' "
-'    ÎÛË®´¦Àí³§
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢  WHERE " & filter & " and Ãû³Æ='ÎÛË®´¦Àí³§' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='ÎÛË®´¦Àí³§' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='ÎÛË®´¦Àí³§' "
-'    ĞÂ°ÂÈ¼Æø
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢  WHERE " & filter & " and Ãû³Æ='ĞÂ°ÂÈ¼Æø' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='ĞÂ°ÂÈ¼Æø' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='ĞÂ°ÂÈ¼Æø' "
-'    ×ÔÓÃÆø
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='×ÔÓÃÆø' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='×ÔÓÃÆø' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='×ÔÓÃÆø' "
-'    ÇáÓÍ
-'    ÇáÓÍ¿â´æºÏ¼Æ
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='ÇáÓÍ¿â´æºÏ¼Æ' and µ¥Î»='¶Ö' "
-'    ÇáÓÍ±ÈÖØ
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='ÇáÓÍ±ÈÖØ' "
-'    ±ûÍé¹Ş¿â´æt
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='±ûÍé¹Ş¿â´æ' and µ¥Î»='¶Ö' "
+    Dim æœˆåˆ, å¹´åˆ As Date
+    æœˆåˆ = DateSerial(Year(æ—¥æœŸ), Month(dæ—¥æœŸ), 1)
+    å¹´åˆ = DateSerial(Year(æ—¥æœŸ), 1, 1)
+    filter = "æ—¥æœŸ = " & "'" & æ—¥æœŸ & "'"
+    filter2 = "æ—¥æœŸ between #" & æœˆåˆ & "# and #" & æ—¥æœŸ & "#"
+    filter3 = "æ—¥æœŸ between #" & å¹´åˆ & "# and #" & æ—¥æœŸ & "#"
+'    å…¥å‚è®¡é‡
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯  WHERE " & filter & " and åç§°='å…¥å‚è®¡é‡' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='å…¥å‚è®¡é‡' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='å…¥å‚è®¡é‡' "
+'    é”¦å¤©åŒ–
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯  WHERE " & filter & " and åç§°='é”¦å¤©åŒ–' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='é”¦å¤©åŒ–' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='é”¦å¤©åŒ–' "
+'    ç²¾ç»†åŒ–å·¥
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯  WHERE " & filter & " and åç§°='ç²¾ç»†åŒ–å·¥' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='ç²¾ç»†åŒ–å·¥' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='ç²¾ç»†åŒ–å·¥' "
+'    æ±¡æ°´å¤„ç†å‚
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯  WHERE " & filter & " and åç§°='æ±¡æ°´å¤„ç†å‚' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='æ±¡æ°´å¤„ç†å‚' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='æ±¡æ°´å¤„ç†å‚' "
+'    æ–°å¥¥ç‡ƒæ°”
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯  WHERE " & filter & " and åç§°='æ–°å¥¥ç‡ƒæ°”' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='æ–°å¥¥ç‡ƒæ°”' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='æ–°å¥¥ç‡ƒæ°”' "
+'    è‡ªç”¨æ°”
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='è‡ªç”¨æ°”' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='è‡ªç”¨æ°”' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='è‡ªç”¨æ°”' "
+'    è½»æ²¹
+'    è½»æ²¹åº“å­˜åˆè®¡
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='è½»æ²¹åº“å­˜åˆè®¡' and å•ä½='å¨' "
+'    è½»æ²¹æ¯”é‡
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='è½»æ²¹æ¯”é‡' "
+'    ä¸™çƒ·ç½åº“å­˜t
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='ä¸™çƒ·ç½åº“å­˜' and å•ä½='å¨' "
 '    V-642t
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='V-642' and µ¥Î»='¶Ö' "
-'    Òº»¯Æø¹Ş¿â´æt
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='Òº»¯Æø¹Ş¿â´æ' and µ¥Î»='¶Ö' "
-'    ÇáÌş¿â´æt
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='ÇáÌş¿â´æ' and µ¥Î»='¶Ö' "
-'    ¼×´¼ÏûºÄ
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='¼×´¼ÏûºÄ' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='¼×´¼ÏûºÄ' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='¼×´¼ÏûºÄ' "
-'    ÒÒ¶ş´¼Éú²ú
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='ÒÒ¶ş´¼»ØÊÕ' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='ÒÒ¶ş´¼»ØÊÕ' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='ÒÒ¶ş´¼»ØÊÕ' "
-'    ¿â´æË®t
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='¿â´æË®' and µ¥Î»='·½' "
-'    Íâ¹©Ë®
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='Íâ¹©Ë®' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='Íâ¹©Ë®' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='Íâ¹©Ë®' "
-'    Ë®ÏûºÄ
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='Ë®ÏûºÄ' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='Ë®ÏûºÄ' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='Ë®ÏûºÄ' "
-'    ×Ô²ÉË®
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='×Ô²ÉË®' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='×Ô²ÉË®' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='×Ô²ÉË®' "
-'    Íâ¹©µç
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='Íâ¹©µç' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='Íâ¹©µç' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='Íâ¹©µç' "
-'    µçÏûºÄ
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='µçÏûºÄ' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='µçÏûºÄ' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='µçÏûºÄ' "
-'    ×Ô·¢µç
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='×Ô·¢µç' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='×Ô·¢µç' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='×Ô·¢µç' "
-'   ÇáÓÍÉú²ú
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='ÇáÓÍ»ØÊÕÁ¿' and µ¥Î»='·½'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='ÇáÓÍ»ØÊÕÁ¿' and µ¥Î»='·½'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='ÇáÓÍ»ØÊÕÁ¿' and µ¥Î»='·½'"
-'    ±û¶¡ÍéÉú²ú
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='±û¶¡Íé»ØÊÕÁ¿' and µ¥Î»='·½' "
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='±û¶¡Íé»ØÊÕÁ¿' and µ¥Î»='·½'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='±û¶¡Íé»ØÊÕÁ¿' and µ¥Î»='·½'"
-'    JZ20-2ÌåÏµ½ÓÊÕ
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='JZ20-2ÌåÏµ' and ×´Ì¬='½ÓÊÕ'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='JZ20-2ÌåÏµ' and ×´Ì¬='½ÓÊÕ'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='JZ20-2ÌåÏµ' and ×´Ì¬='½ÓÊÕ'"
-'    JZ20-2ÌåÏµÍâÊä
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='JZ20-2ÌåÏµ' and ×´Ì¬='ÍâÊä'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='JZ20-2ÌåÏµ' and ×´Ì¬='ÍâÊä'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='JZ20-2ÌåÏµ' and ×´Ì¬='ÍâÊä'"
-'    JZ25-1SÌåÏµ½ÓÊÕ
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='JZ25-1SÌåÏµ' and ×´Ì¬='½ÓÊÕ'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='JZ25-1SÌåÏµ' and ×´Ì¬='½ÓÊÕ'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='JZ25-1SÌåÏµ' and ×´Ì¬='½ÓÊÕ'"
-'    JZ25-1SÌåÏµÍâÊä
-    SQL = "SELECT Êı¾İ FROM Éú²úĞÅÏ¢ WHERE " & filter & " and Ãû³Æ='JZ25-1SÌåÏµ' and ×´Ì¬='ÍâÊä'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÔÂÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter2 & " and Ãû³Æ='JZ25-1SÌåÏµ' and ×´Ì¬='ÍâÊä'"
-    SQL = "SELECT sum(Êı¾İ) as ¼ÆËãÄêÀÛ FROM Éú²úĞÅÏ¢ WHERE " & filter3 & " and Ãû³Æ='JZ25-1SÌåÏµ' and ×´Ì¬='ÍâÊä'"
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='V-642' and å•ä½='å¨' "
+'    æ¶²åŒ–æ°”ç½åº“å­˜t
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='æ¶²åŒ–æ°”ç½åº“å­˜' and å•ä½='å¨' "
+'    è½»çƒƒåº“å­˜t
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='è½»çƒƒåº“å­˜' and å•ä½='å¨' "
+'    ç”²é†‡æ¶ˆè€—
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='ç”²é†‡æ¶ˆè€—' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='ç”²é†‡æ¶ˆè€—' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='ç”²é†‡æ¶ˆè€—' "
+'    ä¹™äºŒé†‡ç”Ÿäº§
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='ä¹™äºŒé†‡å›æ”¶' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='ä¹™äºŒé†‡å›æ”¶' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='ä¹™äºŒé†‡å›æ”¶' "
+'    åº“å­˜æ°´t
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='åº“å­˜æ°´' and å•ä½='æ–¹' "
+'    å¤–ä¾›æ°´
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='å¤–ä¾›æ°´' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='å¤–ä¾›æ°´' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='å¤–ä¾›æ°´' "
+'    æ°´æ¶ˆè€—
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='æ°´æ¶ˆè€—' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='æ°´æ¶ˆè€—' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='æ°´æ¶ˆè€—' "
+'    è‡ªé‡‡æ°´
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='è‡ªé‡‡æ°´' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='è‡ªé‡‡æ°´' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='è‡ªé‡‡æ°´' "
+'    å¤–ä¾›ç”µ
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='å¤–ä¾›ç”µ' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='å¤–ä¾›ç”µ' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='å¤–ä¾›ç”µ' "
+'    ç”µæ¶ˆè€—
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='ç”µæ¶ˆè€—' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='ç”µæ¶ˆè€—' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='ç”µæ¶ˆè€—' "
+'    è‡ªå‘ç”µ
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='è‡ªå‘ç”µ' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='è‡ªå‘ç”µ' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='è‡ªå‘ç”µ' "
+'   è½»æ²¹ç”Ÿäº§
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='è½»æ²¹å›æ”¶é‡' and å•ä½='æ–¹'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='è½»æ²¹å›æ”¶é‡' and å•ä½='æ–¹'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='è½»æ²¹å›æ”¶é‡' and å•ä½='æ–¹'"
+'    ä¸™ä¸çƒ·ç”Ÿäº§
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='ä¸™ä¸çƒ·å›æ”¶é‡' and å•ä½='æ–¹' "
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='ä¸™ä¸çƒ·å›æ”¶é‡' and å•ä½='æ–¹'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='ä¸™ä¸çƒ·å›æ”¶é‡' and å•ä½='æ–¹'"
+'    JZ20-2ä½“ç³»æ¥æ”¶
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='JZ20-2ä½“ç³»' and çŠ¶æ€='æ¥æ”¶'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='JZ20-2ä½“ç³»' and çŠ¶æ€='æ¥æ”¶'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='JZ20-2ä½“ç³»' and çŠ¶æ€='æ¥æ”¶'"
+'    JZ20-2ä½“ç³»å¤–è¾“
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='JZ20-2ä½“ç³»' and çŠ¶æ€='å¤–è¾“'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='JZ20-2ä½“ç³»' and çŠ¶æ€='å¤–è¾“'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='JZ20-2ä½“ç³»' and çŠ¶æ€='å¤–è¾“'"
+'    JZ25-1Sä½“ç³»æ¥æ”¶
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='JZ25-1Sä½“ç³»' and çŠ¶æ€='æ¥æ”¶'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='JZ25-1Sä½“ç³»' and çŠ¶æ€='æ¥æ”¶'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='JZ25-1Sä½“ç³»' and çŠ¶æ€='æ¥æ”¶'"
+'    JZ25-1Sä½“ç³»å¤–è¾“
+    SQL = "SELECT æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter & " and åç§°='JZ25-1Sä½“ç³»' and çŠ¶æ€='å¤–è¾“'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—æœˆç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter2 & " and åç§°='JZ25-1Sä½“ç³»' and çŠ¶æ€='å¤–è¾“'"
+    SQL = "SELECT sum(æ•°æ®) as è®¡ç®—å¹´ç´¯ FROM ç”Ÿäº§ä¿¡æ¯ WHERE " & filter3 & " and åç§°='JZ25-1Sä½“ç³»' and çŠ¶æ€='å¤–è¾“'"
 ErrorHandler:
     Debug.Print Err.Number & vbTab & Err.Description
     Resume Next
 End Sub
-'×Ô¶¯¼ÆËã
-Public Function ×Ô¶¯¼ÆËã(ByRef quickInputData As Object) As Boolean
+'è‡ªåŠ¨è®¡ç®—
+Public Function è‡ªåŠ¨è®¡ç®—(ByRef quickInputData As Object) As Boolean
 On Error GoTo ErrorHandler
-    ×Ô¶¯¼ÆËã = True
-    Dim ÈÕÆÚ As Date
-    Dim È¥ÄêÄêÄ© As Date
-    Dim ½ñÄêÄêÄ© As Date
-    Dim Ê£ÓàÌìÊı As Integer
+    è‡ªåŠ¨è®¡ç®— = True
+    Dim æ—¥æœŸ As Date
+    Dim å»å¹´å¹´æœ« As Date
+    Dim ä»Šå¹´å¹´æœ« As Date
+    Dim å‰©ä½™å¤©æ•° As Integer
     Const rowLimit = 65535
     Const columnLimit = 256
     Dim row As Long
@@ -1927,346 +1918,346 @@ On Error GoTo ErrorHandler
     Dim lastRow As Long
     Dim lastColumn As Long
     Dim offset As Integer
-    lastRow = Worksheets("Ïà¹ØÊı¾İ").Range("a4:a65535").End(xlDown).row
-'    ĞèÒª×òÌì31Ìõ¼ÇÂ¼
+    lastRow = Worksheets("ç›¸å…³æ•°æ®").Range("a4:a65535").End(xlDown).row
+'    éœ€è¦æ˜¨å¤©31æ¡è®°å½•
 '    lastRow = 31
     lastColumn = 11
     Dim h As New help
     For row = 1 To lastRow
         For column = 1 To lastColumn
-            temp = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column).value
-'                ÌìÈ»Æø
-            If h.isMatch(".*Èë³§¼ÆÁ¿.*", temp) Then
+            temp = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column).value
+'                å¤©ç„¶æ°”
+            If h.isMatch(".*å…¥å‚è®¡é‡.*", temp) Then
                 offset = 3
-                [Èë³§¼ÆÁ¿ÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [Èë³§¼ÆÁ¿Êı¾İ]
+                [å…¥å‚è®¡é‡æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [å…¥å‚è®¡é‡æ•°æ®]
                 offset = 4
-                [Èë³§¼ÆÁ¿ÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [Èë³§¼ÆÁ¿Êı¾İ]
+                [å…¥å‚è®¡é‡å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [å…¥å‚è®¡é‡æ•°æ®]
             End If
             If h.isMatch(".*JZ202.*", temp) Then
                 offset = 3
-                [JZ202ÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ202Êı¾İ]
+                [JZ202æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ202æ•°æ®]
                 offset = 4
-                [JZ202ÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ202Êı¾İ]
+                [JZ202å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ202æ•°æ®]
             End If
             If h.isMatch(".*JZ251S.*", temp) Then
                 offset = 3
-                [JZ251SÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ251SÊı¾İ]
+                [JZ251Sæœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ251Sæ•°æ®]
                 offset = 4
-                [JZ251SÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ251SÊı¾İ]
+                [JZ251Så¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ251Sæ•°æ®]
             End If
-            If h.isMatch(".*½õÌì»¯.*", temp) Then
+            If h.isMatch(".*é”¦å¤©åŒ–.*", temp) Then
                 offset = 3
-                [½õÌì»¯ÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [½õÌì»¯Êı¾İ]
+                [é”¦å¤©åŒ–æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [é”¦å¤©åŒ–æ•°æ®]
                 offset = 4
-                [½õÌì»¯ÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [½õÌì»¯Êı¾İ]
+                [é”¦å¤©åŒ–å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [é”¦å¤©åŒ–æ•°æ®]
             End If
-            If temp = "¾«Ï¸»¯¹¤CNG" Then
+            If temp = "ç²¾ç»†åŒ–å·¥CNG" Then
                 offset = 3
                 Dim data As Variant
-                data = [¾«Ï¸»¯¹¤CNGÊı¾İ]
-                [¾«Ï¸»¯¹¤CNGÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [¾«Ï¸»¯¹¤CNGÊı¾İ]
+                data = [ç²¾ç»†åŒ–å·¥CNGæ•°æ®]
+                [ç²¾ç»†åŒ–å·¥CNGæœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ç²¾ç»†åŒ–å·¥CNGæ•°æ®]
                 offset = 4
-                [¾«Ï¸»¯¹¤CNGÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [¾«Ï¸»¯¹¤CNGÊı¾İ]
+                [ç²¾ç»†åŒ–å·¥CNGå¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ç²¾ç»†åŒ–å·¥CNGæ•°æ®]
             End If
-            If temp = "¾«Ï¸»¯¹¤" Then
+            If temp = "ç²¾ç»†åŒ–å·¥" Then
                 offset = 3
-                [¾«Ï¸»¯¹¤ÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [¾«Ï¸»¯¹¤Êı¾İ]
+                [ç²¾ç»†åŒ–å·¥æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ç²¾ç»†åŒ–å·¥æ•°æ®]
                 offset = 4
-                [¾«Ï¸»¯¹¤ÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [¾«Ï¸»¯¹¤Êı¾İ]
+                [ç²¾ç»†åŒ–å·¥å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ç²¾ç»†åŒ–å·¥æ•°æ®]
             End If
 
             
-            If h.isMatch(".*ÎÛË®´¦Àí³§.*", temp) Then
+            If h.isMatch(".*æ±¡æ°´å¤„ç†å‚.*", temp) Then
                 offset = 3
-                [ÎÛË®´¦Àí³§ÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [ÎÛË®´¦Àí³§Êı¾İ]
+                [æ±¡æ°´å¤„ç†å‚æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [æ±¡æ°´å¤„ç†å‚æ•°æ®]
                 offset = 4
-                [ÎÛË®´¦Àí³§ÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [ÎÛË®´¦Àí³§Êı¾İ]
+                [æ±¡æ°´å¤„ç†å‚å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [æ±¡æ°´å¤„ç†å‚æ•°æ®]
             End If
-            If h.isMatch(".*ĞÂ°ÂÈ¼Æø.*", temp) Then
+            If h.isMatch(".*æ–°å¥¥ç‡ƒæ°”.*", temp) Then
                 offset = 3
-                [ĞÂ°ÂÈ¼ÆøÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [ĞÂ°ÂÈ¼ÆøÊı¾İ]
+                [æ–°å¥¥ç‡ƒæ°”æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [æ–°å¥¥ç‡ƒæ°”æ•°æ®]
                 offset = 4
-                [ĞÂ°ÂÈ¼ÆøÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [ĞÂ°ÂÈ¼ÆøÊı¾İ]
+                [æ–°å¥¥ç‡ƒæ°”å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [æ–°å¥¥ç‡ƒæ°”æ•°æ®]
             End If
-            If h.isMatch(".*×ÔÓÃÆø.*", temp) Then
+            If h.isMatch(".*è‡ªç”¨æ°”.*", temp) Then
                 offset = 3
-                [×ÔÓÃÆøÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [×ÔÓÃÆøÊı¾İ]
+                [è‡ªç”¨æ°”æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [è‡ªç”¨æ°”æ•°æ®]
                 offset = 4
-                [×ÔÓÃÆøÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [×ÔÓÃÆøÊı¾İ]
+                [è‡ªç”¨æ°”å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [è‡ªç”¨æ°”æ•°æ®]
             End If
-            If temp Like "*JZ20-2ÌåÏµ*" And row = 28 Then
+            If temp Like "*JZ20-2ä½“ç³»*" And row = 28 Then
                 offset = 3
-                [JZ202ÌåÏµ½ÓÊÕÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ202ÌåÏµ½ÓÊÕÊı¾İ]
+                [JZ202ä½“ç³»æ¥æ”¶æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ202ä½“ç³»æ¥æ”¶æ•°æ®]
                 offset = 4
-                [JZ202ÌåÏµ½ÓÊÕÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ202ÌåÏµ½ÓÊÕÊı¾İ]
+                [JZ202ä½“ç³»æ¥æ”¶å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ202ä½“ç³»æ¥æ”¶æ•°æ®]
             End If
-            If temp Like "*JZ20-2ÌåÏµ*" And row = 29 Then
+            If temp Like "*JZ20-2ä½“ç³»*" And row = 29 Then
                 offset = 3
-                [JZ202ÌåÏµÍâÊäÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ202ÌåÏµÍâÊäÊı¾İ]
+                [JZ202ä½“ç³»å¤–è¾“æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ202ä½“ç³»å¤–è¾“æ•°æ®]
                 offset = 4
-                [JZ202ÌåÏµÍâÊäÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ202ÌåÏµÍâÊäÊı¾İ]
+                [JZ202ä½“ç³»å¤–è¾“å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ202ä½“ç³»å¤–è¾“æ•°æ®]
             End If
-            If temp Like "*JZ25-1SÌåÏµ*" And row = 30 Then
+            If temp Like "*JZ25-1Sä½“ç³»*" And row = 30 Then
                 offset = 3
-                [JZ251SÌåÏµ½ÓÊÕÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ251SÌåÏµ½ÓÊÕÊı¾İ]
+                [JZ251Sä½“ç³»æ¥æ”¶æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ251Sä½“ç³»æ¥æ”¶æ•°æ®]
                 offset = 4
-                [JZ251SÌåÏµ½ÓÊÕÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ251SÌåÏµ½ÓÊÕÊı¾İ]
+                [JZ251Sä½“ç³»æ¥æ”¶å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ251Sä½“ç³»æ¥æ”¶æ•°æ®]
             End If
-            If temp Like "*JZ25-1SÌåÏµ*" And row = 31 Then
+            If temp Like "*JZ25-1Sä½“ç³»*" And row = 31 Then
                 offset = 3
-                [JZ251SÌåÏµÍâÊäÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ251SÌåÏµÍâÊäÊı¾İ]
+                [JZ251Sä½“ç³»å¤–è¾“æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ251Sä½“ç³»å¤–è¾“æ•°æ®]
                 offset = 4
-                [JZ251SÌåÏµÍâÊäÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [JZ251SÌåÏµÍâÊäÊı¾İ]
+                [JZ251Sä½“ç³»å¤–è¾“å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [JZ251Sä½“ç³»å¤–è¾“æ•°æ®]
             End If
-'    ÇáÓÍ
-            If h.isMatch(".*ÇáÓÍ¿â´æ.*", temp) Then
+'    è½»æ²¹
+            If h.isMatch(".*è½»æ²¹åº“å­˜.*", temp) Then
                 offset = 2
-                [ÇáÓÍ»ØÊÕÁ¿t] = [ÇáÓÍ¿â´æºÏ¼Æt] + [ÇáÓÍ×°³µt] - Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value
-                If [ÇáÓÍ»ØÊÕÁ¿t] < 0 Then [ÇáÓÍ»ØÊÕÁ¿t] = 0
+                [è½»æ²¹å›æ”¶é‡t] = [è½»æ²¹åº“å­˜åˆè®¡t] + [è½»æ²¹è£…è½¦t] - Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value
+                If [è½»æ²¹å›æ”¶é‡t] < 0 Then [è½»æ²¹å›æ”¶é‡t] = 0
             End If
-            If 0 = [ÇáÓÍ±ÈÖØ] Then
+            If 0 = [è½»æ²¹æ¯”é‡] Then
                 Dim d
-                d = Worksheets("Éú²úÈÕ±¨").Cells(2, 1).value
-                MsgBox "Êı¾İ¿âÀïÃ»ÓĞÕÒµ½ " & d & " ÀïµÄÇáÓÍ±ÈÖØ,ÇëÔÚ ¿ìËÙÂ¼Èë ±íÀïÊäÈëÇáÓÍ±ÈÖØ£¡"
-                ×Ô¶¯¼ÆËã = False
+                d = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(2, 1).value
+                MsgBox "æ•°æ®åº“é‡Œæ²¡æœ‰æ‰¾åˆ° " & d & " é‡Œçš„è½»æ²¹æ¯”é‡,è¯·åœ¨ å¿«é€Ÿå½•å…¥ è¡¨é‡Œè¾“å…¥è½»æ²¹æ¯”é‡ï¼"
+                è‡ªåŠ¨è®¡ç®— = False
             Else
-                [ÇáÓÍ»ØÊÕÁ¿Êı¾İ] = [ÇáÓÍ»ØÊÕÁ¿t] / [ÇáÓÍ±ÈÖØ]
+                [è½»æ²¹å›æ”¶é‡æ•°æ®] = [è½»æ²¹å›æ”¶é‡t] / [è½»æ²¹æ¯”é‡]
             End If
-'    ±û¶¡Íé
-            If h.isMatch(".*±ûÍé¹Ş¿â´æ.*", temp) Then
-                Dim ×ò±ûÍé¿â´æ As Double
+'    ä¸™ä¸çƒ·
+            If h.isMatch(".*ä¸™çƒ·ç½åº“å­˜.*", temp) Then
+                Dim æ˜¨ä¸™çƒ·åº“å­˜ As Double
                 offset = 2
-                ×ò±ûÍé¿â´æ = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value
+                æ˜¨ä¸™çƒ·åº“å­˜ = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value
             End If
             If h.isMatch(".*V-642.*", temp) Then
-                Dim ×ò¶¡Íé¿â´æ As Double
+                Dim æ˜¨ä¸çƒ·åº“å­˜ As Double
                 offset = 2
-                ×ò¶¡Íé¿â´æ = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value
+                æ˜¨ä¸çƒ·åº“å­˜ = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value
             End If
-            If h.isMatch(".*Òº»¯Æø¹Ş¿â´æ.*", temp) Then
-                Dim ×òÒº»¯Æø¹Ş¿â´æ As Double
+            If h.isMatch(".*æ¶²åŒ–æ°”ç½åº“å­˜.*", temp) Then
+                Dim æ˜¨æ¶²åŒ–æ°”ç½åº“å­˜ As Double
                 offset = 2
-                ×òÒº»¯Æø¹Ş¿â´æ = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value
+                æ˜¨æ¶²åŒ–æ°”ç½åº“å­˜ = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value
             End If
-            If h.isMatch(".*ÇáÌş¿â´æ.*", temp) Then
-                Dim ×òÇáÌş¿â´æ As Double
+            If h.isMatch(".*è½»çƒƒåº“å­˜.*", temp) Then
+                Dim æ˜¨è½»çƒƒåº“å­˜ As Double
                 offset = 2
-                ×òÇáÌş¿â´æ = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value
+                æ˜¨è½»çƒƒåº“å­˜ = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value
             End If
-'    »¯Ñ§Ò©¼Á
-            If h.isMatch(".*¼×´¼ÏûºÄ.*", temp) Then
+'    åŒ–å­¦è¯å‰‚
+            If h.isMatch(".*ç”²é†‡æ¶ˆè€—.*", temp) Then
                 offset = 3
-                [¼×´¼ÏûºÄÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [¼×´¼ÏûºÄÊı¾İ]
+                [ç”²é†‡æ¶ˆè€—æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ç”²é†‡æ¶ˆè€—æ•°æ®]
                 offset = 4
-                [¼×´¼ÏûºÄÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [¼×´¼ÏûºÄÊı¾İ]
+                [ç”²é†‡æ¶ˆè€—å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ç”²é†‡æ¶ˆè€—æ•°æ®]
             End If
-            If h.isMatch(".*ÒÒ¶ş´¼»ØÊÕ.*", temp) Then
-                SQL = "select sum(Êı¾İ) as ÔÂÀÛ from Éú²úĞÅÏ¢ where ÈÕÆÚ between date_trunc('month','" & ÈÕÆÚ & "') and '" & ÈÕÆÚ & "' and Ãû³Æ='ÒÒ¶ş´¼»ØÊÕ' and µ¥Î»='·½' "
+            If h.isMatch(".*ä¹™äºŒé†‡å›æ”¶.*", temp) Then
+                SQL = "select sum(æ•°æ®) as æœˆç´¯ from ç”Ÿäº§ä¿¡æ¯ where æ—¥æœŸ between date_trunc('month','" & æ—¥æœŸ & "') and '" & æ—¥æœŸ & "' and åç§°='ä¹™äºŒé†‡å›æ”¶' and å•ä½='æ–¹' "
                 
                 offset = 3
-                [ÒÒ¶ş´¼»ØÊÕÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [ÒÒ¶ş´¼»ØÊÕÊı¾İ]
+                [ä¹™äºŒé†‡å›æ”¶æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ä¹™äºŒé†‡å›æ”¶æ•°æ®]
                 offset = 4
-                [ÒÒ¶ş´¼»ØÊÕÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [ÒÒ¶ş´¼»ØÊÕÊı¾İ]
+                [ä¹™äºŒé†‡å›æ”¶å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ä¹™äºŒé†‡å›æ”¶æ•°æ®]
             End If
-'    Ë®
-            If h.isMatch(".*Íâ¹©Ë®.*", temp) Then
+'    æ°´
+            If h.isMatch(".*å¤–ä¾›æ°´.*", temp) Then
                 offset = 3
-                [Íâ¹©Ë®ÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [Íâ¹©Ë®Êı¾İ]
+                [å¤–ä¾›æ°´æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [å¤–ä¾›æ°´æ•°æ®]
                 offset = 4
-                [Íâ¹©Ë®ÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [Íâ¹©Ë®Êı¾İ]
+                [å¤–ä¾›æ°´å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [å¤–ä¾›æ°´æ•°æ®]
             End If
-            If h.isMatch(".*×Ô²ÉË®.*", temp) Then
+            If h.isMatch(".*è‡ªé‡‡æ°´.*", temp) Then
                 offset = 3
-                [×Ô²ÉË®ÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [×Ô²ÉË®Êı¾İ]
+                [è‡ªé‡‡æ°´æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [è‡ªé‡‡æ°´æ•°æ®]
                 offset = 4
-                [×Ô²ÉË®ÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [×Ô²ÉË®Êı¾İ]
+                [è‡ªé‡‡æ°´å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [è‡ªé‡‡æ°´æ•°æ®]
             End If
-            If h.isMatch(".*¿â´æË®.*", temp) Then
-                Dim ×ò¿â´æË® As Double
+            If h.isMatch(".*åº“å­˜æ°´.*", temp) Then
+                Dim æ˜¨åº“å­˜æ°´ As Double
                 offset = 2
-                ×ò¿â´æË® = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value
+                æ˜¨åº“å­˜æ°´ = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value
             End If
-            If h.isMatch(".*Ë®ÏûºÄ.*", temp) Then
-                [Ë®ÏûºÄÊı¾İ] = ×ò¿â´æË® + [Íâ¹©Ë®Êı¾İ] + [×Ô²ÉË®Êı¾İ] - [¿â´æË®]
+            If h.isMatch(".*æ°´æ¶ˆè€—.*", temp) Then
+                [æ°´æ¶ˆè€—æ•°æ®] = æ˜¨åº“å­˜æ°´ + [å¤–ä¾›æ°´æ•°æ®] + [è‡ªé‡‡æ°´æ•°æ®] - [åº“å­˜æ°´]
                 offset = 3
-                [Ë®ÏûºÄÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [Ë®ÏûºÄÊı¾İ]
+                [æ°´æ¶ˆè€—æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [æ°´æ¶ˆè€—æ•°æ®]
                 offset = 4
-                [Ë®ÏûºÄÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [Ë®ÏûºÄÊı¾İ]
+                [æ°´æ¶ˆè€—å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [æ°´æ¶ˆè€—æ•°æ®]
             End If
-'    µç
-            If h.isMatch(".*Íâ¹©µç.*", temp) Then
+'    ç”µ
+            If h.isMatch(".*å¤–ä¾›ç”µ.*", temp) Then
                 offset = 3
-                [Íâ¹©µçÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [Íâ¹©µçÊı¾İ]
+                [å¤–ä¾›ç”µæœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [å¤–ä¾›ç”µæ•°æ®]
                 offset = 4
-                [Íâ¹©µçÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [Íâ¹©µçÊı¾İ]
+                [å¤–ä¾›ç”µå¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [å¤–ä¾›ç”µæ•°æ®]
             End If
-            If h.isMatch(".*×Ô·¢µç.*", temp) Then
+            If h.isMatch(".*è‡ªå‘ç”µ.*", temp) Then
                 offset = 3
-                [×Ô·¢µçÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [×Ô·¢µçÊı¾İ]
+                [è‡ªå‘ç”µæœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [è‡ªå‘ç”µæ•°æ®]
                 offset = 4
-                [×Ô·¢µçÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [×Ô·¢µçÊı¾İ]
+                [è‡ªå‘ç”µå¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [è‡ªå‘ç”µæ•°æ®]
             End If
-            If h.isMatch(".*µçÏûºÄ.*", temp) Then
-                [µçÏûºÄÊı¾İ] = [Íâ¹©µçÊı¾İ] + [×Ô·¢µçÊı¾İ]
+            If h.isMatch(".*ç”µæ¶ˆè€—.*", temp) Then
+                [ç”µæ¶ˆè€—æ•°æ®] = [å¤–ä¾›ç”µæ•°æ®] + [è‡ªå‘ç”µæ•°æ®]
                 offset = 3
-                [µçÏûºÄÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [µçÏûºÄÊı¾İ]
+                [ç”µæ¶ˆè€—æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ç”µæ¶ˆè€—æ•°æ®]
                 offset = 4
-                [µçÏûºÄÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [µçÏûºÄÊı¾İ]
+                [ç”µæ¶ˆè€—å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ç”µæ¶ˆè€—æ•°æ®]
             End If
-            If h.isMatch(".*ÇáÓÍ»ØÊÕÁ¿.*", temp) Then
+            If h.isMatch(".*è½»æ²¹å›æ”¶é‡.*", temp) Then
                 offset = 3
-                [ÇáÓÍ»ØÊÕÁ¿ÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [ÇáÓÍ»ØÊÕÁ¿Êı¾İ]
+                [è½»æ²¹å›æ”¶é‡æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [è½»æ²¹å›æ”¶é‡æ•°æ®]
                 offset = 4
-                [ÇáÓÍ»ØÊÕÁ¿ÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [ÇáÓÍ»ØÊÕÁ¿Êı¾İ]
+                [è½»æ²¹å›æ”¶é‡å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [è½»æ²¹å›æ”¶é‡æ•°æ®]
             End If
-            If h.isMatch(".*±û¶¡Íé»ØÊÕÁ¿.*", temp) Then
-'                Dim ×óÔÂÀÛ As Double
-'                Dim ×óÄêÀÛ As Double
-'                Dim Êı¾İ As Double
-'                Êı¾İ = [±û¶¡Íé»ØÊÕÁ¿Êı¾İ]
+            If h.isMatch(".*ä¸™ä¸çƒ·å›æ”¶é‡.*", temp) Then
+'                Dim å·¦æœˆç´¯ As Double
+'                Dim å·¦å¹´ç´¯ As Double
+'                Dim æ•°æ® As Double
+'                æ•°æ® = [ä¸™ä¸çƒ·å›æ”¶é‡æ•°æ®]
                  offset = 3
-'                 ×óÔÂÀÛ = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value
-                [±û¶¡Íé»ØÊÕÁ¿ÔÂÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [±û¶¡Íé»ØÊÕÁ¿Êı¾İ]
-'                Debug.Print Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value & "+" & [±û¶¡Íé»ØÊÕÁ¿Êı¾İ]
+'                 å·¦æœˆç´¯ = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value
+                [ä¸™ä¸çƒ·å›æ”¶é‡æœˆç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ä¸™ä¸çƒ·å›æ”¶é‡æ•°æ®]
+'                Debug.Print Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value & "+" & [ä¸™ä¸çƒ·å›æ”¶é‡æ•°æ®]
                 offset = 4
-'                ×óÄêÀÛ = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value
-                [±û¶¡Íé»ØÊÕÁ¿ÄêÀÛ] = Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value + [±û¶¡Íé»ØÊÕÁ¿Êı¾İ]
-'                Debug.Print Worksheets("Ïà¹ØÊı¾İ").Cells(row, column + offset).value & "+" & [±û¶¡Íé»ØÊÕÁ¿Êı¾İ]
+'                å·¦å¹´ç´¯ = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value
+                [ä¸™ä¸çƒ·å›æ”¶é‡å¹´ç´¯] = Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value + [ä¸™ä¸çƒ·å›æ”¶é‡æ•°æ®]
+'                Debug.Print Worksheets("ç›¸å…³æ•°æ®").Cells(row, column + offset).value & "+" & [ä¸™ä¸çƒ·å›æ”¶é‡æ•°æ®]
             End If
         Next column
     Next row
-    [±û¶¡Íé»ØÊÕÁ¿t] = [ÇáÌş¿â´æt] + [±ûÍé×°³µt] + [¶¡Íé×°³µt] + [Òº»¯Æø×°³µt] - ×òÇáÌş¿â´æ
-    If [±û¶¡Íé»ØÊÕÁ¿t] < 0 Then [±û¶¡Íé»ØÊÕÁ¿t] = 0
-    ÈÕÆÚ = Worksheets("Éú²úÈÕ±¨").Cells(2, 1).value
-'    ÅĞ¶ÏÔÂ³õ£¬Äê³õ
-        Dim dt As New Ê±¼ä
-'        Debug.Print "ÈòÄê" & vbTab & dt.IsLeap(ÈÕÆÚ)
-'        Debug.Print "ÔÂ³õ" & vbTab & dt.IsMonthHead(ÈÕÆÚ)
-'        Debug.Print "ÔÂÄ©" & vbTab & dt.IsMonthEnd(ÈÕÆÚ)
-'        Debug.Print "Äê³õ" & vbTab & dt.IsYearHead(ÈÕÆÚ)
-'        Debug.Print "ÄêÄ©" & vbTab & dt.IsYeadEnd(ÈÕÆÚ)
-'    ÔÂ³õ£¬ÔÂÀÛÖØ×ö
-    If dt.IsMonthHead(ÈÕÆÚ) Then
-'    ÌìÈ»Æø
-        [Èë³§¼ÆÁ¿ÔÂÀÛ] = [Èë³§¼ÆÁ¿Êı¾İ]
-        [½õÌì»¯ÔÂÀÛ] = [½õÌì»¯Êı¾İ]
-        [ĞÂ°ÂÈ¼ÆøÔÂÀÛ] = [ĞÂ°ÂÈ¼ÆøÊı¾İ]
-        [¾«Ï¸»¯¹¤CNGÔÂÀÛ] = [¾«Ï¸»¯¹¤CNGÊı¾İ]
-        [¾«Ï¸»¯¹¤ÔÂÀÛ] = [¾«Ï¸»¯¹¤Êı¾İ]
-        [ÎÛË®´¦Àí³§ÔÂÀÛ] = [ÎÛË®´¦Àí³§Êı¾İ]
-        [×ÔÓÃÆøÔÂÀÛ] = [×ÔÓÃÆøÊı¾İ]
-        [JZ202ÌåÏµ½ÓÊÕÔÂÀÛ] = [JZ202ÌåÏµ½ÓÊÕÊı¾İ]
-        [JZ251SÌåÏµ½ÓÊÕÔÂÀÛ] = [JZ251SÌåÏµ½ÓÊÕÊı¾İ]
-        [JZ202ÌåÏµÍâÊäÔÂÀÛ] = [JZ202ÌåÏµÍâÊäÊı¾İ]
-        [JZ251SÌåÏµÍâÊäÔÂÀÛ] = [JZ251SÌåÏµÍâÊäÊı¾İ]
-'    »¯Ñ§Ò©¼Á
-        [¼×´¼ÏûºÄÔÂÀÛ] = [¼×´¼ÏûºÄÊı¾İ]
-        [ÒÒ¶ş´¼»ØÊÕÔÂÀÛ] = [ÒÒ¶ş´¼»ØÊÕÊı¾İ]
-'    Ë®
-        [Íâ¹©Ë®ÔÂÀÛ] = [Íâ¹©Ë®Êı¾İ]
-        [×Ô²ÉË®ÔÂÀÛ] = [×Ô²ÉË®Êı¾İ]
-        [Ë®ÏûºÄÔÂÀÛ] = [Ë®ÏûºÄÊı¾İ]
-'    µç
-        [Íâ¹©µçÔÂÀÛ] = [Íâ¹©µçÊı¾İ]
-        [×Ô·¢µçÔÂÀÛ] = [×Ô·¢µçÊı¾İ]
-        [µçÏûºÄÔÂÀÛ] = [µçÏûºÄÊı¾İ]
-'     ²úÆ·
-        [ÇáÓÍ»ØÊÕÁ¿ÔÂÀÛ] = [ÇáÓÍ»ØÊÕÁ¿Êı¾İ]
-        [±û¶¡Íé»ØÊÕÁ¿ÔÂÀÛ] = [±û¶¡Íé»ØÊÕÁ¿Êı¾İ]
+    [ä¸™ä¸çƒ·å›æ”¶é‡t] = [è½»çƒƒåº“å­˜t] + [ä¸™çƒ·è£…è½¦t] + [ä¸çƒ·è£…è½¦t] + [æ¶²åŒ–æ°”è£…è½¦t] - æ˜¨è½»çƒƒåº“å­˜
+    If [ä¸™ä¸çƒ·å›æ”¶é‡t] < 0 Then [ä¸™ä¸çƒ·å›æ”¶é‡t] = 0
+    æ—¥æœŸ = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(2, 1).value
+'    åˆ¤æ–­æœˆåˆï¼Œå¹´åˆ
+        Dim dt As New æ—¶é—´
+'        Debug.Print "é—°å¹´" & vbTab & dt.IsLeap(æ—¥æœŸ)
+'        Debug.Print "æœˆåˆ" & vbTab & dt.IsMonthHead(æ—¥æœŸ)
+'        Debug.Print "æœˆæœ«" & vbTab & dt.IsMonthEnd(æ—¥æœŸ)
+'        Debug.Print "å¹´åˆ" & vbTab & dt.IsYearHead(æ—¥æœŸ)
+'        Debug.Print "å¹´æœ«" & vbTab & dt.IsYeadEnd(æ—¥æœŸ)
+'    æœˆåˆï¼Œæœˆç´¯é‡åš
+    If dt.IsMonthHead(æ—¥æœŸ) Then
+'    å¤©ç„¶æ°”
+        [å…¥å‚è®¡é‡æœˆç´¯] = [å…¥å‚è®¡é‡æ•°æ®]
+        [é”¦å¤©åŒ–æœˆç´¯] = [é”¦å¤©åŒ–æ•°æ®]
+        [æ–°å¥¥ç‡ƒæ°”æœˆç´¯] = [æ–°å¥¥ç‡ƒæ°”æ•°æ®]
+        [ç²¾ç»†åŒ–å·¥CNGæœˆç´¯] = [ç²¾ç»†åŒ–å·¥CNGæ•°æ®]
+        [ç²¾ç»†åŒ–å·¥æœˆç´¯] = [ç²¾ç»†åŒ–å·¥æ•°æ®]
+        [æ±¡æ°´å¤„ç†å‚æœˆç´¯] = [æ±¡æ°´å¤„ç†å‚æ•°æ®]
+        [è‡ªç”¨æ°”æœˆç´¯] = [è‡ªç”¨æ°”æ•°æ®]
+        [JZ202ä½“ç³»æ¥æ”¶æœˆç´¯] = [JZ202ä½“ç³»æ¥æ”¶æ•°æ®]
+        [JZ251Sä½“ç³»æ¥æ”¶æœˆç´¯] = [JZ251Sä½“ç³»æ¥æ”¶æ•°æ®]
+        [JZ202ä½“ç³»å¤–è¾“æœˆç´¯] = [JZ202ä½“ç³»å¤–è¾“æ•°æ®]
+        [JZ251Sä½“ç³»å¤–è¾“æœˆç´¯] = [JZ251Sä½“ç³»å¤–è¾“æ•°æ®]
+'    åŒ–å­¦è¯å‰‚
+        [ç”²é†‡æ¶ˆè€—æœˆç´¯] = [ç”²é†‡æ¶ˆè€—æ•°æ®]
+        [ä¹™äºŒé†‡å›æ”¶æœˆç´¯] = [ä¹™äºŒé†‡å›æ”¶æ•°æ®]
+'    æ°´
+        [å¤–ä¾›æ°´æœˆç´¯] = [å¤–ä¾›æ°´æ•°æ®]
+        [è‡ªé‡‡æ°´æœˆç´¯] = [è‡ªé‡‡æ°´æ•°æ®]
+        [æ°´æ¶ˆè€—æœˆç´¯] = [æ°´æ¶ˆè€—æ•°æ®]
+'    ç”µ
+        [å¤–ä¾›ç”µæœˆç´¯] = [å¤–ä¾›ç”µæ•°æ®]
+        [è‡ªå‘ç”µæœˆç´¯] = [è‡ªå‘ç”µæ•°æ®]
+        [ç”µæ¶ˆè€—æœˆç´¯] = [ç”µæ¶ˆè€—æ•°æ®]
+'     äº§å“
+        [è½»æ²¹å›æ”¶é‡æœˆç´¯] = [è½»æ²¹å›æ”¶é‡æ•°æ®]
+        [ä¸™ä¸çƒ·å›æ”¶é‡æœˆç´¯] = [ä¸™ä¸çƒ·å›æ”¶é‡æ•°æ®]
     End If
-'    Äê³õ , ÄêÀÛÖØ×ö
-    If dt.IsYearHead(ÈÕÆÚ) Then
-'    ÌìÈ»Æø
-        [Èë³§¼ÆÁ¿ÄêÀÛ] = [Èë³§¼ÆÁ¿Êı¾İ]
-        [½õÌì»¯ÄêÀÛ] = [½õÌì»¯Êı¾İ]
-        [ĞÂ°ÂÈ¼ÆøÄêÀÛ] = [ĞÂ°ÂÈ¼ÆøÊı¾İ]
-        [¾«Ï¸»¯¹¤ÄêÀÛ] = [¾«Ï¸»¯¹¤Êı¾İ]
-        [¾«Ï¸»¯¹¤CNGÄêÀÛ] = [¾«Ï¸»¯¹¤CNGÊı¾İ]
-        [ÎÛË®´¦Àí³§ÄêÀÛ] = [ÎÛË®´¦Àí³§Êı¾İ]
-        [×ÔÓÃÆøÄêÀÛ] = [×ÔÓÃÆøÊı¾İ]
-        [JZ202ÌåÏµ½ÓÊÕÄêÀÛ] = [JZ202ÌåÏµ½ÓÊÕÊı¾İ]
-        [JZ251SÌåÏµ½ÓÊÕÄêÀÛ] = [JZ251SÌåÏµ½ÓÊÕÊı¾İ]
-        [JZ202ÌåÏµÍâÊäÄêÀÛ] = [JZ202ÌåÏµÍâÊäÊı¾İ]
-        [JZ251SÌåÏµÍâÊäÄêÀÛ] = [JZ251SÌåÏµÍâÊäÊı¾İ]
-'    »¯Ñ§Ò©¼Á
-        [¼×´¼ÏûºÄÄêÀÛ] = [¼×´¼ÏûºÄÊı¾İ]
-        [ÒÒ¶ş´¼»ØÊÕÄêÀÛ] = [ÒÒ¶ş´¼»ØÊÕÊı¾İ]
-'    Ë®
-        [Íâ¹©Ë®ÄêÀÛ] = [Íâ¹©Ë®Êı¾İ]
-        [×Ô²ÉË®ÄêÀÛ] = [×Ô²ÉË®Êı¾İ]
-        [Ë®ÏûºÄÄêÀÛ] = [Ë®ÏûºÄÊı¾İ]
-'    µç
-        [Íâ¹©µçÄêÀÛ] = [Íâ¹©µçÊı¾İ]
-        [×Ô·¢µçÄêÀÛ] = [×Ô·¢µçÊı¾İ]
-        [µçÏûºÄÄêÀÛ] = [µçÏûºÄÊı¾İ]
-'     ²úÆ·
-        [ÇáÓÍ»ØÊÕÁ¿ÄêÀÛ] = [ÇáÓÍ»ØÊÕÁ¿Êı¾İ]
-        [±û¶¡Íé»ØÊÕÁ¿ÄêÀÛ] = [±û¶¡Íé»ØÊÕÁ¿Êı¾İ]
+'    å¹´åˆ , å¹´ç´¯é‡åš
+    If dt.IsYearHead(æ—¥æœŸ) Then
+'    å¤©ç„¶æ°”
+        [å…¥å‚è®¡é‡å¹´ç´¯] = [å…¥å‚è®¡é‡æ•°æ®]
+        [é”¦å¤©åŒ–å¹´ç´¯] = [é”¦å¤©åŒ–æ•°æ®]
+        [æ–°å¥¥ç‡ƒæ°”å¹´ç´¯] = [æ–°å¥¥ç‡ƒæ°”æ•°æ®]
+        [ç²¾ç»†åŒ–å·¥å¹´ç´¯] = [ç²¾ç»†åŒ–å·¥æ•°æ®]
+        [ç²¾ç»†åŒ–å·¥CNGå¹´ç´¯] = [ç²¾ç»†åŒ–å·¥CNGæ•°æ®]
+        [æ±¡æ°´å¤„ç†å‚å¹´ç´¯] = [æ±¡æ°´å¤„ç†å‚æ•°æ®]
+        [è‡ªç”¨æ°”å¹´ç´¯] = [è‡ªç”¨æ°”æ•°æ®]
+        [JZ202ä½“ç³»æ¥æ”¶å¹´ç´¯] = [JZ202ä½“ç³»æ¥æ”¶æ•°æ®]
+        [JZ251Sä½“ç³»æ¥æ”¶å¹´ç´¯] = [JZ251Sä½“ç³»æ¥æ”¶æ•°æ®]
+        [JZ202ä½“ç³»å¤–è¾“å¹´ç´¯] = [JZ202ä½“ç³»å¤–è¾“æ•°æ®]
+        [JZ251Sä½“ç³»å¤–è¾“å¹´ç´¯] = [JZ251Sä½“ç³»å¤–è¾“æ•°æ®]
+'    åŒ–å­¦è¯å‰‚
+        [ç”²é†‡æ¶ˆè€—å¹´ç´¯] = [ç”²é†‡æ¶ˆè€—æ•°æ®]
+        [ä¹™äºŒé†‡å›æ”¶å¹´ç´¯] = [ä¹™äºŒé†‡å›æ”¶æ•°æ®]
+'    æ°´
+        [å¤–ä¾›æ°´å¹´ç´¯] = [å¤–ä¾›æ°´æ•°æ®]
+        [è‡ªé‡‡æ°´å¹´ç´¯] = [è‡ªé‡‡æ°´æ•°æ®]
+        [æ°´æ¶ˆè€—å¹´ç´¯] = [æ°´æ¶ˆè€—æ•°æ®]
+'    ç”µ
+        [å¤–ä¾›ç”µå¹´ç´¯] = [å¤–ä¾›ç”µæ•°æ®]
+        [è‡ªå‘ç”µå¹´ç´¯] = [è‡ªå‘ç”µæ•°æ®]
+        [ç”µæ¶ˆè€—å¹´ç´¯] = [ç”µæ¶ˆè€—æ•°æ®]
+'     äº§å“
+        [è½»æ²¹å›æ”¶é‡å¹´ç´¯] = [è½»æ²¹å›æ”¶é‡æ•°æ®]
+        [ä¸™ä¸çƒ·å›æ”¶é‡å¹´ç´¯] = [ä¸™ä¸çƒ·å›æ”¶é‡æ•°æ®]
 
     End If
     For row = 1 To lastRow
         For column = 1 To lastColumn
-            temp = Worksheets("Éú²úÈÕ±¨").Cells(row, column).value
-            If h.isMatch(".*ºùÂ«µºÌìÈ»ÆøÖÕ¶Ë³§Éú²úÈÕ±¨.*", temp) Then
+            temp = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column).value
+            If h.isMatch(".*è‘«èŠ¦å²›å¤©ç„¶æ°”ç»ˆç«¯å‚ç”Ÿäº§æ—¥æŠ¥.*", temp) Then
                 offset = 1
-                ÈÕÆÚ = Worksheets("Éú²úÈÕ±¨").Cells(row + offset, column).value
-                È¥ÄêÄêÄ© = DateSerial(Year(ÈÕÆÚ) - 1, 12, 31)
-                ½ñÄêÄêÄ© = DateSerial(Year(ÈÕÆÚ), 12, 31)
-                Ê£ÓàÌìÊı = DateDiff("d", ÈÕÆÚ, ½ñÄêÄêÄ©)
+                æ—¥æœŸ = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + offset, column).value
+                å»å¹´å¹´æœ« = DateSerial(Year(æ—¥æœŸ) - 1, 12, 31)
+                ä»Šå¹´å¹´æœ« = DateSerial(Year(æ—¥æœŸ), 12, 31)
+                å‰©ä½™å¤©æ•° = DateDiff("d", æ—¥æœŸ, ä»Šå¹´å¹´æœ«)
             End If
-            If h.isMatch(".*½ø¶È±È.*", temp) Then
+            If h.isMatch(".*è¿›åº¦æ¯”.*", temp) Then
                 offset = 1
-                Worksheets("Éú²úÈÕ±¨").Cells(row + offset, column).value = (ÈÕÆÚ - È¥ÄêÄêÄ©) / (½ñÄêÄêÄ© - È¥ÄêÄêÄ©) * 100
+                Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + offset, column).value = (æ—¥æœŸ - å»å¹´å¹´æœ«) / (ä»Šå¹´å¹´æœ« - å»å¹´å¹´æœ«) * 100
                 offset = 2
-                Worksheets("Éú²úÈÕ±¨").Cells(row + offset, column).value = (ÈÕÆÚ - È¥ÄêÄêÄ©) / (½ñÄêÄêÄ© - È¥ÄêÄêÄ©) * 100
+                Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + offset, column).value = (æ—¥æœŸ - å»å¹´å¹´æœ«) / (ä»Šå¹´å¹´æœ« - å»å¹´å¹´æœ«) * 100
                 offset = 3
-                Worksheets("Éú²úÈÕ±¨").Cells(row + offset, column).value = (ÈÕÆÚ - È¥ÄêÄêÄ©) / (½ñÄêÄêÄ© - È¥ÄêÄêÄ©) * 100
+                Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + offset, column).value = (æ—¥æœŸ - å»å¹´å¹´æœ«) / (ä»Šå¹´å¹´æœ« - å»å¹´å¹´æœ«) * 100
             End If
-            If h.isMatch(".*½ñºóĞèÈÕ²ú.*", temp) Then
-                Debug.Print "Ô­Ê£ÓàÌìÊı:" & Ê£ÓàÌìÊı
-'                Ê£ÓàÌìÊı = Ê£ÓàÌìÊı - quickInputData("Í£²úÌìÊı")
-                Ê£ÓàÌìÊı = quickInputData("Ê£ÓàÌìÊı")
-                Debug.Print "Ê£ÓàÌìÊı:" & Ê£ÓàÌìÊı
+            If h.isMatch(".*ä»Šåéœ€æ—¥äº§.*", temp) Then
+                Debug.Print "åŸå‰©ä½™å¤©æ•°:" & å‰©ä½™å¤©æ•°
+'                å‰©ä½™å¤©æ•° = å‰©ä½™å¤©æ•° - quickInputData("åœäº§å¤©æ•°")
+                å‰©ä½™å¤©æ•° = quickInputData("å‰©ä½™å¤©æ•°")
+                Debug.Print "å‰©ä½™å¤©æ•°:" & å‰©ä½™å¤©æ•°
                 offset = 1
-                temp = ([ÌìÈ»ÆøÄê¶ÈÅä²ú] - [×ÜÍâÊäÆøÁ¿ÄêÀÛ]) / Ê£ÓàÌìÊı
-                Worksheets("Éú²úÈÕ±¨").Cells(row + offset, column).value = temp
+                temp = ([å¤©ç„¶æ°”å¹´åº¦é…äº§] - [æ€»å¤–è¾“æ°”é‡å¹´ç´¯]) / å‰©ä½™å¤©æ•°
+                Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + offset, column).value = temp
                 offset = 2
-                temp = ([ÇáÓÍÄê¶ÈÅä²ú] - [ÇáÓÍ»ØÊÕÁ¿ÄêÀÛ]) / Ê£ÓàÌìÊı
-                Worksheets("Éú²úÈÕ±¨").Cells(row + offset, column).value = temp
+                temp = ([è½»æ²¹å¹´åº¦é…äº§] - [è½»æ²¹å›æ”¶é‡å¹´ç´¯]) / å‰©ä½™å¤©æ•°
+                Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + offset, column).value = temp
                 offset = 3
-                temp = ([±û¶¡ÍéÄê¶ÈÅä²ú] - [±û¶¡Íé»ØÊÕÁ¿ÄêÀÛ]) / Ê£ÓàÌìÊı
-                Worksheets("Éú²úÈÕ±¨").Cells(row + offset, column).value = temp
+                temp = ([ä¸™ä¸çƒ·å¹´åº¦é…äº§] - [ä¸™ä¸çƒ·å›æ”¶é‡å¹´ç´¯]) / å‰©ä½™å¤©æ•°
+                Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + offset, column).value = temp
             End If
         Next column
     Next row
-    If True = Ã»ÕÒµ½ÇáÓÍ±ÈÖØ Then
-        Worksheets("¿ìËÙÂ¼Èë").Select
+    If True = æ²¡æ‰¾åˆ°è½»æ²¹æ¯”é‡ Then
+        Worksheets("å¿«é€Ÿå½•å…¥").Select
         Range("C23").Select
     End If
-'    ÒÒ¶ş´¼Å¨¶ÈÎªÁãÔò²»Ìî
-    If 0 = [ÒÒ¶ş´¼Å¨¶È] Then
-        [ÒÒ¶ş´¼Å¨¶È].ClearContents
+'    ä¹™äºŒé†‡æµ“åº¦ä¸ºé›¶åˆ™ä¸å¡«
+    If 0 = [ä¹™äºŒé†‡æµ“åº¦] Then
+        [ä¹™äºŒé†‡æµ“åº¦].ClearContents
     End If
 ErrorHandler:
     Debug.Print Err.Number & vbTab & Err.Description
 '    Resume Next
 End Function
-'É¾³ıÃû³Æ
+'åˆ é™¤åç§°
 Public Sub eraseName()
     Dim nms
     Set nms = ActiveWorkbook.names
 '    Set wks = Worksheets(1)
     Dim temp
-'    Debug.Print "·¢ÏÖ " & nms.count & " ¸öÃû³Æ."
+'    Debug.Print "å‘ç° " & nms.count & " ä¸ªåç§°."
     For Each temp In nms
-        Debug.Print "É¾³ıÃû³Æ£Û" & temp.name & "£İ " & temp.RefersToRange.Address
+        Debug.Print "åˆ é™¤åç§°ï¼»" & temp.name & "ï¼½ " & temp.RefersToRange.Address
         ActiveWorkbook.names(temp.name).Delete
     Next
 End Sub
-'ÅúÁ¿µ¼Èëµ½Éú²úĞÅÏ¢±í
+'æ‰¹é‡å¯¼å…¥åˆ°ç”Ÿäº§ä¿¡æ¯è¡¨
 Public Sub batchIntoDB()
     On Error Resume Next
-    Dim F As New ÎÄ¼şÄ¿Â¼
+    Dim F As New æ–‡ä»¶ç›®å½•
     Dim backupDir As String
     backupDir = F.pathSelect
     If "" = backupDir Then
@@ -2280,14 +2271,254 @@ Public Sub batchIntoDB()
     Dim temp
     Dim table As Object
     Set table = CreateObject("Scripting.Dictionary")
-    Dim SC As New Éú²úÈÕ±¨
+    Dim SC As New ç”Ÿäº§æ—¥æŠ¥
     For Each temp In fileList.Keys
         Call SC.getValue(temp, table)
     Next temp
     Dim csvFile As String
-    csvFile = ThisWorkbook.path & Application.PathSeparator & "Éú²úĞÅÏ¢.csv"
+    csvFile = ThisWorkbook.path & Application.PathSeparator & "ç”Ÿäº§ä¿¡æ¯.csv"
     Call scxx.saveCSV(csvFile, table)
-    Dim scxx As New Éú²úĞÅÏ¢
+    Dim scxx As New ç”Ÿäº§ä¿¡æ¯
     Call scxx.PushTableToDatabase(table)
 End Sub
-
+' è·å¾—å®šä½è¡¨
+Sub getLocationTable(ByRef data As Object)
+    On Error GoTo ErrorHandler
+    Dim row, column, lastRow, lastColumn, ro, co, i As Long
+    Dim temp, arr, n, names, name, value As Variant
+    Dim flag As String
+    flag = "è‘«èŠ¦å²›å¤©ç„¶æ°”ç»ˆç«¯å‚ç”Ÿäº§æ—¥æŠ¥"
+    arr = Array("å¤©ç„¶æ°”", "è½»æ²¹", "ä¸™ä¸çƒ·")
+    Dim h As New help
+    sheetName = "ç”Ÿäº§æ—¥æŠ¥"
+    Worksheets(sheetName).Select
+    lastRow = Worksheets(sheetName).UsedRange.Rows.count
+    lastColumn = Worksheets(sheetName).UsedRange.Columns.count
+    names = Array("ç¨³å®šåŒº", "å…¥å‚è®¡é‡", "é”¦å¤©åŒ–", "ç²¾ç»†åŒ–å·¥", "ç²¾ç»†åŒ–å·¥CNG", "æ±¡æ°´å¤„ç†å‚", "æ–°å¥¥ç‡ƒæ°”", "è‡ªç”¨æ°”", "æ”¾ç©ºæ°”", "æ€»äº§æ°”é‡", "æ€»å¤–è¾“æ°”é‡")
+    For row = 1 To lastRow
+        ro=0
+        For column = 1 To lastColumn
+            temp = Worksheets(sheetName).Cells(row, column).value
+            co=0
+            If h.isString(temp) Then
+                temp=trim(temp)
+                If h.isMatch(flag, temp) Then
+                    ro =1
+                    name = "æ—¥æœŸ"
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("å¹´æ—¶é—´", temp) Then
+                    For ro = 1 To 3
+                        name = "å¹´æ—¶é—´è¿›åº¦æ¯”"
+                        data(name)=Array(row+ro,column+co)
+                    Next ro
+                End If
+                If h.isMatch("[æœˆå¹´]åº¦é…äº§", temp) Then
+                    For i = 0 To UBound(arr)
+                        ro = i + 1
+                        If h.isMatch("å¹´", temp) Then
+                            name = "å¹´é…äº§" + arr(i) + "æ–¹"
+                        Else
+                            name = "æœˆé…äº§" + arr(i) + "æ–¹"
+                        End If
+                        data(name)=Array(row+ro,column+co)
+                    Next i
+                End If
+                If h.isMatch("[æœˆå¹´]åº¦ç´¯è®¡", temp) Then
+                    For i = 0 To UBound(arr)
+                        ro = i + 1
+                        If h.isMatch("å¹´", temp) Then
+                            name = "å¹´ç´¯" + arr(i) + "æ–¹"
+                        Else
+                            name = "æœˆç´¯" + arr(i) + "æ–¹"
+                        End If
+                        data(name)=Array(row+ro,column+co)
+                    Next i
+                End If
+                If h.isMatch("ä»Šåéœ€æ—¥äº§", temp) Then
+                    For i = 0 To UBound(arr)
+                        ro = i + 1
+                        name = "ä»Šåéœ€æ—¥äº§" + arr(i) + "æ–¹"
+                        data(name)=Array(row+ro,column+co)
+                    Next i
+                End If
+                For Each n In names
+                    If h.isMatch(n, temp) Then
+                        If h.isMatch("(ç¨³å®šåŒº)|(å…¥å‚è®¡é‡)", n) Then
+                            co = 1
+                            name = n + "æ–¹"
+                            value = data(name)
+                            data(name)=Array(row+ro,column+co)
+                            co = 3
+                            name = "æœˆç´¯" + n + "æ–¹"
+                            data(name)=Array(row+ro,column+co)
+                            co = 4
+                            name = "å¹´ç´¯" + n + "æ–¹"
+                            data(name)=Array(row+ro,column+co)
+                        End If
+                        If h.isMatch("(é”¦å¤©åŒ–)|(ç²¾ç»†åŒ–å·¥)|(ç²¾ç»†åŒ–å·¥CNG)|(æ±¡æ°´å¤„ç†å‚)|(æ–°å¥¥ç‡ƒæ°”)|(è‡ªç”¨æ°”)|(æ”¾ç©ºæ°”)", n) Then
+                            co = 1
+                            name = n + "æ–¹"
+                            value = data(name)
+                            If h.isMatch("(æ–°å¥¥ç‡ƒæ°”)|(è‡ªç”¨æ°”)|(æ”¾ç©ºæ°”)", n) Then
+                                co = 2
+                            End If
+                            data(name)=Array(row+ro,column+co)
+                            co = 4
+                            name = "æœˆç´¯" + n + "æ–¹"
+                             data(name)=Array(row+ro,column+co)
+                            co = 5
+                            name = "å¹´ç´¯" + n + "æ–¹"
+                              data(name)=Array(row+ro,column+co)
+                        End If
+                    End If
+                Next n
+                If h.isMatch("(æµ·ç®¡æ¥æ¶²å«æ°´)|(æµ·ç®¡MEGæµ“åº¦)|(æµ·ç®¡å‡ºå£å‡ç‚¹)|(æµ·ç®¡å‡ºå£PHå€¼)", temp) Then
+                    co = 1
+                    n = unitConvert(temp)
+                    name = "ä¸Šåˆ" + n
+                    data(name)=Array(row+ro,column+co)
+                    co = 2
+                    name = "ä¸‹åˆ" + n
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("æµ·ç®¡è¿›/å‡ºå£å‹åŠ›MPa", temp) Then
+                    co = 1
+                                                       
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("æµ·ç®¡è¿›/å‡ºå£æ¸©åº¦â„ƒ", temp) Then
+                    co = 1
+                                                       
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("(JZ20-2å‡ææ²¹)|(JZ20-2è½»æ²¹)", temp) Then
+                    co = 1
+                    name = unitConvert(temp)
+                                                       
+                    data(name)=Array(row+ro,column+co)
+                    co = 2
+                    name = h.search("(JZ20-2å‡ææ²¹)|(JZ20-2è½»æ²¹)", name)
+                    name = name + "å¯†åº¦å¨/ç«‹æ–¹ç±³"
+                                                       
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("(è½»æ²¹å›æ”¶é‡)|(é¥±å’Œè’¸æ±½å‹)|(å¤–è¾“å‡ç‚¹)|(å¤–è¾“PHå€¼)", temp) Then
+                    ro = 1
+                    
+                    name = h.replace(name, "m3", "æ–¹")
+                    name = h.replace(name, "t", "å¨")
+                    name = h.replace(name, "KPa", "åƒå¸•")
+                    name = h.replace(name, "â„ƒ", "æ‘„æ°åº¦")                                  
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("V-6[34][123][ABC]{0,1}", temp) Then
+                    ro = 1
+                    name = h.search("V-6[34][123][ABC]{0,1}", temp) + "ç±³"
+                                                       
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("è½»çƒƒåº“å­˜t", temp) Then
+                    ro = 1
+                    name = "è½»çƒƒåº“å­˜å¨"                                 
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("(è£…è½¦)|(ä¸™ä¸çƒ·å›æ”¶é‡)|(è½»æ²¹å…¥ç½å‰å«æ°´)", temp) Then
+                    co = 1
+                    
+                    name = h.replace(name, "t", "å¨")
+                    name = h.replace(name, "m3", "æ–¹")
+                    name = h.replace(name, "bbl", "æ¡¶")
+                    If h.isMatch("(è½»æ²¹è£…è½¦t)|(æ•°æ®åº“)", temp) Then
+                        co = 2
+                    End If
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("(ç”²é†‡æ¶ˆè€—)|(ä¹™äºŒé†‡æ¶ˆè€—|(ä¹™äºŒé†‡å›æ”¶))|(å¤–ä¾›æ°´)|(æ°´æ¶ˆè€—)", temp) Then
+                    ro = 1
+                    
+                    name = replace(temp, "m3", "æ–¹")                                   
+                    data(name)=Array(row+ro,column+co)
+                    ro = 2
+                    data("æœˆç´¯" + name)=Array(row+ro,column+co)
+                    ro = 3
+                    data("å¹´ç´¯" + name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("(å¤–ä¾›ç”µ)|(è‡ªå‘ç”µ)", temp) Then
+                    ro = 1
+                    
+                    name = replace(temp, "KWh", "åº¦")
+                    data(name)=Array(row+ro,column+co)
+                    ro = 2
+                    data("æœˆç´¯" + name)=Array(row+ro,column+co)
+                    ro = 3
+                    data("å¹´ç´¯" + name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("(ç”²é†‡åº“å­˜)|(æ°´æ± æ°´ä½)|(æ°´æ± å‚¨æ°´)", temp) Then
+                    co = 1
+                    name = "åº“å­˜ç”²é†‡æ–¹"
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("ä¹™äºŒé†‡æµ“åº¦", temp) Then
+                    co = 1
+                    name = temp
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("æ°´æ± æ°´ä½", temp) Then
+                    co = 1
+                    name = "åº“å­˜æ°´ç±³"
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("æ°´æ± å‚¨æ°´", temp) Then
+                    co = 1
+                    name = "åº“å­˜æ°´æ–¹"
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("JZ20-2ä½“ç³»", temp) Then
+                    ro = -1
+                    name = Worksheets(sheetName).Cells(row + ro, column).value
+                    If h.isMatch("å…¥å‚è®¡é‡", name) Then
+                        co = 1
+                        name="æ¥æ”¶JZ20-2ä½“ç³»æ–¹"
+                        data(name)=Array(row+ro,column+co)
+                        co = 3
+                        name="æœˆç´¯æ¥æ”¶JZ20-2ä½“ç³»æ–¹"
+                        data(name)=Array(row+ro,column+co)
+                        co = 4
+                        name="å¹´ç´¯æ¥æ”¶JZ20-2ä½“ç³»æ–¹"
+                        data(name)=Array(row+ro,column+co)
+                        ro = 1
+                        name="æ¥æ”¶JZ25-1Sä½“ç³»æ–¹"
+                        data(name)=Array(row+ro,column+co)
+                    Else
+                        co = 1
+                        name="å¤–è¾“JZ20-2ä½“ç³»æ–¹"
+                        data(name)=Array(row+ro,column+co)
+                        co = 3
+                        name="æœˆç´¯å¤–è¾“JZ20-2ä½“ç³»æ–¹"
+                        data(name)=Array(row+ro,column+co)
+                        co = 4
+                        name="å¹´ç´¯å¤–è¾“JZ20-2ä½“ç³»æ–¹"
+                        data(name)=Array(row+ro,column+co)
+                        ro = 1
+                        name="å¤–è¾“JZ25-1Sä½“ç³»æ–¹"
+                        data(name)=Array(row+ro,column+co)
+                    End If
+                End If
+                If h.isMatch("æµ·ç®¡é€šçƒä¿¡æ¯",temp) Then
+                    ro=11
+                    name = "æµ·ç®¡é€šçƒå¤‡æ³¨"
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("å…¶ä»–",temp) Then
+                    ro=1
+                    name = "ç”Ÿäº§å¤‡æ³¨"
+                    data(name)=Array(row+ro,column+co)                   
+                End If                
+            End If
+        Next column
+    Next row
+ErrorHandler:
+        Debug.Print Err.Number & vbTab & Err.Description
+        Resume Next
+End Sub
