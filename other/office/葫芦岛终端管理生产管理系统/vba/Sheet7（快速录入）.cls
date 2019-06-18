@@ -698,7 +698,7 @@ Function unitConvert(ByVal s As String)
     s = h.replace(s, "[kK][pP]a", "千帕")
     s = h.replace(s, "℃", "摄氏度")
     s = h.replace(s, "%", "")
-    unitConvert = s
+    unitConvert = trim(s)
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
@@ -864,6 +864,9 @@ Private Sub getDerivedData(ByRef data As Object)
     data("今后需日产天然气方") = (data("年配产天然气方") - data("年累总外输气量方")) / data("剩余天数")
     data("今后需日产轻油方") = (data("年配产轻油方") - data("年累轻油回收量方")) / data("剩余天数")
     data("今后需日产丙丁烷方") = (data("年配产丙丁烷方") - data("年累丙丁烷回收量方")) / data("剩余天数")
+    data("放空气方") = data("火炬放空量方")+data("火炬长明灯方")
+    data("月累放空气方") = data("月累火炬放空量方")+data("月累火炬长明灯方")
+    data("年累放空气方") = data("年累火炬放空量方")+data("年累火炬长明灯方")
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
@@ -1176,6 +1179,18 @@ Sub fillProductionDaily(ByRef data As Object)
                         Worksheets("生产日报").Cells(row + ro, column + co).value = value
                     End If
                 End If
+                If h.isMatch("海管通球信息",temp) Then
+                    ro=11
+                    name = "海管通球备注"
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row+ro, column).value = value                    
+                End If
+                If h.isMatch("其他",temp) Then
+                    ro=1
+                    name = "生产备注"
+                    value = data(name)
+                    Worksheets("生产日报").Cells(row+ro, column).value = value                    
+                End If                
             End If
         Next column
     Next row
