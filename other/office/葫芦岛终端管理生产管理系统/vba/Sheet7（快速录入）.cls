@@ -1,37 +1,28 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Sheet7"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = True
 Option Explicit
 Sub test()
     Err.Clear
     On Error GoTo ErrorHandler
     t = Now
-    Dim ÈÕÆÚ, k, v, i, t, s
+    Dim æ—¥æœŸ, k, v, i, t, s
     Dim data As Object
     Set data = CreateObject("Scripting.Dictionary")
     Call getProductionAllocation(data)
-    Debug.Print "»ñµÃÅä²úÊı¾İºÄÊ±" & DateDiff("s", t, Now) & "s!"
+    Debug.Print "è·å¾—é…äº§æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
     Call getQuickInputData(data)
-    Debug.Print "»ñµÃ¿ìËÙÂ¼ÈëÊı¾İºÄÊ±" & DateDiff("s", t, Now) & "s!"
+    Debug.Print "è·å¾—å¿«é€Ÿå½•å…¥æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
     For Each k In data.Keys
         s = unitConvert(k)
         data.key(k) = s
     Next
     Call getRelevantData(data)
-    Debug.Print "»ñµÃÉú²úÈÕ±¨Ïà¹ØÊı¾İºÄÊ±" & DateDiff("s", t, Now) & "s!"
+    Debug.Print "è·å¾—ç”Ÿäº§æ—¥æŠ¥ç›¸å…³æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
     Call getDerivedData(data)
-    Debug.Print "»ñµÃÉú²úÈÕ±¨¼ÆËãÊı¾İºÄÊ±" & DateDiff("s", t, Now) & "s!"
+    Debug.Print "è·å¾—ç”Ÿäº§æ—¥æŠ¥è®¡ç®—æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
     For Each k In data.Keys
         Debug.Print k, data.item(k)
     Next
     Call fillProductionDaily(data)
-    Debug.Print "ÌîĞ´Éú²úÈÕ±¨¼ÆËãÊı¾İºÄÊ±" & DateDiff("s", t, Now) & "s!"
+    Debug.Print "å¡«å†™ç”Ÿäº§æ—¥æŠ¥è®¡ç®—æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     Else
@@ -39,29 +30,31 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
-'±£´æ
-Private Sub ±£´æ_Click()
+'ä¿å­˜
+Private Sub ä¿å­˜_Click()
     Err.Clear
     On Error GoTo ErrorHandler
-    Dim ÈÕÆÚ, k, v, i, t, s
+    Dim æ—¥æœŸ, k, v, i, t, s
     t = Now
     Dim data As Object
     Set data = CreateObject("Scripting.Dictionary")
     Call getProductionAllocation(data)
-    Debug.Print "»ñµÃÅä²úÊı¾İºÄÊ±" & DateDiff("s", t, Now) & "s!"
+    Debug.Print "è·å¾—é…äº§æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
     Call getQuickInputData(data)
-    Debug.Print "»ñµÃ¿ìËÙÂ¼ÈëÊı¾İºÄÊ±" & DateDiff("s", t, Now) & "s!"
+    Debug.Print "è·å¾—å¿«é€Ÿå½•å…¥æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
     For Each k In data.Keys
         s = unitConvert(k)
         data.key(k) = s
     Next
     Call getDerivedData(data)
-    Debug.Print "»ñµÃÉú²úÈÕ±¨¼ÆËãÊı¾İºÄÊ±" & DateDiff("s", t, Now) & "s!"
+    Debug.Print "è·å¾—ç”Ÿäº§æ—¥æŠ¥è®¡ç®—æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
     For Each k In data.Keys
         Debug.Print k, data.item(k)
     Next
     Call fillProductionDaily(data)
-    Debug.Print "ÌîĞ´Éú²úÈÕ±¨¼ÆËãÊı¾İºÄÊ±" & DateDiff("s", t, Now) & "s!"
+    Debug.Print "å¡«å†™ç”Ÿäº§æ—¥æŠ¥è®¡ç®—æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
+    Call fillGasConsumptionTable(data)
+    Debug.Print "å¡«å†™ç‡ƒæ°”æ¶ˆè€—è®¡ç®—æ•°æ®è€—æ—¶" & DateDiff("s", t, Now) & "s!"
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
     Else
@@ -69,19 +62,19 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
-'Ïà¹Ø»¯ÑéÊı¾İ×Ô¶¯ÌîĞ´
+'ç›¸å…³åŒ–éªŒæ•°æ®è‡ªåŠ¨å¡«å†™
 Public Sub testData()
     On Error GoTo ErrorHandler
-    'ÈÕÆÚ
-    Dim ÈÕÆÚ As Date
-    'º£¹Ü
-    Dim º£¹ÜÀ´Òºº¬Ë®ÉÏÎç, º£¹ÜÀ´Òºº¬Ë®ÏÂÎç, º£¹ÜMEGÅ¨¶ÈÉÏÎç, º£¹ÜMEGÅ¨¶ÈÏÂÎç, º£¹Ü³ö¿ÚÄıµãÉÏÎç, º£¹Ü³ö¿ÚÄıµãÏÂÎç, º£¹Ü³ö¿ÚPHÖµÉÏÎç, º£¹Ü³ö¿ÚPHÖµÏÂÎç
-    'ÓÍ
-    Dim ÇáÓÍ×°³µt, ÇáÓÍ×°³µm3, ÇáÓÍ×°³µbbl, ÍâÊäÄıµã, ÍâÊäPHÖµ, ÇáÓÍÈë¹ŞÇ°º¬Ë®, ÇáÓÍÈë¹ŞÇ°º¬Ë®ÉÏÎç, ÇáÓÍÈë¹ŞÇ°º¬Ë®ÏÂÎç, ±¥ºÍÕôÆûÑ¹, ÇáÓÍ±ÈÖØ
-    'ÇáÌş
-    Dim ±ûÍé×°³µt, ¶¡Íé×°³µt, Òº»¯Æø×°³µt As Double
-    '»¯Ñ§Ò©¼Á
-    Dim ÒÒ¶ş´¼Éú²ú, ÒÒ¶ş´¼Å¨¶È As Double
+    'æ—¥æœŸ
+    Dim æ—¥æœŸ As Date
+    'æµ·ç®¡
+    Dim æµ·ç®¡æ¥æ¶²å«æ°´ä¸Šåˆ, æµ·ç®¡æ¥æ¶²å«æ°´ä¸‹åˆ, æµ·ç®¡MEGæµ“åº¦ä¸Šåˆ, æµ·ç®¡MEGæµ“åº¦ä¸‹åˆ, æµ·ç®¡å‡ºå£å‡ç‚¹ä¸Šåˆ, æµ·ç®¡å‡ºå£å‡ç‚¹ä¸‹åˆ, æµ·ç®¡å‡ºå£PHå€¼ä¸Šåˆ, æµ·ç®¡å‡ºå£PHå€¼ä¸‹åˆ
+    'æ²¹
+    Dim è½»æ²¹è£…è½¦t, è½»æ²¹è£…è½¦m3, è½»æ²¹è£…è½¦bbl, å¤–è¾“å‡ç‚¹, å¤–è¾“PHå€¼, è½»æ²¹å…¥ç½å‰å«æ°´, è½»æ²¹å…¥ç½å‰å«æ°´ä¸Šåˆ, è½»æ²¹å…¥ç½å‰å«æ°´ä¸‹åˆ, é¥±å’Œè’¸æ±½å‹, è½»æ²¹æ¯”é‡
+    'è½»çƒƒ
+    Dim ä¸™çƒ·è£…è½¦t, ä¸çƒ·è£…è½¦t, æ¶²åŒ–æ°”è£…è½¦t As Double
+    'åŒ–å­¦è¯å‰‚
+    Dim ä¹™äºŒé†‡ç”Ÿäº§, ä¹™äºŒé†‡æµ“åº¦ As Double
     Dim beginRow, beginColumn, lastRow, lastColumn, row, column, ro, co As Single
     beginRow = 1
     beginColumn = 2
@@ -92,186 +85,186 @@ Public Sub testData()
     Dim psql As New PostgreSQL
     For row = beginRow To lastRow
         temp = Cells(row, beginColumn).value
-        If temp = "ÈÕÆÚ" Then
+        If temp = "æ—¥æœŸ" Then
             co = 1
-            ÈÕÆÚ = Cells(row, beginColumn + co).value
+            æ—¥æœŸ = Cells(row, beginColumn + co).value
             Exit For
         End If
     Next row
-    Dim ×î½üÈÕÆÚ As Date
-    ss = "select Êı¾İ from Éú²úĞÅÏ¢ where ÈÕÆÚ='" & ÈÕÆÚ & "'"
-    filter = " and Ãû³Æ='º£¹ÜÀ´Òºº¬Ë®' and ±¸×¢='ÉÏÎç';"
+    Dim æœ€è¿‘æ—¥æœŸ As Date
+    ss = "select æ•°æ® from ç”Ÿäº§ä¿¡æ¯ where æ—¥æœŸ='" & æ—¥æœŸ & "'"
+    filter = " and åç§°='æµ·ç®¡æ¥æ¶²å«æ°´' and å¤‡æ³¨='ä¸Šåˆ';"
     SQL = ss & filter
-    º£¹ÜÀ´Òºº¬Ë®ÉÏÎç = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='º£¹ÜÀ´Òºº¬Ë®' and ±¸×¢='ÏÂÎç';"
+    æµ·ç®¡æ¥æ¶²å«æ°´ä¸Šåˆ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='æµ·ç®¡æ¥æ¶²å«æ°´' and å¤‡æ³¨='ä¸‹åˆ';"
     SQL = ss & filter
-    º£¹ÜÀ´Òºº¬Ë®ÏÂÎç = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='º£¹ÜMEGÅ¨¶È' and ±¸×¢='ÉÏÎç';"
+    æµ·ç®¡æ¥æ¶²å«æ°´ä¸‹åˆ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='æµ·ç®¡MEGæµ“åº¦' and å¤‡æ³¨='ä¸Šåˆ';"
     SQL = ss & filter
-    º£¹ÜMEGÅ¨¶ÈÉÏÎç = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='º£¹ÜMEGÅ¨¶È' and ±¸×¢='ÏÂÎç';"
+    æµ·ç®¡MEGæµ“åº¦ä¸Šåˆ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='æµ·ç®¡MEGæµ“åº¦' and å¤‡æ³¨='ä¸‹åˆ';"
     SQL = ss & filter
-    º£¹ÜMEGÅ¨¶ÈÏÂÎç = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='º£¹Ü³ö¿ÚÄıµã' and ±¸×¢='ÉÏÎç';"
+    æµ·ç®¡MEGæµ“åº¦ä¸‹åˆ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='æµ·ç®¡å‡ºå£å‡ç‚¹' and å¤‡æ³¨='ä¸Šåˆ';"
     SQL = ss & filter
-    º£¹Ü³ö¿ÚÄıµãÉÏÎç = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='º£¹Ü³ö¿ÚÄıµã' and ±¸×¢='ÏÂÎç';"
+    æµ·ç®¡å‡ºå£å‡ç‚¹ä¸Šåˆ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='æµ·ç®¡å‡ºå£å‡ç‚¹' and å¤‡æ³¨='ä¸‹åˆ';"
     SQL = ss & filter
-    º£¹Ü³ö¿ÚÄıµãÏÂÎç = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='º£¹Ü³ö¿ÚPHÖµ' and ±¸×¢='ÉÏÎç';"
+    æµ·ç®¡å‡ºå£å‡ç‚¹ä¸‹åˆ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='æµ·ç®¡å‡ºå£PHå€¼' and å¤‡æ³¨='ä¸Šåˆ';"
     SQL = ss & filter
-    º£¹Ü³ö¿ÚPHÖµÉÏÎç = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='º£¹Ü³ö¿ÚPHÖµ' and ±¸×¢='ÏÂÎç';"
+    æµ·ç®¡å‡ºå£PHå€¼ä¸Šåˆ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='æµ·ç®¡å‡ºå£PHå€¼' and å¤‡æ³¨='ä¸‹åˆ';"
     SQL = ss & filter
-    º£¹Ü³ö¿ÚPHÖµÏÂÎç = psql.cnn.Execute(SQL)(0)
-    SQL = "select Êı¾İ from Éú²úĞÅÏ¢ where Ãû³Æ='ÇáÓÍÃÜ¶È' and ÈÕÆÚ=(select max(ÈÕÆÚ) from Éú²úĞÅÏ¢ where Ãû³Æ='ÇáÓÍÃÜ¶È' and ÈÕÆÚ <= '" & ÈÕÆÚ & "' )"
-    ÇáÓÍ±ÈÖØ = psql.cnn.Execute(SQL)(0)
-    SQL = "select sum(Êµ¼Ê×°³µt) from Ìáµ¥ where ÈÕÆÚ='" & ÈÕÆÚ & "' and ²úÆ·Ãû³Æ='ÇáÓÍ' ;"
-    ÇáÓÍ×°³µt = psql.cnn.Execute(SQL)(0)
-    SQL = "select sum(Êµ¼Ê×°³µbbl) from Ìáµ¥ where ÈÕÆÚ='" & ÈÕÆÚ & "' and ²úÆ·Ãû³Æ='ÇáÓÍ' ;"
-    ÇáÓÍ×°³µbbl = psql.cnn.Execute(SQL)(0)
-    SQL = "select sum(Êµ¼Ê×°³µm3) from Ìáµ¥ where ÈÕÆÚ='" & ÈÕÆÚ & "' and ²úÆ·Ãû³Æ='ÇáÓÍ' ;"
-    ÇáÓÍ×°³µm3 = psql.cnn.Execute(SQL)(0)
-    'ÇáÓÍ×°³µm3 = Round(ÇáÓÍ×°³µt / ÇáÓÍ±ÈÖØ, 2)
-    SQL = "select Êı¾İ from Éú²úĞÅÏ¢ where Ãû³Æ='ÍâÊäÄıµã' and ÈÕÆÚ=(select max(ÈÕÆÚ) from Éú²úĞÅÏ¢ where Ãû³Æ='ÍâÊäÄıµã' and ÈÕÆÚ <= '" & ÈÕÆÚ & "' )"
-    ÍâÊäÄıµã = psql.cnn.Execute(SQL)(0)
-    SQL = "select Êı¾İ from Éú²úĞÅÏ¢ where Ãû³Æ='ÍâÊäPHÖµ' and ÈÕÆÚ=(select max(ÈÕÆÚ) from Éú²úĞÅÏ¢ where Ãû³Æ='ÍâÊäPHÖµ' and ÈÕÆÚ <= '" & ÈÕÆÚ & "' )"
-    ÍâÊäPHÖµ = psql.cnn.Execute(SQL)(0)
-    SQL = "select Êı¾İ from Éú²úĞÅÏ¢ where Ãû³Æ='E-613±¥ºÍÕôÆûÑ¹' and Àà±ğ='ÇáÓÍ' and ÈÕÆÚ=(select max(ÈÕÆÚ) from Éú²úĞÅÏ¢ where Ãû³Æ='E-613±¥ºÍÕôÆûÑ¹' and ÈÕÆÚ <= '" & ÈÕÆÚ & "' )"
-    ±¥ºÍÕôÆûÑ¹ = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='Èë¹ŞÇ°º¬Ë®' and ±¸×¢='ÉÏÎç' and Àà±ğ='ÇáÓÍ'; "
+    æµ·ç®¡å‡ºå£PHå€¼ä¸‹åˆ = psql.cnn.Execute(SQL)(0)
+    SQL = "select æ•°æ® from ç”Ÿäº§ä¿¡æ¯ where åç§°='è½»æ²¹å¯†åº¦' and æ—¥æœŸ=(select max(æ—¥æœŸ) from ç”Ÿäº§ä¿¡æ¯ where åç§°='è½»æ²¹å¯†åº¦' and æ—¥æœŸ <= '" & æ—¥æœŸ & "' )"
+    è½»æ²¹æ¯”é‡ = psql.cnn.Execute(SQL)(0)
+    SQL = "select sum(å®é™…è£…è½¦t) from æå• where æ—¥æœŸ='" & æ—¥æœŸ & "' and äº§å“åç§°='è½»æ²¹' ;"
+    è½»æ²¹è£…è½¦t = psql.cnn.Execute(SQL)(0)
+    SQL = "select sum(å®é™…è£…è½¦bbl) from æå• where æ—¥æœŸ='" & æ—¥æœŸ & "' and äº§å“åç§°='è½»æ²¹' ;"
+    è½»æ²¹è£…è½¦bbl = psql.cnn.Execute(SQL)(0)
+    SQL = "select sum(å®é™…è£…è½¦m3) from æå• where æ—¥æœŸ='" & æ—¥æœŸ & "' and äº§å“åç§°='è½»æ²¹' ;"
+    è½»æ²¹è£…è½¦m3 = psql.cnn.Execute(SQL)(0)
+    'è½»æ²¹è£…è½¦m3 = Round(è½»æ²¹è£…è½¦t / è½»æ²¹æ¯”é‡, 2)
+    SQL = "select æ•°æ® from ç”Ÿäº§ä¿¡æ¯ where åç§°='å¤–è¾“å‡ç‚¹' and æ—¥æœŸ=(select max(æ—¥æœŸ) from ç”Ÿäº§ä¿¡æ¯ where åç§°='å¤–è¾“å‡ç‚¹' and æ—¥æœŸ <= '" & æ—¥æœŸ & "' )"
+    å¤–è¾“å‡ç‚¹ = psql.cnn.Execute(SQL)(0)
+    SQL = "select æ•°æ® from ç”Ÿäº§ä¿¡æ¯ where åç§°='å¤–è¾“PHå€¼' and æ—¥æœŸ=(select max(æ—¥æœŸ) from ç”Ÿäº§ä¿¡æ¯ where åç§°='å¤–è¾“PHå€¼' and æ—¥æœŸ <= '" & æ—¥æœŸ & "' )"
+    å¤–è¾“PHå€¼ = psql.cnn.Execute(SQL)(0)
+    SQL = "select æ•°æ® from ç”Ÿäº§ä¿¡æ¯ where åç§°='E-613é¥±å’Œè’¸æ±½å‹' and ç±»åˆ«='è½»æ²¹' and æ—¥æœŸ=(select max(æ—¥æœŸ) from ç”Ÿäº§ä¿¡æ¯ where åç§°='E-613é¥±å’Œè’¸æ±½å‹' and æ—¥æœŸ <= '" & æ—¥æœŸ & "' )"
+    é¥±å’Œè’¸æ±½å‹ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='å…¥ç½å‰å«æ°´' and å¤‡æ³¨='ä¸Šåˆ' and ç±»åˆ«='è½»æ²¹'; "
     SQL = ss & filter
-    ÇáÓÍÈë¹ŞÇ°º¬Ë®ÉÏÎç = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='Èë¹ŞÇ°º¬Ë®' and ±¸×¢='ÏÂÎç' and Àà±ğ='ÇáÓÍ'; "
+    è½»æ²¹å…¥ç½å‰å«æ°´ä¸Šåˆ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='å…¥ç½å‰å«æ°´' and å¤‡æ³¨='ä¸‹åˆ' and ç±»åˆ«='è½»æ²¹'; "
     SQL = ss & filter
-    ÇáÓÍÈë¹ŞÇ°º¬Ë®ÏÂÎç = psql.cnn.Execute(SQL)(0)
-    ÇáÓÍÈë¹ŞÇ°º¬Ë® = FormatNumber(ÇáÓÍÈë¹ŞÇ°º¬Ë®ÉÏÎç, -1, -1) & "/" & FormatNumber(ÇáÓÍÈë¹ŞÇ°º¬Ë®ÏÂÎç, -1, -1)
-    SQL = "select sum(Êµ¼Ê×°³µt) from Ìáµ¥ where ÈÕÆÚ='" & ÈÕÆÚ & "' and ²úÆ·Ãû³Æ='±ûÍé' ;"
-    ±ûÍé×°³µt = psql.cnn.Execute(SQL)(0)
-    SQL = "select sum(Êµ¼Ê×°³µt) from Ìáµ¥ where ÈÕÆÚ='" & ÈÕÆÚ & "' and ²úÆ·Ãû³Æ='¶¡Íé' ;"
-    ¶¡Íé×°³µt = psql.cnn.Execute(SQL)(0)
-    SQL = "select sum(Êµ¼Ê×°³µt) from Ìáµ¥ where ÈÕÆÚ='" & ÈÕÆÚ & "' and ²úÆ·Ãû³Æ='Òº»¯Æø' ;"
-    Òº»¯Æø×°³µt = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='ÒÒ¶ş´¼Å¨¶È';"
+    è½»æ²¹å…¥ç½å‰å«æ°´ä¸‹åˆ = psql.cnn.Execute(SQL)(0)
+    è½»æ²¹å…¥ç½å‰å«æ°´ = FormatNumber(è½»æ²¹å…¥ç½å‰å«æ°´ä¸Šåˆ, -1, -1) & "/" & FormatNumber(è½»æ²¹å…¥ç½å‰å«æ°´ä¸‹åˆ, -1, -1)
+    SQL = "select sum(å®é™…è£…è½¦t) from æå• where æ—¥æœŸ='" & æ—¥æœŸ & "' and äº§å“åç§°='ä¸™çƒ·' ;"
+    ä¸™çƒ·è£…è½¦t = psql.cnn.Execute(SQL)(0)
+    SQL = "select sum(å®é™…è£…è½¦t) from æå• where æ—¥æœŸ='" & æ—¥æœŸ & "' and äº§å“åç§°='ä¸çƒ·' ;"
+    ä¸çƒ·è£…è½¦t = psql.cnn.Execute(SQL)(0)
+    SQL = "select sum(å®é™…è£…è½¦t) from æå• where æ—¥æœŸ='" & æ—¥æœŸ & "' and äº§å“åç§°='æ¶²åŒ–æ°”' ;"
+    æ¶²åŒ–æ°”è£…è½¦t = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='ä¹™äºŒé†‡æµ“åº¦';"
     SQL = ss & filter
-    ÒÒ¶ş´¼Å¨¶È = psql.cnn.Execute(SQL)(0)
-    filter = " and Ãû³Æ='ÒÒ¶ş´¼»ØÊÕ' and µ¥Î»='·½';"
+    ä¹™äºŒé†‡æµ“åº¦ = psql.cnn.Execute(SQL)(0)
+    filter = " and åç§°='ä¹™äºŒé†‡å›æ”¶' and å•ä½='æ–¹';"
     SQL = ss & filter
-    ÒÒ¶ş´¼Éú²ú = psql.cnn.Execute(SQL)(0)
+    ä¹™äºŒé†‡ç”Ÿäº§ = psql.cnn.Execute(SQL)(0)
     For row = beginRow To lastRow
         For column = beginColumn To lastColumn
             temp = Cells(row, column).value
-            If temp Like "º£¹ÜÀ´Òºº¬Ë®*" Then
+            If temp Like "æµ·ç®¡æ¥æ¶²å«æ°´*" Then
                 co = 1
-                Cells(row, column + co).value = º£¹ÜÀ´Òºº¬Ë®ÉÏÎç
+                Cells(row, column + co).value = æµ·ç®¡æ¥æ¶²å«æ°´ä¸Šåˆ
                 co = 2
-                Cells(row, column + co).value = º£¹ÜÀ´Òºº¬Ë®ÏÂÎç
+                Cells(row, column + co).value = æµ·ç®¡æ¥æ¶²å«æ°´ä¸‹åˆ
             End If
-            If temp Like "º£¹ÜMEGÅ¨¶È*" Then
+            If temp Like "æµ·ç®¡MEGæµ“åº¦*" Then
                 co = 1
-                Cells(row, column + co).value = º£¹ÜMEGÅ¨¶ÈÉÏÎç
+                Cells(row, column + co).value = æµ·ç®¡MEGæµ“åº¦ä¸Šåˆ
                 co = 2
-                Cells(row, column + co).value = º£¹ÜMEGÅ¨¶ÈÏÂÎç
+                Cells(row, column + co).value = æµ·ç®¡MEGæµ“åº¦ä¸‹åˆ
             End If
-            If temp Like "º£¹Ü³ö¿ÚÄıµã*" Then
+            If temp Like "æµ·ç®¡å‡ºå£å‡ç‚¹*" Then
                 co = 1
-                Cells(row, column + co).value = º£¹Ü³ö¿ÚÄıµãÉÏÎç
+                Cells(row, column + co).value = æµ·ç®¡å‡ºå£å‡ç‚¹ä¸Šåˆ
                 co = 2
-                Cells(row, column + co).value = º£¹Ü³ö¿ÚÄıµãÏÂÎç
+                Cells(row, column + co).value = æµ·ç®¡å‡ºå£å‡ç‚¹ä¸‹åˆ
             End If
-            If temp Like "º£¹Ü³ö¿ÚPHÖµ*" Then
+            If temp Like "æµ·ç®¡å‡ºå£PHå€¼*" Then
                 co = 1
-                Cells(row, column + co).value = º£¹Ü³ö¿ÚPHÖµÉÏÎç
+                Cells(row, column + co).value = æµ·ç®¡å‡ºå£PHå€¼ä¸Šåˆ
                 co = 2
-                Cells(row, column + co).value = º£¹Ü³ö¿ÚPHÖµÏÂÎç
+                Cells(row, column + co).value = æµ·ç®¡å‡ºå£PHå€¼ä¸‹åˆ
             End If
-            If temp Like "ÇáÓÍ×°³µt*" Then
+            If temp Like "è½»æ²¹è£…è½¦t*" Then
                 co = 1
-                Cells(row, column + co).value = ÇáÓÍ×°³µt
+                Cells(row, column + co).value = è½»æ²¹è£…è½¦t
             End If
-            If temp Like "ÇáÓÍ×°³µm3*" Then
+            If temp Like "è½»æ²¹è£…è½¦m3*" Then
                 co = 1
-                Cells(row, column + co).value = ÇáÓÍ×°³µm3
+                Cells(row, column + co).value = è½»æ²¹è£…è½¦m3
             End If
-            If temp Like "ÇáÓÍ×°³µbbl*" Then
+            If temp Like "è½»æ²¹è£…è½¦bbl*" Then
                 co = 1
-                Cells(row, column + co).value = ÇáÓÍ×°³µbbl
+                Cells(row, column + co).value = è½»æ²¹è£…è½¦bbl
             End If
-            If temp Like "ÍâÊäÄıµã*" Then
+            If temp Like "å¤–è¾“å‡ç‚¹*" Then
                 co = 1
-                Cells(row, column + co).value = ÍâÊäÄıµã
+                Cells(row, column + co).value = å¤–è¾“å‡ç‚¹
                 co = 2
-                SQL = "select max(ÈÕÆÚ) from Éú²úĞÅÏ¢ where Ãû³Æ='ÍâÊäÄıµã' and ÈÕÆÚ <= '" & ÈÕÆÚ & "';"
-                ×î½üÈÕÆÚ = psql.cnn.Execute(SQL)(0)
-                If ×î½üÈÕÆÚ <> ÈÕÆÚ Then
-                    Cells(row, column + co).value = ×î½üÈÕÆÚ & "ÒÔºóÃ»ÓĞ»¯ÑéÊı¾İ"
+                SQL = "select max(æ—¥æœŸ) from ç”Ÿäº§ä¿¡æ¯ where åç§°='å¤–è¾“å‡ç‚¹' and æ—¥æœŸ <= '" & æ—¥æœŸ & "';"
+                æœ€è¿‘æ—¥æœŸ = psql.cnn.Execute(SQL)(0)
+                If æœ€è¿‘æ—¥æœŸ <> æ—¥æœŸ Then
+                    Cells(row, column + co).value = æœ€è¿‘æ—¥æœŸ & "ä»¥åæ²¡æœ‰åŒ–éªŒæ•°æ®"
                     Cells(row, column + co).Font.ColorIndex = 3
                 Else
                     Cells(row, column + co).ClearContents
                 End If
             End If
-            If temp Like "ÍâÊäPHÖµ*" Then
+            If temp Like "å¤–è¾“PHå€¼*" Then
                 co = 1
-                Cells(row, column + co).value = ÍâÊäPHÖµ
+                Cells(row, column + co).value = å¤–è¾“PHå€¼
                 co = 2
-                SQL = "select max(ÈÕÆÚ) from Éú²úĞÅÏ¢ where Ãû³Æ='ÍâÊäPHÖµ' and ÈÕÆÚ <= '" & ÈÕÆÚ & "';"
-                ×î½üÈÕÆÚ = psql.cnn.Execute(SQL)(0)
-                If ×î½üÈÕÆÚ <> ÈÕÆÚ Then
-                    Cells(row, column + co).value = ×î½üÈÕÆÚ & "ÒÔºóÃ»ÓĞ»¯ÑéÊı¾İ"
+                SQL = "select max(æ—¥æœŸ) from ç”Ÿäº§ä¿¡æ¯ where åç§°='å¤–è¾“PHå€¼' and æ—¥æœŸ <= '" & æ—¥æœŸ & "';"
+                æœ€è¿‘æ—¥æœŸ = psql.cnn.Execute(SQL)(0)
+                If æœ€è¿‘æ—¥æœŸ <> æ—¥æœŸ Then
+                    Cells(row, column + co).value = æœ€è¿‘æ—¥æœŸ & "ä»¥åæ²¡æœ‰åŒ–éªŒæ•°æ®"
                     Cells(row, column + co).Font.ColorIndex = 3
                 Else
                     Cells(row, column + co).ClearContents
                 End If
             End If
-            If temp Like "±¥ºÍÕôÆûÑ¹*" Then
+            If temp Like "é¥±å’Œè’¸æ±½å‹*" Then
                 co = 1
-                Cells(row, column + co).value = ±¥ºÍÕôÆûÑ¹
+                Cells(row, column + co).value = é¥±å’Œè’¸æ±½å‹
                 co = 2
-                SQL = "select max(ÈÕÆÚ) from Éú²úĞÅÏ¢ where Ãû³Æ='±¥ºÍÕôÆûÑ¹' and ÈÕÆÚ <= '" & ÈÕÆÚ & "';"
-                ×î½üÈÕÆÚ = psql.cnn.Execute(SQL)(0)
-                If ×î½üÈÕÆÚ <> ÈÕÆÚ Then
-                    Cells(row, column + co).value = ×î½üÈÕÆÚ & "ÒÔºóÃ»ÓĞ»¯ÑéÊı¾İ"
+                SQL = "select max(æ—¥æœŸ) from ç”Ÿäº§ä¿¡æ¯ where åç§°='é¥±å’Œè’¸æ±½å‹' and æ—¥æœŸ <= '" & æ—¥æœŸ & "';"
+                æœ€è¿‘æ—¥æœŸ = psql.cnn.Execute(SQL)(0)
+                If æœ€è¿‘æ—¥æœŸ <> æ—¥æœŸ Then
+                    Cells(row, column + co).value = æœ€è¿‘æ—¥æœŸ & "ä»¥åæ²¡æœ‰åŒ–éªŒæ•°æ®"
                     Cells(row, column + co).Font.ColorIndex = 3
                 Else
                     Cells(row, column + co).ClearContents
                 End If
             End If
-            If temp Like "ÇáÓÍÈë¹ŞÇ°*" Then
+            If temp Like "è½»æ²¹å…¥ç½å‰*" Then
                 co = 1
-                Cells(row, column + co).value = ÇáÓÍÈë¹ŞÇ°º¬Ë®
+                Cells(row, column + co).value = è½»æ²¹å…¥ç½å‰å«æ°´
             End If
-            If temp Like "ÇáÓÍ±ÈÖØ*" Then
+            If temp Like "è½»æ²¹æ¯”é‡*" Then
                 co = 1
-                Cells(row, column + co).value = ÇáÓÍ±ÈÖØ
+                Cells(row, column + co).value = è½»æ²¹æ¯”é‡
                 co = 2
-                SQL = "select max(ÈÕÆÚ) from Éú²úĞÅÏ¢ where Ãû³Æ='ÇáÓÍÃÜ¶È' and ÈÕÆÚ <= '" & ÈÕÆÚ & "';"
-                ×î½üÈÕÆÚ = psql.cnn.Execute(SQL)(0)
-                If ×î½üÈÕÆÚ <> ÈÕÆÚ Then
-                    Cells(row, column + co).value = ×î½üÈÕÆÚ & "ÒÔºóÃ»ÓĞ»¯ÑéÊı¾İ"
+                SQL = "select max(æ—¥æœŸ) from ç”Ÿäº§ä¿¡æ¯ where åç§°='è½»æ²¹å¯†åº¦' and æ—¥æœŸ <= '" & æ—¥æœŸ & "';"
+                æœ€è¿‘æ—¥æœŸ = psql.cnn.Execute(SQL)(0)
+                If æœ€è¿‘æ—¥æœŸ <> æ—¥æœŸ Then
+                    Cells(row, column + co).value = æœ€è¿‘æ—¥æœŸ & "ä»¥åæ²¡æœ‰åŒ–éªŒæ•°æ®"
                     Cells(row, column + co).Font.ColorIndex = 3
                 Else
                     Cells(row, column + co).ClearContents
                 End If
             End If
-            If temp Like "±ûÍé×°³µt*" Then
+            If temp Like "ä¸™çƒ·è£…è½¦t*" Then
                 co = 1
-                Cells(row, column + co).value = ±ûÍé×°³µt
+                Cells(row, column + co).value = ä¸™çƒ·è£…è½¦t
             End If
-            If temp Like "¶¡Íé×°³µt*" Then
+            If temp Like "ä¸çƒ·è£…è½¦t*" Then
                 co = 1
-                Cells(row, column + co).value = ¶¡Íé×°³µt
+                Cells(row, column + co).value = ä¸çƒ·è£…è½¦t
             End If
-            If temp Like "Òº»¯Æø×°³µt*" Then
+            If temp Like "æ¶²åŒ–æ°”è£…è½¦t*" Then
                 co = 1
-                Cells(row, column + co).value = Òº»¯Æø×°³µt
+                Cells(row, column + co).value = æ¶²åŒ–æ°”è£…è½¦t
             End If
-            If temp Like "ÒÒ¶ş´¼Å¨¶È*" Then
+            If temp Like "ä¹™äºŒé†‡æµ“åº¦*" Then
                 co = 1
-                Cells(row, column + co).value = ÒÒ¶ş´¼Å¨¶È
+                Cells(row, column + co).value = ä¹™äºŒé†‡æµ“åº¦
             End If
-            If temp Like "ÒÒ¶ş´¼ÈÕ»ØÊÕ*" Then
+            If temp Like "ä¹™äºŒé†‡æ—¥å›æ”¶*" Then
                 co = 1
-                Cells(row, column + co).value = ÒÒ¶ş´¼Éú²ú
+                Cells(row, column + co).value = ä¹™äºŒé†‡ç”Ÿäº§
             End If
         Next column
     Next row
@@ -285,38 +278,38 @@ ErrorHandler:
     Resume Next
 End Sub
 Sub DBsave_Click()
-    '·ÇÈÕ±¨Êı¾İ´æ´¢µ½Êı¾İ¿â
-    Dim sy As New ÉÏÓÎ
+    'éæ—¥æŠ¥æ•°æ®å­˜å‚¨åˆ°æ•°æ®åº“
+    Dim sy As New ä¸Šæ¸¸
     Call sy.save
-    Dim scdt As New Éú²ú¶¯Ì¬
+    Dim scdt As New ç”Ÿäº§åŠ¨æ€
     Call scdt.save
 End Sub
-'·µ»ØÖ÷Ò³
-Private Sub ·µ»ØÖ÷Ò³_Click()
-    Sheets("Ö÷Ò³").Select
+'è¿”å›ä¸»é¡µ
+Private Sub è¿”å›ä¸»é¡µ_Click()
+    Sheets("ä¸»é¡µ").Select
 End Sub
-'·µ»Ø
-Private Sub Éú²úÈÕ±¨_Click()
-    Sheets("Éú²úÈÕ±¨").Select
+'è¿”å›
+Private Sub ç”Ÿäº§æ—¥æŠ¥_Click()
+    Sheets("ç”Ÿäº§æ—¥æŠ¥").Select
 End Sub
-Private Sub º£¹Ü_Click()
-    Worksheets("º£¹Ü").Select
+Private Sub æµ·ç®¡_Click()
+    Worksheets("æµ·ç®¡").Select
 End Sub
 
-Private Sub »¯ÑéÊı¾İÌáÈ¡_Click()
+Private Sub åŒ–éªŒæ•°æ®æå–_Click()
     Err.Clear
     On Error GoTo errorhander
     'Dim psql As New PostgreSQL
-    'Call psql.Êı¾İ¿âÕûÀí
+    'Call psql.æ•°æ®åº“æ•´ç†
     Dim filter As String
     filter = "microsoft office excel files (*.xls),*.xls"
     Dim fn
-    fn = Application.GetOpenFilename(filter, , "ÇëÑ¡ÎÄ¼ş", , MultiSelect:=True)
+    fn = Application.GetOpenFilename(filter, , "è¯·é€‰æ–‡ä»¶", , MultiSelect:=True)
     If Not IsArray(fn) Then Exit Sub
     Dim temp
     Dim table As Object
     Set table = CreateObject("Scripting.Dictionary")
-    Dim testData As New »¯Ñéµ¥
+    Dim testData As New åŒ–éªŒå•
     Dim gasRecord As Object
     Dim waterRecord As Object
     Dim oilRecord As Object
@@ -334,16 +327,16 @@ Private Sub »¯ÑéÊı¾İÌáÈ¡_Click()
         Set wb = Nothing
         Application.ScreenUpdating = True
     Next temp
-    Dim gtd As New ÇáÌş×é·Ö
+    Dim gtd As New è½»çƒƒç»„åˆ†
     Call gtd.PushTableToDatabase(gasRecord)
-    Dim otd As New »¬ÓÍ¼ì²â
+    Dim otd As New æ»‘æ²¹æ£€æµ‹
     Call otd.PushTableToDatabase(oilRecord)
-    Dim wtd As New Ë®ÖÊ¼ì²â
+    Dim wtd As New æ°´è´¨æ£€æµ‹
     Call wtd.PushTableToDatabase(waterRecord)
-    Dim scxx As New Éú²úĞÅÏ¢
+    Dim scxx As New ç”Ÿäº§ä¿¡æ¯
     Call scxx.PushTableToDatabase(scRecord)
     'For Each temp In scRecord.Keys
-    'Debug.Print temp.ÈÕÆÚ, temp.Ãû³Æ, temp.µ¥Î», temp.Êı¾İ, temp.Àà±ğ, temp.±¸×¢
+    'Debug.Print temp.æ—¥æœŸ, temp.åç§°, temp.å•ä½, temp.æ•°æ®, temp.ç±»åˆ«, temp.å¤‡æ³¨
     'Next temp
 errorhander:
     If 0 = Err.Number Or 20 = Err.Number Then
@@ -352,8 +345,8 @@ errorhander:
     End If
 End Sub
 
-'Çå³ı
-Private Sub Çå³ı_Click()
+'æ¸…é™¤
+Private Sub æ¸…é™¤_Click()
     Cells(3, 5).ClearContents
     Cells(21, 5).ClearContents
     Dim row, column, beginRow, lastRow, co As Single
@@ -364,34 +357,34 @@ Private Sub Çå³ı_Click()
     Dim temp As Variant
     For row = beginRow To lastRow
         temp = Cells(row, column - co).value
-        If temp Like "º£¹ÜÀ´Òºº¬Ë®*" Then
+        If temp Like "æµ·ç®¡æ¥æ¶²å«æ°´*" Then
             Cells(row, column + co).ClearContents
         End If
-        If temp Like "º£¹ÜMEGÅ¨¶È*" Then
+        If temp Like "æµ·ç®¡MEGæµ“åº¦*" Then
             Cells(row, column + co).ClearContents
         End If
-        If temp Like "º£¹Ü³ö¿ÚÄıµã*" Then
+        If temp Like "æµ·ç®¡å‡ºå£å‡ç‚¹*" Then
             Cells(row, column + co).ClearContents
         End If
-        If temp Like "º£¹Ü³ö¿ÚPHÖµ*" Then
+        If temp Like "æµ·ç®¡å‡ºå£PHå€¼*" Then
             Cells(row, column + co).ClearContents
         End If
-        If temp Like "JZ20-2ÄıÎöÓÍ*" Then
+        If temp Like "JZ20-2å‡ææ²¹*" Then
             Cells(row, column + co).ClearContents
         End If
-        If temp Like "JZ20-2ÇáÓÍ*" Then
+        If temp Like "JZ20-2è½»æ²¹*" Then
             Cells(row, column + co).ClearContents
         End If
-        If temp Like "ÍâÊäÄıµã*" Then
+        If temp Like "å¤–è¾“å‡ç‚¹*" Then
             Cells(row, column + co).ClearContents
         End If
-        If temp Like "ÍâÊäPHÖµ*" Then
+        If temp Like "å¤–è¾“PHå€¼*" Then
             Cells(row, column + co).ClearContents
         End If
-        If temp Like "ÇáÓÍ±ÈÖØ*" Then
+        If temp Like "è½»æ²¹æ¯”é‡*" Then
             Cells(row, column + co).ClearContents
         End If
-        '²»É¾³ıº¬ÓĞ¹«Ê½µ¥Ôª¸ñÄÚÈİ
+        'ä¸åˆ é™¤å«æœ‰å…¬å¼å•å…ƒæ ¼å†…å®¹
         If Not Cells(row, column).HasFormula Then
             Cells(row, column).ClearContents
         Else
@@ -399,18 +392,18 @@ Private Sub Çå³ı_Click()
         End If
     Next row
 End Sub
-Private Sub Ïû·åÆ½¹È_Click()
-    Sheets("Ïû·åÆ½¹È").Select
-    Call Worksheets("Ïû·åÆ½¹È").Çå³ı_Click
-    Worksheets("Ïû·åÆ½¹È").Cells(4, 10).value = Cells(1, 3).value
+Private Sub æ¶ˆå³°å¹³è°·_Click()
+    Sheets("æ¶ˆå³°å¹³è°·").Select
+    Call Worksheets("æ¶ˆå³°å¹³è°·").æ¸…é™¤_Click
+    Worksheets("æ¶ˆå³°å¹³è°·").Cells(4, 10).value = Cells(1, 3).value
 End Sub
-'×Ô¶¯ÌîĞ´½ñÌìÈÕÆÚ
-Private Sub ½ñÌì_Click()
+'è‡ªåŠ¨å¡«å†™ä»Šå¤©æ—¥æœŸ
+Private Sub ä»Šå¤©_Click()
     Err.Clear
     On Error GoTo ErrorHandler
-    Call Çå³ı_Click
+    Call æ¸…é™¤_Click
     Cells(1, 3).value = DateValue(Date)
-    [ÈÕÆÚ] = Worksheets("¿ìËÙÂ¼Èë").Cells(1, 3).value
+    [æ—¥æœŸ] = Worksheets("å¿«é€Ÿå½•å…¥").Cells(1, 3).value
     Call testData
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
@@ -419,15 +412,15 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
-'×Ô¶¯ÌîĞ´×òÌìÈÕÆÚ
-Private Sub ×òÌì_Click()
+'è‡ªåŠ¨å¡«å†™æ˜¨å¤©æ—¥æœŸ
+Private Sub æ˜¨å¤©_Click()
     Err.Clear
     On Error GoTo ErrorHandler
-    Call Çå³ı_Click
+    Call æ¸…é™¤_Click
     Dim t As Date
     t = DateAdd("d", -1, Date)
     Cells(1, 3).value = DateValue(t)
-    [ÈÕÆÚ] = Cells(1, 3).value
+    [æ—¥æœŸ] = Cells(1, 3).value
     Call testData
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
@@ -437,69 +430,7 @@ ErrorHandler:
     Resume Next
 End Sub
 
-'È¼ÆøÏûºÄ
-Private Sub getGasConsumption(d, gasConsumptionTable)
-    Err.Clear
-    On Error GoTo ErrorHandler
-    Const MAX_ÈÈÓÍÂ¯ As Long = 999999
-    Const MAX_»ğ¾æ³¤Ã÷µÆ As Long = 999999999
-    Const MAX_»ğ¾æ·Å¿ÕÁ¿ As Long = 999999999
-    Dim SQL, SQL_suffix, name, table As String
-    Dim arr, rs, data, cnn
-    table = "Éú²úĞÅÏ¢"
-    SQL_suffix = " AND Ãû³Æ IN ('ÈÈÓÍÂ¯','¹øÂ¯·¿ÓÃÆø','»ğ¾æ³¤Ã÷µÆ','»ğ¾æ·Å¿ÕÁ¿','FIQ-2043')"
-    Dim psql As New PostgreSQL
-    Dim rst As New ADODB.Recordset
-    SQL = "SELECT Ãû³Æ,Êı¾İ FROM " & table & " WHERE ÈÕÆÚ='" & d & "'"
-    SQL = SQL + SQL_suffix
-    Set cnn = psql.cnn
-    rst.Open SQL, cnn
-    If Not rst.BOF And Not rst.EOF Then
-        rst.MoveFirst
-        Do Until rst.EOF
-            name = rst!Ãû³Æ
-            data = rst!Êı¾İ
-            gasConsumptionTable.Add name + "ÈÕÀÛ·½", data
-            rst.MoveNext
-        Loop
-    End If
-    rst.Close
-    table = "Éú²úĞÅÏ¢"
-    SQL_suffix = " AND Ãû³Æ IN ('ÈÈÓÍÂ¯','¹øÂ¯·¿ÓÃÆø','»ğ¾æ³¤Ã÷µÆ','»ğ¾æ·Å¿ÕÁ¿','FIQ-2043')  group by Ãû³Æ"
-    SQL = "SELECT Ãû³Æ,sum(Êı¾İ) AS ÔÂÀÛ FROM " & table & " WHERE ÈÕÆÚ BETWEEN date_trunc('month',TIMESTAMP '" & d & "') AND '" & d & "'"
-    SQL = SQL + SQL_suffix
-    rst.Open SQL, cnn
-    If Not rst.BOF And Not rst.EOF Then
-        rst.MoveFirst
-        Do Until rst.EOF
-            name = rst(0)
-            data = rst(1)
-            gasConsumptionTable.Add name + "ÔÂÀÛ·½", data
-            rst.MoveNext
-        Loop
-    End If
-    rst.Close
-    SQL = "SELECT Ãû³Æ,sum(Êı¾İ) AS ÄêÀÛ FROM " & table & " WHERE ÈÕÆÚ BETWEEN date_trunc('year',TIMESTAMP '" & d & "') AND '" & d & "'"
-    SQL = SQL + SQL_suffix
-    rst.Open SQL, cnn
-    If Not rst.BOF And Not rst.EOF Then
-        rst.MoveFirst
-        Do Until rst.EOF
-            name = rst(0)
-            data = rst(1)
-            gasConsumptionTable.Add name + "ÄêÀÛ·½", data
-            rst.MoveNext
-        Loop
-    End If
-    rst.Close
-ErrorHandler:
-    If 0 = Err.Number Or 20 = Err.Number Then
-    Else
-        Debug.Print Err.Number & vbTab & Err.Description
-    End If
-    Resume Next
-End Sub
-' ÌîÈ¼ÆøÏûºÄ±í
+' å¡«ç‡ƒæ°”æ¶ˆè€—è¡¨
 Private Sub fillGasConsumptionTable(gasConsumptionTable)
     Err.Clear
     On Error GoTo ErrorHandler
@@ -507,17 +438,17 @@ Private Sub fillGasConsumptionTable(gasConsumptionTable)
     Dim flag, name, k As String
     Dim temp, gasConsumption
     Dim h As New help
-    flag = "È¼ÆøÏûºÄ"
-    rowLimit = Worksheets("Éú²úÈÕ±¨").Rows.count
-    columnLimit = Worksheets("Éú²úÈÕ±¨").Columns.count
+    flag = "ç‡ƒæ°”æ¶ˆè€—"
+    rowLimit = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Rows.count
+    columnLimit = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Columns.count
     For row = 1 To rowLimit
         For column = 1 To columnLimit
-            temp = Worksheets("Éú²úÈÕ±¨").Cells(row, column).value
+            temp = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column).value
             If TypeName(temp) = "String" Then
                 If h.isMatch(flag, temp) Then
                     beginRow = row + 1
                     beginColumn = column + 1
-                    rowLimit = row + 1
+                    rowLimit = row + 5
                     columnLimit = column + 5
                     Debug.Print temp & "[" & row & "," & column & "],[" & rowLimit & "," & columnLimit & "]"
                     GoTo LabelFillTable
@@ -526,23 +457,23 @@ Private Sub fillGasConsumptionTable(gasConsumptionTable)
         Next column
     Next row
 LabelFillTable:
-    gasConsumption = Array("ÈÈÓÍÂ¯", "¹øÂ¯·¿ÓÃÆø", "»ğ¾æ³¤Ã÷µÆ", "»ğ¾æ·Å¿ÕÁ¿", "FIQ-2043")
+    gasConsumption = Array("çƒ­æ²¹ç‚‰", "é”…ç‚‰æˆ¿ç”¨æ°”", "ç«ç‚¬é•¿æ˜ç¯", "ç«ç‚¬æ”¾ç©ºé‡", "FIQ-2043")
     For row = beginRow To rowLimit
         For column = beginColumn To columnLimit
-            temp = Worksheets("Éú²úÈÕ±¨").Cells(row, column).value
+            temp = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column).value
             If TypeName(temp) = "String" Then
                 For Each name In gasConsumption
                 'Debug.Print temp, name, h.isMatch(name, temp)
                     If h.isMatch(name, temp) Then
                         ro = 1
-                        k = name + "ÈÕÀÛ·½"
-                        Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = gasConsumptionTable.item(k)
+                        k = name + "æ–¹"
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = gasConsumptionTable.item(k)
                         ro = ro + 1
-                        k = name + "ÔÂÀÛ·½"
-                        Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = gasConsumptionTable.item(k)
+                        k = "æœˆç´¯" + name + "æ–¹"
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = gasConsumptionTable.item(k)
                         ro = ro + 1
-                        k = name + "ÄêÀÛ·½"
-                        Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = gasConsumptionTable.item(k)
+                        k = "å¹´ç´¯" + name + "æ–¹"
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = gasConsumptionTable.item(k)
                     End If
                 Next name
             End If
@@ -555,7 +486,7 @@ ErrorHandler:
     End If
     Resume Next
 End Sub
-'»ñµÃ¿ìËÙÂ¼ÈëÊı¾İ
+'è·å¾—å¿«é€Ÿå½•å…¥æ•°æ®
 Private Sub getQuickInputData(ByRef data As Object)
     On Error GoTo ErrorHandler
     Dim row, column, rowLimit, columnLimit, ro, co As Integer
@@ -566,9 +497,9 @@ Private Sub getQuickInputData(ByRef data As Object)
     Dim h As New help
     For row = 1 To rowLimit
         temp = Cells(row, column).value
-        If h.isMatch("ÈÕÆÚ", temp) Then
+        If h.isMatch("æ—¥æœŸ", temp) Then
             co = 1
-            name = "ÈÕÆÚ"
+            name = "æ—¥æœŸ"
             temp = Cells(row, column + co)
             data(name) = temp
         End If
@@ -578,37 +509,55 @@ Private Sub getQuickInputData(ByRef data As Object)
             temp = Cells(row, column + co).value
             data(name) = temp
         End If
-        If h.isMatch("(º£¹ÜÀ´Òºº¬Ë®)|(º£¹ÜMEGÅ¨¶È)|(º£¹Ü³ö¿ÚÄıµã¡æ)|(º£¹Ü³ö¿ÚPHÖµ)", temp) Then
+        If h.isMatch("(æµ·ç®¡æ¥æ¶²å«æ°´)|(æµ·ç®¡MEGæµ“åº¦)|(æµ·ç®¡å‡ºå£å‡ç‚¹â„ƒ)|(æµ·ç®¡å‡ºå£PHå€¼)", temp) Then
             co = 1
-            name = h.search("(º£¹ÜÀ´Òºº¬Ë®)|(º£¹ÜMEGÅ¨¶È)|(º£¹Ü³ö¿ÚÄıµã¡æ)|(º£¹Ü³ö¿ÚPHÖµ)", temp)
+            name = h.search("(æµ·ç®¡æ¥æ¶²å«æ°´)|(æµ·ç®¡MEGæµ“åº¦)|(æµ·ç®¡å‡ºå£å‡ç‚¹â„ƒ)|(æµ·ç®¡å‡ºå£PHå€¼)", temp)
             temp = Cells(row, column + co).value
-            data("ÉÏÎç" + name) = temp
+            data("ä¸Šåˆ" + name) = temp
             co = 2
             temp = Cells(row, column + co).value
-            data("ÏÂÎç" + name) = temp
+            data("ä¸‹åˆ" + name) = temp
         End If
-        If h.isMatch("(JZ20-2ÄıÎöÓÍm3)|(JZ20-2ÇáÓÍm3)", temp) Then
+        If h.isMatch("(JZ20-2å‡ææ²¹m3)|(JZ20-2è½»æ²¹m3)", temp) Then
             co = 1
-            name = h.search("(JZ20-2ÄıÎöÓÍm3)|(JZ20-2ÇáÓÍm3)", temp)
+            name = h.search("(JZ20-2å‡ææ²¹m3)|(JZ20-2è½»æ²¹m3)", temp)
             temp = Cells(row, column + co).value
             data(name) = temp
             co = 2
             temp = Cells(row, column + co).value
-            name = h.replace(name, "m3", "ÃÜ¶Èt/m3")
+            name = h.replace(name, "m3", "å¯†åº¦t/m3")
             data(name) = temp
         End If
-        If h.isMatch("JZ20-2ÌåÏµ", temp) Then
+        If h.isMatch("JZ20-2ä½“ç³»", temp) Then
             co = 1
             temp = Trim(temp)
-            name = "½ÓÊÕ" + temp
+            name = "æ¥æ”¶" + temp
             temp = Cells(row, column + 1).value
             data(name) = temp
         End If
-        If h.isMatch("Ë®³ØË®Î»", temp) Then
-            name = "¿â´æË®Ã×"
+        If h.isMatch("æ°´æ± æ°´ä½", temp) Then
+            name = "åº“å­˜æ°´ç±³"
             co = 1
             temp = Cells(row, column + co).value
             data(name) = temp
+        End If
+        If h.isMatch("é”…ç‚‰æˆ¿ç”¨æ°”", temp) Then
+            name = "é”…ç‚‰æˆ¿ç”¨æ°”æ–¹"
+            co = 1
+            temp = Cells(row, column + co).value
+            data(name) = temp
+        End If
+        If h.isMatch("FIQ-2043", temp) Then
+            name = "FIQ-2043æ–¹"
+            co = 1
+            temp = Cells(row, column + co).value
+            data(name) = temp
+        End If        
+        If h.isMatch("FIQ-5014KNm3",temp) Then
+            name = "FIQ-5014æ–¹"
+            co = 1
+            temp = Cells(row, column + co).value
+            data(name) = temp*10^3            
         End If
         If h.isString(temp) Then
             name = temp
@@ -622,11 +571,11 @@ ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Sub
-'»ñµÃÅä²úÊı¾İ
+'è·å¾—é…äº§æ•°æ®
 Private Sub getProductionAllocation(ByRef data As Object)
     On Error GoTo ErrorHandler
     Dim row, column, beginRow, beginColumn, lastRow, lastColumn, ro, co As Long
-    Const flag As String = "Åä²úÈÎÎñ"
+    Const flag As String = "é…äº§ä»»åŠ¡"
     Dim h As New help
     Dim temp As Variant
     beginRow = 1
@@ -634,7 +583,7 @@ Private Sub getProductionAllocation(ByRef data As Object)
     lastRow = ActiveSheet.UsedRange.Rows.count
     lastColumn = ActiveSheet.UsedRange.Columns.count
     Dim x, ar, name, value As Variant
-    ar = Array("ÌìÈ»Æø", "±û¶¡Íé", "ÇáÓÍ")
+    ar = Array("å¤©ç„¶æ°”", "ä¸™ä¸çƒ·", "è½»æ²¹")
     For row = beginRow To lastRow
         For column = beginColumn To lastColumn
             temp = Cells(row, column).value
@@ -654,21 +603,21 @@ AllocationFlag:
             For Each x In ar
                 If h.isMatch(x, temp) Then
                     co = 1
-                    name = "ÔÂÅä²ú" + temp
+                    name = "æœˆé…äº§" + temp
                     value = Cells(row, column + co).value
                     data.Add name, value
                     co = 2
-                    name = "ÄêÅä²ú" + temp
+                    name = "å¹´é…äº§" + temp
                     value = Cells(row, column + co).value
                     data.Add name, value
                 End If
             Next x
         Next column
     Next row
-    data.key("ÔÂÅä²úÌìÈ»Æø104m3") = "ÔÂÅä²úÌìÈ»Æøm3"
-    data.key("ÄêÅä²úÌìÈ»Æø104m3") = "ÄêÅä²úÌìÈ»Æøm3"
-    data("ÔÂÅä²úÌìÈ»Æøm3") = data("ÔÂÅä²úÌìÈ»Æøm3") * 10000
-    data("ÄêÅä²úÌìÈ»Æøm3") = data("ÄêÅä²úÌìÈ»Æøm3") * 10000
+    data.key("æœˆé…äº§å¤©ç„¶æ°”104m3") = "æœˆé…äº§å¤©ç„¶æ°”m3"
+    data.key("å¹´é…äº§å¤©ç„¶æ°”104m3") = "å¹´é…äº§å¤©ç„¶æ°”m3"
+    data("æœˆé…äº§å¤©ç„¶æ°”m3") = data("æœˆé…äº§å¤©ç„¶æ°”m3") * 10000
+    data("å¹´é…äº§å¤©ç„¶æ°”m3") = data("å¹´é…äº§å¤©ç„¶æ°”m3") * 10000
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
@@ -680,18 +629,18 @@ Private Sub getRelevantData(ByRef data As Object)
     Dim psql As New PostgreSQL
     Dim h As help
     Dim table, SQL As String
-    'ÀÛ¼Æ±íÊı¾İ×ªÈÕÀÛÊı¾İ
+    'ç´¯è®¡è¡¨æ•°æ®è½¬æ—¥ç´¯æ•°æ®
     Dim names, arr, temp, s, results, name, value As Variant
-    names = Array("FIQ-5014", "¹øÂ¯·¿ÓÃÆø", "»ğ¾æ³¤Ã÷µÆ", "»ğ¾æ·Å¿ÕÁ¿")
+    names = Array("FIQ-5014", "é”…ç‚‰æˆ¿ç”¨æ°”", "ç«ç‚¬é•¿æ˜ç¯", "ç«ç‚¬æ”¾ç©ºé‡")
     s = "'" + Join(names, "','") + "'"
-    table = "Éú²ú¶¯Ì¬"
+    table = "ç”Ÿäº§åŠ¨æ€"
     Dim yesterday As Date
-    yesterday = data("ÈÕÆÚ")
+    yesterday = data("æ—¥æœŸ")
     yesterday = DateAdd("d", -1, yesterday)
-    SQL = "SELECT Ãû³Æ||µ¥Î»,Êı¾İ FROM " & table & " where date_trunc('day',Ê±¼ä) = '" & yesterday & "' and Ãû³Æ in (" & s & ")"
+    SQL = "SELECT åç§°||å•ä½,æ•°æ® FROM " & table & " where date_trunc('day',æ—¶é—´) = '" & yesterday & "' and åç§° in (" & s & ")"
     arr = psql.cnn.Execute(SQL).GetRows
     If IsNull(arr) Or IsEmpty(arr) Then
-        MsgBox yesterday & " Êı¾İ¶ªÊ§£¬Çë²¹ÌîÊı¾İ£¡"
+        MsgBox yesterday & " æ•°æ®ä¸¢å¤±ï¼Œè¯·è¡¥å¡«æ•°æ®ï¼"
         Exit Sub
     End If
     results = Application.Transpose(arr)
@@ -699,35 +648,28 @@ Private Sub getRelevantData(ByRef data As Object)
     row = UBound(results, 1)
     column = UBound(results, 2)
     For row = 1 To UBound(results, 1)
-        name = "×ò" + results(row, 1)
+        name = "æ˜¨" + results(row, 1)
         value = results(row, 2)
         data.Add name, value
-    'Debug.Print name, data(name)
     Next row
     Const MAX_fuelGas As Long = 999999
-    data("ÈÈÓÍÂ¯·½") = data("FIQ-5014·½") - data("×òFIQ-5014·½")
-    If data("ÈÈÓÍÂ¯·½") < 0 Then
-       data ("ÈÈÓÍÂ¯·½") + MAX_fuelGas
+    data("çƒ­æ²¹ç‚‰æ–¹") = data("FIQ-5014æ–¹") - data("æ˜¨FIQ-5014æ–¹")
+    If data("çƒ­æ²¹ç‚‰æ–¹") < 0 Then
+       data ("çƒ­æ²¹ç‚‰æ–¹") + MAX_fuelGas
     End If
-    data("¹øÂ¯·¿ÓÃÆø·½") = data("¹øÂ¯·¿ÓÃÆø·½") - data("×ò¹øÂ¯·¿ÓÃÆø·½")
-    data("»ğ¾æ³¤Ã÷µÆ·½") = data("»ğ¾æ³¤Ã÷µÆ·½") - data("×ò»ğ¾æ³¤Ã÷µÆ·½")
-    data("»ğ¾æ·Å¿ÕÁ¿·½") = data("»ğ¾æ·Å¿ÕÁ¿·½") - data("×ò»ğ¾æ·Å¿ÕÁ¿·½")
-    data.Remove ("×òFIQ-5014·½")
-    data.Remove ("×ò¹øÂ¯·¿ÓÃÆø·½")
-    data.Remove ("×ò»ğ¾æ³¤Ã÷µÆ·½")
-    data.Remove ("×ò»ğ¾æ·Å¿ÕÁ¿·½")
-        'Debug.Print results
-        '»ñµÃ×òÄêÀÛÊı¾İ
+    data("é”…ç‚‰æˆ¿ç”¨æ°”æ–¹") = data("é”…ç‚‰æˆ¿ç”¨æ°”æ–¹") - data("æ˜¨é”…ç‚‰æˆ¿ç”¨æ°”æ–¹")
+    data("ç«ç‚¬é•¿æ˜ç¯æ–¹") = data("ç«ç‚¬é•¿æ˜ç¯æ–¹") - data("æ˜¨ç«ç‚¬é•¿æ˜ç¯æ–¹")
+    data("ç«ç‚¬æ”¾ç©ºé‡æ–¹") = data("ç«ç‚¬æ”¾ç©ºé‡æ–¹") - data("æ˜¨ç«ç‚¬æ”¾ç©ºé‡æ–¹")
     Call getAggregateData(data, "year", yesterday)
-        '»ñµÃ×òÔÂÀÛÊı¾İ
+        'è·å¾—æ˜¨æœˆç´¯æ•°æ®
     Call getAggregateData(data, "month", yesterday)
-        '»ñµÃ×òÈÕ¿â´æÊı¾İ
-    SQL = "SELECT Ãû³Æ||µ¥Î»,Êı¾İ from Éú²úĞÅÏ¢ WHERE ÈÕÆÚ = '%0' and ×´Ì¬='¿â´æ' and Ãû³Æ ~'(V-6\d+[ABC]{0,1})|Ë®' and µ¥Î» ~'·½|¶Ö'"
+        'è·å¾—æ˜¨æ—¥åº“å­˜æ•°æ®
+    SQL = "SELECT åç§°||å•ä½,æ•°æ® from ç”Ÿäº§ä¿¡æ¯ WHERE æ—¥æœŸ = '%0' and çŠ¶æ€='åº“å­˜' and åç§° ~'(V-6\d+[ABC]{0,1})|æ°´' and å•ä½ ~'æ–¹|å¨'"
     SQL = replace(SQL, "%0", yesterday)
         'Debug.Print SQL
     arr = psql.cnn.Execute(SQL).GetRows
     If IsNull(arr) Or IsEmpty(arr) Then
-        MsgBox yesterday & " Êı¾İ¶ªÊ§£¬Çë²¹ÌîÊı¾İ£¡"
+        MsgBox yesterday & " æ•°æ®ä¸¢å¤±ï¼Œè¯·è¡¥å¡«æ•°æ®ï¼"
         Exit Sub
     End If
     results = Application.Transpose(arr)
@@ -735,7 +677,7 @@ Private Sub getRelevantData(ByRef data As Object)
     For row = 1 To UBound(results, 1)
         name = results(row, 1)
         value = results(row, 2)
-        name = "×ò" + name
+        name = "æ˜¨" + name
         data.Add name, value
         'Debug.Print name, data(name)
     Next row
@@ -746,38 +688,38 @@ End Sub
 Function unitConvert(ByVal s As String)
     On Error GoTo ErrorHandler
     Dim h As New help
-    s = h.replace(s, "t/m3", "¶Ö/Á¢·½Ã×")
-    s = h.replace(s, "N{0,1}m3", "·½")
-    s = h.replace(s, "((V-6\d+[ABC]{0,1})|(¿â´æË®))(m)", "$1Ã×")
-    s = h.replace(s, "[kK]wh", "¶È")
-    s = h.replace(s, "bbl", "Í°")
-    s = h.replace(s, "t", "¶Ö")
-    s = h.replace(s, "M[Pp]a", "Õ×ÅÁ")
-    s = h.replace(s, "[kK][pP]a", "Ç§ÅÁ")
-    s = h.replace(s, "¡æ", "ÉãÊÏ¶È")
+    s = h.replace(s, "t/m3", "å¨/ç«‹æ–¹ç±³")
+    s = h.replace(s, "N{0,1}m3", "æ–¹")
+    s = h.replace(s, "((V-6\d+[ABC]{0,1})|(åº“å­˜æ°´))(m)", "$1ç±³")
+    s = h.replace(s, "[kK]wh", "åº¦")
+    s = h.replace(s, "bbl", "æ¡¶")
+    s = h.replace(s, "t", "å¨")
+    s = h.replace(s, "M[Pp]a", "å…†å¸•")
+    s = h.replace(s, "[kK][pP]a", "åƒå¸•")
+    s = h.replace(s, "â„ƒ", "æ‘„æ°åº¦")
     s = h.replace(s, "%", "")
     unitConvert = s
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Function
-'»ñµÃÔÂÀÛ£¬ÄêÀÛÊı¾İ
+'è·å¾—æœˆç´¯ï¼Œå¹´ç´¯æ•°æ®
 Private Sub getAggregateData(ByRef data As Object, ByVal interval As String, ByVal sd As Date)
     On Error GoTo ErrorHandler
     Dim names, arr, results, name, value As Variant
     Dim s, SQL As String
     Dim psql As New PostgreSQL
     Dim row As Long
-    names = Array("ÈÈÓÍÂ¯", "¹øÂ¯·¿ÓÃÆø", "»ğ¾æ·Å¿ÕÁ¿", "»ğ¾æ³¤Ã÷µÆ", "½õÌì»¯", "¾«Ï¸»¯¹¤", "¾«Ï¸»¯¹¤CNG", "Èë³§¼ÆÁ¿", "ÎÈ¶¨Çø", "ÎÛË®´¦Àí³§", "ĞÂ°ÂÈ¼Æø", "×ÔÓÃÆø", "×Ü²úÆøÁ¿", "×ÜÍâÊäÆøÁ¿", "ÇáÓÍ»ØÊÕÁ¿", "±û¶¡Íé»ØÊÕÁ¿", "¼×´¼ÏûºÄ", "ÒÒ¶ş´¼»ØÊÕ", "Ë®ÏûºÄ", "Íâ¹©Ë®", "×Ô²ÉË®", "×Ô·¢µç", "µçÏûºÄ", "Íâ¹©µç")
+    names = Array("çƒ­æ²¹ç‚‰", "é”…ç‚‰æˆ¿ç”¨æ°”", "ç«ç‚¬æ”¾ç©ºé‡", "ç«ç‚¬é•¿æ˜ç¯", "é”¦å¤©åŒ–", "ç²¾ç»†åŒ–å·¥", "ç²¾ç»†åŒ–å·¥CNG", "å…¥å‚è®¡é‡", "ç¨³å®šåŒº", "æ±¡æ°´å¤„ç†å‚", "æ–°å¥¥ç‡ƒæ°”", "è‡ªç”¨æ°”", "æ€»äº§æ°”é‡", "æ€»å¤–è¾“æ°”é‡", "è½»æ²¹å›æ”¶é‡", "ä¸™ä¸çƒ·å›æ”¶é‡", "ç”²é†‡æ¶ˆè€—", "ä¹™äºŒé†‡æ¶ˆè€—", "ä¹™äºŒé†‡å›æ”¶", "æ°´æ¶ˆè€—", "å¤–ä¾›æ°´", "è‡ªé‡‡æ°´", "è‡ªå‘ç”µ", "ç”µæ¶ˆè€—", "å¤–ä¾›ç”µ","FIQ-2043")
     s = "'" + Join(names, "','") + "'"
-    SQL = "SELECT Ãû³Æ||µ¥Î» as name,SUM(Êı¾İ) as sum from Éú²úĞÅÏ¢ WHERE ÈÕÆÚ BETWEEN date_trunc('%0',timestamp '%1') and '%1' and Ãû³Æ in (%2) GROUP BY name order by name;"
+    SQL = "SELECT åç§°||å•ä½ as name,SUM(æ•°æ®) as sum from ç”Ÿäº§ä¿¡æ¯ WHERE æ—¥æœŸ BETWEEN date_trunc('%0',timestamp '%1') and '%1' and åç§° in (%2) GROUP BY name order by name;"
     SQL = replace(SQL, "%0", interval)
     SQL = replace(SQL, "%1", sd)
     SQL = replace(SQL, "%2", s)
         'Debug.Print SQL
     arr = psql.cnn.Execute(SQL).GetRows
     If IsNull(arr) Or IsEmpty(arr) Then
-        MsgBox sd & " Êı¾İ¶ªÊ§£¬Çë²¹ÌîÊı¾İ£¡"
+        MsgBox sd & " æ•°æ®ä¸¢å¤±ï¼Œè¯·è¡¥å¡«æ•°æ®ï¼"
         Exit Sub
     End If
     results = Application.Transpose(arr)
@@ -787,24 +729,24 @@ Private Sub getAggregateData(ByRef data As Object, ByVal interval As String, ByV
         value = results(row, 2)
         Select Case interval
             Case "year"
-                name = "ÄêÀÛ" + name
+                name = "å¹´ç´¯" + name
             Case "month"
-                name = "ÔÂÀÛ" + name
+                name = "æœˆç´¯" + name
         End Select
         data.Add name, value
     'Debug.Print name, data(name)
     Next row
-    SQL = "SELECT ×´Ì¬||Ãû³Æ||µ¥Î» as name,SUM(Êı¾İ) as sum from Éú²úĞÅÏ¢ WHERE ÈÕÆÚ BETWEEN date_trunc('%0',timestamp '%1') and '%1' and Ãû³Æ ~('%2') GROUP BY name order by name;"
+    SQL = "SELECT çŠ¶æ€||åç§°||å•ä½ as name,SUM(æ•°æ®) as sum from ç”Ÿäº§ä¿¡æ¯ WHERE æ—¥æœŸ BETWEEN date_trunc('%0',timestamp '%1') and '%1' and åç§° ~('%2') GROUP BY name order by name;"
     SQL = replace(SQL, "%0", interval)
     SQL = replace(SQL, "%1", sd)
-    s = "JZ20-2ÌåÏµ"
+    s = "JZ20-2ä½“ç³»"
     SQL = replace(SQL, "%2", s)
     Erase arr
     Erase results
     'Debug.Print SQL
     arr = psql.cnn.Execute(SQL).GetRows
     If IsNull(arr) Or IsEmpty(arr) Then
-        MsgBox sd & " Êı¾İ¶ªÊ§£¬Çë²¹ÌîÊı¾İ£¡"
+        MsgBox sd & " æ•°æ®ä¸¢å¤±ï¼Œè¯·è¡¥å¡«æ•°æ®ï¼"
         Exit Sub
     End If
     results = Application.Transpose(arr)
@@ -814,9 +756,9 @@ Private Sub getAggregateData(ByRef data As Object, ByVal interval As String, ByV
         value = results(row, 2)
         Select Case interval
             Case "year"
-                name = "ÄêÀÛ" + name
+                name = "å¹´ç´¯" + name
             Case "month"
-                name = "ÔÂÀÛ" + name
+                name = "æœˆç´¯" + name
         End Select
         data.Add name, value
     'Debug.Print name, data(name)
@@ -825,127 +767,127 @@ ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Sub
-' ÍÆµ¼Êı¾İ
+' æ¨å¯¼æ•°æ®
 Private Sub getDerivedData(ByRef data As Object)
     On Error GoTo ErrorHandler
     Call getRelevantData(data)
     Call getHightHydrocarbonDensityData(data)
     Dim arr, temp, height, volume, quality, name As Variant
-    'ÌìÈ»Æø
-    data("½ÓÊÕJZ25-1SÌåÏµ·½") = data("Èë³§¼ÆÁ¿·½") - data("½ÓÊÕJZ20-2ÌåÏµ·½")
-    data("ÍâÊäJZ20-2ÌåÏµ·½") = data("½õÌì»¯·½") * data("½ÓÊÕJZ20-2ÌåÏµ·½") / data("Èë³§¼ÆÁ¿·½")
-    data("ÍâÊäJZ25-1SÌåÏµ·½") = data("½õÌì»¯·½") - data("ÍâÊäJZ20-2ÌåÏµ·½")
-    data("×ÜÍâÊäÆøÁ¿·½") = data("½õÌì»¯·½") + data("¾«Ï¸»¯¹¤·½") + data("¾«Ï¸»¯¹¤CNG·½") + data("ÎÛË®´¦Àí³§·½") + data("ĞÂ°ÂÈ¼Æø·½")
-    data("×Ü²úÆøÁ¿·½") = data("×ÔÓÃÆø·½") + data("×ÜÍâÊäÆøÁ¿·½")
-    'ÇáÓÍ
+    'å¤©ç„¶æ°”
+    data("æ¥æ”¶JZ25-1Sä½“ç³»æ–¹") = data("å…¥å‚è®¡é‡æ–¹") - data("æ¥æ”¶JZ20-2ä½“ç³»æ–¹")
+    data("å¤–è¾“JZ20-2ä½“ç³»æ–¹") = data("é”¦å¤©åŒ–æ–¹") * data("æ¥æ”¶JZ20-2ä½“ç³»æ–¹") / data("å…¥å‚è®¡é‡æ–¹")
+    data("å¤–è¾“JZ25-1Sä½“ç³»æ–¹") = data("é”¦å¤©åŒ–æ–¹") - data("å¤–è¾“JZ20-2ä½“ç³»æ–¹")
+    data("æ€»å¤–è¾“æ°”é‡æ–¹") = data("é”¦å¤©åŒ–æ–¹") + data("ç²¾ç»†åŒ–å·¥æ–¹") + data("ç²¾ç»†åŒ–å·¥CNGæ–¹") + data("æ±¡æ°´å¤„ç†å‚æ–¹") + data("æ–°å¥¥ç‡ƒæ°”æ–¹")
+    data("æ€»äº§æ°”é‡æ–¹") = data("è‡ªç”¨æ°”æ–¹") + data("æ€»å¤–è¾“æ°”é‡æ–¹")
+    'è½»æ²¹
     arr = Array("V-631A", "V-631B", "V-631C")
     For Each temp In arr
-        height = data(temp + "Ã×")
+        height = data(temp + "ç±³")
         volume = height * 165
         quality = height * 122
-        name = temp + "·½"
+        name = temp + "æ–¹"
         data.Add name, volume
-        name = temp + "¶Ö"
+        name = temp + "å¨"
         data.Add name, quality
-        data("ÇáÓÍ¿â´æ¶Ö") = data("ÇáÓÍ¿â´æ¶Ö") + quality
+        data("è½»æ²¹åº“å­˜å¨") = data("è½»æ²¹åº“å­˜å¨") + quality
     Next temp
-    data("×òÇáÓÍ¿â´æ¶Ö") = data("×òV-631A¶Ö") + data("×òV-631B¶Ö") + data("×òV-631C¶Ö")
-    data("ÇáÓÍ»ØÊÕ¶Ö") = data("ÇáÓÍ¿â´æ¶Ö") + data("ÇáÓÍ×°³µ¶Ö") - data("×òÇáÓÍ¿â´æ¶Ö")
-    data("ÇáÓÍ»ØÊÕ·½") = data("ÇáÓÍ»ØÊÕ¶Ö") / data("ÇáÓÍ±ÈÖØ")
-    data("ÇáÓÍ»ØÊÕÁ¿·½") = data("ÇáÓÍ»ØÊÕ·½")
-    data("ÇáÓÍ»ØÊÕÁ¿¶Ö") = data("ÇáÓÍ»ØÊÕ¶Ö")
-    'ÇáÌş
+    data("æ˜¨è½»æ²¹åº“å­˜å¨") = data("æ˜¨V-631Aå¨") + data("æ˜¨V-631Bå¨") + data("æ˜¨V-631Cå¨")
+    data("è½»æ²¹å›æ”¶å¨") = data("è½»æ²¹åº“å­˜å¨") + data("è½»æ²¹è£…è½¦å¨") - data("æ˜¨è½»æ²¹åº“å­˜å¨")
+    data("è½»æ²¹å›æ”¶æ–¹") = data("è½»æ²¹å›æ”¶å¨") / data("è½»æ²¹æ¯”é‡")
+    data("è½»æ²¹å›æ”¶é‡æ–¹") = data("è½»æ²¹å›æ”¶æ–¹")
+    data("è½»æ²¹å›æ”¶é‡å¨") = data("è½»æ²¹å›æ”¶å¨")
+    'è½»çƒƒ
     arr = Array("V-641A", "V-641B", "V-642", "V-643A", "V-643B")
-    data("ÇáÌş¿â´æ¶Ö") = 0
+    data("è½»çƒƒåº“å­˜å¨") = 0
     For Each temp In arr
-        height = data(temp + "Ã×")
+        height = data(temp + "ç±³")
         volume = height ^ 2 * 19.311 - height ^ 3 * 1.047
-        quality = data(temp + "ÃÜ¶È") * (3 * 6.15 - height) * 3.1415 * height ^ 2 / 3
-        name = temp + "·½"
+        quality = data(temp + "å¯†åº¦") * (3 * 6.15 - height) * 3.1415 * height ^ 2 / 3
+        name = temp + "æ–¹"
         data.Add name, volume
     'Debug.Print name, volume
-        name = temp + "¶Ö"
+        name = temp + "å¨"
         data.Add name, quality
-    'Debug.Print name, quality, temp + "ÃÜ¶È", data(temp + "ÃÜ¶È")
-        data("ÇáÌş¿â´æ¶Ö") = data("ÇáÌş¿â´æ¶Ö") + quality
+    'Debug.Print name, quality, temp + "å¯†åº¦", data(temp + "å¯†åº¦")
+        data("è½»çƒƒåº“å­˜å¨") = data("è½»çƒƒåº“å­˜å¨") + quality
     Next temp
-    data("±ûÍéÃÜ¶È") = data("V-641AÃÜ¶È")
-    data("¶¡ÍéÃÜ¶È") = data("V-642ÃÜ¶È")
-    data("Òº»¯ÆøÃÜ¶È") = data("V-643AÃÜ¶È")
-    data("±ûÍé×°³µ·½") = data("±ûÍé×°³µ¶Ö") / data("±ûÍéÃÜ¶È")
-    data("¶¡Íé×°³µ·½") = data("¶¡Íé×°³µ¶Ö") / data("¶¡ÍéÃÜ¶È")
-    data("Òº»¯Æø×°³µ·½") = data("Òº»¯Æø×°³µ¶Ö") / data("Òº»¯ÆøÃÜ¶È")
+    data("ä¸™çƒ·å¯†åº¦") = data("V-641Aå¯†åº¦")
+    data("ä¸çƒ·å¯†åº¦") = data("V-642å¯†åº¦")
+    data("æ¶²åŒ–æ°”å¯†åº¦") = data("V-643Aå¯†åº¦")
+    data("ä¸™çƒ·è£…è½¦æ–¹") = data("ä¸™çƒ·è£…è½¦å¨") / data("ä¸™çƒ·å¯†åº¦")
+    data("ä¸çƒ·è£…è½¦æ–¹") = data("ä¸çƒ·è£…è½¦å¨") / data("ä¸çƒ·å¯†åº¦")
+    data("æ¶²åŒ–æ°”è£…è½¦æ–¹") = data("æ¶²åŒ–æ°”è£…è½¦å¨") / data("æ¶²åŒ–æ°”å¯†åº¦")
     
-    data("×òÇáÌş¿â´æ¶Ö") = data("×òV-641A¶Ö") + data("×òV-641B¶Ö") + data("×òV-642¶Ö") + data("×òV-643A¶Ö") + data("×òV-643B¶Ö")
-    'Debug.Print data("×òÇáÌş¿â´æ¶Ö"), data("×òV-641A¶Ö"), data("×òV-641B¶Ö"), data("×òV-642¶Ö"), data("×òV-643A¶Ö"), data("×òV-643B¶Ö")
-    data("ÇáÌş»ØÊÕ¶Ö") = data("±ûÍé×°³µ¶Ö") + data("¶¡Íé×°³µ¶Ö") + data("Òº»¯Æø×°³µ¶Ö") + data("×òÇáÌş¿â´æ¶Ö") - data("ÇáÌş¿â´æ¶Ö")
-    'Debug.Print data("ÇáÌş»ØÊÕ¶Ö"), data("±ûÍé×°³µ¶Ö"), data("¶¡Íé×°³µ¶Ö"), data("Òº»¯Æø×°³µ¶Ö"), data("×òÇáÌş¿â´æ¶Ö"), data("ÇáÌş¿â´æ¶Ö")
-    data("ÇáÌş»ØÊÕ·½") = data("ÇáÌş»ØÊÕ¶Ö") / 0.54
-    data("±û¶¡Íé»ØÊÕÁ¿¶Ö") = data("ÇáÌş»ØÊÕ¶Ö")
-    data("±û¶¡Íé»ØÊÕÁ¿·½") = data("ÇáÌş»ØÊÕ·½")
+    data("æ˜¨è½»çƒƒåº“å­˜å¨") = data("æ˜¨V-641Aå¨") + data("æ˜¨V-641Bå¨") + data("æ˜¨V-642å¨") + data("æ˜¨V-643Aå¨") + data("æ˜¨V-643Bå¨")
+    'Debug.Print data("æ˜¨è½»çƒƒåº“å­˜å¨"), data("æ˜¨V-641Aå¨"), data("æ˜¨V-641Bå¨"), data("æ˜¨V-642å¨"), data("æ˜¨V-643Aå¨"), data("æ˜¨V-643Bå¨")
+    data("è½»çƒƒå›æ”¶å¨") = data("ä¸™çƒ·è£…è½¦å¨") + data("ä¸çƒ·è£…è½¦å¨") + data("æ¶²åŒ–æ°”è£…è½¦å¨") + data("æ˜¨è½»çƒƒåº“å­˜å¨") - data("è½»çƒƒåº“å­˜å¨")
+    'Debug.Print data("è½»çƒƒå›æ”¶å¨"), data("ä¸™çƒ·è£…è½¦å¨"), data("ä¸çƒ·è£…è½¦å¨"), data("æ¶²åŒ–æ°”è£…è½¦å¨"), data("æ˜¨è½»çƒƒåº“å­˜å¨"), data("è½»çƒƒåº“å­˜å¨")
+    data("è½»çƒƒå›æ”¶æ–¹") = data("è½»çƒƒå›æ”¶å¨") / 0.54
+    data("ä¸™ä¸çƒ·å›æ”¶é‡å¨") = data("è½»çƒƒå›æ”¶å¨")
+    data("ä¸™ä¸çƒ·å›æ”¶é‡æ–¹") = data("è½»çƒƒå›æ”¶æ–¹")
     
-    data("¿â´æË®·½") = data("¿â´æË®Ã×") * 1390
-    data("Ë®ÏûºÄ·½") = data("×ò¿â´æË®·½") + data("Íâ¹©Ë®·½") + data("×Ô²ÉË®·½") - data("¿â´æË®·½")
-    data("µçÏûºÄ¶È") = data("Íâ¹©µç¶È") + data("×Ô·¢µç¶È")
-    'ÔÂÀÛÄêÀÛ
+    data("åº“å­˜æ°´æ–¹") = data("åº“å­˜æ°´ç±³") * 1390
+    data("æ°´æ¶ˆè€—æ–¹") = data("æ˜¨åº“å­˜æ°´æ–¹") + data("å¤–ä¾›æ°´æ–¹") + data("è‡ªé‡‡æ°´æ–¹") - data("åº“å­˜æ°´æ–¹")
+    data("ç”µæ¶ˆè€—åº¦") = data("å¤–ä¾›ç”µåº¦") + data("è‡ªå‘ç”µåº¦")
+    'æœˆç´¯å¹´ç´¯
     Dim names, unit, name1, name2, name3 As Variant
     Dim h As New help
-    names = Array("ÈÈÓÍÂ¯", "¹øÂ¯·¿ÓÃÆø", "»ğ¾æ·Å¿ÕÁ¿", "»ğ¾æ³¤Ã÷µÆ", "½õÌì»¯", "¾«Ï¸»¯¹¤", "¾«Ï¸»¯¹¤CNG", "Èë³§¼ÆÁ¿", "ÎÈ¶¨Çø", "ÎÛË®´¦Àí³§", "ĞÂ°ÂÈ¼Æø", "×ÔÓÃÆø", "×Ü²úÆøÁ¿", "×ÜÍâÊäÆøÁ¿", "ÇáÓÍ»ØÊÕÁ¿", "±û¶¡Íé»ØÊÕÁ¿", "¼×´¼ÏûºÄ", "ÒÒ¶ş´¼»ØÊÕ", "Ë®ÏûºÄ", "Íâ¹©Ë®", "×Ô²ÉË®", "×Ô·¢µç", "µçÏûºÄ", "Íâ¹©µç")
+    names = Array("çƒ­æ²¹ç‚‰", "é”…ç‚‰æˆ¿ç”¨æ°”", "ç«ç‚¬æ”¾ç©ºé‡", "ç«ç‚¬é•¿æ˜ç¯", "é”¦å¤©åŒ–", "ç²¾ç»†åŒ–å·¥", "ç²¾ç»†åŒ–å·¥CNG", "å…¥å‚è®¡é‡", "ç¨³å®šåŒº", "æ±¡æ°´å¤„ç†å‚", "æ–°å¥¥ç‡ƒæ°”", "è‡ªç”¨æ°”", "æ€»äº§æ°”é‡", "æ€»å¤–è¾“æ°”é‡", "è½»æ²¹å›æ”¶é‡", "ä¸™ä¸çƒ·å›æ”¶é‡", "ç”²é†‡æ¶ˆè€—", "ä¹™äºŒé†‡å›æ”¶", "æ°´æ¶ˆè€—", "å¤–ä¾›æ°´", "è‡ªé‡‡æ°´", "è‡ªå‘ç”µ", "ç”µæ¶ˆè€—", "å¤–ä¾›ç”µ")
     For Each temp In names
-        If h.isMatch("µç", temp) Then
-            unit = "¶È"
+        If h.isMatch("ç”µ", temp) Then
+            unit = "åº¦"
         Else
-            unit = "·½"
+            unit = "æ–¹"
         End If
         name1 = temp + unit
-        name2 = "ÔÂÀÛ" + name1
+        name2 = "æœˆç´¯" + name1
         data(name2) = data(name1) + data(name2)
     'Debug.Print name2, data(name2), name1, data(name1)
-        name2 = "ÄêÀÛ" + name1
+        name2 = "å¹´ç´¯" + name1
         data(name2) = data(name1) + data(name2)
     'Debug.Print name2, data(name2), name1, data(name1)
     Next temp
-    data("ÔÂÀÛ½ÓÊÕJZ20-2ÌåÏµ·½") = data("½ÓÊÕJZ20-2ÌåÏµ·½") + data("ÔÂÀÛ½ÓÊÕJZ20-2ÌåÏµ·½")
-    data("ÄêÀÛ½ÓÊÕJZ20-2ÌåÏµ·½") = data("½ÓÊÕJZ20-2ÌåÏµ·½") + data("ÄêÀÛ½ÓÊÕJZ20-2ÌåÏµ·½")
-    data("ÔÂÀÛÍâÊäJZ20-2ÌåÏµ·½") = data("ÍâÊäJZ20-2ÌåÏµ·½") + data("ÔÂÀÛÍâÊäJZ20-2ÌåÏµ·½")
-    data("ÄêÀÛÍâÊäJZ20-2ÌåÏµ·½") = data("ÍâÊäJZ20-2ÌåÏµ·½") + data("ÄêÀÛÍâÊäJZ20-2ÌåÏµ·½")
-    data("ÄêÀÛÌìÈ»Æø·½") = data("ÄêÀÛ×ÜÍâÊäÆøÁ¿·½")
-    data("ÄêÀÛÇáÓÍ·½") = data("ÄêÀÛÇáÓÍ»ØÊÕÁ¿·½")
-    data("ÄêÀÛ±û¶¡Íé·½") = data("ÄêÀÛ±û¶¡Íé»ØÊÕÁ¿·½")
-    data("ÔÂÀÛÌìÈ»Æø·½") = data("ÔÂÀÛ×ÜÍâÊäÆøÁ¿·½")
-    data("ÔÂÀÛÇáÓÍ·½") = data("ÔÂÀÛÇáÓÍ»ØÊÕÁ¿·½")
-    data("ÔÂÀÛ±û¶¡Íé·½") = data("ÔÂÀÛ±û¶¡Íé»ØÊÕÁ¿·½")
+    data("æœˆç´¯æ¥æ”¶JZ20-2ä½“ç³»æ–¹") = data("æ¥æ”¶JZ20-2ä½“ç³»æ–¹") + data("æœˆç´¯æ¥æ”¶JZ20-2ä½“ç³»æ–¹")
+    data("å¹´ç´¯æ¥æ”¶JZ20-2ä½“ç³»æ–¹") = data("æ¥æ”¶JZ20-2ä½“ç³»æ–¹") + data("å¹´ç´¯æ¥æ”¶JZ20-2ä½“ç³»æ–¹")
+    data("æœˆç´¯å¤–è¾“JZ20-2ä½“ç³»æ–¹") = data("å¤–è¾“JZ20-2ä½“ç³»æ–¹") + data("æœˆç´¯å¤–è¾“JZ20-2ä½“ç³»æ–¹")
+    data("å¹´ç´¯å¤–è¾“JZ20-2ä½“ç³»æ–¹") = data("å¤–è¾“JZ20-2ä½“ç³»æ–¹") + data("å¹´ç´¯å¤–è¾“JZ20-2ä½“ç³»æ–¹")
+    data("å¹´ç´¯å¤©ç„¶æ°”æ–¹") = data("å¹´ç´¯æ€»å¤–è¾“æ°”é‡æ–¹")
+    data("å¹´ç´¯è½»æ²¹æ–¹") = data("å¹´ç´¯è½»æ²¹å›æ”¶é‡æ–¹")
+    data("å¹´ç´¯ä¸™ä¸çƒ·æ–¹") = data("å¹´ç´¯ä¸™ä¸çƒ·å›æ”¶é‡æ–¹")
+    data("æœˆç´¯å¤©ç„¶æ°”æ–¹") = data("æœˆç´¯æ€»å¤–è¾“æ°”é‡æ–¹")
+    data("æœˆç´¯è½»æ²¹æ–¹") = data("æœˆç´¯è½»æ²¹å›æ”¶é‡æ–¹")
+    data("æœˆç´¯ä¸™ä¸çƒ·æ–¹") = data("æœˆç´¯ä¸™ä¸çƒ·å›æ”¶é‡æ–¹")
     
-    data("È¥ÄêÄêÄ©") = DateSerial(Year(data("ÈÕÆÚ")) - 1, 12, 31)
-    data("½ñÄêÄêÄ©") = DateSerial(Year(data("ÈÕÆÚ")), 12, 31)
-    data("ÄêÊ±¼ä½ø¶È±È") = (data("ÈÕÆÚ") - data("È¥ÄêÄêÄ©")) / (data("½ñÄêÄêÄ©") - data("È¥ÄêÄêÄ©")) * 100
-    data("½ñºóĞèÈÕ²úÌìÈ»Æø·½") = (data("ÄêÅä²úÌìÈ»Æø·½") - data("ÄêÀÛ×ÜÍâÊäÆøÁ¿·½")) / data("Ê£ÓàÌìÊı")
-    data("½ñºóĞèÈÕ²úÇáÓÍ·½") = (data("ÄêÅä²úÇáÓÍ·½") - data("ÄêÀÛÇáÓÍ»ØÊÕÁ¿·½")) / data("Ê£ÓàÌìÊı")
-    data("½ñºóĞèÈÕ²ú±û¶¡Íé·½") = (data("ÄêÅä²ú±û¶¡Íé·½") - data("ÄêÀÛ±û¶¡Íé»ØÊÕÁ¿·½")) / data("Ê£ÓàÌìÊı")
+    data("å»å¹´å¹´æœ«") = DateSerial(Year(data("æ—¥æœŸ")) - 1, 12, 31)
+    data("ä»Šå¹´å¹´æœ«") = DateSerial(Year(data("æ—¥æœŸ")), 12, 31)
+    data("å¹´æ—¶é—´è¿›åº¦æ¯”") = (data("æ—¥æœŸ") - data("å»å¹´å¹´æœ«")) / (data("ä»Šå¹´å¹´æœ«") - data("å»å¹´å¹´æœ«")) * 100
+    data("ä»Šåéœ€æ—¥äº§å¤©ç„¶æ°”æ–¹") = (data("å¹´é…äº§å¤©ç„¶æ°”æ–¹") - data("å¹´ç´¯æ€»å¤–è¾“æ°”é‡æ–¹")) / data("å‰©ä½™å¤©æ•°")
+    data("ä»Šåéœ€æ—¥äº§è½»æ²¹æ–¹") = (data("å¹´é…äº§è½»æ²¹æ–¹") - data("å¹´ç´¯è½»æ²¹å›æ”¶é‡æ–¹")) / data("å‰©ä½™å¤©æ•°")
+    data("ä»Šåéœ€æ—¥äº§ä¸™ä¸çƒ·æ–¹") = (data("å¹´é…äº§ä¸™ä¸çƒ·æ–¹") - data("å¹´ç´¯ä¸™ä¸çƒ·å›æ”¶é‡æ–¹")) / data("å‰©ä½™å¤©æ•°")
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Sub
-'»ñµÃ±û¶¡ÍéÃÜ¶È
+'è·å¾—ä¸™ä¸çƒ·å¯†åº¦
 Private Sub getHightHydrocarbonDensityData(ByRef data As Object)
     On Error GoTo ErrorHandler
     Dim row, column, lastRow, lastColumn, ro, co As Long
-    lastRow = Worksheets("Éú²úÈÕ±¨").UsedRange.Rows.count
-    lastColumn = Worksheets("Éú²úÈÕ±¨").UsedRange.Columns.count
+    lastRow = Worksheets("ç”Ÿäº§æ—¥æŠ¥").UsedRange.Rows.count
+    lastColumn = Worksheets("ç”Ÿäº§æ—¥æŠ¥").UsedRange.Columns.count
     Dim flag, temp, name, value As Variant
     Dim h As New help
-    flag = "±ÈÖØ"
+    flag = "æ¯”é‡"
     For row = 1 To lastRow
         For column = 1 To lastColumn
-            temp = Worksheets("Éú²úÈÕ±¨").Cells(row, column).value
+            temp = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column).value
             If h.isString(temp) Then
                 If h.isMatch(flag, temp) Then
                      For co = 0 To 4
                         ro = 1
-                        name = Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column + co).value
-                        name = name + "ÃÜ¶È"
+                        name = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column + co).value
+                        name = name + "å¯†åº¦"
                         ro = 2
-                        value = Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column + co).value
+                        value = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column + co).value
     'Debug.Print row + ro, column + co, name, value
                         data(name) = value
                     Next co
@@ -958,15 +900,15 @@ ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Sub
-' »ñµÃÍ£²úÌìÊıÊı¾İ
+' è·å¾—åœäº§å¤©æ•°æ•°æ®
 Sub getMaintenancePlaneData(ByRef data As Object)
     Dim row, column, lastRow, lastColumn, ro, co As Long
     Dim temp, flag, d, d1, d2, name, value As Variant
     Dim h As New help
     lastRow = UsedRange.Rows.count
     lastColumn = UsedRange.Columns.count
-    flag = "¼ìĞŞ¼Æ»®"
-    d = data("ÈÕÆÚ")
+    flag = "æ£€ä¿®è®¡åˆ’"
+    d = data("æ—¥æœŸ")
     For row = 1 To lastRow
         For column = 1 To lastColumn
             temp = Cells(row, column).value
@@ -976,7 +918,7 @@ Sub getMaintenancePlaneData(ByRef data As Object)
                d1 = Cells(row + ro, column + co).value
                ro = 2
                d2 = Cells(row + ro, column + co).value
-               name = "Ê£ÓàÌìÊı"
+               name = "å‰©ä½™å¤©æ•°"
                If d >= d1 And d <= d2 Then
                     value = DateSerial(Year(d), 12, 31) - d2
                Else
@@ -990,248 +932,248 @@ Sub getMaintenancePlaneData(ByRef data As Object)
     Next row
 
 End Sub
-' ÌîĞ´Éú²úÈÕ±¨
+' å¡«å†™ç”Ÿäº§æ—¥æŠ¥
 Sub fillProductionDaily(ByRef data As Object)
     On Error GoTo ErrorHandler
     Dim row, column, lastRow, lastColumn, ro, co, i As Long
     Dim temp, arr, n, names, name, value As Variant
     Dim flag As String
-    flag = "ºùÂ«µºÌìÈ»ÆøÖÕ¶Ë³§Éú²úÈÕ±¨"
-    arr = Array("ÌìÈ»Æø", "ÇáÓÍ", "±û¶¡Íé")
+    flag = "è‘«èŠ¦å²›å¤©ç„¶æ°”ç»ˆç«¯å‚ç”Ÿäº§æ—¥æŠ¥"
+    arr = Array("å¤©ç„¶æ°”", "è½»æ²¹", "ä¸™ä¸çƒ·")
     Dim h As New help
-    Worksheets("Éú²úÈÕ±¨").Select
-    lastRow = Worksheets("Éú²úÈÕ±¨").UsedRange.Rows.count
-    lastColumn = Worksheets("Éú²úÈÕ±¨").UsedRange.Columns.count
-    names = Array("ÎÈ¶¨Çø", "Èë³§¼ÆÁ¿", "½õÌì»¯", "¾«Ï¸»¯¹¤", "¾«Ï¸»¯¹¤CNG", "ÎÛË®´¦Àí³§", "ĞÂ°ÂÈ¼Æø", "×ÔÓÃÆø", "·Å¿ÕÆø", "×Ü²úÆøÁ¿", "×ÜÍâÊäÆøÁ¿")
+    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Select
+    lastRow = Worksheets("ç”Ÿäº§æ—¥æŠ¥").UsedRange.Rows.count
+    lastColumn = Worksheets("ç”Ÿäº§æ—¥æŠ¥").UsedRange.Columns.count
+    names = Array("ç¨³å®šåŒº", "å…¥å‚è®¡é‡", "é”¦å¤©åŒ–", "ç²¾ç»†åŒ–å·¥", "ç²¾ç»†åŒ–å·¥CNG", "æ±¡æ°´å¤„ç†å‚", "æ–°å¥¥ç‡ƒæ°”", "è‡ªç”¨æ°”", "æ”¾ç©ºæ°”", "æ€»äº§æ°”é‡", "æ€»å¤–è¾“æ°”é‡")
     For row = 1 To lastRow
         For column = 1 To lastColumn
-            temp = Worksheets("Éú²úÈÕ±¨").Cells(row, column).value
+            temp = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column).value
             If h.isString(temp) Then
                 If h.isMatch(flag, temp) Then
-                    lastColumn = Worksheets("Éú²úÈÕ±¨").Cells(row, column).MergeArea.Columns.count
+                    lastColumn = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column).MergeArea.Columns.count
                     ro = 1
-                    name = "ÈÕÆÚ"
+                    name = "æ—¥æœŸ"
                     value = data(name)
-                    [ÈÕÆÚ] = value
+                    [æ—¥æœŸ] = value
                 End If
-                If h.isMatch("ÄêÊ±¼ä", temp) Then
+                If h.isMatch("å¹´æ—¶é—´", temp) Then
                     For ro = 1 To 3
-                        name = "ÄêÊ±¼ä½ø¶È±È"
+                        name = "å¹´æ—¶é—´è¿›åº¦æ¯”"
                         value = data(name)
-                        Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = value
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = value
                     Next ro
                 End If
-                If h.isMatch("[ÔÂÄê]¶ÈÅä²ú", temp) Then
+                If h.isMatch("[æœˆå¹´]åº¦é…äº§", temp) Then
                     For i = 0 To UBound(arr)
                         ro = i + 1
-                        If h.isMatch("Äê", temp) Then
-                            name = "ÄêÅä²ú" + arr(i) + "·½"
+                        If h.isMatch("å¹´", temp) Then
+                            name = "å¹´é…äº§" + arr(i) + "æ–¹"
                         Else
-                            name = "ÔÂÅä²ú" + arr(i) + "·½"
+                            name = "æœˆé…äº§" + arr(i) + "æ–¹"
                         End If
                         value = data(name)
-                        Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = value
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = value
                     Next i
                 End If
-                If h.isMatch("[ÔÂÄê]¶ÈÀÛ¼Æ", temp) Then
+                If h.isMatch("[æœˆå¹´]åº¦ç´¯è®¡", temp) Then
                     For i = 0 To UBound(arr)
                         ro = i + 1
-                        If h.isMatch("Äê", temp) Then
-                            name = "ÄêÀÛ" + arr(i) + "·½"
+                        If h.isMatch("å¹´", temp) Then
+                            name = "å¹´ç´¯" + arr(i) + "æ–¹"
                         Else
-                            name = "ÔÂÀÛ" + arr(i) + "·½"
+                            name = "æœˆç´¯" + arr(i) + "æ–¹"
                         End If
                         value = data(name)
-                        Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = value
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = value
                     Next i
                 End If
-                If h.isMatch("½ñºóĞèÈÕ²ú", temp) Then
+                If h.isMatch("ä»Šåéœ€æ—¥äº§", temp) Then
                     For i = 0 To UBound(arr)
                         ro = i + 1
-                        name = "½ñºóĞèÈÕ²ú" + arr(i) + "·½"
+                        name = "ä»Šåéœ€æ—¥äº§" + arr(i) + "æ–¹"
                         value = data(name)
-                        Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = value
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = value
                     Next i
                 End If
                 For Each n In names
                     If h.isMatch(n, temp) Then
-                        If h.isMatch("(ÎÈ¶¨Çø)|(Èë³§¼ÆÁ¿)", n) Then
+                        If h.isMatch("(ç¨³å®šåŒº)|(å…¥å‚è®¡é‡)", n) Then
                             co = 1
-                            name = n + "·½"
+                            name = n + "æ–¹"
                             value = data(name)
-                            Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                            Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                             co = 3
-                            name = "ÔÂÀÛ" + n + "·½"
+                            name = "æœˆç´¯" + n + "æ–¹"
                             value = data(name)
-                            Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                            Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                             co = 4
-                            name = "ÄêÀÛ" + n + "·½"
+                            name = "å¹´ç´¯" + n + "æ–¹"
                             value = data(name)
-                            Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                            Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                         End If
-                        If h.isMatch("(½õÌì»¯)|(¾«Ï¸»¯¹¤)|(¾«Ï¸»¯¹¤CNG)|(ÎÛË®´¦Àí³§)|(ĞÂ°ÂÈ¼Æø)|(×ÔÓÃÆø)|(·Å¿ÕÆø)", n) Then
+                        If h.isMatch("(é”¦å¤©åŒ–)|(ç²¾ç»†åŒ–å·¥)|(ç²¾ç»†åŒ–å·¥CNG)|(æ±¡æ°´å¤„ç†å‚)|(æ–°å¥¥ç‡ƒæ°”)|(è‡ªç”¨æ°”)|(æ”¾ç©ºæ°”)", n) Then
                             co = 1
-                            name = n + "·½"
+                            name = n + "æ–¹"
                             value = data(name)
-                            If h.isMatch("(ĞÂ°ÂÈ¼Æø)|(×ÔÓÃÆø)|(·Å¿ÕÆø)", n) Then
+                            If h.isMatch("(æ–°å¥¥ç‡ƒæ°”)|(è‡ªç”¨æ°”)|(æ”¾ç©ºæ°”)", n) Then
                                 co = 2
                             End If
-                            Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                            Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                             co = 4
-                            name = "ÔÂÀÛ" + n + "·½"
+                            name = "æœˆç´¯" + n + "æ–¹"
                             value = data(name)
-                            Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                            Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                             co = 5
-                            name = "ÄêÀÛ" + n + "·½"
+                            name = "å¹´ç´¯" + n + "æ–¹"
                             value = data(name)
-                            Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                            Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                         End If
                     End If
                 Next n
-                If h.isMatch("(º£¹ÜÀ´Òºº¬Ë®)|(º£¹ÜMEGÅ¨¶È)|(º£¹Ü³ö¿ÚÄıµã)|(º£¹Ü³ö¿ÚPHÖµ)", temp) Then
+                If h.isMatch("(æµ·ç®¡æ¥æ¶²å«æ°´)|(æµ·ç®¡MEGæµ“åº¦)|(æµ·ç®¡å‡ºå£å‡ç‚¹)|(æµ·ç®¡å‡ºå£PHå€¼)", temp) Then
                     co = 1
                     n = unitConvert(temp)
-                    'name = h.replace(n, "¡æ", "ÉãÊÏ¶È")
+                    'name = h.replace(n, "â„ƒ", "æ‘„æ°åº¦")
                     'name = h.replace(n, "%", "")
-                    name = "ÉÏÎç" + n
+                    name = "ä¸Šåˆ" + n
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                     co = 2
-                    name = "ÏÂÎç" + n
+                    name = "ä¸‹åˆ" + n
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                 End If
-                If h.isMatch("º£¹Ü½ø/³ö¿ÚÑ¹Á¦MPa", temp) Then
+                If h.isMatch("æµ·ç®¡è¿›/å‡ºå£å‹åŠ›MPa", temp) Then
                     co = 1
-                    value = data("º£¹Ü½ø/³ö¿ÚÑ¹Á¦Õ×ÅÁ")
-                    'value = CStr(data("½ø¿Úº£¹ÜÑ¹Á¦Õ×ÅÁ")) + "/" + CStr(data("³ö¿Úº£¹ÜÑ¹Á¦Õ×ÅÁ"))
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    value = data("æµ·ç®¡è¿›/å‡ºå£å‹åŠ›å…†å¸•")
+                    'value = CStr(data("è¿›å£æµ·ç®¡å‹åŠ›å…†å¸•")) + "/" + CStr(data("å‡ºå£æµ·ç®¡å‹åŠ›å…†å¸•"))
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                 End If
-                If h.isMatch("º£¹Ü½ø/³ö¿ÚÎÂ¶È¡æ", temp) Then
+                If h.isMatch("æµ·ç®¡è¿›/å‡ºå£æ¸©åº¦â„ƒ", temp) Then
                     co = 1
-                    value = data("º£¹Ü½ø/³ö¿ÚÎÂ¶ÈÉãÊÏ¶È")
-                    'value = CStr(data("½ø¿Úº£¹ÜÎÂ¶ÈÉãÊÏ¶È")) + "/" + CStr(data("³ö¿Úº£¹ÜÎÂ¶ÈÉãÊÏ¶È"))
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    value = data("æµ·ç®¡è¿›/å‡ºå£æ¸©åº¦æ‘„æ°åº¦")
+                    'value = CStr(data("è¿›å£æµ·ç®¡æ¸©åº¦æ‘„æ°åº¦")) + "/" + CStr(data("å‡ºå£æµ·ç®¡æ¸©åº¦æ‘„æ°åº¦"))
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                 End If
-                If h.isMatch("(JZ20-2ÄıÎöÓÍ)|(JZ20-2ÇáÓÍ)", temp) Then
+                If h.isMatch("(JZ20-2å‡ææ²¹)|(JZ20-2è½»æ²¹)", temp) Then
                     co = 1
                     name = unitConvert(temp)
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                     co = 2
-                    name = h.search("(JZ20-2ÄıÎöÓÍ)|(JZ20-2ÇáÓÍ)", name)
-                    name = name + "ÃÜ¶È¶Ö/Á¢·½Ã×"
+                    name = h.search("(JZ20-2å‡ææ²¹)|(JZ20-2è½»æ²¹)", name)
+                    name = name + "å¯†åº¦å¨/ç«‹æ–¹ç±³"
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                 End If
-                If h.isMatch("(ÇáÓÍ»ØÊÕÁ¿)|(±¥ºÍÕôÆûÑ¹)|(ÍâÊäÄıµã)|(ÍâÊäPHÖµ)", temp) Then
+                If h.isMatch("(è½»æ²¹å›æ”¶é‡)|(é¥±å’Œè’¸æ±½å‹)|(å¤–è¾“å‡ç‚¹)|(å¤–è¾“PHå€¼)", temp) Then
                     ro = 1
                     name = temp
-                    name = h.replace(name, "m3", "·½")
-                    name = h.replace(name, "t", "¶Ö")
-                    name = h.replace(name, "KPa", "Ç§ÅÁ")
-                    name = h.replace(name, "¡æ", "ÉãÊÏ¶È")
+                    name = h.replace(name, "m3", "æ–¹")
+                    name = h.replace(name, "t", "å¨")
+                    name = h.replace(name, "KPa", "åƒå¸•")
+                    name = h.replace(name, "â„ƒ", "æ‘„æ°åº¦")
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = value
                 End If
                 If h.isMatch("V-6[34][123][ABC]{0,1}", temp) Then
                     ro = 1
-                    name = h.search("V-6[34][123][ABC]{0,1}", temp) + "Ã×"
+                    name = h.search("V-6[34][123][ABC]{0,1}", temp) + "ç±³"
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = value
                 End If
-                If h.isMatch("ÇáÌş¿â´æt", temp) Then
+                If h.isMatch("è½»çƒƒåº“å­˜t", temp) Then
                     ro = 1
-                    name = "ÇáÌş¿â´æ¶Ö"
+                    name = "è½»çƒƒåº“å­˜å¨"
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = value
                 End If
-                If h.isMatch("(×°³µ)|(±û¶¡Íé»ØÊÕÁ¿)|(ÇáÓÍÈë¹ŞÇ°º¬Ë®)", temp) Then
+                If h.isMatch("(è£…è½¦)|(ä¸™ä¸çƒ·å›æ”¶é‡)|(è½»æ²¹å…¥ç½å‰å«æ°´)", temp) Then
                     co = 1
                     name = temp
-                    name = h.replace(name, "t", "¶Ö")
-                    name = h.replace(name, "m3", "·½")
-                    name = h.replace(name, "bbl", "Í°")
+                    name = h.replace(name, "t", "å¨")
+                    name = h.replace(name, "m3", "æ–¹")
+                    name = h.replace(name, "bbl", "æ¡¶")
                     value = data(name)
-                    If h.isMatch("(ÇáÓÍ×°³µt)|(Êı¾İ¿â)", temp) Then
+                    If h.isMatch("(è½»æ²¹è£…è½¦t)|(æ•°æ®åº“)", temp) Then
                         co = 2
                     End If
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                 End If
-                If h.isMatch("(¼×´¼ÏûºÄ)|(ÒÒ¶ş´¼ÏûºÄ|(ÒÒ¶ş´¼»ØÊÕ))|(Íâ¹©Ë®)|(Ë®ÏûºÄ)", temp) Then
+                If h.isMatch("(ç”²é†‡æ¶ˆè€—)|(ä¹™äºŒé†‡æ¶ˆè€—|(ä¹™äºŒé†‡å›æ”¶))|(å¤–ä¾›æ°´)|(æ°´æ¶ˆè€—)", temp) Then
                     ro = 1
-                    name = replace(temp, "m3", "·½")
+                    name = replace(temp, "m3", "æ–¹")
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = value
                     ro = 2
-                    Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = data("ÔÂÀÛ" + name)
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = data("æœˆç´¯" + name)
                     ro = 3
-                    Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = data("ÄêÀÛ" + name)
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = data("å¹´ç´¯" + name)
                 End If
-                If h.isMatch("(Íâ¹©µç)|(×Ô·¢µç)", temp) Then
+                If h.isMatch("(å¤–ä¾›ç”µ)|(è‡ªå‘ç”µ)", temp) Then
                     ro = 1
-                    name = replace(temp, "KWh", "¶È")
+                    name = replace(temp, "KWh", "åº¦")
                     value = data(name)
                     'Debug.Print name, value
-                    Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = value
                     ro = 2
-                    Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = data("ÔÂÀÛ" + name)
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = data("æœˆç´¯" + name)
                     ro = 3
-                    Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value = data("ÄêÀÛ" + name)
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value = data("å¹´ç´¯" + name)
                 End If
-                If h.isMatch("(¼×´¼¿â´æ)|(Ë®³ØË®Î»)|(Ë®³Ø´¢Ë®)", temp) Then
+                If h.isMatch("(ç”²é†‡åº“å­˜)|(æ°´æ± æ°´ä½)|(æ°´æ± å‚¨æ°´)", temp) Then
                     co = 1
-                    name = "¿â´æ¼×´¼·½"
+                    name = "åº“å­˜ç”²é†‡æ–¹"
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                 End If
-                If h.isMatch("ÒÒ¶ş´¼Å¨¶È", temp) Then
+                If h.isMatch("ä¹™äºŒé†‡æµ“åº¦", temp) Then
                     co = 1
                     name = temp
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                 End If
-                If h.isMatch("Ë®³ØË®Î»", temp) Then
+                If h.isMatch("æ°´æ± æ°´ä½", temp) Then
                     co = 1
-                    name = "¿â´æË®Ã×"
+                    name = "åº“å­˜æ°´ç±³"
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                 End If
-                If h.isMatch("Ë®³Ø´¢Ë®", temp) Then
+                If h.isMatch("æ°´æ± å‚¨æ°´", temp) Then
                     co = 1
-                    name = "¿â´æË®·½"
+                    name = "åº“å­˜æ°´æ–¹"
                     value = data(name)
-                    Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                    Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                 End If
-                If h.isMatch("JZ20-2ÌåÏµ", temp) Then
+                If h.isMatch("JZ20-2ä½“ç³»", temp) Then
                     ro = -1
-                    name = Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column).value
-                    If h.isMatch("Èë³§¼ÆÁ¿", name) Then
+                    name = Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column).value
+                    If h.isMatch("å…¥å‚è®¡é‡", name) Then
                         co = 1
-                        value = data("½ÓÊÕJZ20-2ÌåÏµ·½")
-                        Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                        value = data("æ¥æ”¶JZ20-2ä½“ç³»æ–¹")
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                         co = 3
-                        value = data("ÔÂÀÛ½ÓÊÕJZ20-2ÌåÏµ·½")
-                        Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                        value = data("æœˆç´¯æ¥æ”¶JZ20-2ä½“ç³»æ–¹")
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                         co = 4
-                        value = data("ÄêÀÛ½ÓÊÕJZ20-2ÌåÏµ·½")
-                        Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                        value = data("å¹´ç´¯æ¥æ”¶JZ20-2ä½“ç³»æ–¹")
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                         ro = 1
-                        value = data("½ÓÊÕJZ25-1SÌåÏµ·½")
-                        Cells(row + ro, column + co).value = value
+                        value = data("æ¥æ”¶JZ25-1Sä½“ç³»æ–¹")
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column + co).value = value
                     Else
                         co = 1
-                        value = data("ÍâÊäJZ20-2ÌåÏµ·½")
-                        Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                        value = data("å¤–è¾“JZ20-2ä½“ç³»æ–¹")
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                         co = 3
-                        value = data("ÔÂÀÛÍâÊäJZ20-2ÌåÏµ·½")
-                        Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                        value = data("æœˆç´¯å¤–è¾“JZ20-2ä½“ç³»æ–¹")
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                         co = 4
-                        value = data("ÄêÀÛÍâÊäJZ20-2ÌåÏµ·½")
-                        Worksheets("Éú²úÈÕ±¨").Cells(row, column + co).value = value
+                        value = data("å¹´ç´¯å¤–è¾“JZ20-2ä½“ç³»æ–¹")
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row, column + co).value = value
                         ro = 1
-                        value = data("ÍâÊäJZ25-1SÌåÏµ·½")
-                        Worksheets("Éú²úÈÕ±¨").Cells(row + ro, column + co).value = value
+                        value = data("å¤–è¾“JZ25-1Sä½“ç³»æ–¹")
+                        Worksheets("ç”Ÿäº§æ—¥æŠ¥").Cells(row + ro, column + co).value = value
                     End If
                 End If
             End If
@@ -1241,4 +1183,3 @@ ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
 End Sub
-
