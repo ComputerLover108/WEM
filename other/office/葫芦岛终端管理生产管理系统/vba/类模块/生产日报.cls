@@ -2281,7 +2281,7 @@ Public Sub batchIntoDB()
     Dim scxx As New 生产信息
     Call scxx.PushTableToDatabase(table)
 End Sub
-' 获得定位表
+'获得定位表
 Sub getLocationTable(ByRef data As Object)
     On Error GoTo ErrorHandler
     Dim row, column, lastRow, lastColumn, ro, co, i As Long
@@ -2371,11 +2371,23 @@ Sub getLocationTable(ByRef data As Object)
                             name = "年累" + n + "方"
                               data(name)=Array(row+ro,column+co)
                         End If
+                        if h.isMatch("(总产气量)|(总外输气量)",n) Then
+                            co = 2
+                            name = n + "方"
+                            value = data(name)
+                            data(name)=Array(row+ro,column+co)
+                            co = 4
+                            name = "月累" + n + "方"
+                            data(name)=Array(row+ro,column+co)
+                            co = 5
+                            name = "年累" + n + "方"
+                            data(name)=Array(row+ro,column+co)                        
+                        End If
                     End If
                 Next n
                 If h.isMatch("(海管来液含水)|(海管MEG浓度)|(海管出口凝点)|(海管出口PH值)", temp) Then
                     co = 1
-                    n = unitConvert(temp)
+                    n = h.unitConvert(temp)
                     name = "上午" + n
                     data(name)=Array(row+ro,column+co)
                     co = 2
@@ -2394,7 +2406,7 @@ Sub getLocationTable(ByRef data As Object)
                 End If
                 If h.isMatch("(JZ20-2凝析油)|(JZ20-2轻油)", temp) Then
                     co = 1
-                    name = unitConvert(temp)
+                    name = h.unitConvert(temp)
                                                        
                     data(name)=Array(row+ro,column+co)
                     co = 2
@@ -2424,8 +2436,7 @@ Sub getLocationTable(ByRef data As Object)
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("(装车)|(丙丁烷回收量)|(轻油入罐前含水)", temp) Then
-                    co = 1
-                    
+                    co = 1                   
                     name = h.replace(name, "t", "吨")
                     name = h.replace(name, "m3", "方")
                     name = h.replace(name, "bbl", "桶")
@@ -2435,8 +2446,7 @@ Sub getLocationTable(ByRef data As Object)
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("(甲醇消耗)|(乙二醇消耗|(乙二醇回收))|(外供水)|(水消耗)", temp) Then
-                    ro = 1
-                    
+                    ro = 1                   
                     name = replace(temp, "m3", "方")                                   
                     data(name)=Array(row+ro,column+co)
                     ro = 2
@@ -2445,8 +2455,7 @@ Sub getLocationTable(ByRef data As Object)
                     data("年累" + name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("(外供电)|(自发电)", temp) Then
-                    ro = 1
-                    
+                    ro = 1                   
                     name = replace(temp, "KWh", "度")
                     data(name)=Array(row+ro,column+co)
                     ro = 2
@@ -2454,7 +2463,7 @@ Sub getLocationTable(ByRef data As Object)
                     ro = 3
                     data("年累" + name)=Array(row+ro,column+co)
                 End If
-                If h.isMatch("(甲醇库存)|(水池水位)|(水池储水)", temp) Then
+                If h.isMatch("甲醇库存", temp) Then
                     co = 1
                     name = "库存甲醇方"
                     data(name)=Array(row+ro,column+co)
@@ -2521,4 +2530,57 @@ Sub getLocationTable(ByRef data As Object)
 ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
         Resume Next
+End Sub
+'获得生产日报数据
+Sub getDailyData(ByRef locatTable as Object,ByRef data as Object)
+    On Error GoTo ErrorHandler
+    Dim sheetName,name as String
+    Dim row,column as Long
+    dim value as Variant
+    sheetName = "生产日报"    
+    For Each k In locatTable.Keys
+        row=locatTable(k)(0)
+        column=locatTable(k)(1)
+        name = k
+        value=Worksheets(sheetName).Cells(row,column).value
+        data(name) = value
+    Next    
+ErrorHandler:    
+    Debug.Print Err.Number & vbTab & Err.Source & vbTab & Err.Description      
+End Sub
+'日报数据清除
+Sub clearDailyTable(ByRef locatTable as Object)  
+    On Error GoTo ErrorHandler
+    Dim sheetName as String
+    Dim row,column as Long
+    sheetName = "生产日报"    
+    For Each k In locatTable.Keys
+        row=locatTable(k)(0)
+        column=locatTable(k)(1)
+        ' If Worksheets(sheetName).Cells(row,column).MergeArea Then
+
+        ' Else
+        '     Worksheets(sheetName).Cells(row,column).ClearContents
+        ' End If
+        Worksheets(sheetName).Cells(row,column).value=Null
+    Next    
+ErrorHandler:    
+    Debug.Print Err.Number & vbTab & Err.Source & vbTab & Err.Description     
+End Sub
+'填写日报
+Sub fillDailyData(ByRef locatTable as Object,ByRef data as Object)
+    On Error GoTo ErrorHandler
+    Dim sheetName,name as String
+    Dim row,column as Long
+    dim value as Variant
+    sheetName = "生产日报"    
+    For Each k In locatTable.Keys
+        row=locatTable(k)(0)
+        column=locatTable(k)(1)
+        name = k
+        value = data(name)
+        Worksheets(sheetName).Cells(row,column).value=value
+    Next    
+ErrorHandler:    
+    Debug.Print Err.Number & vbTab & Err.Source & vbTab & Err.Description      
 End Sub
