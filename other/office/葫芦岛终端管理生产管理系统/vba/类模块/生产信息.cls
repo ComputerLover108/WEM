@@ -487,7 +487,21 @@ Sub dictToRecord(ByRef source as Object,ByRef result as Object)
         remark = ""
         source = ""
         value = source(temp)
+        With recordSC
+            .日期 = 日期
+            .名称 = name
+            .单位 = unit
+            .数据 = value
+            .类别 = category
+            .状态 = status
+            .数据源 = source
+            .月累 = monthSum
+            .年累 = yearSum
+        End With
+        table.Add recordSC, ""
+        Set recordSC = Nothing        
         For Each name In hasSum
+            unit = "方"
             pattern = h.replace(temp,"方$","")
             select case pattern
                 case "总外输气量","锦天化","精细化工","精细化工CNG","污水处理厂","新奥燃气"
@@ -554,10 +568,7 @@ Sub dictToRecord(ByRef source as Object,ByRef result as Object)
             Set recordSC = Nothing        
         Next
 
-        For Each name In oil
-            category="天然气"
-            pattern = h.replace(temp,"方$","")                    
-        Next        
+       
     Next
 ErrorHandler:    
     Debug.Print Err.Number & vbTab & Err.Source & vbTab & Err.Description     
