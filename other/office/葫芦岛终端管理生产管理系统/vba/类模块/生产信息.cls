@@ -1,100 +1,91 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Éú²úĞÅÏ¢"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
-Public ÈÕÆÚ As Date
-Public Ãû³Æ As String
-Public µ¥Î» As String
-Public Êı¾İ As Variant
-Public Àà±ğ As String
-Public ×´Ì¬ As String
-Public ±¸×¢ As String
-Public ÔÂÀÛ As Variant
-Public ÄêÀÛ As Variant
-Public Êı¾İÔ´ As String
+Public æ—¥æœŸ As Date
+Public åç§° As String
+Public å•ä½ As String
+Public æ•°æ® As Variant
+Public ç±»åˆ« As String
+Public çŠ¶æ€ As String
+Public å¤‡æ³¨ As String
+Public æœˆç´¯ As Variant
+Public å¹´ç´¯ As Variant
+Public æ•°æ®æº As String
 Function content() As String
-    content = ÈÕÆÚ & _
-                vbTab & Ãû³Æ & _
-                vbTab & µ¥Î» & _
-                vbTab & Êı¾İ & _
-                vbTab & Àà±ğ & _
-                vbTab & ×´Ì¬ & _
-                vbTab & ±¸×¢ & _
-                vbTab & ÔÂÀÛ & _
-                vbTab & ÄêÀÛ & _
-                vbTab & Êı¾İÔ´
+    content = æ—¥æœŸ & _
+                vbTab & åç§° & _
+                vbTab & å•ä½ & _
+                vbTab & æ•°æ® & _
+                vbTab & ç±»åˆ« & _
+                vbTab & çŠ¶æ€ & _
+                vbTab & å¤‡æ³¨ & _
+                vbTab & æœˆç´¯ & _
+                vbTab & å¹´ç´¯ & _
+                vbTab & æ•°æ®æº
 End Function
-'csv¸ñÊ½
+'csvæ ¼å¼
 Function contentCSV() As String
-'    csv¸ñÊ½¹æ·¶
-'¡¡¡¡1 ¿ªÍ·ÊÇ²»Áô¿Õ£¬ÒÔĞĞÎªµ¥Î»¡£
-'¡¡¡¡2 ¿Éº¬»ò²»º¬ÁĞÃû£¬º¬ÁĞÃûÔò¾ÓÎÄ¼şµÚÒ»ĞĞ¡£
-'¡¡¡¡3 Ò»ĞĞÊı¾İ²»¿åĞĞ£¬ÎŞ¿ÕĞĞ¡£
-'¡¡¡¡4 ÒÔ°ë½Ç¶ººÅ£¨¼´,£©×÷·Ö¸ô·û£¬ÁĞÎª¿ÕÒ²Òª±í´ïÆä´æÔÚ¡£
-'¡¡¡¡5 ÁĞÄÚÈİÈç´æÔÚ°ë½Ç¶ººÅ£¨¼´,£©ÔòÓÃ°ë½ÇÒıºÅ£¨¼´""£©½«¸Ã×Ö¶ÎÖµ°üº¬ÆğÀ´¡£
-'¡¡¡¡6 ÁĞÄÚÈİÈç´æÔÚ°ë½ÇÒıºÅ£¨¼´"£©ÔòÓ¦Ìæ»»³É°ë½ÇË«ÒıºÅ£¨""£©×ªÒå£¬²¢ÓÃ°ë½ÇÒıºÅ£¨¼´""£©½«¸Ã×Ö¶ÎÖµ°üº¬ÆğÀ´¡£
-'¡¡¡¡7 ÎÄ¼ş¶ÁĞ´Ê±ÒıºÅ£¬¶ººÅ²Ù×÷¹æÔò»¥Äæ¡£
-'¡¡¡¡8 ÄÚÂë¸ñÊ½²»ÏŞ£¬¿ÉÎª ASCII¡¢Unicode »òÕßÆäËû¡£
-'    9 ²»Ö§³ÖÌØÊâ×Ö·û
+'    csvæ ¼å¼è§„èŒƒ
+'ã€€ã€€1 å¼€å¤´æ˜¯ä¸ç•™ç©ºï¼Œä»¥è¡Œä¸ºå•ä½ã€‚
+'ã€€ã€€2 å¯å«æˆ–ä¸å«åˆ—åï¼Œå«åˆ—ååˆ™å±…æ–‡ä»¶ç¬¬ä¸€è¡Œã€‚
+'ã€€ã€€3 ä¸€è¡Œæ•°æ®ä¸å®è¡Œï¼Œæ— ç©ºè¡Œã€‚
+'ã€€ã€€4 ä»¥åŠè§’é€—å·ï¼ˆå³,ï¼‰ä½œåˆ†éš”ç¬¦ï¼Œåˆ—ä¸ºç©ºä¹Ÿè¦è¡¨è¾¾å…¶å­˜åœ¨ã€‚
+'ã€€ã€€5 åˆ—å†…å®¹å¦‚å­˜åœ¨åŠè§’é€—å·ï¼ˆå³,ï¼‰åˆ™ç”¨åŠè§’å¼•å·ï¼ˆå³""ï¼‰å°†è¯¥å­—æ®µå€¼åŒ…å«èµ·æ¥ã€‚
+'ã€€ã€€6 åˆ—å†…å®¹å¦‚å­˜åœ¨åŠè§’å¼•å·ï¼ˆå³"ï¼‰åˆ™åº”æ›¿æ¢æˆåŠè§’åŒå¼•å·ï¼ˆ""ï¼‰è½¬ä¹‰ï¼Œå¹¶ç”¨åŠè§’å¼•å·ï¼ˆå³""ï¼‰å°†è¯¥å­—æ®µå€¼åŒ…å«èµ·æ¥ã€‚
+'ã€€ã€€7 æ–‡ä»¶è¯»å†™æ—¶å¼•å·ï¼Œé€—å·æ“ä½œè§„åˆ™äº’é€†ã€‚
+'ã€€ã€€8 å†…ç æ ¼å¼ä¸é™ï¼Œå¯ä¸º ASCIIã€Unicode æˆ–è€…å…¶ä»–ã€‚
+'    9 ä¸æ”¯æŒç‰¹æ®Šå­—ç¬¦
     Call ruleData
     Dim s As String
-    s = s & ÈÕÆÚ & ","
-    s = s & Ãû³Æ & ","
-    s = s & µ¥Î» & ","
-    s = s & Êı¾İ & ","
-    s = s & Àà±ğ & ","
-    s = s & ×´Ì¬ & ","
-    s = s & ±¸×¢ & ","
-    s = s & ÔÂÀÛ & ","
-    s = s & ÄêÀÛ & ","
-    s = s & Êı¾İÔ´
+    s = s & æ—¥æœŸ & ","
+    s = s & åç§° & ","
+    s = s & å•ä½ & ","
+    s = s & æ•°æ® & ","
+    s = s & ç±»åˆ« & ","
+    s = s & çŠ¶æ€ & ","
+    s = s & å¤‡æ³¨ & ","
+    s = s & æœˆç´¯ & ","
+    s = s & å¹´ç´¯ & ","
+    s = s & æ•°æ®æº
     s = s & vbCrLf
 '    Debug.Print s
     contentCSV = s
 End Function
-'ÅĞ¶ÏÕıÈ·µÄÉú²úĞÅÏ¢¸ñÊ½
-Public Function isFormat(ByRef x As Éú²úĞÅÏ¢) As Boolean
-'    tableDef = " (ÈÕÆÚ date,Ãû³Æ text(16),µ¥Î» text(8),Êı¾İ double,Àà±ğ text(8),×´Ì¬ text(8),ÔÂÀÛ double,ÄêÀÛ double,±¸×¢ text,Êı¾İÔ´ text  )"
-    If Not IsDate(x.ÈÕÆÚ) Then
+'åˆ¤æ–­æ­£ç¡®çš„ç”Ÿäº§ä¿¡æ¯æ ¼å¼
+Public Function isFormat(ByRef x As ç”Ÿäº§ä¿¡æ¯) As Boolean
+'    tableDef = " (æ—¥æœŸ date,åç§° text(16),å•ä½ text(8),æ•°æ® double,ç±»åˆ« text(8),çŠ¶æ€ text(8),æœˆç´¯ double,å¹´ç´¯ double,å¤‡æ³¨ text,æ•°æ®æº text  )"
+    If Not IsDate(x.æ—¥æœŸ) Then
         isFormat = False
         Exit Function
     End If
-    If Len(x.Ãû³Æ) > 16 Then
+    If Len(x.åç§°) > 16 Then
         isFormat = False
         Exit Function
     End If
-    If Len(x.µ¥Î») > 8 Then
+    If Len(x.å•ä½) > 8 Then
         isFormat = False
         Exit Function
     End If
-    If Len(x.Àà±ğ) > 8 Then
+    If Len(x.ç±»åˆ«) > 8 Then
         isFormat = False
         Exit Function
     End If
-    If Len(x.×´Ì¬) > 8 Then
+    If Len(x.çŠ¶æ€) > 8 Then
         isFormat = False
         Exit Function
     End If
-    If Not IsNumeric(x.Êı¾İ) Then
+    If Not IsNumeric(x.æ•°æ®) Then
         isFormat = False
         Exit Function
     End If
-    If Not IsNumeric(x.ÔÂÀÛ) Then
+    If Not IsNumeric(x.æœˆç´¯) Then
         isFormat = False
         Exit Function
     End If
-    If Not IsNumeric(x.ÄêÀÛ) Then
+    If Not IsNumeric(x.å¹´ç´¯) Then
         isFormat = False
         Exit Function
     End If
     isFormat = True
 End Function
-'±£´æÎªCSVÎÄ¼ş UTF-8
+'ä¿å­˜ä¸ºCSVæ–‡ä»¶ UTF-8
 Sub saveCSV(ByVal fileName As String, ByVal tt)
     Dim objStream As Object
     Set objStream = CreateObject("ADODB.Stream")
@@ -103,7 +94,7 @@ Sub saveCSV(ByVal fileName As String, ByVal tt)
     objStream.Open
     objStream.position = 0
     objStream.Charset = "UTF-8"
-    Dim temp As New Éú²úĞÅÏ¢
+    Dim temp As New ç”Ÿäº§ä¿¡æ¯
     Dim x
     For Each x In tt.Keys
         Set temp = x
@@ -115,52 +106,52 @@ Sub saveCSV(ByVal fileName As String, ByVal tt)
     objStream.Close
     Set objStream = Nothing
 End Sub
-'¹æ·¶Êı¾İÎªÕıÈ·¸ñÊ½
+'è§„èŒƒæ•°æ®ä¸ºæ­£ç¡®æ ¼å¼
 Public Function ruleData()
-'    csv¸ñÊ½¹æ·¶
-'¡¡¡¡1 ¿ªÍ·ÊÇ²»Áô¿Õ£¬ÒÔĞĞÎªµ¥Î»¡£
-'¡¡¡¡2 ¿Éº¬»ò²»º¬ÁĞÃû£¬º¬ÁĞÃûÔò¾ÓÎÄ¼şµÚÒ»ĞĞ¡£
-'¡¡¡¡3 Ò»ĞĞÊı¾İ²»¿åĞĞ£¬ÎŞ¿ÕĞĞ¡£
-'¡¡¡¡4 ÒÔ°ë½Ç¶ººÅ£¨¼´,£©×÷·Ö¸ô·û£¬ÁĞÎª¿ÕÒ²Òª±í´ïÆä´æÔÚ¡£
-'¡¡¡¡5 ÁĞÄÚÈİÈç´æÔÚ°ë½Ç¶ººÅ£¨¼´,£©ÔòÓÃ°ë½ÇÒıºÅ£¨¼´""£©½«¸Ã×Ö¶ÎÖµ°üº¬ÆğÀ´¡£
-'¡¡¡¡6 ÁĞÄÚÈİÈç´æÔÚ°ë½ÇÒıºÅ£¨¼´"£©ÔòÓ¦Ìæ»»³É°ë½ÇË«ÒıºÅ£¨""£©×ªÒå£¬²¢ÓÃ°ë½ÇÒıºÅ£¨¼´""£©½«¸Ã×Ö¶ÎÖµ°üº¬ÆğÀ´¡£
-'¡¡¡¡7 ÎÄ¼ş¶ÁĞ´Ê±ÒıºÅ£¬¶ººÅ²Ù×÷¹æÔò»¥Äæ¡£
-'¡¡¡¡8 ÄÚÂë¸ñÊ½²»ÏŞ£¬¿ÉÎª ASCII¡¢Unicode »òÕßÆäËû¡£
-'    9 ²»Ö§³ÖÌØÊâ×Ö·û
-    If Not IsNumeric(Êı¾İ) Then
-        Êı¾İ = Null
+'    csvæ ¼å¼è§„èŒƒ
+'ã€€ã€€1 å¼€å¤´æ˜¯ä¸ç•™ç©ºï¼Œä»¥è¡Œä¸ºå•ä½ã€‚
+'ã€€ã€€2 å¯å«æˆ–ä¸å«åˆ—åï¼Œå«åˆ—ååˆ™å±…æ–‡ä»¶ç¬¬ä¸€è¡Œã€‚
+'ã€€ã€€3 ä¸€è¡Œæ•°æ®ä¸å®è¡Œï¼Œæ— ç©ºè¡Œã€‚
+'ã€€ã€€4 ä»¥åŠè§’é€—å·ï¼ˆå³,ï¼‰ä½œåˆ†éš”ç¬¦ï¼Œåˆ—ä¸ºç©ºä¹Ÿè¦è¡¨è¾¾å…¶å­˜åœ¨ã€‚
+'ã€€ã€€5 åˆ—å†…å®¹å¦‚å­˜åœ¨åŠè§’é€—å·ï¼ˆå³,ï¼‰åˆ™ç”¨åŠè§’å¼•å·ï¼ˆå³""ï¼‰å°†è¯¥å­—æ®µå€¼åŒ…å«èµ·æ¥ã€‚
+'ã€€ã€€6 åˆ—å†…å®¹å¦‚å­˜åœ¨åŠè§’å¼•å·ï¼ˆå³"ï¼‰åˆ™åº”æ›¿æ¢æˆåŠè§’åŒå¼•å·ï¼ˆ""ï¼‰è½¬ä¹‰ï¼Œå¹¶ç”¨åŠè§’å¼•å·ï¼ˆå³""ï¼‰å°†è¯¥å­—æ®µå€¼åŒ…å«èµ·æ¥ã€‚
+'ã€€ã€€7 æ–‡ä»¶è¯»å†™æ—¶å¼•å·ï¼Œé€—å·æ“ä½œè§„åˆ™äº’é€†ã€‚
+'ã€€ã€€8 å†…ç æ ¼å¼ä¸é™ï¼Œå¯ä¸º ASCIIã€Unicode æˆ–è€…å…¶ä»–ã€‚
+'    9 ä¸æ”¯æŒç‰¹æ®Šå­—ç¬¦
+    If Not IsNumeric(æ•°æ®) Then
+        æ•°æ® = Null
     End If
-    If Len(±¸×¢) > 0 Then
-        ±¸×¢ = Chr(34) & ±¸×¢ & Chr(34)
+    If Len(å¤‡æ³¨) > 0 Then
+        å¤‡æ³¨ = Chr(34) & å¤‡æ³¨ & Chr(34)
     End If
 End Function
-'½¨Á¢±í Éú²úĞÅÏ¢
+'å»ºç«‹è¡¨ ç”Ÿäº§ä¿¡æ¯
 Sub CreateTable()
     Err.Clear
     On Error GoTo errorhander
     Dim SQL As String
     Dim tablename As String
-    tablename = "Éú²úĞÅÏ¢"
-'    access ±í
+    tablename = "ç”Ÿäº§ä¿¡æ¯"
+'    access è¡¨
     Dim tableDef As String
-    tableDef = " (ID counter,ÈÕÆÚ date not null,Ãû³Æ text(16) not null,µ¥Î» text(8),Êı¾İ double,Àà±ğ text(8),×´Ì¬ text(8),ÔÂÀÛ double,ÄêÀÛ double,±¸×¢ text,Êı¾İÔ´ text  )"
+    tableDef = " (ID counter,æ—¥æœŸ date not null,åç§° text(16) not null,å•ä½ text(8),æ•°æ® double,ç±»åˆ« text(8),çŠ¶æ€ text(8),æœˆç´¯ double,å¹´ç´¯ double,å¤‡æ³¨ text,æ•°æ®æº text  )"
     SQL = " CREATE TABLE " & tablename & tableDef
     Dim ac As New access
     Call ac.cnn.Execute(SQL)
-'    PostgreSQL ±í
-    tableDef = " (ID serial,ÈÕÆÚ date not null,Ãû³Æ varchar(16) not null,µ¥Î» varchar(8),Êı¾İ double precision,Àà±ğ varchar(8),×´Ì¬ varchar(8),±¸×¢ varchar,ÔÂÀÛ double precision,ÄêÀÛ double precision,Êı¾İÔ´ varchar  );"
+'    PostgreSQL è¡¨
+    tableDef = " (ID serial,æ—¥æœŸ date not null,åç§° varchar(16) not null,å•ä½ varchar(8),æ•°æ® double precision,ç±»åˆ« varchar(8),çŠ¶æ€ varchar(8),å¤‡æ³¨ varchar,æœˆç´¯ double precision,å¹´ç´¯ double precision,æ•°æ®æº varchar  );"
     SQL = " CREATE TABLE IF NOT EXISTS " & tablename & tableDef
     Dim psql As New PostgreSQL
     Call psql.cnn.Execute(SQL)
-'    ÖØ½¨Âß¼­Ë÷Òı
-    SQL = "create unique index Éú²úĞÅÏ¢_Âß¼­ID on " & tablename & " (ÈÕÆÚ,Ãû³Æ,µ¥Î»,Àà±ğ,×´Ì¬,±¸×¢) "
+'    é‡å»ºé€»è¾‘ç´¢å¼•
+    SQL = "create unique index ç”Ÿäº§ä¿¡æ¯_é€»è¾‘ID on " & tablename & " (æ—¥æœŸ,åç§°,å•ä½,ç±»åˆ«,çŠ¶æ€,å¤‡æ³¨) "
     Call ac.cnn.Execute(SQL)
     Call psql.cnn.Execute(SQL)
 errorhander:
     If Err.Number <> 0 Then Debug.Print Err.Number & vbTab & Err.Description
     Resume Next
 End Sub
-'Éú²úĞÅÏ¢µ¼ÈëÊı¾İ¿â
+'ç”Ÿäº§ä¿¡æ¯å¯¼å…¥æ•°æ®åº“
 Public Sub PushTableToDatabase(table)
     Err.Clear
     On Error GoTo ErrorHandler
@@ -171,99 +162,99 @@ Public Sub PushTableToDatabase(table)
     Dim psql As New PostgreSQL
     Dim rst As New ADODB.Recordset
     Dim SQL As String
-    Dim temp As New Éú²úĞÅÏ¢
+    Dim temp As New ç”Ÿäº§ä¿¡æ¯
     Dim Condition As Boolean
     Condition = True
     Dim x, y
     Dim filter As String
 '    Call collate
-'    Debug.Print "µ¼ÈëÇ°Êı¾İÕûÀí»¨·Ñ" & DateDiff("s", t, Now()) & "s."
+'    Debug.Print "å¯¼å…¥å‰æ•°æ®æ•´ç†èŠ±è´¹" & DateDiff("s", t, Now()) & "s."
     Dim tablename As String
-    tablename = "Éú²úĞÅÏ¢"
+    tablename = "ç”Ÿäº§ä¿¡æ¯"
     Dim cnn As Object
-    Debug.Print "×¼±¸µ¼Èë" & table.count & "Ìõ¼ÇÂ¼£¡"
-'    µ¼Èëaccess
+    Debug.Print "å‡†å¤‡å¯¼å…¥" & table.count & "æ¡è®°å½•ï¼"
+'    å¯¼å…¥access
 '    Set cnn = ac.cnn
 '    rst.Open tablename, cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTabl
 '    For Each x In table.Keys
 '        Condition = x.isFormat(temp)
 '        If Condition Then
-''            SQL = "select count(*) from " & tablename & " where ÈÕÆÚ=#" & x.ÈÕÆÚ & "# and Ãû³Æ='" & x.Ãû³Æ & "' and µ¥Î»='" & x.µ¥Î» & "' and Àà±ğ='" & x.Àà±ğ & "' and ×´Ì¬='" & x.×´Ì¬ & "' and  ±¸×¢='" & x.±¸×¢ & "'"
+''            SQL = "select count(*) from " & tablename & " where æ—¥æœŸ=#" & x.æ—¥æœŸ & "# and åç§°='" & x.åç§° & "' and å•ä½='" & x.å•ä½ & "' and ç±»åˆ«='" & x.ç±»åˆ« & "' and çŠ¶æ€='" & x.çŠ¶æ€ & "' and  å¤‡æ³¨='" & x.å¤‡æ³¨ & "'"
 ''            y = cnn.Execute(SQL)(0)
 '''            Debug.Print y, SQL
 ''            If y = 0 Then
 ''                rst.AddNew
 ''            End If
 '            rst.AddNew
-'            rst.Fields("µ¥Î»").value = ""
-'            rst.Fields("×´Ì¬").value = ""
-'            rst.Fields("Àà±ğ").value = ""
-'            rst.Fields("±¸×¢").value = ""
-'            rst.Fields("Êı¾İÔ´").value = ThisWorkbook.FullName
+'            rst.Fields("å•ä½").value = ""
+'            rst.Fields("çŠ¶æ€").value = ""
+'            rst.Fields("ç±»åˆ«").value = ""
+'            rst.Fields("å¤‡æ³¨").value = ""
+'            rst.Fields("æ•°æ®æº").value = ThisWorkbook.FullName
 ''            Debug.Print ThisWorkbook.path + "\" + ThisWorkbook.name
-'            If IsDate(x.ÈÕÆÚ) Then
-'                rst.Fields("ÈÕÆÚ").value = x.ÈÕÆÚ
+'            If IsDate(x.æ—¥æœŸ) Then
+'                rst.Fields("æ—¥æœŸ").value = x.æ—¥æœŸ
 '            End If
-'            If Not IsEmpty(x.Ãû³Æ) Then
-'                rst.Fields("Ãû³Æ").value = x.Ãû³Æ
+'            If Not IsEmpty(x.åç§°) Then
+'                rst.Fields("åç§°").value = x.åç§°
 '            End If
-'            If Not IsEmpty(x.µ¥Î») Or x.µ¥Î» <> "" Then
-'                rst.Fields("µ¥Î»").value = x.µ¥Î»
+'            If Not IsEmpty(x.å•ä½) Or x.å•ä½ <> "" Then
+'                rst.Fields("å•ä½").value = x.å•ä½
 '            End If
-'            If Not IsEmpty(x.Àà±ğ) Or x.Àà±ğ <> "" Then
-'                rst.Fields("Àà±ğ").value = x.Àà±ğ
+'            If Not IsEmpty(x.ç±»åˆ«) Or x.ç±»åˆ« <> "" Then
+'                rst.Fields("ç±»åˆ«").value = x.ç±»åˆ«
 '            End If
-'            If Not IsEmpty(x.×´Ì¬) Or x.×´Ì¬ <> "" Then
-'                rst.Fields("×´Ì¬").value = x.×´Ì¬
+'            If Not IsEmpty(x.çŠ¶æ€) Or x.çŠ¶æ€ <> "" Then
+'                rst.Fields("çŠ¶æ€").value = x.çŠ¶æ€
 '            End If
-'            If Not IsEmpty(x.±¸×¢) Or x.±¸×¢ <> "" Then
-'                rst.Fields("±¸×¢").value = x.±¸×¢
+'            If Not IsEmpty(x.å¤‡æ³¨) Or x.å¤‡æ³¨ <> "" Then
+'                rst.Fields("å¤‡æ³¨").value = x.å¤‡æ³¨
 '            End If
-'            If Not IsEmpty(x.Êı¾İÔ´) Or x.Êı¾İÔ´ <> "" Then
-'                rst.Fields("Êı¾İÔ´").value = x.Êı¾İÔ´
+'            If Not IsEmpty(x.æ•°æ®æº) Or x.æ•°æ®æº <> "" Then
+'                rst.Fields("æ•°æ®æº").value = x.æ•°æ®æº
 '            End If
-'            If IsNumeric(x.Êı¾İ) Then
-'                rst.Fields("Êı¾İ").value = Round(x.Êı¾İ, 4)
+'            If IsNumeric(x.æ•°æ®) Then
+'                rst.Fields("æ•°æ®").value = Round(x.æ•°æ®, 4)
 '            End If
-'            If IsNumeric(x.ÔÂÀÛ) Then
-'                rst.Fields("ÔÂÀÛ").value = Round(x.ÔÂÀÛ, 4)
+'            If IsNumeric(x.æœˆç´¯) Then
+'                rst.Fields("æœˆç´¯").value = Round(x.æœˆç´¯, 4)
 '            End If
-'            If IsNumeric(x.ÄêÀÛ) Then
-'                rst.Fields("ÄêÀÛ").value = Round(x.ÄêÀÛ, 4)
+'            If IsNumeric(x.å¹´ç´¯) Then
+'                rst.Fields("å¹´ç´¯").value = Round(x.å¹´ç´¯, 4)
 '            End If
 '            rst.UpdateBatch
 '        End If
 '    Next x
-'    Debug.Print "µ¼Èë" & rst.RecordCount; "Ìõ¼ÇÂ¼,access±í»¨·Ñ" & DateDiff("s", t, Now()) & "s."
+'    Debug.Print "å¯¼å…¥" & rst.RecordCount; "æ¡è®°å½•,accessè¡¨èŠ±è´¹" & DateDiff("s", t, Now()) & "s."
 '    rst.Close
 '    Set rst = Nothing
-'    µ¼Èëpostgresql
-'    PostgreSQL Î¨Ò»Ë÷Òı²»ÄÜ´¦Àí¿ÕÖµ
+'    å¯¼å…¥postgresql
+'    PostgreSQL å”¯ä¸€ç´¢å¼•ä¸èƒ½å¤„ç†ç©ºå€¼
 '    Dim SQL_suffix As String
-'    SQL = "CREATE UNIQUE INDEX IF NOT EXISTS  Éú²úĞÅÏ¢Î¨Ò»Ë÷Òı  ON Éú²úĞÅÏ¢ (ÈÕÆÚ,Ãû³Æ,µ¥Î»,Àà±ğ,×´Ì¬,±¸×¢);"
+'    SQL = "CREATE UNIQUE INDEX IF NOT EXISTS  ç”Ÿäº§ä¿¡æ¯å”¯ä¸€ç´¢å¼•  ON ç”Ÿäº§ä¿¡æ¯ (æ—¥æœŸ,åç§°,å•ä½,ç±»åˆ«,çŠ¶æ€,å¤‡æ³¨);"
 '    Call psql.cnn.Execute(SQL)
-'    SQL_suffix = " ON CONFLICT (ÈÕÆÚ,Ãû³Æ,µ¥Î»,Àà±ğ,×´Ì¬,±¸×¢) DO UPDATE SET Êı¾İÔ´ = EXCLUDED.Êı¾İÔ´,Êı¾İ = EXCLUDED.Êı¾İ,ÔÂÀÛ = EXCLUDED.ÔÂÀÛ,ÄêÀÛ = EXCLUDED.ÄêÀÛ where  Éú²úĞÅÏ¢.Êı¾İ is distinct from EXCLUDED.Êı¾İ or Éú²úĞÅÏ¢.ÔÂÀÛ is distinct from EXCLUDED.ÔÂÀÛ or Éú²úĞÅÏ¢.ÄêÀÛ is distinct from EXCLUDED.ÄêÀÛ or Éú²úĞÅÏ¢.Êı¾İÔ´ is distinct from EXCLUDED.Êı¾İÔ´;"
-'    Dim Êı¾İ, ÔÂÀÛ, ÄêÀÛ
+'    SQL_suffix = " ON CONFLICT (æ—¥æœŸ,åç§°,å•ä½,ç±»åˆ«,çŠ¶æ€,å¤‡æ³¨) DO UPDATE SET æ•°æ®æº = EXCLUDED.æ•°æ®æº,æ•°æ® = EXCLUDED.æ•°æ®,æœˆç´¯ = EXCLUDED.æœˆç´¯,å¹´ç´¯ = EXCLUDED.å¹´ç´¯ where  ç”Ÿäº§ä¿¡æ¯.æ•°æ® is distinct from EXCLUDED.æ•°æ® or ç”Ÿäº§ä¿¡æ¯.æœˆç´¯ is distinct from EXCLUDED.æœˆç´¯ or ç”Ÿäº§ä¿¡æ¯.å¹´ç´¯ is distinct from EXCLUDED.å¹´ç´¯ or ç”Ÿäº§ä¿¡æ¯.æ•°æ®æº is distinct from EXCLUDED.æ•°æ®æº;"
+'    Dim æ•°æ®, æœˆç´¯, å¹´ç´¯
 '    For Each x In table.Keys
 '        Set temp = x
 '        Condition = x.isFormat(temp)
 '        If Condition Then
-'            If Not IsEmpty(x.Êı¾İ) Then
-'                Êı¾İ = Round(x.Êı¾İ, 4)
+'            If Not IsEmpty(x.æ•°æ®) Then
+'                æ•°æ® = Round(x.æ•°æ®, 4)
 '            Else
-'                Êı¾İ = "NULL"
+'                æ•°æ® = "NULL"
 '            End If
-'            If Not IsEmpty(x.ÔÂÀÛ) Then
-'                ÔÂÀÛ = Round(x.ÔÂÀÛ, 4)
+'            If Not IsEmpty(x.æœˆç´¯) Then
+'                æœˆç´¯ = Round(x.æœˆç´¯, 4)
 '            Else
-'                ÔÂÀÛ = "NULL"
+'                æœˆç´¯ = "NULL"
 '            End If
-'            If Not IsEmpty(x.ÄêÀÛ) Then
-'                ÄêÀÛ = Round(x.ÄêÀÛ, 4)
+'            If Not IsEmpty(x.å¹´ç´¯) Then
+'                å¹´ç´¯ = Round(x.å¹´ç´¯, 4)
 '            Else
-'                ÄêÀÛ = "NULL"
+'                å¹´ç´¯ = "NULL"
 '            End If
-'            SQL = "INSERT INTO " & tablename & " ( ÈÕÆÚ,Ãû³Æ,µ¥Î»,Àà±ğ,×´Ì¬,±¸×¢,Êı¾İÔ´,Êı¾İ,ÔÂÀÛ,ÄêÀÛ) VALUES ( '" & x.ÈÕÆÚ & "','" & x.Ãû³Æ & "','" & x.µ¥Î» & "','" & x.Àà±ğ & "','" & x.×´Ì¬ & "','" & x.±¸×¢ & "','" & x.Êı¾İÔ´ & "'," & Êı¾İ & "," & ÔÂÀÛ & "," & ÄêÀÛ & ")"
+'            SQL = "INSERT INTO " & tablename & " ( æ—¥æœŸ,åç§°,å•ä½,ç±»åˆ«,çŠ¶æ€,å¤‡æ³¨,æ•°æ®æº,æ•°æ®,æœˆç´¯,å¹´ç´¯) VALUES ( '" & x.æ—¥æœŸ & "','" & x.åç§° & "','" & x.å•ä½ & "','" & x.ç±»åˆ« & "','" & x.çŠ¶æ€ & "','" & x.å¤‡æ³¨ & "','" & x.æ•°æ®æº & "'," & æ•°æ® & "," & æœˆç´¯ & "," & å¹´ç´¯ & ")"
 '            SQL = SQL + SQL_suffix
 '            Debug.Print SQL
 '            Call psql.cnn.Execute(SQL)
@@ -276,48 +267,48 @@ Public Sub PushTableToDatabase(table)
         Condition = x.isFormat(temp)
         If Condition Then
             rst.AddNew
-            rst.Fields("µ¥Î»").value = ""
-            rst.Fields("×´Ì¬").value = ""
-            rst.Fields("Àà±ğ").value = ""
-            rst.Fields("±¸×¢").value = ""
-            rst.Fields("Êı¾İÔ´").value = ThisWorkbook.FullName
-            If IsDate(x.ÈÕÆÚ) Then
-                rst.Fields("ÈÕÆÚ").value = x.ÈÕÆÚ
+            rst.Fields("å•ä½").value = ""
+            rst.Fields("çŠ¶æ€").value = ""
+            rst.Fields("ç±»åˆ«").value = ""
+            rst.Fields("å¤‡æ³¨").value = ""
+            rst.Fields("æ•°æ®æº").value = ThisWorkbook.FullName
+            If IsDate(x.æ—¥æœŸ) Then
+                rst.Fields("æ—¥æœŸ").value = x.æ—¥æœŸ
             End If
-            If Not IsEmpty(x.Ãû³Æ) Then
-                rst.Fields("Ãû³Æ").value = x.Ãû³Æ
+            If Not IsEmpty(x.åç§°) Then
+                rst.Fields("åç§°").value = x.åç§°
             End If
-            If Not IsEmpty(x.µ¥Î») Or x.µ¥Î» <> "" Then
-                rst.Fields("µ¥Î»").value = x.µ¥Î»
+            If Not IsEmpty(x.å•ä½) Or x.å•ä½ <> "" Then
+                rst.Fields("å•ä½").value = x.å•ä½
             End If
-            If Not IsEmpty(x.Àà±ğ) Or x.Àà±ğ <> "" Then
-                rst.Fields("Àà±ğ").value = x.Àà±ğ
+            If Not IsEmpty(x.ç±»åˆ«) Or x.ç±»åˆ« <> "" Then
+                rst.Fields("ç±»åˆ«").value = x.ç±»åˆ«
             End If
-            If Not IsEmpty(x.×´Ì¬) Or x.×´Ì¬ <> "" Then
-                rst.Fields("×´Ì¬").value = x.×´Ì¬
+            If Not IsEmpty(x.çŠ¶æ€) Or x.çŠ¶æ€ <> "" Then
+                rst.Fields("çŠ¶æ€").value = x.çŠ¶æ€
             End If
-            If Not IsEmpty(x.±¸×¢) Or x.±¸×¢ <> "" Then
-                rst.Fields("±¸×¢").value = x.±¸×¢
+            If Not IsEmpty(x.å¤‡æ³¨) Or x.å¤‡æ³¨ <> "" Then
+                rst.Fields("å¤‡æ³¨").value = x.å¤‡æ³¨
             End If
-            If Not IsEmpty(x.Êı¾İÔ´) Or x.Êı¾İÔ´ <> "" Then
-                rst.Fields("Êı¾İÔ´").value = x.Êı¾İÔ´
+            If Not IsEmpty(x.æ•°æ®æº) Or x.æ•°æ®æº <> "" Then
+                rst.Fields("æ•°æ®æº").value = x.æ•°æ®æº
             End If
-            If IsNumeric(x.Êı¾İ) Then
-                rst.Fields("Êı¾İ").value = Round(CDec(x.Êı¾İ), 4)
+            If IsNumeric(x.æ•°æ®) Then
+                rst.Fields("æ•°æ®").value = Round(CDec(x.æ•°æ®), 4)
             End If
-            If IsNumeric(x.ÔÂÀÛ) Then
-                rst.Fields("ÔÂÀÛ").value = Round(CDec(x.ÔÂÀÛ), 4)
+            If IsNumeric(x.æœˆç´¯) Then
+                rst.Fields("æœˆç´¯").value = Round(CDec(x.æœˆç´¯), 4)
             End If
-            If IsNumeric(x.ÄêÀÛ) Then
-                rst.Fields("ÄêÀÛ").value = Round(CDec(x.ÄêÀÛ), 4)
+            If IsNumeric(x.å¹´ç´¯) Then
+                rst.Fields("å¹´ç´¯").value = Round(CDec(x.å¹´ç´¯), 4)
             End If
-'            Debug.Print rst.Fields("ÈÕÆÚ"), rst.Fields("Ãû³Æ"), rst.Fields("Êı¾İ"), rst.Fields("ÔÂÀÛ"), rst.Fields("ÄêÀÛ")
+'            Debug.Print rst.Fields("æ—¥æœŸ"), rst.Fields("åç§°"), rst.Fields("æ•°æ®"), rst.Fields("æœˆç´¯"), rst.Fields("å¹´ç´¯")
             rst.UpdateBatch
         End If
     Next x
     rst.Close
     Set rst = Nothing
-    Debug.Print "µ¼Èë" & table.count & "Ìõ¼ÇÂ¼µ½±í" & tablename & " ,PostgreSQL±í»¨·Ñ" & DateDiff("s", t, Now()) & "s."
+    Debug.Print "å¯¼å…¥" & table.count & "æ¡è®°å½•åˆ°è¡¨" & tablename & " ,PostgreSQLè¡¨èŠ±è´¹" & DateDiff("s", t, Now()) & "s."
     Call removeDuplicate
 ErrorHandler:
     If 0 = Err.Number Or 20 = Err.Number Then
@@ -325,14 +316,14 @@ ErrorHandler:
     Else
         Debug.Print Err.Number, Err.Description
     End If
-'    PostgreSQL Î´Á¬½Ó´úÂë -2147467259
+'    PostgreSQL æœªè¿æ¥ä»£ç  -2147467259
     If -2147467259 = Err.Number Then
-        MsgBox "PostgreSQL Êı¾İ¿âÃ»ÓĞ´ò¿ª£¡"
+        MsgBox "PostgreSQL æ•°æ®åº“æ²¡æœ‰æ‰“å¼€ï¼"
         Exit Sub
     End If
     Resume Next
 End Sub
-'È¥³ıÖØ¸´Êı¾İ
+'å»é™¤é‡å¤æ•°æ®
 Public Sub removeDuplicate()
 '    Dim ac As New access
 '    Call ac.removeDuplicate
@@ -346,9 +337,9 @@ Public Sub AccessToPostgreSQL()
     Dim ac As New access
     Dim psql As New PostgreSQL
     Dim tablename As String
-    tablename = "Éú²úĞÅÏ¢"
+    tablename = "ç”Ÿäº§ä¿¡æ¯"
 '    Dim SQL As String
-'    SQL = " Select  ÈÕÆÚ,Ãû³Æ,µ¥Î»,Êı¾İ,Àà±ğ,×´Ì¬,ÔÂÀÛ,ÄêÀÛ,±¸×¢,Êı¾İÔ´ from Éú²úĞÅÏ¢ "
+'    SQL = " Select  æ—¥æœŸ,åç§°,å•ä½,æ•°æ®,ç±»åˆ«,çŠ¶æ€,æœˆç´¯,å¹´ç´¯,å¤‡æ³¨,æ•°æ®æº from ç”Ÿäº§ä¿¡æ¯ "
 '    rst1.Open SQL, ac.cnn, adOpenDynamic, adLockBatchOptimistic
     Dim rst1 As New ADODB.Recordset
     rst1.Open tablename, ac.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
@@ -357,16 +348,16 @@ Public Sub AccessToPostgreSQL()
     rst1.MoveFirst
     While Not rst1.EOF Or rst1.BOF
         rst2.AddNew
-        rst2.Fields("ÈÕÆÚ").value = rst1!ÈÕÆÚ
-        rst2.Fields("Ãû³Æ").value = rst1!Ãû³Æ
-        rst2.Fields("µ¥Î»").value = rst1!µ¥Î»
-        rst2.Fields("Àà±ğ").value = rst1!Àà±ğ
-        rst2.Fields("×´Ì¬").value = rst1!×´Ì¬
-        rst2.Fields("±¸×¢").value = rst1!±¸×¢
-        rst2.Fields("Êı¾İÔ´").value = rst1!Êı¾İÔ´
-        rst2.Fields("Êı¾İ").value = rst1!Êı¾İ
-        rst2.Fields("ÔÂÀÛ").value = rst1!ÔÂÀÛ
-        rst2.Fields("ÄêÀÛ").value = rst1!ÄêÀÛ
+        rst2.Fields("æ—¥æœŸ").value = rst1!æ—¥æœŸ
+        rst2.Fields("åç§°").value = rst1!åç§°
+        rst2.Fields("å•ä½").value = rst1!å•ä½
+        rst2.Fields("ç±»åˆ«").value = rst1!ç±»åˆ«
+        rst2.Fields("çŠ¶æ€").value = rst1!çŠ¶æ€
+        rst2.Fields("å¤‡æ³¨").value = rst1!å¤‡æ³¨
+        rst2.Fields("æ•°æ®æº").value = rst1!æ•°æ®æº
+        rst2.Fields("æ•°æ®").value = rst1!æ•°æ®
+        rst2.Fields("æœˆç´¯").value = rst1!æœˆç´¯
+        rst2.Fields("å¹´ç´¯").value = rst1!å¹´ç´¯
         rst2.UpdateBatch
         rst1.MoveNext
         rst2.MoveNext
@@ -382,11 +373,11 @@ ErrorHandler:
     Else
         Debug.Print Err.Number & vbTab & Err.Description
     End If
-'    access ÖØ¸´Êı¾İ´¦Àí
+'    access é‡å¤æ•°æ®å¤„ç†
     Resume Next
-'    PostgreSQL Î´Á¬½Ó´úÂë -2147467259
+'    PostgreSQL æœªè¿æ¥ä»£ç  -2147467259
     If -2147467259 = Err.Number Then
-        MsgBox "PostgreSQL Êı¾İ¿âÃ»ÓĞ´ò¿ª£¡"
+        MsgBox "PostgreSQL æ•°æ®åº“æ²¡æœ‰æ‰“å¼€ï¼"
         Exit Sub
     End If
 End Sub
@@ -397,7 +388,7 @@ On Error GoTo ErrorHandler
     Dim ac As New access
     Dim psql As New PostgreSQL
     Dim tablename As String
-    tablename = "Éú²úĞÅÏ¢"
+    tablename = "ç”Ÿäº§ä¿¡æ¯"
 '    Access
     Dim rst1 As New ADODB.Recordset
     Dim rst2 As New ADODB.Recordset
@@ -406,16 +397,16 @@ On Error GoTo ErrorHandler
     rst2.Open tablename, ac.cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
     While Not rst1.EOF Or rst1.BOF
         rst2.AddNew
-        rst2.Fields("ÈÕÆÚ").value = rst1!ÈÕÆÚ
-        rst2.Fields("Ãû³Æ").value = rst1!Ãû³Æ
-        rst2.Fields("µ¥Î»").value = rst1!µ¥Î»
-        rst2.Fields("Àà±ğ").value = rst1!Àà±ğ
-        rst2.Fields("×´Ì¬").value = rst1!×´Ì¬
-        rst2.Fields("±¸×¢").value = rst1!±¸×¢
-        rst2.Fields("Êı¾İÔ´").value = rst1!Êı¾İÔ´
-        rst2.Fields("Êı¾İ").value = rst1!Êı¾İ
-        rst2.Fields("ÔÂÀÛ").value = rst1!ÔÂÀÛ
-        rst2.Fields("ÄêÀÛ").value = rst1!ÄêÀÛ
+        rst2.Fields("æ—¥æœŸ").value = rst1!æ—¥æœŸ
+        rst2.Fields("åç§°").value = rst1!åç§°
+        rst2.Fields("å•ä½").value = rst1!å•ä½
+        rst2.Fields("ç±»åˆ«").value = rst1!ç±»åˆ«
+        rst2.Fields("çŠ¶æ€").value = rst1!çŠ¶æ€
+        rst2.Fields("å¤‡æ³¨").value = rst1!å¤‡æ³¨
+        rst2.Fields("æ•°æ®æº").value = rst1!æ•°æ®æº
+        rst2.Fields("æ•°æ®").value = rst1!æ•°æ®
+        rst2.Fields("æœˆç´¯").value = rst1!æœˆç´¯
+        rst2.Fields("å¹´ç´¯").value = rst1!å¹´ç´¯
         rst2.UpdateBatch
         rst1.MoveNext
         rst2.MoveNext
@@ -429,11 +420,11 @@ ErrorHandler:
     Else
         Debug.Print Err.Number & vbTab & Err.Description
     End If
-'    access ÖØ¸´Êı¾İ´¦Àí
+'    access é‡å¤æ•°æ®å¤„ç†
     Resume Next
-'    PostgreSQL Î´Á¬½Ó´úÂë -2147467259
+'    PostgreSQL æœªè¿æ¥ä»£ç  -2147467259
     If -2147467259 = Err.Number Then
-        MsgBox "PostgreSQL Êı¾İ¿âÃ»ÓĞ´ò¿ª£¡"
+        MsgBox "PostgreSQL æ•°æ®åº“æ²¡æœ‰æ‰“å¼€ï¼"
         Exit Sub
     End If
 End Sub
@@ -443,20 +434,20 @@ On Error GoTo ErrorHandler
     Dim SQL, tablename As String
     Dim ac As New access
     Dim psql As New PostgreSQL
-    tablename = "Éú²úĞÅÏ¢"
-    SQL = "update " & tablename & " set µ¥Î»='' where µ¥Î» is null;"
+    tablename = "ç”Ÿäº§ä¿¡æ¯"
+    SQL = "update " & tablename & " set å•ä½='' where å•ä½ is null;"
     Call ac.cnn.Execute(SQL)
     Call psql.cnn.Execute(SQL)
-    SQL = "update " & tablename & " set Àà±ğ='' where Àà±ğ is null;"
+    SQL = "update " & tablename & " set ç±»åˆ«='' where ç±»åˆ« is null;"
     Call ac.cnn.Execute(SQL)
     Call psql.cnn.Execute(SQL)
-    SQL = "update " & tablename & " set ×´Ì¬='' where ×´Ì¬ is null;"
+    SQL = "update " & tablename & " set çŠ¶æ€='' where çŠ¶æ€ is null;"
     Call ac.cnn.Execute(SQL)
     Call psql.cnn.Execute(SQL)
-    SQL = "update " & tablename & " set ±¸×¢='' where ±¸×¢ is null;"
+    SQL = "update " & tablename & " set å¤‡æ³¨='' where å¤‡æ³¨ is null;"
     Call ac.cnn.Execute(SQL)
     Call psql.cnn.Execute(SQL)
-    SQL = "update " & tablename & " set Êı¾İÔ´='' where Êı¾İÔ´ is null;"
+    SQL = "update " & tablename & " set æ•°æ®æº='' where æ•°æ®æº is null;"
     Call ac.cnn.Execute(SQL)
     Call psql.cnn.Execute(SQL)
 ErrorHandler:
@@ -465,5 +456,112 @@ ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
     End If
 End Sub
+
+Sub dictToRecord(ByRef source as Object,ByRef result as Object)
+    On Error GoTo ErrorHandler
+    dim gas,oil,hydrocarbons,chemicals, water, electricity,hasSum as Variant
+    set gas=array("ç¨³å®šåŒº","å…¥å‚è®¡é‡","æ€»å¤–è¾“æ°”é‡","æ€»äº§æ°”é‡","é”¦å¤©åŒ–","ç²¾ç»†åŒ–å·¥","ç²¾ç»†åŒ–å·¥CNG","æ±¡æ°´å¤„ç†å‚","æ–°å¥¥ç‡ƒæ°”","è‡ªç”¨æ°”","æ”¾ç©ºæ°”")
+    ' çƒ­æ²¹ç‚‰ é”…ç‚‰æˆ¿ç”¨æ°”   ç«ç‚¬é•¿æ˜ç¯   ç«ç‚¬æ”¾ç©ºé‡   FIQ-2043
+    ' JZ20-2ä½“ç³»,JZ25-1Sä½“ç³»
+    set oil=array("è½»æ²¹å›æ”¶é‡","è½»æ²¹è£…è½¦")
+    set hydrocarbons = array("ä¸™ä¸çƒ·å›æ”¶é‡","è½»çƒƒè£…è½¦")
+    set chemicals = array("ç”²é†‡æ¶ˆè€—","ä¹™äºŒé†‡å›æ”¶","ä¹™äºŒé†‡æ¶ˆè€—")
+    set water = array("å¤–ä¾›æ°´","è‡ªé‡‡æ°´","æ°´æ¶ˆè€—")    
+    set electricity = array("å¤–ä¾›ç”µ","è‡ªå‘ç”µ","ç”µæ¶ˆè€—")
+    set hasSum = array("ç¨³å®šåŒº","å…¥å‚è®¡é‡","æ€»äº§æ°”é‡", _
+                        "æ€»å¤–è¾“æ°”é‡","é”¦å¤©åŒ–","ç²¾ç»†åŒ–å·¥","ç²¾ç»†åŒ–å·¥CNG","æ±¡æ°´å¤„ç†å‚","æ–°å¥¥ç‡ƒæ°”","è‡ªç”¨æ°”","æ”¾ç©ºæ°”", _
+                        "JZ20-2ä½“ç³»","JZ25-1Sä½“ç³»", _
+                        "è½»æ²¹å›æ”¶é‡","ä¸™ä¸çƒ·å›æ”¶é‡", _
+                        "å¤–ä¾›æ°´","è‡ªé‡‡æ°´","æ°´æ¶ˆè€—", _
+                        "ç”²é†‡æ¶ˆè€—","ä¹™äºŒé†‡å›æ”¶","ä¹™äºŒé†‡æ¶ˆè€—", _
+                        "å¤–ä¾›ç”µ","è‡ªå‘ç”µ","ç”µæ¶ˆè€—", _
+                        )
+    dim pattern,name,temp,category,unit,status,remark,source as String
+    dim value,monthSum,yearSum as Variant
+    dim pdate as date
+    pdate = source("æ—¥æœŸ")
+    dim h as New help
+    Dim recordSC As New ç”Ÿäº§ä¿¡æ¯
+    For Each temp In source.Keys
+        unit = "æ–¹"
+        remark = ""
+        source = ""
+        value = source(temp)
+        For Each name In hasSum
+            pattern = h.replace(temp,"æ–¹$","")
+            select case pattern
+                case "æ€»å¤–è¾“æ°”é‡","é”¦å¤©åŒ–","ç²¾ç»†åŒ–å·¥","ç²¾ç»†åŒ–å·¥CNG","æ±¡æ°´å¤„ç†å‚","æ–°å¥¥ç‡ƒæ°”"
+                    category="å¤©ç„¶æ°”"
+                    status = "å¤–è¾“"
+                case "ç¨³å®šåŒº","å…¥å‚è®¡é‡"
+                    category="å¤©ç„¶æ°”"                
+                    status = "æ¥æ”¶"
+                case "è‡ªç”¨æ°”","æ”¾ç©ºæ°”"
+                    category="å¤©ç„¶æ°”"                
+                    status = "æ¶ˆè€—"                    
+                case "æ€»äº§æ°”é‡"
+                    category="å¤©ç„¶æ°”"                
+                    status = "ç”Ÿäº§"
+                case "è½»æ²¹å›æ”¶é‡"
+                    category = "è½»æ²¹"
+                    status = "ç”Ÿäº§"
+                case "ä¸™ä¸çƒ·å›æ”¶é‡"
+                    category = "ä¸™ä¸çƒ·"
+                    status = "ç”Ÿäº§"
+                case "å¤–ä¾›æ°´"
+                    category = "æ°´"
+                    status = "æ¥æ”¶"
+                case "æ°´æ¶ˆè€—"
+                    category = "æ°´"
+                    status = "æ¶ˆè€—"
+                case "è‡ªé‡‡æ°´"
+                    category = "æ°´"
+                    status = "ç”Ÿäº§"
+                case "ç”²é†‡æ¶ˆè€—","ä¹™äºŒé†‡æ¶ˆè€—"
+                    category = "åŒ–å­¦è¯å‰‚"
+                    status = "æ¶ˆè€—"
+                case "ä¹™äºŒé†‡å›æ”¶"
+                    category = "åŒ–å­¦è¯å‰‚"
+                    status = "ç”Ÿäº§"
+                case "å¤–ä¾›ç”µ"
+                    category = "ç”µ"
+                    status = "æ¥æ”¶"
+                    unit = "åº¦"
+                case "è‡ªå‘ç”µ"
+                    category = "ç”µ"
+                    status = "ç”Ÿäº§"
+                    unit = "åº¦"
+                case "ç”µæ¶ˆè€—"
+                    unit = "åº¦"
+                    category = "ç”µ"
+                    status = "æ¶ˆè€—"                                                            
+            End Select
+            monthSum = source("æœˆç´¯"+temp)    
+            yearSum = source("å¹´ç´¯"+temp)
+            Debug.Print pdate,name,unit,category,status,remark,source,value,monthSum,yearSum    
+            With recordSC
+                .æ—¥æœŸ = æ—¥æœŸ
+                .åç§° = name
+                .å•ä½ = unit
+                .æ•°æ® = value
+                .ç±»åˆ« = category
+                .çŠ¶æ€ = status
+                .æ•°æ®æº = source
+                .æœˆç´¯ = monthSum
+                .å¹´ç´¯ = yearSum
+            End With
+            table.Add recordSC, ""
+            Set recordSC = Nothing        
+        Next
+
+        For Each name In oil
+            category="å¤©ç„¶æ°”"
+            pattern = h.replace(temp,"æ–¹$","")                    
+        Next        
+    Next
+ErrorHandler:    
+    Debug.Print Err.Number & vbTab & Err.Source & vbTab & Err.Description     
+End Sub
+
 
 
