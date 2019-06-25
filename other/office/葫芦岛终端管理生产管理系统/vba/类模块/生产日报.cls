@@ -84,7 +84,6 @@ Public Sub getValue(ByVal fname As String, table)
 Err.Clear
 On Error GoTo ErrorHandler
     Application.ScreenUpdating = False
-'    Application.Visible = True
     Dim Title As String
     Title = "*葫芦岛天然气终端厂生产日报*"
     Dim wb
@@ -2342,49 +2341,48 @@ Sub getLocationTable(ByRef data As Object)
                         data(name)=Array(row+ro,column+co)
                     Next i
                 End If
-                For Each n In names
-                    If h.isMatch(n, temp) Then
-                        If h.isMatch("(稳定区)|(入厂计量)", n) Then
-                            co = 1
-                            name = n + "方"
-                            value = data(name)
-                            data(name)=Array(row+ro,column+co)
-                            co = 3
-                            name = "月累" + n + "方"
-                            data(name)=Array(row+ro,column+co)
-                            co = 4
-                            name = "年累" + n + "方"
-                            data(name)=Array(row+ro,column+co)
-                        End If
-                        If h.isMatch("(锦天化)|(精细化工)|(精细化工CNG)|(污水处理厂)|(新奥燃气)|(自用气)|(放空气)", n) Then
-                            co = 1
-                            name = n + "方"
-                            value = data(name)
-                            If h.isMatch("(新奥燃气)|(自用气)|(放空气)", n) Then
-                                co = 2
-                            End If
-                            data(name)=Array(row+ro,column+co)
-                            co = 4
-                            name = "月累" + n + "方"
-                             data(name)=Array(row+ro,column+co)
-                            co = 5
-                            name = "年累" + n + "方"
-                              data(name)=Array(row+ro,column+co)
-                        End If
-                        if h.isMatch("(总产气量)|(总外输气量)",n) Then
-                            co = 2
-                            name = n + "方"
-                            value = data(name)
-                            data(name)=Array(row+ro,column+co)
-                            co = 4
-                            name = "月累" + n + "方"
-                            data(name)=Array(row+ro,column+co)
-                            co = 5
-                            name = "年累" + n + "方"
-                            data(name)=Array(row+ro,column+co)                        
-                        End If
+                If h.isMatch("(稳定区)|(入厂计量)", temp) Then
+                    n= h.replace(temp,"(104)m3$","")
+                    co = 1
+                    name = n + "方"
+                    value = data(name)
+                    data(name)=Array(row+ro,column+co)
+                    co = 3
+                    name = "月累" + n + "方"
+                    data(name)=Array(row+ro,column+co)
+                    co = 4
+                    name = "年累" + n + "方"
+                    data(name)=Array(row+ro,column+co)
+                End If
+                If h.isMatch("(锦天化)|(精细化工)|(精细化工CNG)|(污水处理厂)|(新奥燃气)|(自用气)|(放空气)", temp) Then
+                    co = 1
+                    n= h.replace(temp,"(104)m3$","")
+                    name = n + "方"
+                    value = data(name)
+                    If h.isMatch("(新奥燃气)|(自用气)|(放空气)", temp) Then
+                        co = 2
                     End If
-                Next n
+                    data(name)=Array(row+ro,column+co)
+                    co = 4
+                    name = "月累" + n + "方"
+                    data(name)=Array(row+ro,column+co)
+                    co = 5
+                    name = "年累" + n + "方"
+                    data(name)=Array(row+ro,column+co)
+                End If
+                if h.isMatch("(总产气量)|(总外输气量)",temp) Then
+                    co = 2
+                    n= h.replace(temp,"(104)m3$","")
+                    name = n + "方"
+                    value = data(name)
+                    data(name)=Array(row+ro,column+co)
+                    co = 4
+                    name = "月累" + n + "方"
+                    data(name)=Array(row+ro,column+co)
+                    co = 5
+                    name = "年累" + n + "方"
+                    data(name)=Array(row+ro,column+co)                        
+                End If
                 If h.isMatch("(海管来液含水)|(海管MEG浓度)|(海管出口凝点)|(海管出口PH值)", temp) Then
                     co = 1
                     n = h.unitConvert(temp)
@@ -2528,8 +2526,10 @@ Sub getLocationTable(ByRef data As Object)
         Next column
     Next row
 ErrorHandler:
-        Debug.Print Err.Number & vbTab & Err.Description
-        Resume Next
+    If Err.Number Then
+        Debug.Print Err.Number & vbTab & Err.source & vbTab & Err.Description
+    End If
+    Resume Next
 End Sub
 '获得生产日报数据
 Sub getDailyData(ByRef locatTable as Object,ByRef data as Object)
@@ -2546,7 +2546,9 @@ Sub getDailyData(ByRef locatTable as Object,ByRef data as Object)
         data(name) = value
     Next    
 ErrorHandler:    
-    Debug.Print Err.Number & vbTab & Err.Source & vbTab & Err.Description      
+    If Err.Number Then
+        Debug.Print Err.Number & vbTab & Err.source & vbTab & Err.Description
+    End If      
 End Sub
 '日报数据清除
 Sub clearDailyTable(ByRef locatTable as Object)  
@@ -2565,7 +2567,9 @@ Sub clearDailyTable(ByRef locatTable as Object)
         Worksheets(sheetName).Cells(row,column).value=Null
     Next    
 ErrorHandler:    
-    Debug.Print Err.Number & vbTab & Err.Source & vbTab & Err.Description     
+    If Err.Number Then
+        Debug.Print Err.Number & vbTab & Err.source & vbTab & Err.Description
+    End If    
 End Sub
 '填写日报
 Sub fillDailyData(ByRef locatTable as Object,ByRef data as Object)
@@ -2582,5 +2586,7 @@ Sub fillDailyData(ByRef locatTable as Object,ByRef data as Object)
         Worksheets(sheetName).Cells(row,column).value=value
     Next    
 ErrorHandler:    
-    Debug.Print Err.Number & vbTab & Err.Source & vbTab & Err.Description      
+    If Err.Number Then
+        Debug.Print Err.Number & vbTab & Err.source & vbTab & Err.Description
+    End If     
 End Sub

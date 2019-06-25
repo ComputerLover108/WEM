@@ -456,123 +456,111 @@ ErrorHandler:
         Debug.Print Err.Number & vbTab & Err.Description
     End If
 End Sub
-
+' 字典数据转生产信息数据
 Sub dictToRecord(ByRef source as Object,ByRef result as Object)
     On Error GoTo ErrorHandler
     dim gas,oil,hydrocarbons,chemicals, water, electricity,hasSum as Variant
-    set gas=array("稳定区","入厂计量","总外输气量","总产气量","锦天化","精细化工","精细化工CNG","污水处理厂","新奥燃气","自用气","放空气")
+    gas=array("稳定区","入厂计量","总外输气量","总产气量","锦天化","精细化工","精细化工CNG","污水处理厂","新奥燃气","自用气","放空气")
     ' 热油炉 锅炉房用气   火炬长明灯   火炬放空量   FIQ-2043
     ' JZ20-2体系,JZ25-1S体系
-    set oil=array("轻油回收量","轻油装车")
-    set hydrocarbons = array("丙丁烷回收量","轻烃装车")
-    set chemicals = array("甲醇消耗","乙二醇回收","乙二醇消耗")
-    set water = array("外供水","自采水","水消耗")    
-    set electricity = array("外供电","自发电","电消耗")
-    set hasSum = array("稳定区","入厂计量","总产气量", _
+    oil=array("轻油回收量","轻油装车")
+    hydrocarbons = array("丙丁烷回收量","轻烃装车")
+    chemicals = array("甲醇消耗","乙二醇回收","乙二醇消耗")
+    water = array("外供水","自采水","水消耗")    
+    electricity = array("外供电","自发电","电消耗")
+    hasSum = array("稳定区","入厂计量","总产气量", _
                         "总外输气量","锦天化","精细化工","精细化工CNG","污水处理厂","新奥燃气","自用气","放空气", _
                         "JZ20-2体系","JZ25-1S体系", _
                         "轻油回收量","丙丁烷回收量", _
                         "外供水","自采水","水消耗", _
                         "甲醇消耗","乙二醇回收","乙二醇消耗", _
-                        "外供电","自发电","电消耗", _
+                        "外供电","自发电","电消耗" _
                         )
-    dim pattern,name,temp,category,unit,status,remark,source as String
+    dim pattern,name,temp,category,unit,status,remark,DataSource as String
     dim value,monthSum,yearSum as Variant
     dim pdate as date
     pdate = source("日期")
     dim h as New help
     Dim recordSC As New 生产信息
     For Each temp In source.Keys
-        unit = "方"
+        pattern = h.replace(temp,"(方)|(桶)|(吨)|(米)|(度)|(摄氏度)|(千帕)|(兆帕)$","")
         remark = ""
-        source = ""
-        value = source(temp)
+        DataSource = ""
+        monthSum = NULL
+        yearSum = NULL
+        value = source(temp)        
+        For Each name In hasSum
+            unit = "方"
+            if pattern = name Then
+                select case pattern
+                    case "总外输气量","锦天化","精细化工","精细化工CNG","污水处理厂","新奥燃气"
+                        category="天然气"
+                        status = "外输"
+                    case "稳定区","入厂计量"
+                        category="天然气"                
+                        status = "接收"
+                    case "自用气","放空气"
+                        category="天然气"                
+                        status = "消耗"                    
+                    case "总产气量"
+                        category="天然气"                
+                        status = "生产"
+                    case "轻油回收量"
+                        category = "轻油"
+                        status = "生产"
+                    case "丙丁烷回收量"
+                        category = "丙丁烷"
+                        status = "生产"
+                    case "外供水"
+                        category = "水"
+                        status = "接收"
+                    case "水消耗"
+                        category = "水"
+                        status = "消耗"
+                    case "自采水"
+                        category = "水"
+                        status = "生产"
+                    case "甲醇消耗","乙二醇消耗"
+                        category = "化学药剂"
+                        status = "消耗"
+                    case "乙二醇回收"
+                        category = "化学药剂"
+                        status = "生产"
+                    case "外供电"
+                        category = "电"
+                        status = "接收"
+                        unit = "度"
+                    case "自发电"
+                        category = "电"
+                        status = "生产"
+                        unit = "度"
+                    case "电消耗"
+                        unit = "度"
+                        category = "电"
+                        status = "消耗"                                                            
+                End Select
+                monthSum = source("月累"+temp)    
+                yearSum = source("年累"+temp)
+                Debug.Print pdate,name,unit,category,status,remark,dataSource,value,monthSum,yearSum
+            End If         
+        Next        
+
         With recordSC
             .日期 = 日期
-            .名称 = name
+            .名称 = pattern
             .单位 = unit
             .数据 = value
             .类别 = category
             .状态 = status
-            .数据源 = source
+            .数据源 = DataSource
             .月累 = monthSum
             .年累 = yearSum
         End With
         table.Add recordSC, ""
-        Set recordSC = Nothing        
-        For Each name In hasSum
-            unit = "方"
-            pattern = h.replace(temp,"方$","")
-            select case pattern
-                case "总外输气量","锦天化","精细化工","精细化工CNG","污水处理厂","新奥燃气"
-                    category="天然气"
-                    status = "外输"
-                case "稳定区","入厂计量"
-                    category="天然气"                
-                    status = "接收"
-                case "自用气","放空气"
-                    category="天然气"                
-                    status = "消耗"                    
-                case "总产气量"
-                    category="天然气"                
-                    status = "生产"
-                case "轻油回收量"
-                    category = "轻油"
-                    status = "生产"
-                case "丙丁烷回收量"
-                    category = "丙丁烷"
-                    status = "生产"
-                case "外供水"
-                    category = "水"
-                    status = "接收"
-                case "水消耗"
-                    category = "水"
-                    status = "消耗"
-                case "自采水"
-                    category = "水"
-                    status = "生产"
-                case "甲醇消耗","乙二醇消耗"
-                    category = "化学药剂"
-                    status = "消耗"
-                case "乙二醇回收"
-                    category = "化学药剂"
-                    status = "生产"
-                case "外供电"
-                    category = "电"
-                    status = "接收"
-                    unit = "度"
-                case "自发电"
-                    category = "电"
-                    status = "生产"
-                    unit = "度"
-                case "电消耗"
-                    unit = "度"
-                    category = "电"
-                    status = "消耗"                                                            
-            End Select
-            monthSum = source("月累"+temp)    
-            yearSum = source("年累"+temp)
-            Debug.Print pdate,name,unit,category,status,remark,source,value,monthSum,yearSum    
-            With recordSC
-                .日期 = 日期
-                .名称 = name
-                .单位 = unit
-                .数据 = value
-                .类别 = category
-                .状态 = status
-                .数据源 = source
-                .月累 = monthSum
-                .年累 = yearSum
-            End With
-            table.Add recordSC, ""
-            Set recordSC = Nothing        
-        Next
-
-       
+        Set recordSC = Nothing               
     Next
 ErrorHandler:    
-    Debug.Print Err.Number & vbTab & Err.Source & vbTab & Err.Description     
+    If Err.Number Then
+        Debug.Print Err.Number & vbTab & Err.source & vbTab & Err.Description
+    End If     
 End Sub
-
-
-
