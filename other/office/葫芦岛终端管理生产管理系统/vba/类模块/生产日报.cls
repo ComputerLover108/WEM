@@ -2301,6 +2301,7 @@ Sub getLocationTable(ByRef data As Object)
             co=0
             If h.isString(temp) Then
                 temp=trim(temp)
+                n= h.replace(temp,"(104)?m3$","")
                 If h.isMatch(flag, temp) Then
                     ro =1
                     name = "日期"
@@ -2342,7 +2343,7 @@ Sub getLocationTable(ByRef data As Object)
                     Next i
                 End If
                 If h.isMatch("(稳定区)|(入厂计量)", temp) Then
-                    n= h.replace(temp,"(104)m3$","")
+                    ro = 0
                     co = 1
                     name = n + "方"
                     value = data(name)
@@ -2355,8 +2356,9 @@ Sub getLocationTable(ByRef data As Object)
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("(锦天化)|(精细化工)|(精细化工CNG)|(污水处理厂)|(新奥燃气)|(自用气)|(放空气)", temp) Then
+                    ro = 0                
                     co = 1
-                    n= h.replace(temp,"(104)m3$","")
+                    ' n= h.replace(temp,"(104)m3$","")
                     name = n + "方"
                     value = data(name)
                     If h.isMatch("(新奥燃气)|(自用气)|(放空气)", temp) Then
@@ -2371,8 +2373,9 @@ Sub getLocationTable(ByRef data As Object)
                     data(name)=Array(row+ro,column+co)
                 End If
                 if h.isMatch("(总产气量)|(总外输气量)",temp) Then
+                    ro = 0
                     co = 2
-                    n= h.replace(temp,"(104)m3$","")
+                    ' n= h.replace(temp,"(104)m3$","")
                     name = n + "方"
                     value = data(name)
                     data(name)=Array(row+ro,column+co)
@@ -2384,6 +2387,7 @@ Sub getLocationTable(ByRef data As Object)
                     data(name)=Array(row+ro,column+co)                        
                 End If
                 If h.isMatch("(海管来液含水)|(海管MEG浓度)|(海管出口凝点)|(海管出口PH值)", temp) Then
+                    ro = 0
                     co = 1
                     n = h.unitConvert(temp)
                     name = "上午" + n
@@ -2393,16 +2397,19 @@ Sub getLocationTable(ByRef data As Object)
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("海管进/出口压力MPa", temp) Then
+                    ro = 0                    
                     co = 1
-                                                       
+                    name=h.unitConvert(temp)                                  
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("海管进/出口温度℃", temp) Then
+                    ro = 0                
                     co = 1
-                                                       
+                    name=h.unitConvert(temp)                                   
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("(JZ20-2凝析油)|(JZ20-2轻油)", temp) Then
+                    ro = 0                
                     co = 1
                     name = h.unitConvert(temp)
                                                        
@@ -2434,6 +2441,7 @@ Sub getLocationTable(ByRef data As Object)
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("(装车)|(丙丁烷回收量)|(轻油入罐前含水)", temp) Then
+                    ro = 0
                     co = 1                   
                     name = h.replace(name, "t", "吨")
                     name = h.replace(name, "m3", "方")
@@ -2462,21 +2470,25 @@ Sub getLocationTable(ByRef data As Object)
                     data("年累" + name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("甲醇库存", temp) Then
+                    ro = 0                
                     co = 1
                     name = "库存甲醇方"
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("乙二醇浓度", temp) Then
+                    ro = 0                
                     co = 1
                     name = temp
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("水池水位", temp) Then
+                    ro = 0
                     co = 1
                     name = "库存水米"
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("水池储水", temp) Then
+                    ro = 0
                     co = 1
                     name = "库存水方"
                     data(name)=Array(row+ro,column+co)
@@ -2512,21 +2524,23 @@ Sub getLocationTable(ByRef data As Object)
                         data(name)=Array(row+ro,column+co)
                     End If
                 End If
-                If h.isMatch("海管通球信息",temp) Then
+                If h.isMatch("海管信息",temp) Then
                     ro=11
+                    co = 0
                     name = "海管通球备注"
                     data(name)=Array(row+ro,column+co)
                 End If
                 If h.isMatch("其他",temp) Then
                     ro=1
+                    co = 0
                     name = "生产备注"
                     data(name)=Array(row+ro,column+co)                   
-                End If                
+                End If              
             End If
         Next column
     Next row
 ErrorHandler:
-    If Err.Number Then
+    If Err.Number<>0 and err.Number<>20 Then
         Debug.Print Err.Number & vbTab & Err.source & vbTab & Err.Description
     End If
     Resume Next
@@ -2544,7 +2558,13 @@ Sub getDailyData(ByRef locatTable as Object,ByRef data as Object)
         name = k
         value=Worksheets(sheetName).Cells(row,column).value
         data(name) = value
-    Next    
+    Next
+    value = split(data("海管进/出口压力兆帕"),"/") 
+    data("海管进口压力兆帕")=value(0)
+    data("海管出口压力兆帕")=value(1)
+    value = split(data("海管进/出口温度摄氏度"),"/")
+    data("海管进口温度摄氏度") = value(0)
+    data("海管出口温度摄氏度") = value(1)    
 ErrorHandler:    
     If Err.Number Then
         Debug.Print Err.Number & vbTab & Err.source & vbTab & Err.Description
