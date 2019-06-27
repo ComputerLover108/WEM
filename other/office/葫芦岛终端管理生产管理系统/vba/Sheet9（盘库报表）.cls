@@ -1,20 +1,11 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "Sheet9"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = True
 Option Explicit
-Dim ÈÕÆÚ As Date
+Dim æ—¥æœŸ As Date
 Private Sub test()
     '// add declarations
     On Error GoTo catchError
     Dim data As Object
     Set data = CreateObject("Scripting.Dictionary")
-    data("ÈÕÆÚ") = "2019-4-30"
+    data("æ—¥æœŸ") = "2019-4-30"
     Call getRelatedData(data)
     Dim k As Variant
     For Each k In data.Keys
@@ -28,7 +19,7 @@ catchError:
     GoTo exitSub
 End Sub
 
-Private Sub ÎÄ¼şµ¼Èë_Click()
+Private Sub æ–‡ä»¶å¯¼å…¥_Click()
     Dim h As New help
     If Not h.password Then
         Exit Sub
@@ -36,7 +27,7 @@ Private Sub ÎÄ¼şµ¼Èë_Click()
     Dim filter As String
     filter = "microsoft office excel files (*.xls),*.xls"
     Dim fn
-    fn = Application.GetOpenFilename(filter, , "ÇëÑ¡ÎÄ¼ş", , MultiSelect:=True)
+    fn = Application.GetOpenFilename(filter, , "è¯·é€‰æ–‡ä»¶", , MultiSelect:=True)
     If Not IsArray(fn) Then Exit Sub
     Dim temp
     Dim data As Object
@@ -44,23 +35,23 @@ Private Sub ÎÄ¼şµ¼Èë_Click()
     For Each temp In fn
         Call dataAcquisition(temp, data)
     Next temp
-    Dim panku As New inventory
+    Dim panku As New Inventory
     Call panku.save(data)
 End Sub
 
-Private Sub ĞÅÏ¢²É¼¯_Click()
+Private Sub ä¿¡æ¯é‡‡é›†_Click()
     Dim hasright As Boolean
     Dim sd As String
-    sd = InputBox("ÇëÊäÈëÃÜÂë£º", "Î£ÏÕ²Ù×÷£¡", "******")
+    sd = InputBox("è¯·è¾“å…¥å¯†ç ï¼š", "å±é™©æ“ä½œï¼", "******")
     Dim h As New help
     hasright = h.checkRight(sd)
     If False = hasright Then
-        MsgBox "ÃÜÂë²»¶Ô£¡½ûÖ¹Î£ÏÕ²Ù×÷£¡"
+        MsgBox "å¯†ç ä¸å¯¹ï¼ç¦æ­¢å±é™©æ“ä½œï¼"
         Exit Sub
     End If
     If True = hasright Then
         Dim mydir As String
-        Dim F As New ÎÄ¼şÄ¿Â¼
+        Dim F As New æ–‡ä»¶ç›®å½•
         mydir = F.pathSelect
         If "" = mydir Then
             Exit Sub
@@ -70,7 +61,7 @@ Private Sub ĞÅÏ¢²É¼¯_Click()
         Dim pattern As String
         pattern = ".*xls$"
         Call F.FindFiles(mydir, pattern, fileList)
-    '    Debug.Print "ÕÒµ½" & fileList.count & "ÎÄ¼ş£¡"
+    '    Debug.Print "æ‰¾åˆ°" & fileList.count & "æ–‡ä»¶ï¼"
         Dim fname
         Dim data As Object
         Set data = CreateObject("Scripting.Dictionary")
@@ -78,7 +69,7 @@ Private Sub ĞÅÏ¢²É¼¯_Click()
             Call dataAcquisition(fname, data)
         Next fname
     End If
-    Dim panku As New inventory
+    Dim panku As New Inventory
     Call panku.save(data)
     hasright = False
 End Sub
@@ -89,8 +80,8 @@ Private Sub dataAcquisition(ByVal fname As String, ByRef table As Object)
     Set wb = Workbooks.Open(fname, 0, ReadOnly)
     Dim h As New help
     Dim flag, pattern As String
-    flag = "ºùÂ«µºÌìÈ»ÆøÖÕ¶Ë³§ÓÍÆøÅÌ¿â±¨"
-    pattern = "[0-9]{4}Äê[0-9]{1,2}ÔÂ[0-9]{1,2}ÈÕ"
+    flag = "è‘«èŠ¦å²›å¤©ç„¶æ°”ç»ˆç«¯å‚æ²¹æ°”ç›˜åº“æŠ¥"
+    pattern = "[0-9]{4}å¹´[0-9]{1,2}æœˆ[0-9]{1,2}æ—¥"
     Dim d As Date
     Dim temp, temp1, temp2 As Variant
     Dim row, column, ro, co, lastRow, lastColumn As Long
@@ -98,11 +89,11 @@ Private Sub dataAcquisition(ByVal fname As String, ByRef table As Object)
     lastColumn = UsedRange.Columns.count
     Dim condition1, condition2 As Boolean
     Dim aim, aims, units  As Variant
-    aims = Array("Çá.*ÓÍ", "Òº.*»¯.*Æø")
-    units = Array("·½", "Í°", "¶Ö")
+    aims = Array("è½».*æ²¹", "æ¶².*åŒ–.*æ°”")
+    units = Array("æ–¹", "æ¡¶", "å¨")
     Dim SQL, name, unit, category, status, remark, source As String
     source = fname
-    Dim recordPK As New inventory
+    Dim recordPK As New Inventory
     For Each sh In wb.Worksheets
         condition1 = condition2 = False
         For row = 1 To lastRow
@@ -122,32 +113,32 @@ Private Sub dataAcquisition(ByVal fname As String, ByRef table As Object)
                         For Each unit In units
                             If h.isMatch(unit, temp) Then
                                 co = 1
-                                If unit = "·½" Then
+                                If unit = "æ–¹" Then
                                     ro = -3
                                 End If
-                                If unit = "Í°" Then
+                                If unit = "æ¡¶" Then
                                     ro = -4
                                 End If
-                                If unit = "¶Ö" Then
+                                If unit = "å¨" Then
                                     ro = -5
                                 End If
                                 temp2 = sh.Cells(row + ro, column + co).value
                                 If h.isMatch(aim, temp2) Then
                                     co = 2
                                     temp = sh.Cells(row, column + co).value
-                                    If h.isMatch("Çá.*ÓÍ", temp2) Then
-                                        name = "ÇáÓÍ"
+                                    If h.isMatch("è½».*æ²¹", temp2) Then
+                                        name = "è½»æ²¹"
                                     End If
-                                    If h.isMatch("Òº.*»¯.*Æø", temp2) Then
-                                        name = "ÇáÌş"
+                                    If h.isMatch("æ¶².*åŒ–.*æ°”", temp2) Then
+                                        name = "è½»çƒƒ"
                                     End If
                                     category = name
-                                    status = "¿â´æ"
+                                    status = "åº“å­˜"
                                     With recordPK
                                         .create_date = d
                                         .product = name
                                         .unit = unit
-                                        .product_data = temp
+                                        .product_data = Round(temp, 2)
                                         .category = category
                                         .status = status
                                         .source = source
@@ -157,12 +148,12 @@ Private Sub dataAcquisition(ByVal fname As String, ByRef table As Object)
                         
                                     co = co + 2
                                     temp = sh.Cells(row, column + co).value
-                                    status = "ÍâÊä"
+                                    status = "å¤–è¾“"
                                     With recordPK
                                         .create_date = d
-                                        .product = "ÄêÀÛ" + name
+                                        .product = "å¹´ç´¯" + name
                                         .unit = unit
-                                        .product_data = temp
+                                        .product_data = Round(temp, 2)
                                         .category = category
                                         .status = status
                                         .source = source
@@ -171,12 +162,12 @@ Private Sub dataAcquisition(ByVal fname As String, ByRef table As Object)
                                     Set recordPK = Nothing
                                     co = co + 2
                                     temp = sh.Cells(row, column + co).value
-                                    status = "Éú²ú"
+                                    status = "ç”Ÿäº§"
                                     With recordPK
                                         .create_date = d
-                                        .product = "ÄêÀÛ" + name
+                                        .product = "å¹´ç´¯" + name
                                         .unit = unit
-                                        .product_data = temp
+                                        .product_data = Round(temp, 2)
                                         .category = category
                                         .status = status
                                         .source = source
@@ -187,21 +178,21 @@ Private Sub dataAcquisition(ByVal fname As String, ByRef table As Object)
                             End If
                         Next unit
                     Next aim
-                    If h.isMatch("ÌìÈ»Æø(ÍâÊäÁ¿|×ÔÓÃÁ¿)|·Å¿ÕÁ¿", temp) Then
+                    If h.isMatch("å¤©ç„¶æ°”(å¤–è¾“é‡|è‡ªç”¨é‡)|æ”¾ç©ºé‡", temp) Then
                         name = sh.Cells(row, column).value
-                        unit = "·½"
-                        category = "ÌìÈ»Æø"
-                        If h.isMatch("ÍâÊäÁ¿", name) Then
-                            status = "ÍâÊä"
+                        unit = "æ–¹"
+                        category = "å¤©ç„¶æ°”"
+                        If h.isMatch("å¤–è¾“é‡", name) Then
+                            status = "å¤–è¾“"
                         End If
-                        If h.isMatch("×ÔÓÃÁ¿|·Å¿ÕÁ¿", name) Then
-                            status = "ÏûºÄ"
+                        If h.isMatch("è‡ªç”¨é‡|æ”¾ç©ºé‡", name) Then
+                            status = "æ¶ˆè€—"
                         End If
                         ro = 2
                         temp = sh.Cells(row + ro, column).value
                         With recordPK
                             .create_date = d
-                            .product = "ÄêÀÛ" + name
+                            .product = "å¹´ç´¯" + name
                             .unit = unit
                             .product_data = temp * 10 ^ 4
                             .category = category
@@ -226,18 +217,18 @@ Sub save_Click()
     On Error GoTo ErrorHandler
     Dim h As New help
     Dim flag, pattern As String
-    flag = "ºùÂ«µºÌìÈ»ÆøÖÕ¶Ë³§ÓÍÆøÅÌ¿â±¨"
-    pattern = "[0-9]{4}Äê[0-9]{1,2}ÔÂ[0-9]{1,2}ÈÕ"
+    flag = "è‘«èŠ¦å²›å¤©ç„¶æ°”ç»ˆç«¯å‚æ²¹æ°”ç›˜åº“æŠ¥"
+    pattern = "[0-9]{4}å¹´[0-9]{1,2}æœˆ[0-9]{1,2}æ—¥"
     Dim d As Date
     Dim temp, temp1, temp2 As Variant
     Dim row, column, lastRow, lastColumn, ro, co As Long
     Dim aim, aims, units  As Variant
-    aims = Array("Çá.*ÓÍ", "Òº.*»¯.*Æø")
-    units = Array("·½", "Í°", "¶Ö")
+    aims = Array("è½».*æ²¹", "æ¶².*åŒ–.*æ°”")
+    units = Array("æ–¹", "æ¡¶", "å¨")
     Dim SQL, name, unit, category, status, remark, source As String
     Dim condition1, condition2 As Boolean
     source = ""
-    Dim recordPK As New inventory
+    Dim recordPK As New Inventory
     Dim table As Object
     Set table = CreateObject("Scripting.Dictionary")
     lastRow = UsedRange.Rows.count
@@ -260,27 +251,27 @@ Sub save_Click()
                     For Each unit In units
                         If h.isMatch(unit, temp) Then
                             co = 1
-                            If unit = "·½" Then
+                            If unit = "æ–¹" Then
                                 ro = -3
                             End If
-                            If unit = "Í°" Then
+                            If unit = "æ¡¶" Then
                                 ro = -4
                             End If
-                            If unit = "¶Ö" Then
+                            If unit = "å¨" Then
                                 ro = -5
                             End If
                             temp2 = Cells(row + ro, column + co).value
                             If h.isMatch(aim, temp2) Then
                                 co = 2
                                 temp = Cells(row, column + co).value
-                                If h.isMatch("Çá.*ÓÍ", temp2) Then
-                                    name = "ÇáÓÍ"
+                                If h.isMatch("è½».*æ²¹", temp2) Then
+                                    name = "è½»æ²¹"
                                 End If
-                                If h.isMatch("Òº.*»¯.*Æø", temp2) Then
-                                    name = "ÇáÌş"
+                                If h.isMatch("æ¶².*åŒ–.*æ°”", temp2) Then
+                                    name = "è½»çƒƒ"
                                 End If
                                 category = name
-                                status = "¿â´æ"
+                                status = "åº“å­˜"
                                 With recordPK
                                     .create_date = d
                                     .product = name
@@ -295,10 +286,10 @@ Sub save_Click()
                     
                                 co = co + 2
                                 temp = Cells(row, column + co).value
-                                status = "ÍâÊä"
+                                status = "å¤–è¾“"
                                 With recordPK
                                     .create_date = d
-                                    .product = "ÄêÀÛ" + name
+                                    .product = "å¹´ç´¯" + name
                                     .unit = unit
                                     .product_data = temp
                                     .category = category
@@ -309,10 +300,10 @@ Sub save_Click()
                                 Set recordPK = Nothing
                                 co = co + 2
                                 temp = Cells(row, column + co).value
-                                status = "Éú²ú"
+                                status = "ç”Ÿäº§"
                                 With recordPK
                                     .create_date = d
-                                    .product = "ÄêÀÛ" + name
+                                    .product = "å¹´ç´¯" + name
                                     .unit = unit
                                     .product_data = temp
                                     .category = category
@@ -325,21 +316,21 @@ Sub save_Click()
                         End If
                     Next unit
                 Next aim
-                If h.isMatch("ÌìÈ»Æø(ÍâÊäÁ¿|×ÔÓÃÁ¿)|·Å¿ÕÁ¿", temp) Then
+                If h.isMatch("å¤©ç„¶æ°”(å¤–è¾“é‡|è‡ªç”¨é‡)|æ”¾ç©ºé‡", temp) Then
                     name = Cells(row, column).value
-                    unit = "·½"
-                    category = "ÌìÈ»Æø"
-                    If h.isMatch("ÍâÊäÁ¿", name) Then
-                        status = "ÍâÊä"
+                    unit = "æ–¹"
+                    category = "å¤©ç„¶æ°”"
+                    If h.isMatch("å¤–è¾“é‡", name) Then
+                        status = "å¤–è¾“"
                     End If
-                    If h.isMatch("×ÔÓÃÁ¿|·Å¿ÕÁ¿", name) Then
-                        status = "ÏûºÄ"
+                    If h.isMatch("è‡ªç”¨é‡|æ”¾ç©ºé‡", name) Then
+                        status = "æ¶ˆè€—"
                     End If
                     ro = 2
                     temp = Cells(row + ro, column).value
                     With recordPK
                         .create_date = d
-                        .product = "ÄêÀÛ" + name
+                        .product = "å¹´ç´¯" + name
                         .unit = unit
                         .product_data = temp * 10 ^ 4
                         .category = category
@@ -355,7 +346,7 @@ Sub save_Click()
     If h.isMonthEnd(d) Then
         Call recordPK.save(table)
     Else
-        MsgBox "Ã»µ½ÔÂµ×,²»ÄÜ±£´æ£¡"
+        MsgBox "æ²¡åˆ°æœˆåº•,ä¸èƒ½ä¿å­˜ï¼"
         Exit Sub
     End If
 ErrorHandler:
@@ -371,51 +362,51 @@ Private Sub getRelatedData(ByRef data As Object)
     Dim rst1, rst2, rst3 As Variant
     Dim temp
     Dim h As New help
-    d = data("ÈÕÆÚ")
+    d = data("æ—¥æœŸ")
     lastMonth = DateSerial(Year(d), Month(d), 1) - 1
-    SQL = "SELECT concat(Ãû³Æ,µ¥Î»),Êı¾İ FROM Éú²úĞÅÏ¢ WHERE µ¥Î»='·½' AND ×´Ì¬='¼Æ»®' AND ÈÕÆÚ='$1';"
+    SQL = "SELECT concat(åç§°,å•ä½),æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE å•ä½='æ–¹' AND çŠ¶æ€='è®¡åˆ’' AND æ—¥æœŸ='$1';"
     SQL = replace(SQL, "$1", d)
     Debug.Print SQL
     rst1 = psql.cnn.Execute(SQL).GetRows()
     rst2 = h.transpose2DArray(rst1)
     Call h.array2dic(rst2, data)
 
-    SQL = "SELECT concat(Ãû³Æ,µ¥Î»),Êı¾İ FROM Éú²úĞÅÏ¢ WHERE Ãû³Æ IN ('ÇáÓÍ¿â´æºÏ¼Æ','ÇáÌş¿â´æ') AND µ¥Î»='¶Ö' AND ×´Ì¬='¿â´æ' AND ÈÕÆÚ='$1';"
+    SQL = "SELECT concat(åç§°,å•ä½),æ•°æ® FROM ç”Ÿäº§ä¿¡æ¯ WHERE åç§° IN ('è½»æ²¹åº“å­˜åˆè®¡','è½»çƒƒåº“å­˜') AND å•ä½='å¨' AND çŠ¶æ€='åº“å­˜' AND æ—¥æœŸ='$1';"
     SQL = replace(SQL, "$1", d)
     Debug.Print SQL
     rst1 = psql.cnn.Execute(SQL).GetRows()
     rst2 = h.transpose2DArray(rst1)
     Call h.array2dic(rst2, data)
 
-   SQL = "select concat('ÉÏÔÂ',status,product,unit),product_data from inventory where create_date='$1';"
+   SQL = "select concat('ä¸Šæœˆ',status,product,unit),product_data from inventory where create_date='$1';"
    SQL = replace(SQL, "$1", lastMonth)
    Debug.Print SQL
    rst1 = psql.cnn.Execute(SQL).GetRows()
    rst2 = h.transpose2DArray(rst1)
    Call h.array2dic(rst2, data)
     
-    SQL = "SELECT concat('ÔÂÀÛ',Ãû³Æ,µ¥Î»),sum(Êı¾İ) FROM Éú²úĞÅÏ¢ WHERE Ãû³Æ='ÇáÓÍ×°³µ' AND µ¥Î» IN ('·½','Í°','¶Ö') AND ×´Ì¬='ÍâÊä'  AND ÈÕÆÚ BETWEEN date_trunc('month',TIMESTAMP '$1') AND '$1' GROUP BY Ãû³Æ,µ¥Î»;"
+    SQL = "SELECT concat('æœˆç´¯',åç§°,å•ä½),sum(æ•°æ®) FROM ç”Ÿäº§ä¿¡æ¯ WHERE åç§°='è½»æ²¹è£…è½¦' AND å•ä½ IN ('æ–¹','æ¡¶','å¨') AND çŠ¶æ€='å¤–è¾“'  AND æ—¥æœŸ BETWEEN date_trunc('month',TIMESTAMP '$1') AND '$1' GROUP BY åç§°,å•ä½;"
     SQL = replace(SQL, "$1", d)
    Debug.Print SQL
    rst1 = psql.cnn.Execute(SQL).GetRows()
    rst2 = h.transpose2DArray(rst1)
    Call h.array2dic(rst2, data)
 
-   SQL = "SELECT concat('ÔÂÀÛÇáÌş×°³µ',µ¥Î»),sum(Êı¾İ) FROM Éú²úĞÅÏ¢ WHERE Ãû³Æ IN ('±ûÍé×°³µ','¶¡Íé×°³µ','Òº»¯Æø×°³µ') AND µ¥Î»='¶Ö' AND ×´Ì¬='ÍâÊä' AND ÈÕÆÚ BETWEEN date_trunc('month',TIMESTAMP '$1') AND '$1' GROUP BY µ¥Î»;"
+   SQL = "SELECT concat('æœˆç´¯è½»çƒƒè£…è½¦',å•ä½),sum(æ•°æ®) FROM ç”Ÿäº§ä¿¡æ¯ WHERE åç§° IN ('ä¸™çƒ·è£…è½¦','ä¸çƒ·è£…è½¦','æ¶²åŒ–æ°”è£…è½¦') AND å•ä½='å¨' AND çŠ¶æ€='å¤–è¾“' AND æ—¥æœŸ BETWEEN date_trunc('month',TIMESTAMP '$1') AND '$1' GROUP BY å•ä½;"
    SQL = replace(SQL, "$1", d)
    Debug.Print SQL
    rst1 = psql.cnn.Execute(SQL).GetRows()
    rst2 = h.transpose2DArray(rst1)
    Call h.array2dic(rst2, data)
 
-   SQL = "SELECT concat('ÄêÀÛÇáÌş×°³µ',µ¥Î»),sum(Êı¾İ) FROM Éú²úĞÅÏ¢ WHERE Ãû³Æ IN ('±ûÍé×°³µ','¶¡Íé×°³µ','Òº»¯Æø×°³µ') AND µ¥Î»='¶Ö' AND ×´Ì¬='ÍâÊä' AND ÈÕÆÚ BETWEEN date_trunc('month',TIMESTAMP '$1') AND '$1' GROUP BY µ¥Î»;"
+   SQL = "SELECT concat('å¹´ç´¯è½»çƒƒè£…è½¦',å•ä½),sum(æ•°æ®) FROM ç”Ÿäº§ä¿¡æ¯ WHERE åç§° IN ('ä¸™çƒ·è£…è½¦','ä¸çƒ·è£…è½¦','æ¶²åŒ–æ°”è£…è½¦') AND å•ä½='å¨' AND çŠ¶æ€='å¤–è¾“' AND æ—¥æœŸ BETWEEN date_trunc('month',TIMESTAMP '$1') AND '$1' GROUP BY å•ä½;"
    SQL = replace(SQL, "$1", d)
    Debug.Print SQL
    rst1 = psql.cnn.Execute(SQL).GetRows()
    rst2 = h.transpose2DArray(rst1)
    Call h.array2dic(rst2, data)
 
-   SQL = "SELECT concat('ÔÂÀÛ',Ãû³Æ,µ¥Î»),sum(Êı¾İ) FROM Éú²úĞÅÏ¢ WHERE Ãû³Æ IN ('Êı¾İ¿âÇáÓÍ»ØÊÕÁ¿','Êı¾İ¿â±û¶¡Íé»ØÊÕÁ¿') AND µ¥Î»='·½' AND ×´Ì¬='Éú²ú'AND ÈÕÆÚ BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY Ãû³Æ,µ¥Î»;"
+   SQL = "SELECT concat('æœˆç´¯',åç§°,å•ä½),sum(æ•°æ®) FROM ç”Ÿäº§ä¿¡æ¯ WHERE åç§° IN ('è½»æ²¹å›æ”¶é‡','ä¸™ä¸çƒ·å›æ”¶é‡') AND å•ä½='æ–¹' AND çŠ¶æ€='ç”Ÿäº§'AND æ—¥æœŸ BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY åç§°,å•ä½;"
    SQL = replace(SQL, "$1", "month")
    SQL = replace(SQL, "$2", d)
    Debug.Print SQL
@@ -423,8 +414,8 @@ Private Sub getRelatedData(ByRef data As Object)
    rst2 = h.transpose2DArray(rst1)
    Call h.array2dic(rst2, data)
 
-   SQL = "SELECT concat('$0',Ãû³Æ,µ¥Î»),sum(Êı¾İ) FROM Éú²úĞÅÏ¢ WHERE Ãû³Æ IN ('×ÜÍâÊäÆøÁ¿','×ÔÓÃÆø','»ğ¾æ³¤Ã÷µÆ','»ğ¾æ·Å¿ÕÁ¿') AND µ¥Î»='·½' AND ÈÕÆÚ BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY Ãû³Æ,µ¥Î»;"
-   SQL = replace(SQL, "$0", "ÔÂÀÛ")
+   SQL = "SELECT concat('$0',åç§°,å•ä½),sum(æ•°æ®) FROM ç”Ÿäº§ä¿¡æ¯ WHERE åç§° IN ('æ€»å¤–è¾“æ°”é‡','è‡ªç”¨æ°”','ç«ç‚¬é•¿æ˜ç¯','ç«ç‚¬æ”¾ç©ºé‡') AND å•ä½='æ–¹' AND æ—¥æœŸ BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY åç§°,å•ä½;"
+   SQL = replace(SQL, "$0", "æœˆç´¯")
    SQL = replace(SQL, "$1", "month")
    SQL = replace(SQL, "$2", d)
    Debug.Print SQL
@@ -432,14 +423,14 @@ Private Sub getRelatedData(ByRef data As Object)
    rst2 = h.transpose2DArray(rst1)
    Call h.array2dic(rst2, data)
 
-    data("ÔÂÀÛÌìÈ»ÆøÍâÊäÁ¿·½") = data("ÔÂÀÛ×ÜÍâÊäÆøÁ¿·½")
-    data("ÔÂÀÛ¹¤ÒµÌìÈ»ÆøÁ¿·½") = data("ÔÂÀÛ×ÜÍâÊäÆøÁ¿·½")
-    data("ÔÂÀÛÌìÈ»Æø×ÔÓÃÁ¿·½") = data("ÔÂÀÛ×ÔÓÃÆø·½")
-    data("ÔÂÀÛ·Å¿ÕÁ¿·½") = data("ÔÂÀÛ»ğ¾æ³¤Ã÷µÆ·½") + data("ÔÂÀÛ»ğ¾æ·Å¿ÕÁ¿·½")
-    data("ÉÏÔÂÄêÀÛÌìÈ»ÆøÍâÊäÁ¿·½") = data("ÉÏÔÂÍâÊäÄêÀÛÌìÈ»ÆøÍâÊäÁ¿·½")
-    data("ÉÏÔÂÄêÀÛ¹¤ÒµÌìÈ»ÆøÁ¿·½") = data("ÉÏÔÂÍâÊäÄêÀÛÌìÈ»ÆøÍâÊäÁ¿·½")
-    data("ÉÏÔÂÄêÀÛÌìÈ»Æø×ÔÓÃÁ¿·½") = data("ÉÏÔÂÏûºÄÄêÀÛÌìÈ»Æø×ÔÓÃÁ¿·½")
-    data("ÉÏÔÂÄêÀÛ·Å¿ÕÁ¿·½") = data("ÉÏÔÂÏûºÄÄêÀÛ·Å¿ÕÁ¿·½")
+    data("æœˆç´¯å¤©ç„¶æ°”å¤–è¾“é‡æ–¹") = data("æœˆç´¯æ€»å¤–è¾“æ°”é‡æ–¹")
+    data("æœˆç´¯å·¥ä¸šå¤©ç„¶æ°”é‡æ–¹") = data("æœˆç´¯æ€»å¤–è¾“æ°”é‡æ–¹")
+    data("æœˆç´¯å¤©ç„¶æ°”è‡ªç”¨é‡æ–¹") = data("æœˆç´¯è‡ªç”¨æ°”æ–¹")
+    data("æœˆç´¯æ”¾ç©ºé‡æ–¹") = data("æœˆç´¯ç«ç‚¬é•¿æ˜ç¯æ–¹") + data("æœˆç´¯ç«ç‚¬æ”¾ç©ºé‡æ–¹")
+    data("ä¸Šæœˆå¹´ç´¯å¤©ç„¶æ°”å¤–è¾“é‡æ–¹") = data("ä¸Šæœˆå¤–è¾“å¹´ç´¯å¤©ç„¶æ°”å¤–è¾“é‡æ–¹")
+    data("ä¸Šæœˆå¹´ç´¯å·¥ä¸šå¤©ç„¶æ°”é‡æ–¹") = data("ä¸Šæœˆå¤–è¾“å¹´ç´¯å¤©ç„¶æ°”å¤–è¾“é‡æ–¹")
+    data("ä¸Šæœˆå¹´ç´¯å¤©ç„¶æ°”è‡ªç”¨é‡æ–¹") = data("ä¸Šæœˆæ¶ˆè€—å¹´ç´¯å¤©ç„¶æ°”è‡ªç”¨é‡æ–¹")
+    data("ä¸Šæœˆå¹´ç´¯æ”¾ç©ºé‡æ–¹") = data("ä¸Šæœˆæ¶ˆè€—å¹´ç´¯æ”¾ç©ºé‡æ–¹")
 exitSub:
     Exit Sub
 catchError:
@@ -451,21 +442,24 @@ End Sub
 Private Sub look_Click()
     Dim sd As String
     Dim d As Date
-    sd = InputBox("ÇëÊäÈëÖ¸¶¨ÈÕÆÚ£º", "×Ô¶¯Éú³ÉÖ¸¶¨ÈÕÆÚµÄÅÌ¿â±¨±í", DateValue(Now))
+    sd = InputBox("è¯·è¾“å…¥æŒ‡å®šæ—¥æœŸï¼š", "è‡ªåŠ¨ç”ŸæˆæŒ‡å®šæ—¥æœŸçš„ç›˜åº“æŠ¥è¡¨", DateValue(Now))
     If False = IsDate(sd) Then
-        MsgBox "ÈÕÆÚ²»ÕıÈ·!"
+        MsgBox "æ—¥æœŸä¸æ­£ç¡®!"
         Exit Sub
     End If
     d = CDate(sd)
     Dim data As Object
     Set data = CreateObject("Scripting.Dictionary")
-    data("ÈÕÆÚ") = d
+    data("æ—¥æœŸ") = d
     Call getRelatedData(data)
+    data("è½»çƒƒåº“å­˜å¨") = Round(data("è½»çƒƒåº“å­˜å¨"), 2)
+    data("æœˆç´¯ä¸™ä¸çƒ·å›æ”¶é‡æ–¹") = Round(data("æœˆç´¯ä¸™ä¸çƒ·å›æ”¶é‡æ–¹"), 2)
+    data("æœˆç´¯è½»æ²¹å›æ”¶é‡æ–¹") = Round(data("æœˆç´¯è½»æ²¹å›æ”¶é‡æ–¹"), 2)
     Call fillTable(data)
     Dim k As Variant
-'    For Each k In data.Keys
-'        Debug.Print k, data.item(k)
-'    Next
+    For Each k In data.Keys
+        Debug.Print k, data.item(k)
+    Next
     Debug.Print data.count
 End Sub
 
@@ -481,145 +475,145 @@ Private Sub fillTable(ByRef data As Object)
     For row = 1 To lastRow
         For column = 1 To lastColumn
             temp = Cells(row, column).value
-            If h.isMatch("¿â*´æ", temp) Then
+            If h.isMatch("åº“*å­˜", temp) Then
                 ro = -1
                 co = 0
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("Çá.*ÓÍ", temp1) Then
+                If h.isMatch("è½».*æ²¹", temp1) Then
                     ro = 2
                     co = 0
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂ¿â´æÇáÓÍ·½")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆåº“å­˜è½»æ²¹æ–¹")
                     ro = ro + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂ¿â´æÇáÓÍÍ°")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆåº“å­˜è½»æ²¹æ¡¶")
                     ro = ro + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂ¿â´æÇáÓÍ¶Ö")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆåº“å­˜è½»æ²¹å¨")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÇáÓÍ¿â´æºÏ¼Æ¶Ö")
+                    Cells(row + ro, column + co).value = data("è½»æ²¹åº“å­˜åˆè®¡å¨")
                 End If
-                If h.isMatch("Òº.*»¯.*Æø", temp1) Then
+                If h.isMatch("æ¶².*åŒ–.*æ°”", temp1) Then
                     ro = 2
                     co = 0
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂ¿â´æÇáÌş·½")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆåº“å­˜è½»çƒƒæ–¹")
                     ro = ro + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂ¿â´æÇáÌşÍ°")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆåº“å­˜è½»çƒƒæ¡¶")
                     ro = ro + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂ¿â´æÇáÌş¶Ö")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆåº“å­˜è½»çƒƒå¨")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÇáÌş¿â´æ¶Ö")
+                    Cells(row + ro, column + co).value = data("è½»çƒƒåº“å­˜å¨")
                 End If
             End If
-            If h.isMatch("Ïú.*ÊÛ.*Á¿", temp) Then
+            If h.isMatch("é”€.*å”®.*é‡", temp) Then
                 ro = -1
                 co = -2
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("Çá.*ÓÍ", temp1) Then
+                If h.isMatch("è½».*æ²¹", temp1) Then
                     ro = 2
                     co = 0
-                    Cells(row + ro, column + co).value = data("ÔÂÀÛÇáÓÍ×°³µ·½")
+                    Cells(row + ro, column + co).value = data("æœˆç´¯è½»æ²¹è£…è½¦æ–¹")
                     ro = ro + 1
-                    Cells(row + ro, column + co).value = data("ÔÂÀÛÇáÓÍ×°³µÍ°")
+                    Cells(row + ro, column + co).value = data("æœˆç´¯è½»æ²¹è£…è½¦æ¡¶")
                     ro = ro + 1
-                    Cells(row + ro, column + co).value = data("ÔÂÀÛÇáÓÍ×°³µ¶Ö")
+                    Cells(row + ro, column + co).value = data("æœˆç´¯è½»æ²¹è£…è½¦å¨")
                 End If
-                If h.isMatch("Òº.*»¯.*Æø", temp1) Then
+                If h.isMatch("æ¶².*åŒ–.*æ°”", temp1) Then
                     ro = 4
                     co = 0
-                    Cells(row + ro, column + co).value = data("ÔÂÀÛÇáÌş×°³µ¶Ö")
+                    Cells(row + ro, column + co).value = data("æœˆç´¯è½»çƒƒè£…è½¦å¨")
                 End If
             End If
-            If h.isMatch("ÅÌ.*¿â.*²ú.*Á¿", temp) Then
+            If h.isMatch("ç›˜.*åº“.*äº§.*é‡", temp) Then
                 ro = -1
                 co = -4
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("Çá.*ÓÍ", temp1) Then
+                If h.isMatch("è½».*æ²¹", temp1) Then
                     ro = 2
                     co = 0
-                    Cells(row + ro, column + co).value = data("ÔÂÀÛÊı¾İ¿âÇáÓÍ»ØÊÕÁ¿·½")
+                    Cells(row + ro, column + co).value = data("æœˆç´¯è½»æ²¹å›æ”¶é‡æ–¹")
                 End If
-                If h.isMatch("Òº.*»¯.*Æø", temp1) Then
+                If h.isMatch("æ¶².*åŒ–.*æ°”", temp1) Then
                     ro = 2
                     co = 0
-                    Cells(row + ro, column + co).value = data("ÔÂÀÛÊı¾İ¿â±û¶¡Íé»ØÊÕÁ¿·½")
+                    Cells(row + ro, column + co).value = data("æœˆç´¯ä¸™ä¸çƒ·å›æ”¶é‡æ–¹")
                 End If
             End If
-            If h.isMatch("¼Æ.*»®.*²ú.*Á¿", temp) And row < 20 Then
+            If h.isMatch("è®¡.*åˆ’.*äº§.*é‡", temp) And row < 20 Then
                 ro = -1
                 co = -6
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("Çá.*ÓÍ", temp1) Then
+                If h.isMatch("è½».*æ²¹", temp1) Then
                     ro = 2
                     co = 0
-                    Cells(row + ro, column + co).value = data("ÇáÓÍÔÂÅä²ú·½")
+                    Cells(row + ro, column + co).value = data("è½»æ²¹æœˆé…äº§æ–¹")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÇáÓÍÄêÅä²ú·½")
+                    Cells(row + ro, column + co).value = data("è½»æ²¹å¹´é…äº§æ–¹")
                 End If
-                If h.isMatch("Òº.*»¯.*Æø", temp1) Then
+                If h.isMatch("æ¶².*åŒ–.*æ°”", temp1) Then
                     ro = 2
                     co = 0
-                    Cells(row + ro, column + co).value = data("±û¶¡ÍéÔÂÅä²ú·½")
+                    Cells(row + ro, column + co).value = data("ä¸™ä¸çƒ·æœˆé…äº§æ–¹")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("±û¶¡ÍéÄêÅä²ú·½")
+                    Cells(row + ro, column + co).value = data("ä¸™ä¸çƒ·å¹´é…äº§æ–¹")
                 End If
             End If
-            If h.isMatch("±¸.*×¢", temp) Then
+            If h.isMatch("å¤‡.*æ³¨", temp) Then
                 ro = -1
                 co = -8
                 temp1 = Cells(row + ro, column + co).value
-                If h.isMatch("Çá.*ÓÍ", temp1) Then
+                If h.isMatch("è½».*æ²¹", temp1) Then
                     ro = 2
                     co = 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÍâÊäÄêÀÛÇáÓÍ·½")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆå¤–è¾“å¹´ç´¯è½»æ²¹æ–¹")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÍâÊäÄêÀÛÇáÓÍÍ°")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆå¤–è¾“å¹´ç´¯è½»æ²¹æ¡¶")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÍâÊäÄêÀÛÇáÓÍ¶Ö")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆå¤–è¾“å¹´ç´¯è½»æ²¹å¨")
                     ro = ro + 1
                     co = 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÉú²úÄêÀÛÇáÓÍ·½")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆç”Ÿäº§å¹´ç´¯è½»æ²¹æ–¹")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÉú²úÄêÀÛÇáÓÍÍ°")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆç”Ÿäº§å¹´ç´¯è½»æ²¹æ¡¶")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÉú²úÄêÀÛÇáÓÍ¶Ö")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆç”Ÿäº§å¹´ç´¯è½»æ²¹å¨")
                 End If
-                If h.isMatch("Òº.*»¯.*Æø", temp1) Then
+                If h.isMatch("æ¶².*åŒ–.*æ°”", temp1) Then
                     ro = 2
                     co = 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÍâÊäÄêÀÛÇáÌş·½")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆå¤–è¾“å¹´ç´¯è½»çƒƒæ–¹")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÍâÊäÄêÀÛÇáÌşÍ°")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆå¤–è¾“å¹´ç´¯è½»çƒƒæ¡¶")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÍâÊäÄêÀÛÇáÌş¶Ö")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆå¤–è¾“å¹´ç´¯è½»çƒƒå¨")
                     ro = ro + 1
                     co = 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÉú²úÄêÀÛÇáÌş·½")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆç”Ÿäº§å¹´ç´¯è½»çƒƒæ–¹")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÉú²úÄêÀÛÇáÌşÍ°")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆç”Ÿäº§å¹´ç´¯è½»çƒƒæ¡¶")
                     co = co + 1
-                    Cells(row + ro, column + co).value = data("ÉÏÔÂÉú²úÄêÀÛÇáÌş¶Ö")
+                    Cells(row + ro, column + co).value = data("ä¸Šæœˆç”Ÿäº§å¹´ç´¯è½»çƒƒå¨")
                 End If
             End If
-            If h.isMatch("¹¤ÒµÌìÈ»Æø|ÌìÈ»ÆøÍâÊäÁ¿|ÌìÈ»Æø×ÔÓÃÁ¿|·Å¿ÕÁ¿", temp) Then
+            If h.isMatch("å·¥ä¸šå¤©ç„¶æ°”|å¤©ç„¶æ°”å¤–è¾“é‡|å¤©ç„¶æ°”è‡ªç”¨é‡|æ”¾ç©ºé‡", temp) Then
                 ro = 1
                 co = 0
                 temp = Trim(temp)
-                name = "ÔÂÀÛ" + temp + "Íò·½"
-                data(name) = data("ÔÂÀÛ" + temp + "·½") / 10 ^ 4
+                name = "æœˆç´¯" + temp + "ä¸‡æ–¹"
+                data(name) = data("æœˆç´¯" + temp + "æ–¹") / 10 ^ 4
                 Cells(row + ro, column + co).value = data(name)
                 ro = ro + 2
-                name = "ÉÏÔÂÄêÀÛ" + temp + "Íò·½"
-                data(name) = data("ÉÏÔÂÄêÀÛ" + temp + "·½") / 10 ^ 4
+                name = "ä¸Šæœˆå¹´ç´¯" + temp + "ä¸‡æ–¹"
+                data(name) = data("ä¸Šæœˆå¹´ç´¯" + temp + "æ–¹") / 10 ^ 4
                 Cells(row + ro, column + co).value = data(name)
             End If
-            If h.isMatch("ÈÕÆÚ.*\d+[Äê\-\/]\d+[ÔÂ\-\/]\d+[ÈÕ]{0,1}", temp) Then
-                temp = h.replace(temp, "ÈÕÆÚ.*\d+[Äê\-\/]\d+[ÔÂ\-\/]\d+[ÈÕ]{0,1}", "ÈÕÆÚ£º" + Format(data("ÈÕÆÚ"), "Long Date"))
+            If h.isMatch("æ—¥æœŸ.*\d+[å¹´\-\/]\d+[æœˆ\-\/]\d+[æ—¥]{0,1}", temp) Then
+                temp = h.replace(temp, "æ—¥æœŸ.*\d+[å¹´\-\/]\d+[æœˆ\-\/]\d+[æ—¥]{0,1}", "æ—¥æœŸï¼š" + Format(data("æ—¥æœŸ"), "YYYYå¹´MMæœˆDDæ—¥"))
                 Cells(row, column).value = temp
                 Debug.Print temp
             End If
-            If h.isMatch("¼Æ»®²úÁ¿.*ÒÚÁ¢·½\/Äê\s+.*ÍòÁ¢·½Ã×\/ÔÂ", temp) Then
-                temp = h.replace(temp, "\d+(\.\d+)ÒÚÁ¢·½\/Äê", CStr(data("ÌìÈ»ÆøÄêÅä²ú·½") / 10 ^ 8) + "ÒÚÁ¢·½/Äê")
-                temp = h.replace(temp, "\d+(\.\d+)ÍòÁ¢·½Ã×\/ÔÂ", CStr(data("ÌìÈ»ÆøÔÂÅä²ú·½") / 10 ^ 4) + "ÍòÁ¢·½Ã×/ÔÂ")
+            If h.isMatch("è®¡åˆ’äº§é‡.*äº¿ç«‹æ–¹\/å¹´\s+.*ä¸‡ç«‹æ–¹ç±³\/æœˆ", temp) Then
+                temp = h.replace(temp, "\d+(\.\d+)äº¿ç«‹æ–¹\/å¹´", CStr(data("å¤©ç„¶æ°”å¹´é…äº§æ–¹") / 10 ^ 8) + "äº¿ç«‹æ–¹/å¹´")
+                temp = h.replace(temp, "\d+(\.\d+)ä¸‡ç«‹æ–¹ç±³\/æœˆ", CStr(data("å¤©ç„¶æ°”æœˆé…äº§æ–¹") / 10 ^ 4) + "ä¸‡ç«‹æ–¹ç±³/æœˆ")
                 Cells(row, column).value = temp
-                Debug.Print temp, data("ÌìÈ»ÆøÄêÅä²ú·½"), data("ÌìÈ»ÆøÔÂÅä²ú·½"), data("ÈÕÆÚ")
+                Debug.Print temp, data("å¤©ç„¶æ°”å¹´é…äº§æ–¹"), data("å¤©ç„¶æ°”æœˆé…äº§æ–¹"), data("æ—¥æœŸ")
             End If
         Next column
     Next row
@@ -631,12 +625,14 @@ catchError:
     GoTo exitSub
 End Sub
 
-Private Sub ´òÓ¡_Click()
+Private Sub æ‰“å°_Click()
+    Err.Clear
+    On Error GoTo errorhander
     Call save_Click
     Dim backupPath As String
-    Dim path As New ÎÄ¼şÄ¿Â¼
-    backupPath = path.×Ô¶¯½¨Á¢±¸·İÄ¿Â¼(ActiveWorkbook.path, ÈÕÆÚ)
-    Const name = " ºùÂ«µºÌìÈ»ÆøÖÕ¶Ë³§ÓÍÆøÅÌ¿â±¨±í.xls"
+    Dim path As New æ–‡ä»¶ç›®å½•
+    backupPath = path.è‡ªåŠ¨å»ºç«‹å¤‡ä»½ç›®å½•(ActiveWorkbook.path, Now())
+    Const name = " è‘«èŠ¦å²›å¤©ç„¶æ°”ç»ˆç«¯å‚æ²¹æ°”ç›˜åº“æŠ¥è¡¨.xls"
     Dim sd As String
     sd = Format(Now, "YYYY-MM-DD")
     Dim absFname As String
@@ -645,9 +641,9 @@ Private Sub ´òÓ¡_Click()
     Set fs = CreateObject("Scripting.FileSystemObject")
     absFname = fs.getabsolutepathname(absFname)
     ThisWorkbook.save
-    Worksheets("ÅÌ¿â±¨±í").Cells.Select
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Cells.Select
     Dim ps As Object
-    Set ps = Worksheets("ÅÌ¿â±¨±í").PageSetup
+    Set ps = Worksheets("ç›˜åº“æŠ¥è¡¨").PageSetup
     Dim row, column, beginRow, beginColumn, lastRow, lastColumn As Single
     beginRow = 1
     beginColumn = 1
@@ -657,12 +653,12 @@ Private Sub ´òÓ¡_Click()
     Set rowHeights = CreateObject("Scripting.Dictionary")
     Set columnWidths = CreateObject("Scripting.Dictionary")
     For row = beginRow To lastRow
-        rowHeights.Add row, Worksheets("ÅÌ¿â±¨±í").Rows(row).RowHeight
+        rowHeights.Add row, Worksheets("ç›˜åº“æŠ¥è¡¨").Rows(row).RowHeight
     Next row
     For column = beginColumn To lastColumn
-        columnWidths.Add column, Worksheets("ÅÌ¿â±¨±í").Columns(column).ColumnWidth
+        columnWidths.Add column, Worksheets("ç›˜åº“æŠ¥è¡¨").Columns(column).ColumnWidth
     Next column
-    Worksheets("ÅÌ¿â±¨±í").Range(Cells(beginRow, beginColumn), Cells(lastRow, lastColumn)).Select
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Range(Cells(beginRow, beginColumn), Cells(lastRow, lastColumn)).Select
     Selection.Copy
     Dim wb As Object
     Set wb = Workbooks.Add
@@ -671,66 +667,69 @@ Private Sub ´òÓ¡_Click()
         SkipBlanks:=False, Transpose:=False
     Selection.PasteSpecial Paste:=xlPasteValuesAndNumberFormats, Operation:= _
         xlNone, SkipBlanks:=False, Transpose:=False
-    wb.Worksheets(1).name = "ÅÌ¿â±¨±í"
-    With wb.Worksheets("ÅÌ¿â±¨±í").PageSetup
-        .LeftMargin = ps.LeftMargin     'Ò³±ß¾à£º×ó(L)_
-        .RightMargin = ps.RightMargin     'Ò³±ß¾à£ºÓÒ(R)
-        .TopMargin = ps.TopMargin          'Ò³±ß¾à£ºÉÏ(T)
-        .BottomMargin = ps.BottomMargin       'Ò³±ß¾à£ºÏÂ(B)
-        .HeaderMargin = ps.HeaderMargin    'Ò³±ß¾à£ºÒ³Ã¼(A)
-        .FooterMargin = ps.FooterMargin     'Ò³±ß¾à£ºÒ³½Å(F)
-        .Orientation = ps.Orientation      'Ò³Ãæ·½Ïò£º×İÏò(T) xlPortrait/ ºáÏò (L)xlLandscape
+    wb.Worksheets(1).name = "ç›˜åº“æŠ¥è¡¨"
+    With wb.Worksheets("ç›˜åº“æŠ¥è¡¨").PageSetup
+        .LeftMargin = ps.LeftMargin     'é¡µè¾¹è·ï¼šå·¦(L)_
+        .RightMargin = ps.RightMargin     'é¡µè¾¹è·ï¼šå³(R)
+        .TopMargin = ps.TopMargin          'é¡µè¾¹è·ï¼šä¸Š(T)
+        .BottomMargin = ps.BottomMargin       'é¡µè¾¹è·ï¼šä¸‹(B)
+        .HeaderMargin = ps.HeaderMargin    'é¡µè¾¹è·ï¼šé¡µçœ‰(A)
+        .FooterMargin = ps.FooterMargin     'é¡µè¾¹è·ï¼šé¡µè„š(F)
+        .Orientation = ps.Orientation      'é¡µé¢æ–¹å‘ï¼šçºµå‘(T) xlPortrait/ æ¨ªå‘ (L)xlLandscape
         .PrintArea = ps.PrintArea
-        .CenterHorizontally = ps.CenterHorizontally                         'Ò³±ß¾à¾ÓÖĞ·½Ê½£ºË®Æ½(Z)
-        .CenterVertically = ps.CenterVertically                           'Ò³±ß¾à¾ÓÖĞ·½Ê½£º´¹Ö±(V)
+        .CenterHorizontally = ps.CenterHorizontally                         'é¡µè¾¹è·å±…ä¸­æ–¹å¼ï¼šæ°´å¹³(Z)
+        .CenterVertically = ps.CenterVertically                           'é¡µè¾¹è·å±…ä¸­æ–¹å¼ï¼šå‚ç›´(V)
         .Zoom = ps.Zoom
     End With
     For Each row In rowHeights.Keys
-        wb.Worksheets("ÅÌ¿â±¨±í").Rows(row).RowHeight = rowHeights(row)
+        wb.Worksheets("ç›˜åº“æŠ¥è¡¨").Rows(row).RowHeight = rowHeights(row)
     Next row
     For Each column In columnWidths.Keys
-        wb.Worksheets("ÅÌ¿â±¨±í").Columns(column).ColumnWidth = columnWidths(column)
+        wb.Worksheets("ç›˜åº“æŠ¥è¡¨").Columns(column).ColumnWidth = columnWidths(column)
     Next column
     wb.SaveAs fileName:=absFname, FileFormat:=xlNormal
+'    wb.Worksheets("ç›˜åº“æŠ¥è¡¨").PageSetup.PrintArea = wb.Worksheets("ç›˜åº“æŠ¥è¡¨").Range(Cells(beginRow, beginColumn), Cells(lastRow, lastColumn))
     wb.Close
-    Worksheets("ÅÌ¿â±¨±í").PrintOut
+    Windows("è‘«èŠ¦å²›å¤©ç„¶æ°”å¤„ç†å‚ç”Ÿäº§ç®¡ç†ç³»ç»Ÿ.xls").Activate
+    Worksheets("ç›˜åº“æŠ¥è¡¨").PrintOut
+errorhander:
+    If Err.Number <> 0 Then Debug.Print Err.Number & vbTab & Err.Description
 End Sub
 
-Private Sub ·µ»Ø_Click()
-    Worksheets("¿ìËÙÂ¼Èë").Select
+Private Sub è¿”å›_Click()
+    Worksheets("å¿«é€Ÿå½•å…¥").Select
 End Sub
 
-Private Sub ·µ»ØÖ÷Ò³_Click()
-    Worksheets("Ö÷Ò³").Select
+Private Sub è¿”å›ä¸»é¡µ_Click()
+    Worksheets("ä¸»é¡µ").Select
 End Sub
 
-Private Sub Çå³ı_Click()
-    Worksheets("ÅÌ¿â±¨±í").Cells(2, 13).ClearContents
+Private Sub æ¸…é™¤_Click()
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Cells(2, 13).ClearContents
     Dim cell As Range
-    'ÇáÓÍ
-    Worksheets("ÅÌ¿â±¨±í").Range(Cells(12, 2), Cells(14, 9)).Select
+    'è½»æ²¹
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Range(Cells(12, 2), Cells(14, 9)).Select
     For Each cell In Selection
         If cell.HasFormula = False Then cell.ClearContents
     Next cell
-    Worksheets("ÅÌ¿â±¨±í").Range(Cells(12, 11), Cells(13, 13)).Select
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Range(Cells(12, 11), Cells(13, 13)).Select
     For Each cell In Selection
         If cell.HasFormula = False Then cell.ClearContents
     Next cell
     
-    '±û¶¡Íé
-    Worksheets("ÅÌ¿â±¨±í").Range(Cells(18, 2), Cells(20, 9)).Select
+    'ä¸™ä¸çƒ·
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Range(Cells(18, 2), Cells(20, 9)).Select
     For Each cell In Selection
         If cell.HasFormula = False Then cell.ClearContents
     Next cell
-    Worksheets("ÅÌ¿â±¨±í").Range(Cells(18, 11), Cells(19, 13)).Select
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Range(Cells(18, 11), Cells(19, 13)).Select
     For Each cell In Selection
         If cell.HasFormula = False Then cell.ClearContents
     Next cell
-    'ÌìÈ»Æø
-    Worksheets("ÅÌ¿â±¨±í").Range(Cells(23, 3), Cells(23, 14)).ClearContents
-    Worksheets("ÅÌ¿â±¨±í").Range(Cells(25, 3), Cells(25, 14)).ClearContents
-    Worksheets("ÅÌ¿â±¨±í").Cells(21, 8).ClearContents
-    Worksheets("ÅÌ¿â±¨±í").Cells(21, 11).ClearContents
+    'å¤©ç„¶æ°”
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Range(Cells(23, 3), Cells(23, 14)).ClearContents
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Range(Cells(25, 3), Cells(25, 14)).ClearContents
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Cells(21, 8).ClearContents
+    Worksheets("ç›˜åº“æŠ¥è¡¨").Cells(21, 11).ClearContents
 End Sub
-
 
