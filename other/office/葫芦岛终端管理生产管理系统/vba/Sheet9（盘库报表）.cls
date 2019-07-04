@@ -276,7 +276,7 @@ Sub save_Click()
                                     .create_date = d
                                     .product = name
                                     .unit = unit
-                                    .product_data = temp
+                                    .product_data = Round(temp, 2)
                                     .category = category
                                     .status = status
                                     .source = source
@@ -291,7 +291,7 @@ Sub save_Click()
                                     .create_date = d
                                     .product = "年累" + name
                                     .unit = unit
-                                    .product_data = temp
+                                    .product_data = Round(temp, 2)
                                     .category = category
                                     .status = status
                                     .source = source
@@ -305,7 +305,7 @@ Sub save_Click()
                                     .create_date = d
                                     .product = "年累" + name
                                     .unit = unit
-                                    .product_data = temp
+                                    .product_data = Round(temp, 2)
                                     .category = category
                                     .status = status
                                     .source = source
@@ -405,8 +405,9 @@ Private Sub getRelatedData(ByRef data As Object)
    rst1 = psql.cnn.Execute(SQL).GetRows()
    rst2 = h.transpose2DArray(rst1)
    Call h.array2dic(rst2, data)
-
-   SQL = "SELECT concat('月累',名称,单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('轻油回收量','丙丁烷回收量') AND 单位='方' AND 状态='生产'AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
+   
+   SQL = "SELECT concat('月累',名称,单位),sum(round(cast(数据 as numeric),2)) FROM 生产信息 WHERE 名称 IN ('轻油回收量','丙丁烷回收量') AND 单位='方' AND 状态='生产'AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
+'   SQL = "SELECT concat('月累',名称,单位),sum(数据) FROM 生产信息 WHERE 名称 IN ('轻油回收量','丙丁烷回收量') AND 单位='方' AND 状态='生产'AND 日期 BETWEEN date_trunc('$1',TIMESTAMP '$2') AND '$2' GROUP BY 名称,单位;"
    SQL = replace(SQL, "$1", "month")
    SQL = replace(SQL, "$2", d)
    Debug.Print SQL
@@ -631,20 +632,45 @@ Private Sub 打印_Click()
     Call save_Click
     Dim backupPath As String
     Dim path As New 文件目录
-    backupPath = path.自动建立备份目录(ActiveWorkbook.path, Now())
+    backupPath = ActiveWorkbook.path + "葫芦岛天然气终端厂油气盘库报表"
     Const name = " 葫芦岛天然气终端厂油气盘库报表.xls"
+    Dim h As New help
+    Dim flag, pattern As String
+    flag = "葫芦岛天然气终端厂油气盘库报"
+    pattern = "[0-9]{4}年[0-9]{1,2}月[0-9]{1,2}日"
+    Dim d As Date
+'    Dim row, column, lastRow, lastColumn As Long
+    Dim row, column, beginRow, beginColumn, lastRow, lastColumn As Single
+    Dim temp As Variant
+    lastRow = UsedRange.Rows.count
+    lastColumn = UsedRange.Columns.count
+    For row = 1 To lastRow
+        For column = 1 To lastColumn
+            temp = Cells(row, column).value
+            If h.isMatch(pattern, temp) Then
+                d = h.search(temp, pattern)
+                If IsDate(d) Then
+                    Exit For
+                End If
+            End If
+        Next column
+    Next row
     Dim sd As String
-    sd = Format(Now, "YYYY-MM-DD")
+    sd = Format(d, "YYYY-MM-DD")
     Dim absFname As String
+    backupPath = ActiveWorkbook.path & Application.PathSeparator & "盘库报表"
     absFname = backupPath & Application.PathSeparator & sd & name
     Dim fs As Object
     Set fs = CreateObject("Scripting.FileSystemObject")
-    absFname = fs.getabsolutepathname(absFname)
+'    absFname = fs.getabsolutepathname(absFname)
+    If Not fs.FolderExists(backupPath) Then
+        fs.CreateFolder (backupPath)
+    End If
     ThisWorkbook.save
     Worksheets("盘库报表").Cells.Select
     Dim ps As Object
     Set ps = Worksheets("盘库报表").PageSetup
-    Dim row, column, beginRow, beginColumn, lastRow, lastColumn As Single
+'    Dim row, column, beginRow, beginColumn, lastRow, lastColumn As Single
     beginRow = 1
     beginColumn = 1
     lastRow = UsedRange.Rows.count
@@ -732,4 +758,6 @@ Private Sub 清除_Click()
     Worksheets("盘库报表").Cells(21, 8).ClearContents
     Worksheets("盘库报表").Cells(21, 11).ClearContents
 End Sub
+
+
 
