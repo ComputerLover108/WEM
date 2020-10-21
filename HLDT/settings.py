@@ -11,7 +11,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'aj2o)&gfkz*twkq7_f_-4igws$ep==a(2l-3=e2vde1-kct07i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = ('127.0.0.1',)
@@ -89,7 +90,7 @@ DATABASES = {
         # 'HOST': '127.0.0.1',
         # 'HOST': 'localhost',
         # 'HOST': '10.30.29.80',
-        'HOST': '192.168.0.122',
+        'HOST': '192.168.0.111',
         'PORT': '2012',
     }
 }
