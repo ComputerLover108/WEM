@@ -179,4 +179,15 @@ ErrorHandler:
         Resume Next
 End Function
 
+Function lastRow()
+    lastRow = UsedRange.Rows.Count
+    ' lastRow = UsedRange.Find(what:="*", searchorder:=xlByRows, searchdirection:=xlPrevious).Row
+End Function
+
+Function lastColumn()
+    lastColumn = UsedRange.Columns.Count
+    ' lastColumn UsedRange.Find(what:="*", searchorder:=xlByColumns, searchdirection:=xlPrevious).Column
+    ' kk = Cells(1, 256).End(xlToLeft).Column
+    ' yy = Cells(1, kk).End(xlDown).Row    
+End Function
 

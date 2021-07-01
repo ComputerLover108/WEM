@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Éú²ú¶¯Ì¬"
+Attribute VB_Name = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -12,21 +12,21 @@ Public Sub CreateTable()
     Err.Clear
 On Error GoTo errorhander
     Dim tablename As String
-    tablename = "Éú²ú¶¯Ì¬"
+    tablename = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬"
     Dim SQL As String
     Dim tableDef As String
 '    access
     Dim ac As New access
-    tableDef = " (ID counter,Ê±¼ä date not null,Ãû³Æ text(32) not null,µ¥Î» text(32) not null,Êı¾İ double not null,Àà±ğ text(32),±¸×¢ text  )"
+    tableDef = " (ID counter,Ê±ï¿½ï¿½ date not null,ï¿½ï¿½ï¿½ï¿½ text(32) not null,ï¿½ï¿½Î» text(32) not null,ï¿½ï¿½ï¿½ï¿½ double not null,ï¿½ï¿½ï¿½ text(32),ï¿½ï¿½×¢ text  )"
     SQL = "create table " & tablename & tableDef
     ac.cnn.Execute (SQL)
 '    PostgreSQL
     Dim psql As New PostgreSQL
-    tableDef = " (ID serial,Ê±¼ä timestamp without time zone not null,Ãû³Æ varchar(32) not null,µ¥Î» varchar(32) not null,Êı¾İ double precision not null,Àà±ğ varchar(32),±¸×¢ text  )"
+    tableDef = " (ID serial,Ê±ï¿½ï¿½ timestamp without time zone not null,ï¿½ï¿½ï¿½ï¿½ varchar(32) not null,ï¿½ï¿½Î» varchar(32) not null,ï¿½ï¿½ï¿½ï¿½ double precision not null,ï¿½ï¿½ï¿½ varchar(32),ï¿½ï¿½×¢ text  )"
     SQL = "create table if not exists " & tablename & tableDef
     psql.cnn.Execute (SQL)
-'    ½¨Á¢Ë÷Òı
-    SQL = "create unique index Éú²ú¶¯Ì¬_Âß¼­ID on Éú²ú¶¯Ì¬(Ê±¼ä,Ãû³Æ)"
+'    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    SQL = "create unique index ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬_ï¿½ß¼ï¿½ID on ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬(Ê±ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½)"
     ac.cnn.Execute (SQL)
     psql.cnn.Execute (SQL)
 errorhander:
@@ -38,21 +38,21 @@ Public Sub reCreateTable()
     Err.Clear
 On Error GoTo errorhander
     Dim tablename As String
-    tablename = "Éú²ú¶¯Ì¬"
+    tablename = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬"
     Dim SQL As String
 '    Dim tableDef As String
     Dim ac As New access
     Dim psql As New PostgreSQL
-'    É¾³ıÔÚaccessÖĞÉú²ú¶¯Ì¬±í
+'    É¾ï¿½ï¿½ï¿½ï¿½accessï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬ï¿½ï¿½
     If ac.hasTable(tablename) Then
-        SQL = "drop index Éú²ú¶¯Ì¬_Âß¼­ID on " & tablename
+        SQL = "drop index ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬_ï¿½ß¼ï¿½ID on " & tablename
         Call ac.cnn.Execute(SQL)
         SQL = "DROP TABLE  " & tablename
         Call ac.cnn.Execute(SQL)
     End If
-'    É¾³ıÔÚPostgreSQLÖĞÉú²ú¶¯Ì¬
+'    É¾ï¿½ï¿½ï¿½ï¿½PostgreSQLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬
     If psql.hasTable(tablename) Then
-        SQL = "drop index if exists Éú²ú¶¯Ì¬_ID cascade"
+        SQL = "drop index if exists ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬_ID cascade"
         Call psql.cnn.Execute(SQL)
         SQL = "drop table if exists " & tablename & " CASCADE"
         Call psql.cnn.Execute(SQL)
@@ -63,176 +63,85 @@ errorhander:
     Resume Next
 End Sub
 
-Public Sub save()
+'ç”Ÿäº§åŠ¨æ€å¯¼å…¥æ•°æ®åº“
+Public Sub PushTableToDatabase(table)
     Err.Clear
-On Error GoTo errorhander
+    On Error GoTo ErrorHandler
+'    Call removeDuplicate
     Dim t As Date
-    Dim tablename As String
-    tablename = "Éú²ú¶¯Ì¬"
-    Dim SQL As String
-    Dim ac As New access
-    Dim psql As New PostgreSQL
-    Dim ¼ÇÂ¼Ê±¼ä As Date
-    Dim row As Long
-    Dim column As Long
-    Dim offset As Long
-    Dim anchor As Long
-    Dim lastRow As Long
-    Dim Êı¾İ As Double
-    Dim Ãû³Æ, µ¥Î», Àà±ğ, ±¸×¢ As String
-    Dim temp As String
-    Dim h As New help
     t = Now
-    lastRow = Worksheets("¿ìËÙÂ¼Èë").Range("B65535").End(xlUp).row
-    column = 1
-    For row = 1 To lastRow
-        temp = Worksheets("¿ìËÙÂ¼Èë").Cells(row, column).value
-        If h.isMatch(".*Éú²ú¶¯Ì¬.*", temp) Then
-            anchor = row
-            Exit For
+    Dim psql As New PostgreSQL
+    Dim rst As New ADODB.Recordset
+    Dim SQL As String
+    Dim temp As New ç”Ÿäº§åŠ¨æ€
+    Dim Condition As Boolean
+    Condition = True
+    Dim x, y
+    Dim filter As String
+'    Debug.Print "å¯¼å…¥å‰æ•°æ®æ•´ç†èŠ±è´¹" & DateDiff("s", t, Now()) & "s."
+    Dim tablename As String
+    tablename = "ç”Ÿäº§åŠ¨æ€"
+    Dim cnn As Object
+    Debug.Print "å‡†å¤‡å¯¼å…¥" & table.count & "æ¡è®°å½•ï¼"
+    Set cnn = psql.cnn
+    rst.Open tablename, cnn, adOpenDynamic, adLockBatchOptimistic, adCmdTable
+    For Each x In table.Keys
+        Set temp = x
+        Condition = x.isFormat(temp)
+        If Condition Then
+            rst.AddNew
+            rst.Fields("å•ä½").value = ""
+            rst.Fields("å¤‡æ³¨").value = ""
+            If IsDate(x.æ—¥æœŸ) Then
+                rst.Fields("æ—¥æœŸ").value = x.æ—¥æœŸ
+            End If
+            If Not IsEmpty(x.åç§°) Then
+                rst.Fields("åç§°").value = x.åç§°
+            End If
+            If Not IsEmpty(x.ç±»åˆ«) Or x.ç±»åˆ« <> "" Then
+                rst.Fields("ç±»åˆ«").value = x.ç±»åˆ«
+            End If
+            If Not IsEmpty(x.å¤‡æ³¨) Or x.å¤‡æ³¨ <> "" Then
+                rst.Fields("å¤‡æ³¨").value = x.å¤‡æ³¨
+            End If
+            If IsNumeric(x.æ•°æ®) Then
+                rst.Fields("æ•°æ®").value = Round(CDec(x.æ•°æ®), 4)
+            End If
+'            Debug.Print rst.Fields("æ—¥æœŸ"), rst.Fields("åç§°"), rst.Fields("å•ä½"),rst.Fields("æ•°æ®")
+            rst.UpdateBatch
         End If
-    Next row
-    lastRow = anchor + Worksheets("¿ìËÙÂ¼Èë").Cells(anchor, column).MergeArea.Rows.count - 1
-    column = 2
-    offset = 1
-    ¼ÇÂ¼Ê±¼ä = Worksheets("¿ìËÙÂ¼Èë").Cells(1, 3).value
-    For row = anchor To lastRow
-        temp = Worksheets("¿ìËÙÂ¼Èë").Cells(row, column).value
-            If h.isMatch(".*FIQ-6102.*", temp) Then
-                Ãû³Æ = "FIQ-6102"
-                µ¥Î» = "·½"
-                If IsEmpty(Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value) Then
-                    MsgBox (Ãû³Æ & "Êı¾İ±ØĞëÌîĞ´£¡")
-                    Exit Sub
-                End If
-                Êı¾İ = Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value
-                Àà±ğ = "ÇáÓÍ"
-            End If
-            If h.isMatch(".*FIQ-5014.*", temp) Then
-                Ãû³Æ = "FIQ-5014"
-                µ¥Î» = "·½"
-'                ±í¸ñµ¥Î»ÊÇÇ§·½£¬Êı¾İ¿âµ¥Î»ÊÇ·½
-                If IsEmpty(Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value) Then
-                    MsgBox (Ãû³Æ & "Êı¾İ±ØĞëÌîĞ´£¡")
-                    Exit Sub
-                End If
-                Êı¾İ = Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value * 1000
-                Àà±ğ = "È¼ÁÏÆø"
-            End If
-            If h.isMatch(".*FIQ-2043.*", temp) Then
-                Ãû³Æ = "FIQ-2043"
-                µ¥Î» = "·½"
-                If IsEmpty(Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value) Then
-                    MsgBox (Ãû³Æ & "Êı¾İ±ØĞëÌîĞ´£¡")
-                    Exit Sub
-                End If
-                Êı¾İ = Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value
-                Àà±ğ = "ÌìÈ»Æø"
-            End If
-            If h.isMatch(".*¹øÂ¯·¿ÓÃÆø.*", temp) Then
-                Ãû³Æ = "¹øÂ¯·¿ÓÃÆø"
-                µ¥Î» = "·½"
-                If IsEmpty(Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value) Then
-                    MsgBox (Ãû³Æ & "Êı¾İ±ØĞëÌîĞ´£¡")
-                    Exit Sub
-                End If
-                Êı¾İ = Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value
-                Àà±ğ = "È¼ÁÏÆø"
-                ±¸×¢ = "¹øÂ¯¡¢²ÍÌü"
-            End If
-            If h.isMatch(".*»ğ¾æ³¤Ã÷µÆ.*", temp) Then
-                Ãû³Æ = "»ğ¾æ³¤Ã÷µÆ"
-                µ¥Î» = "·½"
-                If IsEmpty(Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value) Then
-                    MsgBox (Ãû³Æ & "Êı¾İ±ØĞëÌîĞ´£¡")
-                    Exit Sub
-                End If
-                Êı¾İ = Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value
-                Àà±ğ = "ÌìÈ»Æø"
-            End If
-            If h.isMatch(".*»ğ¾æ·Å¿ÕÁ¿.*", temp) Then
-                Ãû³Æ = "»ğ¾æ·Å¿ÕÁ¿"
-                µ¥Î» = "·½"
-                If IsEmpty(Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value) Then
-                    MsgBox (Ãû³Æ & "Êı¾İ±ØĞëÌîĞ´£¡")
-                    Exit Sub
-                End If
-                Êı¾İ = Worksheets("¿ìËÙÂ¼Èë").Cells(row, column + offset).value
-                Àà±ğ = "ÌìÈ»Æø"
-            End If
-            
-        If Not IsNull(Worksheets("¿ìËÙÂ¼Èë").Cells(row, column)) And Not IsEmpty(Worksheets("¿ìËÙÂ¼Èë").Cells(row, column)) Then
-            SQL = "delete from " & tablename & " where Ê±¼ä= '" & ¼ÇÂ¼Ê±¼ä & "' and Ãû³Æ = '" & Ãû³Æ & "'"
-            Call psql.cnn.Execute(SQL)
-            SQL = "INSERT INTO " & tablename & " ( Ê±¼ä,Ãû³Æ,µ¥Î»,Êı¾İ,Àà±ğ) VALUES ( '" & ¼ÇÂ¼Ê±¼ä & "','" & Ãû³Æ & "','" & µ¥Î» & "','" & Êı¾İ & "','" & Àà±ğ & "')"
-'            Debug.Print SQL
-            Call psql.cnn.Execute(SQL)
-        End If
-    Next row
-    Dim yd, td As Date
-    td = DateValue(¼ÇÂ¼Ê±¼ä)
-    yd = DateAdd("d", -1, td)
-    Dim temp1, temp2 As Variant
-    Dim cumulativeTable, name, SQL_suffix
-    SQL = ""
-'    SQL_suffix = " ON CONFLICT (ÈÕÆÚ,Ãû³Æ,µ¥Î»,Àà±ğ,×´Ì¬,±¸×¢) DO UPDATE SET Êı¾İÔ´ = EXCLUDED.Êı¾İÔ´,Êı¾İ = EXCLUDED.Êı¾İ,ÔÂÀÛ = EXCLUDED.ÔÂÀÛ,ÄêÀÛ = EXCLUDED.ÄêÀÛ where  Éú²úĞÅÏ¢.Êı¾İ is distinct from EXCLUDED.Êı¾İ or Éú²úĞÅÏ¢.ÔÂÀÛ is distinct from EXCLUDED.ÔÂÀÛ or Éú²úĞÅÏ¢.ÄêÀÛ is distinct from EXCLUDED.ÄêÀÛ or Éú²úĞÅÏ¢.Êı¾İÔ´ is distinct from EXCLUDED.Êı¾İÔ´;"
-'    SQL_suffix = " ON CONFLICT (ÈÕÆÚ,Ãû³Æ,µ¥Î»,Àà±ğ,×´Ì¬,±¸×¢) DO UPDATE SET Êı¾İ = EXCLUDED.Êı¾İ where  Éú²úĞÅÏ¢.Êı¾İ is distinct from EXCLUDED.Êı¾İ ;"
-    cumulativeTable = Array("FIQ-5014", "FIQ-2043", "¹øÂ¯·¿ÓÃÆø", "»ğ¾æ³¤Ã÷µÆ", "»ğ¾æ·Å¿ÕÁ¿")
-'    SQL = "CREATE UNIQUE INDEX IF NOT EXISTS  Éú²úĞÅÏ¢Î¨Ò»Ë÷Òı  ON Éú²úĞÅÏ¢ (ÈÕÆÚ,Ãû³Æ,µ¥Î»,Àà±ğ,×´Ì¬,±¸×¢);"
-'    Call psql.cnn.Execute(SQL)
-'    PostgreSQL Î¨Ò»Ë÷Òı²»ÄÜ´¦Àí¿ÕÖµ
-    Dim table As Object
-    Set table = CreateObject("Scripting.Dictionary")
-    Dim record As New Éú²úĞÅÏ¢
-    Dim scxx As New Éú²úĞÅÏ¢
-    Const MAX_fuelGas As Long = 999999
-    For Each name In cumulativeTable
-        SQL = "select Êı¾İ from Éú²ú¶¯Ì¬ where Ãû³Æ = '" & name & "' and Ê±¼ä='" & yd & "'"
-        temp1 = psql.cnn.Execute(SQL)(0)
-        SQL = "select Êı¾İ from Éú²ú¶¯Ì¬ where Ãû³Æ = '" & name & "' and Ê±¼ä='" & td & "'"
-        temp2 = psql.cnn.Execute(SQL)(0)
-'        Debug.Print name, yd, temp1, td, temp2, temp2 - temp1
-        If Not IsEmpty(temp1) And Not IsEmpty(temp2) Then
-            Êı¾İ = temp2 - temp1
-            If h.isMatch(".*FIQ-5014.*", name) Then
-                name = "ÈÈÓÍÂ¯"
-                If Êı¾İ < 0 Then
-                    Êı¾İ = Êı¾İ + MAX_fuelGas
-                End If
-            End If
-'            Debug.Print name & " Êı¾İ=" & Êı¾İ
-        End If
-'            FIQ2043²»ÊÇ×ÜÀÛ¼Æ±í
-        If h.isMatch(".*FIQ-2043.*", name) Then
-            Êı¾İ = temp2
-        End If
-        If Êı¾İ < 0 Then
-'        ÒÇ±íÊı¾İĞ£ÑéÒÔĞÂÊı¾İÎª×¼
-            MsgBox (name + "£¨" + CStr(temp2) + "£©£¬½ñÌìÊı¾İ£¨" + CStr(temp1) + "£©±È×òÌì»¹Ğ¡£¬ÄãÈ·¶¨£¡")
-'            Êı¾İ = temp2
-        End If
-        Ãû³Æ = name
-        µ¥Î» = "·½"
-        Àà±ğ = "ÌìÈ»Æø"
-        With record
-            .ÈÕÆÚ = td
-            .Ãû³Æ = Ãû³Æ
-            .Êı¾İ = Êı¾İ
-            .µ¥Î» = µ¥Î»
-            .Àà±ğ = Àà±ğ
-        End With
-        table.Add record, ""
-        Set record = Nothing
-        Debug.Print td, Ãû³Æ, µ¥Î», Àà±ğ, ±¸×¢, Êı¾İ
-'        SQL = "INSERT INTO " & tablename & " ( ÈÕÆÚ,Ãû³Æ,µ¥Î»,Êı¾İ,Àà±ğ,±¸×¢) VALUES ( '" & td & "','" & Ãû³Æ & "','" & µ¥Î» & "','" & Êı¾İ & "','" & Àà±ğ & "','" & ±¸×¢ & "')"
-'        SQL = SQL + SQL_suffix
-'        Debug.Print SQL
-'        Call psql.cnn.Execute(SQL)
-    Next
-    Call scxx.PushTableToDatabase(table)
-    Debug.Print "ÌîĞ´Êı¾İµ½Éú²ú¶¯Ì¬ºÄÊ±" & DateDiff("s", t, Now) & "s!"
-errorhander:
-    If Err.Number <> 0 Then Debug.Print Err.Number & vbTab & Err.Description
+    Next x
+    rst.Close
+    Set rst = Nothing
+    Debug.Print "å¯¼å…¥" & table.count & "æ¡è®°å½•åˆ°è¡¨" & tablename & " ,PostgreSQLè¡¨èŠ±è´¹" & DateDiff("s", t, Now()) & "s."
+    Call removeDuplicate
+ErrorHandler:
+'    PostgreSQL æœªè¿æ¥ä»£ç  -2147467259
+    If -2147467259 = Err.Number Then
+        MsgBox "PostgreSQL æ•°æ®åº“æ²¡æœ‰æ‰“å¼€ï¼"
+        Exit Sub
+    Else
+        Debug.Print Err.Number, Err.Description        
+    End If
     Resume Next
 End Sub
 
+private sub removeDuplicate()
+    on error goto ErrorHandler
+    On Error Resume Next
+    Dim filter As String
+    Dim SQL As String
+    dim tablename as string
+    tablename="ç”Ÿäº§åŠ¨æ€"
+    filter = " where id not in ( select max(ID) from " & table & " group by æ—¶é—´,åç§°,å•ä½ ) "
+    SQL = "delete from " & tablename & filter
+    Dim t As Date
+    t = Now
+    Dim psql As New PostgreSQL
+    Call psql.cnn.Execute(SQL)
+    Debug.Print "PostgreSQL å»é™¤é‡å¤æ•°æ®èŠ±è´¹" & DateDiff("s", t, Now()) & "s."   
+    on error goto 0
+    exit sub
+ErrorHandler:
+    
+end sub
